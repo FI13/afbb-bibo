@@ -10,6 +10,5 @@
 	</parent>
 
 	<artifactId>io.github.davidbecker.rcprapbootstrap.rcp.feature</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 </project>
