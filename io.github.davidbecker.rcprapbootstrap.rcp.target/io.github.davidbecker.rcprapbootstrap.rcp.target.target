@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="org.e4.gemini.target" sequenceNumber="15">
+<?pde version="3.8"?><target name="Eclipse RCP 3.7.1" sequenceNumber="3">
 <locations>
-<location path="${eclipse_home}" type="Profile"/>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.persistence.sdk.feature.group" version="2.5.0.v20130507-3faac2b"/>
-<unit id="org.eclipse.equinox.sdk.feature.group" version="3.9.0.v20130604-2047"/>
-<repository location="http://download.eclipse.org/releases/kepler"/>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.rcp.sdk.id" version="3.7.1.M20110909-1335"/>
+<unit id="org.eclipse.equinox.executable.feature.group" version="3.5.0.v20110530-7P7NFUFFLWUl76mart"/>
+<unit id="org.eclipse.help.feature.group" version="1.3.0.v20110327-7i7uFFkFFp7gNobOpNgKo0"/>
+<unit id="org.eclipse.equinox.p2.rcp.feature.feature.group" version="1.0.1.R37x_v20110906-782EpBqNKGUkZQpuT8hAlWlFbUeo"/>
+<unit id="org.junit" version="4.8.2.v4_8_2_v20110321-1705"/>
+<unit id="org.hamcrest.core" version="1.1.0.v20090501071000"/>
+<unit id="org.eclipse.ui.forms" version="3.5.100.v20110425"/>
+<repository location="http://download.eclipse.org/releases/indigo/"/>
 </location>
 </locations>
 </target>

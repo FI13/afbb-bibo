@@ -78,18 +78,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="io.github.davidbecker.rcprapbootstrap.ui.application"
-            name="RCP Product">
+            name="Bootstrap">
          <property
-               name="aboutText"
-               value="RCP Mail template created by PDE">
-         </property>
-         <property
-               name="windowImages"
-               value="icons/sample2.gif">
-         </property>
-         <property
-               name="aboutImage"
-               value="product_lg.gif">
+               name="appName"
+               value="Bootstrap">
          </property>
       </product>
    </extension>
