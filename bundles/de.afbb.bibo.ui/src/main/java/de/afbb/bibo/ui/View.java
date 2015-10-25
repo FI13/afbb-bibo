@@ -16,7 +16,7 @@ import org.eclipse.ui.part.ViewPart;
 
 public class View extends ViewPart {
 
-	public static final String ID = "io.github.davidbecker.rcprapbootstrap.ui.view";
+	public static final String ID = "de.afbb.bibo.ui.view";
 
 	/**
 	 * The text control that's displaying the content of the email message.

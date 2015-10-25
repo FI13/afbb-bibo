@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Bootstrap" uid="io.github.davidbecker.rcprapbootstrap.rcp" id="io.github.davidbecker.rcprapbootstrap.ui.product" application="io.github.davidbecker.rcprapbootstrap.ui.application" version="1.0" useFeatures="true" includeLaunchers="true">
+<product name="BiBo" uid="de.afbb.bibo.rcp" id="de.afbb.bibo.ui.product" application="de.afbb.bibo.ui.application" version="1.0" useFeatures="true" includeLaunchers="true">
 
    <configIni use="default">
    </configIni>
@@ -15,7 +15,7 @@
    </plugins>
 
    <features>
-      <feature id="io.github.davidbecker.rcprapbootstrap.rcp.feature" version="1.0.0.qualifier"/>
+      <feature id="de.afbb.bibo.rcp.feature"/>
    </features>
 
    <configurations>

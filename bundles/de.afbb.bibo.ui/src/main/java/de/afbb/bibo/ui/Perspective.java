@@ -9,7 +9,7 @@ public class Perspective implements IPerspectiveFactory {
 	/**
 	 * The ID of the perspective as specified in the extension.
 	 */
-	public static final String ID = "io.github.davidbecker.rcprapbootstrap.ui.perspective";
+	public static final String ID = "de.afbb.bibo.ui.perspective";
 
 	public void createInitialLayout(IPageLayout layout) {
 		String editorArea = layout.getEditorArea();

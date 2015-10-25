@@ -16,7 +16,7 @@
       <perspective
             name="RCP Perspective"
             class="de.afbb.bibo.ui.Perspective"
-            id="io.github.davidbecker.rcprapbootstrap.ui.perspective">
+            id="de.afbb.bibo.ui.perspective">
       </perspective>
    </extension>
    <extension
@@ -26,44 +26,44 @@
             allowMultiple="true"
             icon="icons/sample2.gif"
             class="de.afbb.bibo.ui.View"
-            id="io.github.davidbecker.rcprapbootstrap.ui.view">
+            id="de.afbb.bibo.ui.view">
       </view>
       <view
             name="Mailboxes"
             allowMultiple="true"
             icon="icons/sample3.gif"
             class="de.afbb.bibo.ui.NavigationView"
-            id="io.github.davidbecker.rcprapbootstrap.ui.navigationView">
+            id="de.afbb.bibo.ui.navigationView">
       </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
       <category
             name="Mail"
-            id="io.github.davidbecker.rcprapbootstrap.ui.category">
+            id="de.afbb.bibo.ui.category">
       </category>
       <command
             name="Open Mailbox"
             description="Opens a mailbox"
-            categoryId="io.github.davidbecker.rcprapbootstrap.ui.category"
-            id="io.github.davidbecker.rcprapbootstrap.ui.open">
+            categoryId="de.afbb.bibo.ui.category"
+            id="de.afbb.bibo.ui.open">
       </command>
       <command
             name="Open Message Dialog"
             description="Open a message dialog"
-            categoryId="io.github.davidbecker.rcprapbootstrap.ui.category"
-            id="io.github.davidbecker.rcprapbootstrap.ui.openMessage">
+            categoryId="de.afbb.bibo.ui.category"
+            id="de.afbb.bibo.ui.openMessage">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="io.github.davidbecker.rcprapbootstrap.ui.open"
+            commandId="de.afbb.bibo.ui.open"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+SHIFT+O">
       </key>
       <key
-            commandId="io.github.davidbecker.rcprapbootstrap.ui.openMessage"
+            commandId="de.afbb.bibo.ui.openMessage"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+SHIFT+M">
       </key>
@@ -77,11 +77,11 @@
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            application="io.github.davidbecker.rcprapbootstrap.ui.application"
-            name="Bootstrap">
+            application="de.afbb.bibo.ui.application"
+            name="BiBo">
          <property
                name="appName"
-               value="Bootstrap">
+               value="BiBo">
          </property>
       </product>
    </extension>

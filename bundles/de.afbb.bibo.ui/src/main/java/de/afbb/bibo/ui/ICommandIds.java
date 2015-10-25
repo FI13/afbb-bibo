@@ -9,7 +9,7 @@ package de.afbb.bibo.ui;
  */
 public interface ICommandIds {
 
-    public static final String CMD_OPEN = "io.github.davidbecker.rcprapbootstrap.ui.open";
-    public static final String CMD_OPEN_MESSAGE = "io.github.davidbecker.rcprapbootstrap.ui.openMessage";
+    public static final String CMD_OPEN = "de.afbb.bibo.ui.open";
+    public static final String CMD_OPEN_MESSAGE = "de.afbb.bibo.ui.openMessage";
     
 }
