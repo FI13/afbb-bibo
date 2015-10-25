@@ -3,12 +3,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>io.github.davidbecker.rcprapbootstrap</groupId>
-	<artifactId>io.github.davidbecker.rcprapbootstrap</artifactId>
+	<groupId>de.afbb.bibo</groupId>
+	<artifactId>de.afbb.bibo</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>io.github.davidbecker.rcprapbootstrap</name>
+	<name>de.afbb.bibo</name>
 
 	<properties>
 		<tycho.version>0.23.1</tycho.version>
@@ -19,14 +19,10 @@
 	</properties>
 
 	<modules>
-		<module>bundles/io.github.davidbecker.rcprapbootstrap.ui</module>
-		<module>bundles/io.github.davidbecker.rcprapbootstrap.rcp.target</module>
-		<module>
-			products/io.github.davidbecker.rcprapbootstrap.rcp.product
-		</module>
-		<module>
-			features/io.github.davidbecker.rcprapbootstrap.rcp.feature
-		</module>
+		<module>bundles/de.afbb.bibo.ui</module>
+		<module>bundles/de.afbb.bibo.rcp.target</module>
+		<module>products/de.afbb.bibo.rcp.product</module>
+		<module>features/de.afbb.bibo.rcp.feature</module>
 	</modules>
 
 	<build>
@@ -79,7 +75,7 @@
 					<target>
 						<artifact>
 							<groupId>${project.groupId}</groupId>
-							<artifactId>io.github.davidbecker.rcprapbootstrap.rcp.target</artifactId>
+							<artifactId>de.afbb.bibo.rcp.target</artifactId>
 							<version>${project.version}</version>
 						</artifact>
 					</target>
