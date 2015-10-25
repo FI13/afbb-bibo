@@ -19,9 +19,8 @@
 	</properties>
 
 	<modules>
-		<module>io.github.davidbecker.rcprapbootstrap.ui</module>
-		<module>io.github.davidbecker.rcprapbootstrap.rcp.target</module>
-
+		<module>bundles/io.github.davidbecker.rcprapbootstrap.ui</module>
+		<module>bundles/io.github.davidbecker.rcprapbootstrap.rcp.target</module>
 		<module>
 			products/io.github.davidbecker.rcprapbootstrap.rcp.product
 		</module>
