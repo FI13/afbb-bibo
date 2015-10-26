@@ -5,7 +5,7 @@ public class Admin {
 	private Integer id;
 	private String name;
 	private String salt;
-	private String password;
+	private String hash;
 
 	/**
 	 * getter for id
@@ -65,21 +65,21 @@ public class Admin {
 	}
 
 	/**
-	 * getter for password
+	 * getter for hash
 	 * 
-	 * @return the password
+	 * @return the hash
 	 */
-	public String getPassword() {
-		return password;
+	public String getHash() {
+		return hash;
 	}
 
 	/**
-	 * setter for password
+	 * setter for hash
 	 * 
-	 * @param password
-	 *            the password to set
+	 * @param hash
+	 *            the hash to set
 	 */
-	public void setPassword(final String password) {
-		this.password = password;
+	public void setHash(final String hash) {
+		this.hash = hash;
 	}
 }

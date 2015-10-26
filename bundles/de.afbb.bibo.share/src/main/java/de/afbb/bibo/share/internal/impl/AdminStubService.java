@@ -30,4 +30,12 @@ public class AdminStubService implements IAdminService {
 		return list;
 	}
 
+	@Override
+	public boolean validateLogin(final Admin admin, final String password) {
+		if (admin == null || password == null) {
+			return false;
+		}
+		return "password123".equals(password);
+	}
+
 }
