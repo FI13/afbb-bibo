@@ -20,6 +20,7 @@
 
 	<modules>
 		<module>bundles/de.afbb.bibo.ui</module>
+		<module>bundles/de.afbb.bibo.share</module>
 		<module>bundles/de.afbb.bibo.rcp.target</module>
 		<module>products/de.afbb.bibo.rcp.product</module>
 		<module>features/de.afbb.bibo.rcp.feature</module>
