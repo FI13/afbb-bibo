@@ -12,6 +12,6 @@ public interface IAdminService {
 
 	List<Admin> list();
 
-	boolean validateLogin(Admin admin, String password);
+	boolean validateLogin(Admin admin);
 
 }

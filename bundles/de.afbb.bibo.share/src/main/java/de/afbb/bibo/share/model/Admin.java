@@ -2,10 +2,33 @@ package de.afbb.bibo.share.model;
 
 public class Admin {
 
+	public static final String FIELD_NAME = "name";
+	public static final String FIELD_PASSWORD = "password";
+
 	private Integer id;
 	private String name;
 	private String salt;
 	private String hash;
+	private String password;
+
+	/**
+	 * getter for password
+	 * 
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * setter for password
+	 * 
+	 * @param password
+	 *            the password to set
+	 */
+	public void setPassword(final String password) {
+		this.password = password;
+	}
 
 	/**
 	 * getter for id

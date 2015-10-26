@@ -31,11 +31,11 @@ public class AdminStubService implements IAdminService {
 	}
 
 	@Override
-	public boolean validateLogin(final Admin admin, final String password) {
-		if (admin == null || password == null) {
+	public boolean validateLogin(final Admin admin) {
+		if (admin == null || admin.getPassword() == null) {
 			return false;
 		}
-		return "password123".equals(password);
+		return "password123".equals(admin.getPassword());
 	}
 
 }
