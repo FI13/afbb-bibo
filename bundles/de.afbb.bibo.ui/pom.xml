@@ -11,4 +11,11 @@
 	</parent>
 	<packaging>eclipse-plugin</packaging>
 	<artifactId>de.afbb.bibo.ui</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.8.2</version>
+		</dependency>
+	</dependencies>
 </project>

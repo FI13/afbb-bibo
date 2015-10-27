@@ -4,34 +4,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.afbb.bibo.share.IBenutzerService;
-import de.afbb.bibo.share.model.Benutzer;
+import de.afbb.bibo.share.model.Curator;
 
 public class BenutzerStubService implements IBenutzerService {
 
 	@Override
-	public Benutzer findById(final Integer id) {
-		final Benutzer admin = new Benutzer();
+	public Curator findById(final Integer id) {
+		final Curator admin = new Curator();
 		admin.setId(1);
 		admin.setName("Horst");
 		return admin;
 	}
 
 	@Override
-	public Benutzer create(final Benutzer admin) {
+	public Curator create(final Curator admin) {
 		return admin;
 	}
 
 	@Override
-	public List<Benutzer> list() {
-		final List<Benutzer> list = new ArrayList<Benutzer>();
-		list.add(new Benutzer());
-		list.add(new Benutzer());
-		list.add(new Benutzer());
+	public List<Curator> list() {
+		final List<Curator> list = new ArrayList<Curator>();
+		list.add(new Curator());
+		list.add(new Curator());
+		list.add(new Curator());
 		return list;
 	}
 
 	@Override
-	public boolean validateLogin(final Benutzer admin) {
+	public boolean validateLogin(final Curator admin) {
 		if (admin == null || admin.getPassword() == null) {
 			return false;
 		}

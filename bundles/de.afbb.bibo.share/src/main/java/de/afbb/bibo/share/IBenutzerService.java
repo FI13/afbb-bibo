@@ -2,16 +2,16 @@ package de.afbb.bibo.share;
 
 import java.util.List;
 
-import de.afbb.bibo.share.model.Benutzer;
+import de.afbb.bibo.share.model.Curator;
 
 public interface IBenutzerService {
 
-	Benutzer findById(Integer id);
+	Curator findById(Integer id);
 
-	Benutzer create(Benutzer admin);
+	Curator create(Curator admin);
 
-	List<Benutzer> list();
+	List<Curator> list();
 
-	boolean validateLogin(Benutzer admin);
+	boolean validateLogin(Curator admin);
 
 }
