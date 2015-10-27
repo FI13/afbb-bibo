@@ -1,6 +1,6 @@
 package de.afbb.bibo.share.model;
 
-public class Admin {
+public class Benutzer {
 
 	public static final String FIELD_NAME = "name";
 	public static final String FIELD_PASSWORD = "password";
