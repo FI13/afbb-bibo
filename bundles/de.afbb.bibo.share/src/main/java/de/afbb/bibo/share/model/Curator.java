@@ -1,6 +1,11 @@
 package de.afbb.bibo.share.model;
 
-public class Curator {
+import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
+
+public class Curator extends AbstractPropertyChangeSupport {
+
+	public static final String FIELD_NAME = "name";//$NON-NLS-1$
+	public static final String FIELD_PASSWORD = "password";//$NON-NLS-1$
 
 	private Integer id;
 	private String name;
@@ -24,7 +29,7 @@ public class Curator {
 	 *            the password to set
 	 */
 	public void setPassword(final String password) {
-		this.password = password;
+		changeSupport.firePropertyChange(FIELD_PASSWORD, this.password, this.password = password);
 	}
 
 	/**
@@ -62,7 +67,7 @@ public class Curator {
 	 *            the name to set
 	 */
 	public void setName(final String name) {
-		this.name = name;
+		changeSupport.firePropertyChange(FIELD_NAME, this.name, this.name = name);
 	}
 
 	/**
