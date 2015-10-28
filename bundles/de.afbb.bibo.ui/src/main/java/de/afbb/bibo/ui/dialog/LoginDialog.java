@@ -43,23 +43,13 @@ public class LoginDialog extends TitleAreaDialog {
 
 		final Label lbtName = new Label(container, SWT.NONE);
 		lbtName.setText("Name");
-
-		final GridData dataName = new GridData();
-		dataName.grabExcessHorizontalSpace = true;
-		dataName.horizontalAlignment = GridData.FILL;
-
 		txtName = new Text(container, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtName);
-//		txtName.setLayoutData(dataName);
 
 		final Label lbtLastName = new Label(container, SWT.NONE);
 		lbtLastName.setText("Passwort");
-
-		final GridData dataLastName = new GridData();
-		dataLastName.grabExcessHorizontalSpace = true;
-		dataLastName.horizontalAlignment = GridData.FILL;
 		txtPassword = new Text(container, SWT.BORDER | SWT.PASSWORD);
-		txtPassword.setLayoutData(dataLastName);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPassword);
 
 		createBinding();
 
