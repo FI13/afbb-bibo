@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Text;
 import de.afbb.bibo.crypto.CryptoUtil;
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
 
 public class LoginDialog extends TitleAreaDialog {
@@ -78,6 +79,7 @@ public class LoginDialog extends TitleAreaDialog {
 				return false;
 			}
 			setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
+			SessionHolder.getInstance().setSessionToken(sessionToken);
 			return true;
 		} catch (final ConnectException e) {
 			setMessage("Es besteht ein Verbindungs-Problem mit dem Server", IMessageProvider.WARNING);
