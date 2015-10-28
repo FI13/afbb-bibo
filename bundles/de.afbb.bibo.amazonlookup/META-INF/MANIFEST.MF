@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Amazonlookup
+Bundle-SymbolicName: de.afbb.bibo.amazonlookup
+Bundle-Version: 1.0.0.qualifier
