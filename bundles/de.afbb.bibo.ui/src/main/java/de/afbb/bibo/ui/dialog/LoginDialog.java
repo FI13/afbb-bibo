@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 
 import de.afbb.bibo.crypto.CryptoUtil;
 import de.afbb.bibo.databinding.BindingHelper;
@@ -76,7 +77,7 @@ public class LoginDialog extends TitleAreaDialog {
 			loginSuccessful = validateLogin();
 			okPressed();
 		} else {
-			cancelPressed();
+			PlatformUI.getWorkbench().close();
 		}
 	}
 
