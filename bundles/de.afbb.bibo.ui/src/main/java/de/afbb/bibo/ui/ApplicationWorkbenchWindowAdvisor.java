@@ -51,7 +51,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		// open welcome view
 		final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
-			page.openEditor(curator, WelcomeView.ID);
+			page.openEditor(SessionHolder.getInstance().getCurator(), WelcomeView.ID);
 		} catch (final PartInitException e) {
 			e.printStackTrace();
 			// shouldn't happen
