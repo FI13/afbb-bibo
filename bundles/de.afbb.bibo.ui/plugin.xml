@@ -54,6 +54,10 @@
             categoryId="de.afbb.bibo.ui.category"
             id="de.afbb.bibo.ui.openMessage">
       </command>
+      <command
+            id="de.afbb.bibo.ui.login"
+            name="Anmeldung">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -84,6 +88,9 @@
                value="BiBo">
          </property>
       </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
    </extension>
 
 </plugin>
