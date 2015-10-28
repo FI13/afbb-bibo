@@ -1,8 +1,12 @@
 package de.afbb.bibo.share.model;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IPersistableElement;
+
 import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 
-public class Curator extends AbstractPropertyChangeSupport {
+public class Curator extends AbstractPropertyChangeSupport implements IEditorInput {
 
 	public static final String FIELD_NAME = "name";//$NON-NLS-1$
 	public static final String FIELD_PASSWORD = "password";//$NON-NLS-1$
@@ -56,6 +60,7 @@ public class Curator extends AbstractPropertyChangeSupport {
 	 * 
 	 * @return the name
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -106,5 +111,31 @@ public class Curator extends AbstractPropertyChangeSupport {
 	 */
 	public void setHash(final String hash) {
 		this.hash = hash;
+	}
+
+	@Override
+	public Object getAdapter(final Class adapter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean exists() {
+		return false;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor() {
+		return null;
+	}
+
+	@Override
+	public IPersistableElement getPersistable() {
+		return null;
+	}
+
+	@Override
+	public String getToolTipText() {
+		return name;
 	}
 }

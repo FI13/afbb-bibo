@@ -22,13 +22,6 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            name="Willkommen"
-            allowMultiple="true"
-            icon="icons/sample2.gif"
-            class="de.afbb.bibo.ui.view.WelcomeView"
-            id="de.afbb.bibo.ui.view.welcome">
-      </view>
-      <view
             name="Mailboxes"
             allowMultiple="true"
             icon="icons/sample3.gif"
@@ -91,6 +84,16 @@
    </extension>
    <extension
          point="org.eclipse.ui.menus">
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="de.afbb.bibo.ui.view.WelcomeView"
+            default="false"
+            icon="icons/sample.gif"
+            id="de.afbb.bibo.ui.view.welcome"
+            name="Willkommen">
+      </editor>
    </extension>
 
 </plugin>

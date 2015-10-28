@@ -2,6 +2,8 @@ package de.afbb.bibo.ui;
 
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
@@ -10,6 +12,7 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
+import de.afbb.bibo.ui.view.WelcomeView;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
@@ -44,6 +47,15 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		SessionHolder.getInstance().setCurator(curator);
 		// TODO end remove here
 		shell.setText(TITLE + " - Angemeldet als: " + SessionHolder.getInstance().getCurator().getName());
+
+		// open welcome view
+		final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		try {
+			page.openEditor(curator, WelcomeView.ID);
+		} catch (final PartInitException e) {
+			e.printStackTrace();
+			// shouldn't happen
+		}
 	}
 
 }
