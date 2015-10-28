@@ -1,6 +1,9 @@
 package de.afbb.bibo.ui.dialog;
 
+import java.net.ConnectException;
+
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -12,7 +15,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import de.afbb.bibo.crypto.CryptoUtil;
 import de.afbb.bibo.databinding.BindingHelper;
+import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.Curator;
 
 public class LoginDialog extends TitleAreaDialog {
@@ -39,6 +44,7 @@ public class LoginDialog extends TitleAreaDialog {
 		container.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
 		final GridLayout layout = new GridLayout(2, false);
 		layout.marginWidth = 30;
+		layout.horizontalSpacing = 10;
 		container.setLayout(layout);
 
 		final Label lbtName = new Label(container, SWT.NONE);
@@ -54,6 +60,29 @@ public class LoginDialog extends TitleAreaDialog {
 		createBinding();
 
 		return area;
+	}
+
+	@Override
+	protected void buttonPressed(final int buttonId) {
+		validateLogin();
+	}
+
+	private boolean validateLogin() {
+		try {
+			final String salt = ServiceLocator.getInstance().getLoginService().requestSaltForUserName(curator.getName());
+			final String hashPassword = CryptoUtil.hashPassword(curator.getPassword(), salt);
+			final String sessionToken = ServiceLocator.getInstance().getLoginService().requestSessionTokenForHash(curator.getName(),
+					hashPassword);
+			if (sessionToken == null || sessionToken.isEmpty()) {
+				setMessage("Name und Passwort stimmen nicht überein !", IMessageProvider.ERROR);
+				return false;
+			}
+			setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
+			return true;
+		} catch (final ConnectException e) {
+			setMessage("Es besteht ein Verbindungs-Problem mit dem Server", IMessageProvider.WARNING);
+		}
+		return false;
 	}
 
 	private void createBinding() {

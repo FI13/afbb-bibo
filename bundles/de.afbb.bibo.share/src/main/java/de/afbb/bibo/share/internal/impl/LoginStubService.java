@@ -1,14 +1,16 @@
 package de.afbb.bibo.share.internal.impl;
 
+import java.net.ConnectException;
+
 import de.afbb.bibo.crypto.CryptoUtil;
-import de.afbb.bibo.share.LoginService;
+import de.afbb.bibo.share.ILoginService;
 
 /**
- * stub implementation of {@link LoginService}
+ * stub implementation of {@link ILoginService}
  * 
  * @author dbecker
  */
-public class LoginStubService implements LoginService {
+public class LoginStubService implements ILoginService {
 
 	private static final String USER = "Hugo";
 	private static final String SALT = "salt";
@@ -16,12 +18,12 @@ public class LoginStubService implements LoginService {
 	private static final String HASH = CryptoUtil.hashPassword(PASSWORD, SALT);
 
 	@Override
-	public String requestSaltForUserName(final String userName) {
+	public String requestSaltForUserName(final String userName) throws ConnectException {
 		return USER.equals(userName) ? SALT : null;
 	}
 
 	@Override
-	public String requestSessionTokenForHash(final String userName, final String hashedPassword) {
+	public String requestSessionTokenForHash(final String userName, final String hashedPassword) throws ConnectException {
 		return USER.equals(userName) && HASH.equals(hashedPassword) ? "token" : null;
 	}
 

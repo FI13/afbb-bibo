@@ -1,11 +1,13 @@
 package de.afbb.bibo.share;
 
+import java.net.ConnectException;
+
 /**
  * service interface to create a session with the server
  * 
  * @author dbecker
  */
-public interface LoginService {
+public interface ILoginService {
 
 	/**
 	 * requests the salt for given user
@@ -13,8 +15,9 @@ public interface LoginService {
 	 * @param userName
 	 *            name of the user
 	 * @return password salt or empty String when user doesn't exist
+	 * @throws ConnectException
 	 */
-	String requestSaltForUserName(String userName);
+	String requestSaltForUserName(String userName) throws ConnectException;
 
 	/**
 	 * request a session token for given user
@@ -24,7 +27,8 @@ public interface LoginService {
 	 * @param hashedPassword
 	 *            hashed password for user
 	 * @return session token or empty String when hashedPassword isn't valid for given userName
+	 * @throws ConnectException
 	 */
-	String requestSessionTokenForHash(String userName, String hashedPassword);
+	String requestSessionTokenForHash(String userName, String hashedPassword) throws ConnectException;
 
 }

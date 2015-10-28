@@ -8,7 +8,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Import-Package: de.afbb.bibo.share.model,
+Import-Package: de.afbb.bibo.crypto,
+ de.afbb.bibo.share,
+ de.afbb.bibo.share.model,
  org.eclipse.core.databinding,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.observable.value,
