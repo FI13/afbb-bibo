@@ -7,3 +7,4 @@ Import-Package: org.apache.commons.codec.digest
 Export-Package: de.afbb.bibo.crypto,
  de.afbb.bibo.share,
  de.afbb.bibo.share.model
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
