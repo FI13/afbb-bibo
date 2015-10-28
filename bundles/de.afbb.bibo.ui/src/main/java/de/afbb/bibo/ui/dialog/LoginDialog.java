@@ -3,6 +3,7 @@ package de.afbb.bibo.ui.dialog;
 import java.net.ConnectException;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -27,6 +28,7 @@ public class LoginDialog extends TitleAreaDialog {
 	private Text txtName;
 	private final Curator curator = new Curator();
 	private final DataBindingContext bindingContext = new DataBindingContext();
+	private boolean loginSuccessful = false;
 
 	public LoginDialog(final Shell parentShell) {
 		super(parentShell);
@@ -36,6 +38,11 @@ public class LoginDialog extends TitleAreaDialog {
 	public void create() {
 		super.create();
 		setTitle("Benutzer-Anmeldung");
+	}
+
+	@Override
+	public boolean close() {
+		return loginSuccessful ? super.close() : loginSuccessful;
 	}
 
 	@Override
@@ -65,7 +72,12 @@ public class LoginDialog extends TitleAreaDialog {
 
 	@Override
 	protected void buttonPressed(final int buttonId) {
-		validateLogin();
+		if (Dialog.OK == buttonId) {
+			loginSuccessful = validateLogin();
+			okPressed();
+		} else {
+			cancelPressed();
+		}
 	}
 
 	private boolean validateLogin() {
