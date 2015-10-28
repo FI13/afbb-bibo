@@ -20,7 +20,7 @@ public class LoginAction extends Action {
 		setId(ICommandIds.CMD_OPEN);
 		// Associate the action with a pre-defined command, to allow key bindings.
 		setActionDefinitionId(ICommandIds.CMD_OPEN);
-		setImageDescriptor(de.afbb.bibo.ui.Activator.getImageDescriptor("/icons/sample2.gif"));
+		setImageDescriptor(de.afbb.bibo.ui.Activator.getImageDescriptor("/icons/16x16login.png"));
 	}
 
 	@Override

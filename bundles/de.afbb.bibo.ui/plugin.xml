@@ -5,7 +5,8 @@
    <extension
          id="application"
          point="org.eclipse.core.runtime.applications">
-      <application>
+      <application
+            icon="icons/16x16schueler.png">
          <run
                class="de.afbb.bibo.ui.Application">
          </run>
@@ -22,14 +23,14 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            name="Message"
+            name="Detailansicht"
             allowMultiple="true"
             icon="icons/sample2.gif"
             class="de.afbb.bibo.ui.View"
             id="de.afbb.bibo.ui.view">
       </view>
       <view
-            name="Mailboxes"
+            name="Übersicht"
             allowMultiple="true"
             icon="icons/sample3.gif"
             class="de.afbb.bibo.ui.NavigationView"
@@ -82,10 +83,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="de.afbb.bibo.ui.application"
-            name="BiBo">
+            name="AfbB Bibliothek">
          <property
                name="appName"
-               value="BiBo">
+               value="AfbB Bibliothek">
          </property>
       </product>
    </extension>

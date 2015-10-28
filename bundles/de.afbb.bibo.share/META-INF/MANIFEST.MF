@@ -5,3 +5,5 @@ Bundle-SymbolicName: de.afbb.bibo.share
 Bundle-Version: 1.0.0.qualifier
 Import-Package: org.apache.commons.codec,
  org.apache.commons.codec.binary
+Export-Package: de.afbb.bibo.share,
+ de.afbb.bibo.share.model
