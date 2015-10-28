@@ -1,4 +1,4 @@
-package de.afbb.bibo.ui;
+package de.afbb.bibo.ui.view;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.JFaceResources;
@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
-public class View extends ViewPart {
+public class WelcomeView extends ViewPart {
 
 	public static final String ID = "de.afbb.bibo.ui.view";
 
