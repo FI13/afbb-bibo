@@ -3,3 +3,5 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Amazonlookup
 Bundle-SymbolicName: de.afbb.bibo.amazonlookup
 Bundle-Version: 1.0.0.qualifier
+Import-Package: org.apache.commons.codec,
+ org.apache.commons.codec.binary;version="1.3.0"
