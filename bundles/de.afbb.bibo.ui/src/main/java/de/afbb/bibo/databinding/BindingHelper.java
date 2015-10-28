@@ -18,6 +18,21 @@ public final class BindingHelper {
 	private BindingHelper() {
 	}
 
+	/**
+	 * creates a bidirectional binding for a text field.<br>
+	 * changes in model will be instantly reflected by the target and vice versa.
+	 * 
+	 * @param textField
+	 *            widget for input
+	 * @param entity
+	 *            class that holds the model informations
+	 * @param entityClass
+	 *            class of entity
+	 * @param propertyName
+	 *            name of the property that should be binded. expected to be of {@link String} type
+	 * @param bindingContext
+	 *            context of the binding
+	 */
 	public static void bindStringToTextField(final Text textField, final Object entity, final Class<?> entityClass,
 			final String propertyName, final DataBindingContext bindingContext) {
 		final ISWTObservableValue targetObservable = SWTObservables.observeText(textField, SWT.Modify);

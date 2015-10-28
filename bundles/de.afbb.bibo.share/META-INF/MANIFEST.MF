@@ -3,6 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Share
 Bundle-SymbolicName: de.afbb.bibo.share
 Bundle-Version: 1.0.0.qualifier
-Import-Package: org.apache.commons.codec,
- org.apache.commons.codec.binary
-Export-Package: de.afbb.bibo.share.model
+Import-Package: org.apache.commons.codec.digest
+Export-Package: de.afbb.bibo.crypto,
+ de.afbb.bibo.share,
+ de.afbb.bibo.share.model
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
