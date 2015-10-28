@@ -99,6 +99,7 @@ public class LoginDialog extends TitleAreaDialog {
 			}
 			setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
 			SessionHolder.getInstance().setSessionToken(sessionToken);
+			SessionHolder.getInstance().setCurator(curator);
 			return true;
 		} catch (final ConnectException e) {
 			setMessage("Es besteht ein Verbindungs-Problem mit dem Server", IMessageProvider.WARNING);
