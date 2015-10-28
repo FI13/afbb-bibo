@@ -23,6 +23,12 @@ import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
 
+/**
+ * dialog that tries to log the user in.<br>
+ * will set the returned session token into {@link SessionHolder} on success and will terminate the program if the user cancels the dialog
+ * 
+ * @author dbecker
+ */
 public class LoginDialog extends TitleAreaDialog {
 
 	private Text txtPassword;
