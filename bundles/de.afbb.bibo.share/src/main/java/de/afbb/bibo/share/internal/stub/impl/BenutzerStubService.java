@@ -1,4 +1,4 @@
-package de.afbb.bibo.share.internal.impl;
+package de.afbb.bibo.share.internal.stub.impl;
 
 import java.util.ArrayList;
 import java.util.List;

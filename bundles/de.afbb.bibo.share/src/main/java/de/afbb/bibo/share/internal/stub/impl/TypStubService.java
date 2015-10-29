@@ -1,4 +1,4 @@
-package de.afbb.bibo.share.internal.impl;
+package de.afbb.bibo.share.internal.stub.impl;
 
 import de.afbb.bibo.share.ITypService;
 import de.afbb.bibo.share.model.Typ;

@@ -1,8 +1,8 @@
 package de.afbb.bibo.share;
 
-import de.afbb.bibo.share.internal.impl.BenutzerStubService;
-import de.afbb.bibo.share.internal.impl.LoginStubService;
-import de.afbb.bibo.share.internal.impl.TypStubService;
+import de.afbb.bibo.share.internal.stub.impl.BenutzerStubService;
+import de.afbb.bibo.share.internal.stub.impl.LoginStubService;
+import de.afbb.bibo.share.internal.stub.impl.TypStubService;
 
 /**
  * finds a service that can handle the request
