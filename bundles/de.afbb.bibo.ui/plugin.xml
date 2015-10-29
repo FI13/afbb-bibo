@@ -121,22 +121,22 @@
          </separator>
          <command
                commandId="de.afbb.bibo.ui.create.curator"
-               icon="icons/sample2.gif"
+               icon="icons/32x32benutzerverwaltung.png"
                style="push">
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.type"
-               icon="icons/sample2.gif"
+               icon="icons/32x32medien.png"
                style="push">
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.Exemplar"
-               icon="icons/sample2.gif"
+               icon="icons/32x32book.png"
                style="push">
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.borrower"
-               icon="icons/sample2.gif"
+               icon="icons/32x32schueler.png"
                style="push">
          </command>
          <separator
@@ -157,6 +157,12 @@
             icon="icons/sample.gif"
             id="de.afbb.bibo.ui.view.welcome"
             name="Willkommen">
+      </editor>
+      <editor
+            class="de.afbb.bibo.ui.view.BorrowerView"
+            default="false"
+            id="de.afbb.bibo.ui.view.borrower"
+            name="Ausleiher">
       </editor>
    </extension>
    <extension
