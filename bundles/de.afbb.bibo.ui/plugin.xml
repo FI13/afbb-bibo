@@ -5,8 +5,7 @@
    <extension
          id="application"
          point="org.eclipse.core.runtime.applications">
-      <application
-            icon="icons/16x16schueler.png">
+      <application>
          <run
                class="de.afbb.bibo.ui.Application">
          </run>
@@ -23,14 +22,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            name="Detailansicht"
-            allowMultiple="true"
-            icon="icons/sample2.gif"
-            class="de.afbb.bibo.ui.View"
-            id="de.afbb.bibo.ui.view">
-      </view>
-      <view
-            name="Übersicht"
+            name="Mailboxes"
             allowMultiple="true"
             icon="icons/sample3.gif"
             class="de.afbb.bibo.ui.NavigationView"
@@ -59,6 +51,30 @@
             id="de.afbb.bibo.ui.login"
             name="Anmeldung">
       </command>
+      <command
+            id="de.afbb.bibo.ui.create.curator"
+            name="Neuanlage Verwalter">
+      </command>
+      <command
+            id="de.afbb.bibo.ui.create.Exemplar"
+            name="Erfassung Exemplar">
+      </command>
+      <command
+            id="de.afbb.bibo.ui.create.borrower"
+            name="Neuanlage Ausleiher">
+      </command>
+      <command
+            id="de.afbb.bibo.ui.create.type"
+            name="Neuanlage Kategorie">
+      </command>
+      <command
+            id="de.afbb.bibo.ui.lend"
+            name="Verleihen">
+      </command>
+      <command
+            id="de.afbb.bibo.ui.return"
+            name="Zurückgeben">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -83,15 +99,84 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="de.afbb.bibo.ui.application"
-            name="AfbB Bibliothek">
+            name="BiBo">
          <property
                name="appName"
-               value="AfbB Bibliothek">
+               value="BiBo">
          </property>
       </product>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:de.afbb.bibo.coolbar">
+         <command
+               commandId="org.eclipse.ui.file.save"
+               style="push">
+         </command>
+         <separator
+               name="de.afbb.bibo.ui.separator.coolbar1"
+               visible="true">
+         </separator>
+         <command
+               commandId="de.afbb.bibo.ui.create.curator"
+               icon="icons/sample2.gif"
+               style="push">
+         </command>
+         <command
+               commandId="de.afbb.bibo.ui.create.type"
+               icon="icons/sample2.gif"
+               style="push">
+         </command>
+         <command
+               commandId="de.afbb.bibo.ui.create.Exemplar"
+               icon="icons/sample2.gif"
+               style="push">
+         </command>
+         <command
+               commandId="de.afbb.bibo.ui.create.borrower"
+               icon="icons/sample2.gif"
+               style="push">
+         </command>
+         <separator
+               name="de.afbb.bibo.ui.separator.coolbar2"
+               visible="true">
+         </separator>
+         <command
+               commandId="de.afbb.bibo.ui.return"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="de.afbb.bibo.ui.view.WelcomeView"
+            default="false"
+            icon="icons/sample.gif"
+            id="de.afbb.bibo.ui.view.welcome"
+            name="Willkommen">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="de.afbb.bibo.ui.handler.CreateCuratorHandler"
+            commandId="de.afbb.bibo.ui.create.curator">
+      </handler>
+      <handler
+            class="de.afbb.bibo.ui.handler.CreateExemplarHandler"
+            commandId="de.afbb.bibo.ui.create.Exemplar">
+      </handler>
+      <handler
+            class="de.afbb.bibo.ui.handler.CreateBorrowerHandler"
+            commandId="de.afbb.bibo.ui.create.borrower">
+      </handler>
+      <handler
+            class="de.afbb.bibo.ui.handler.CreateTypeHandler"
+            commandId="de.afbb.bibo.ui.create.type">
+      </handler>
    </extension>
 
 </plugin>

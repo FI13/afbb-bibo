@@ -17,8 +17,6 @@ import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
-import de.afbb.bibo.ui.action.LoginAction;
-
 /**
  * An action bar advisor is responsible for creating, adding, and disposing of the
  * actions added to a workbench window. Each window will be populated with
@@ -26,13 +24,14 @@ import de.afbb.bibo.ui.action.LoginAction;
  */
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
+	public static final String ID_COOLBAR = "de.afbb.bibo.coolbar";//$NON-NLS-1$
+
 	// Actions - important to allocate these only in makeActions, and then use them
 	// in the fill methods. This ensures that the actions aren't recreated
 	// when fillActionBars is called with FILL_PROXY.
 	private IWorkbenchAction exitAction;
 	private IWorkbenchAction aboutAction;
 	private IWorkbenchAction newWindowAction;
-	private LoginAction loginAction;
 	private Action messagePopupAction;
 
 	public ApplicationActionBarAdvisor(final IActionBarConfigurer configurer) {
@@ -54,10 +53,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		register(aboutAction);
 
 		newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(window);
-		register(newWindowAction);
-
-		loginAction = new LoginAction(window, "Open Another Message View", View.ID);
-		register(loginAction);
 
 		messagePopupAction = new MessagePopupAction("Open Message", window);
 		register(messagePopupAction);
@@ -77,7 +72,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		fileMenu.add(newWindowAction);
 		fileMenu.add(new Separator());
 		fileMenu.add(messagePopupAction);
-		fileMenu.add(loginAction);
 		fileMenu.add(new Separator());
 		fileMenu.add(exitAction);
 
@@ -88,8 +82,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	@Override
 	protected void fillCoolBar(final ICoolBarManager coolBar) {
 		final IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
-		coolBar.add(new ToolBarContributionItem(toolbar, "main"));
-		toolbar.add(loginAction);
+		coolBar.add(new ToolBarContributionItem(toolbar, ID_COOLBAR));
 		toolbar.add(messagePopupAction);
 	}
 }
