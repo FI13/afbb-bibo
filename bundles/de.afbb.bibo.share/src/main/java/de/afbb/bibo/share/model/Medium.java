@@ -3,49 +3,66 @@ package de.afbb.bibo.share.model;
 public class Medium {
 	private Integer id;
 	private String isbn;
-	private String titel;
+	private String title;
 	private String author;
 	private String language;
-	private Typ typus;
-	
-	
-	public Typ getTypus() {
-		return typus;
+	private Integer typId;
+	private String publisher;
+
+	public String getTitle() {
+		return title;
 	}
-	public void setTypus(Typ typus) {
-		this.typus = typus;
+
+	public void setTitle(final String title) {
+		this.title = title;
 	}
+
+	public Integer getTypId() {
+		return typId;
+	}
+
+	public void setTypId(final Integer typId) {
+		this.typId = typId;
+	}
+
+	public String getPublisher() {
+		return publisher;
+	}
+
+	public void setPublisher(final String publisher) {
+		this.publisher = publisher;
+	}
+
 	public Integer getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+
+	public void setId(final Integer id) {
 		this.id = id;
 	}
+
 	public String getIsbn() {
 		return isbn;
 	}
-	public void setIsbn(String isbn) {
+
+	public void setIsbn(final String isbn) {
 		this.isbn = isbn;
 	}
-	public String getTitel() {
-		return titel;
-	}
-	public void setTitel(String titel) {
-		this.titel = titel;
-	}
+
 	public String getAuthor() {
 		return author;
 	}
-	public void setAuthor(String author) {
+
+	public void setAuthor(final String author) {
 		this.author = author;
 	}
+
 	public String getLanguage() {
 		return language;
 	}
-	public void setLanguage(String language) {
+
+	public void setLanguage(final String language) {
 		this.language = language;
 	}
-
-	
 
 }

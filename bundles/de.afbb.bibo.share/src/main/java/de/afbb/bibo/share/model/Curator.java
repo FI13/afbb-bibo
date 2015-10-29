@@ -14,12 +14,12 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 	private Integer id;
 	private String name;
 	private String salt;
-	private String hash;
+	private String passwordHash;
 	private String password;
 
 	/**
 	 * getter for password
-	 * 
+	 *
 	 * @return the password
 	 */
 	public String getPassword() {
@@ -28,7 +28,7 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 
 	/**
 	 * setter for password
-	 * 
+	 *
 	 * @param password
 	 *            the password to set
 	 */
@@ -38,7 +38,7 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 
 	/**
 	 * getter for id
-	 * 
+	 *
 	 * @return the id
 	 */
 	public Integer getId() {
@@ -47,7 +47,7 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 
 	/**
 	 * setter for id
-	 * 
+	 *
 	 * @param id
 	 *            the id to set
 	 */
@@ -57,7 +57,7 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 
 	/**
 	 * getter for name
-	 * 
+	 *
 	 * @return the name
 	 */
 	@Override
@@ -67,7 +67,7 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 
 	/**
 	 * setter for name
-	 * 
+	 *
 	 * @param name
 	 *            the name to set
 	 */
@@ -77,7 +77,7 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 
 	/**
 	 * getter for salt
-	 * 
+	 *
 	 * @return the salt
 	 */
 	public String getSalt() {
@@ -86,7 +86,7 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 
 	/**
 	 * setter for salt
-	 * 
+	 *
 	 * @param salt
 	 *            the salt to set
 	 */
@@ -95,22 +95,22 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 	}
 
 	/**
-	 * getter for hash
-	 * 
-	 * @return the hash
+	 * getter for passwordHash
+	 *
+	 * @return the passwordhash
 	 */
-	public String getHash() {
-		return hash;
+	public String getPasswordHash() {
+		return passwordHash;
 	}
 
 	/**
-	 * setter for hash
-	 * 
+	 * setter for passwordHash
+	 *
 	 * @param hash
-	 *            the hash to set
+	 *            the passwordHash to set
 	 */
-	public void setHash(final String hash) {
-		this.hash = hash;
+	public void setPasswordHash(final String hash) {
+		passwordHash = hash;
 	}
 
 	@Override
