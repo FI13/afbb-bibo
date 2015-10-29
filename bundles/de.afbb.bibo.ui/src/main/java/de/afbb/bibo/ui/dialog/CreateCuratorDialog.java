@@ -33,6 +33,12 @@ public class CreateCuratorDialog extends TitleAreaDialog {
 	}
 
 	@Override
+	public void create() {
+		super.create();
+		setTitle("Neuanlage Verwalter");
+	}
+
+	@Override
 	protected Control createDialogArea(final Composite parent) {
 		final Composite area = (Composite) super.createDialogArea(parent);
 		final Composite container = new Composite(area, SWT.NONE);
@@ -56,8 +62,6 @@ public class CreateCuratorDialog extends TitleAreaDialog {
 		lblPassword2.setText("Passwort (Wiederholung)");
 		txtPassword2 = new Text(container, SWT.BORDER | SWT.PASSWORD);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPassword2);
-
-		createBinding();
 
 		createBinding();
 
