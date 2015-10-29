@@ -1,7 +1,10 @@
 package de.afbb.bibo.ui.dialog;
 
+import java.net.ConnectException;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -100,8 +103,12 @@ public class CreateTypeDialog extends TitleAreaDialog {
 	@Override
 	protected void buttonPressed(final int buttonId) {
 		if (buttonId == Dialog.OK) {
-			ServiceLocator.getInstance().getTypService().create(type);
-			okPressed();
+			try {
+				ServiceLocator.getInstance().getTypService().create(type);
+				okPressed();
+			} catch (final ConnectException e) {
+				setMessage("Es besteht ein Verbindungs-Problem mit dem Server", IMessageProvider.WARNING);
+			}
 		} else {
 			cancelPressed();
 		}
