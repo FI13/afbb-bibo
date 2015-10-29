@@ -27,4 +27,9 @@ public class LoginStubService implements ILoginService {
 		return USER.equals(userName) && HASH.equals(hashedPassword) ? "token" : null;
 	}
 
+	@Override
+	public void invalidateSession(final String sessionToken) {
+		// nothing to do in stub service
+	}
+
 }
