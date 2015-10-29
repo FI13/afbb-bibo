@@ -16,7 +16,7 @@ public class CreateTypeHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		new CreateTypeDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
+		new CreateTypeDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell()).open();
 		return event;
 	}
 
