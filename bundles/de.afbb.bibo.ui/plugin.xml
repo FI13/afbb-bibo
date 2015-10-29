@@ -121,7 +121,7 @@
          </separator>
          <command
                commandId="de.afbb.bibo.ui.create.curator"
-               icon="icons/sample2.gif"
+               icon="icons/32x32benutzerverwaltung.png"
                style="push">
          </command>
          <command
