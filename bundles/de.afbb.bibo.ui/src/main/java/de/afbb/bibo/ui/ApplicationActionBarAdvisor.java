@@ -24,6 +24,8 @@ import org.eclipse.ui.application.IActionBarConfigurer;
  */
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
+	public static final String ID_COOLBAR = "de.afbb.bibo.coolbar";//$NON-NLS-1$
+
 	// Actions - important to allocate these only in makeActions, and then use them
 	// in the fill methods. This ensures that the actions aren't recreated
 	// when fillActionBars is called with FILL_PROXY.
@@ -80,7 +82,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	@Override
 	protected void fillCoolBar(final ICoolBarManager coolBar) {
 		final IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
-		coolBar.add(new ToolBarContributionItem(toolbar, "main"));
+		coolBar.add(new ToolBarContributionItem(toolbar, ID_COOLBAR));
 		toolbar.add(messagePopupAction);
 	}
 }
