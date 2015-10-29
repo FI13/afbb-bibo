@@ -112,6 +112,14 @@
             allPopups="false"
             locationURI="toolbar:de.afbb.bibo.coolbar">
          <command
+               commandId="org.eclipse.ui.file.save"
+               style="push">
+         </command>
+         <separator
+               name="de.afbb.bibo.ui.separator.coolbar1"
+               visible="true">
+         </separator>
+         <command
                commandId="de.afbb.bibo.ui.create.curator"
                icon="icons/sample2.gif"
                style="push">
@@ -132,7 +140,7 @@
                style="push">
          </command>
          <separator
-               name="de.afbb.bibo.ui.separator.coolbar"
+               name="de.afbb.bibo.ui.separator.coolbar2"
                visible="true">
          </separator>
          <command
