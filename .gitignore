@@ -1,5 +1,6 @@
 .classpath
 .gitignore
+.metadata
 .settings/
 target/
 bin/
