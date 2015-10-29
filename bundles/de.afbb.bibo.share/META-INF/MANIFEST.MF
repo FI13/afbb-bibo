@@ -3,3 +3,4 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Share
 Bundle-SymbolicName: de.afbb.bibo.share
 Bundle-Version: 1.0.0.qualifier
+Export-Package: de.afbb.bibo.share.model

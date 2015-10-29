@@ -1,57 +1,69 @@
 package com.amazon.advertising.api.sample;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
-
 import java.io.File;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import de.afbb.bibo.share.model.Medium;
 
 public class Parser {
 
-	public static void main(String[] args) {
-	    try {
+	public static void main(final String[] args) {
+		final Medium test = new Medium();
+		try {
 
-	    	File fXmlFile = new File("h:/ama.xml");
-	    	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-	    	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-	    	Document doc = dBuilder.parse(fXmlFile);
-	    			
-	    	//optional, but recommended
-	    	//read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
-	    	doc.getDocumentElement().normalize();
+			final File fXmlFile = new File("h:/ama.xml");
+			final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			final Document doc = dBuilder.parse(fXmlFile);
 
-	    	System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-	    			
-	    	NodeList nList = doc.getElementsByTagName("Item");
-	    		    	
-	    	for (int temp = 0; temp < nList.getLength(); temp++) {
+			// optional, but recommended
+			// read this -
+			// http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
+			doc.getDocumentElement().normalize();
 
-	    		Node nNode = nList.item(temp);
-	    				
-	    		System.out.println("\nCurrent Element :" + nNode.getNodeName());
-	    				
-	    		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+			System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 
-	    			Element eElement = (Element) nNode;
+			final NodeList nList = doc.getElementsByTagName("Item");
 
-	    			System.out.println("Staff id : " + eElement.getAttribute("id"));
-	    			System.out.println("Laenge Author: "+eElement.getElementsByTagName("Author").getLength());
-	    			for (int i=0; i<eElement.getElementsByTagName("Author").getLength(); i++){
-	    				
-	    			System.out.println("Author : " + eElement.getElementsByTagName("Author").item(i).getTextContent());
-	    			//System.out.println("Author : " + eElement.getElementsByTagName("Author").item(1).getTextContent());
-	    			}
-	    			System.out.println("Language : " + eElement.getElementsByTagName("Language").item(0).getTextContent());
-	    			System.out.println("Publisher : " + eElement.getElementsByTagName("Publisher").item(0).getTextContent());
-	    			System.out.println("Title : " + eElement.getElementsByTagName("Title").item(0).getTextContent());
+			for (int temp = 0; temp < nList.getLength(); temp++) {
 
-	    		}
-	    	}
-	        } catch (Exception e) {
-	    	e.printStackTrace();
-	        }
+				final Node nNode = nList.item(temp);
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+					final Element eElement = (Element) nNode;
+
+					// Authors bestimmen
+					String authorNames = "";
+					for (int i = 0; i < eElement.getElementsByTagName("Author").getLength(); i++) {
+						authorNames += eElement.getElementsByTagName("Author").item(i).getTextContent() + " ";
+					}
+					test.setAuthor(authorNames);
+					// Authors Ende
+					test.setLanguage(eElement.getElementsByTagName("Language").item(0).getFirstChild().getNextSibling()
+							.getTextContent());
+
+					test.setPublisher(eElement.getElementsByTagName("Publisher").item(0).getTextContent());
+					test.setTitle(eElement.getElementsByTagName("Title").item(0).getTextContent());
+
+					// Ausgabe des Testobjects
+					System.out.println("Ausgabe Objekt: ");
+					System.out.println("Author: " + test.getAuthor());
+					System.out.println("ISBN: " + test.getIsbn());
+					System.out.println("Language: " + test.getLanguage());
+					System.out.println("Publisher: " + test.getPublisher());
+					System.out.println("Title: " + test.getTitle());
+
+				}
+			}
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
