@@ -1,4 +1,4 @@
-package de.afbb.bibo.share.internal.impl;
+package de.afbb.bibo.share.internal.stub.impl;
 
 import java.net.ConnectException;
 
@@ -25,6 +25,11 @@ public class LoginStubService implements ILoginService {
 	@Override
 	public String requestSessionTokenForHash(final String userName, final String hashedPassword) throws ConnectException {
 		return USER.equals(userName) && HASH.equals(hashedPassword) ? "token" : null;
+	}
+
+	@Override
+	public void invalidateSession(final String sessionToken) {
+		// nothing to do in stub service
 	}
 
 }
