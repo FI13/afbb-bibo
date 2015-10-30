@@ -20,4 +20,15 @@ public class CuratorStubService implements ICuratorService {
 		// nothing to do in stub service
 	}
 
+	@Override
+	public void update(final Curator curator) throws ConnectException {
+		try {
+			// just to test job in client
+			Thread.sleep(1000);
+		} catch (final InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }

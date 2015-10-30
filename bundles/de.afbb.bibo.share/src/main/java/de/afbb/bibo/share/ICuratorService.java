@@ -15,9 +15,8 @@ public interface ICuratorService {
 	 */
 	boolean exists(String curatorName) throws ConnectException;;
 
-	/**
-	 * @param curator
-	 */
 	void create(Curator curator) throws ConnectException;
+
+	void update(Curator curator) throws ConnectException;
 
 }
