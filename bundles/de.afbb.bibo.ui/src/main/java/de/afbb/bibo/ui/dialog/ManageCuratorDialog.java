@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import de.afbb.bibo.crypto.CryptoUtil;
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
@@ -98,7 +99,9 @@ public class ManageCuratorDialog extends AbstractDialog {
 							@Override
 							protected IStatus run(final IProgressMonitor monitor) {
 								try {
-									// TODO compute hash
+									// compute hash
+									final String salt = createNew ? CryptoUtil.generateSalt() : curator.getSalt();
+									curator.setPasswordHash(CryptoUtil.hashPassword(curator.getPassword(), salt));
 									if (createNew) {
 										ServiceLocator.getInstance().getCuratorService().create(curator);
 									} else {
