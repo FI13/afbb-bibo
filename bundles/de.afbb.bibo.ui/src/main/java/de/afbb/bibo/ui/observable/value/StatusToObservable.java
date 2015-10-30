@@ -16,7 +16,7 @@ public class StatusToObservable extends ComputedValue {
 	@Override
 	protected Object calculate() {
 		final IStatus v = (IStatus) value.getValue();
-		return v == null || v.getSeverity() != IStatus.ERROR;
+		return v == null || v.getSeverity() == IStatus.OK;
 	}
 
 }
