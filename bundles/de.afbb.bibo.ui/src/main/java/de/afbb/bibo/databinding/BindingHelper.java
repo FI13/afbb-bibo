@@ -61,14 +61,15 @@ public final class BindingHelper {
 		final Binding binding = bindingContext.bindValue(targetObservable, modelObservable, targetToModel, null);
 
 		if (required) {
-			createControlDecoration(textField, binding, NotEmptyValue.MSG);
+			createControlDecoration(textField, binding, NotEmptyValue.MSG, required);
 		}
 
 		return binding;
 	}
 
-	public static ControlDecoration createControlDecoration(final Control control, final Binding binding, final String message) {
-		final ControlDecoration controlDecoration = new ControlDecoration(control, SWT.RIGHT | SWT.TOP);
+	public static ControlDecoration createControlDecoration(final Control control, final Binding binding, final String message,
+			final boolean required) {
+		final ControlDecoration controlDecoration = new ControlDecoration(control, SWT.RIGHT | SWT.BOTTOM);
 		final FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 		controlDecoration.setImage(fieldDecoration.getImage());
 		decorations.put(control, controlDecoration);
@@ -81,6 +82,20 @@ public final class BindingHelper {
 			}
 
 		});
+		if (required) {
+			final ControlDecoration requiredDecoration = new ControlDecoration(control, SWT.RIGHT | SWT.TOP);
+			final FieldDecoration requiredFieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(
+					FieldDecorationRegistry.DEC_REQUIRED);
+			requiredDecoration.setImage(requiredFieldDecoration.getImage());
+			control.addDisposeListener(new DisposeListener() {
+
+				@Override
+				public void widgetDisposed(final DisposeEvent e) {
+					requiredDecoration.dispose();
+				}
+
+			});
+		}
 		return controlDecoration;
 	}
 
