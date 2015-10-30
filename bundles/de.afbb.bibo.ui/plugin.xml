@@ -103,10 +103,20 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="de.afbb.bibo.ui.application"
-            name="BiBo">
+            name="AfbB Bibliothek">
          <property
                name="appName"
-               value="BiBo">
+               value="AfbB Bibliothek">
+         </property>
+         <property
+               name="aboutText"
+               value="Bibliotheks-Verwaltung für AfbB.
+
+Erstellt von FI13">
+         </property>
+         <property
+               name="aboutImage"
+               value="product_lg.gif">
          </property>
       </product>
    </extension>
