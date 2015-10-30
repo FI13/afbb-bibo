@@ -61,14 +61,24 @@ public final class BindingHelper {
 		final Binding binding = bindingContext.bindValue(targetObservable, modelObservable, targetToModel, null);
 
 		if (required) {
-			createControlDecoration(textField, binding, NotEmptyValue.MSG, required);
+			createControlDecoration(textField, NotEmptyValue.MSG, required);
 		}
 
 		return binding;
 	}
 
-	public static ControlDecoration createControlDecoration(final Control control, final Binding binding, final String message,
-			final boolean required) {
+	/**
+	 * creates a control decoration to given control. will add the control to decorations map
+	 * 
+	 * @param control
+	 *            to add decoration to
+	 * @param message
+	 *            to display when decoration is shown
+	 * @param required
+	 *            should the required asterisk be shown?
+	 * @return created decoretion
+	 */
+	public static ControlDecoration createControlDecoration(final Control control, final String message, final boolean required) {
 		final ControlDecoration controlDecoration = new ControlDecoration(control, SWT.RIGHT | SWT.BOTTOM);
 		final FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 		controlDecoration.setImage(fieldDecoration.getImage());
