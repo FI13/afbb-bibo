@@ -117,6 +117,7 @@
             locationURI="toolbar:de.afbb.bibo.coolbar">
          <command
                commandId="org.eclipse.ui.file.save"
+               icon="icons/32x32login.png"
                style="push">
          </command>
          <separator
@@ -140,12 +141,12 @@
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.Exemplar"
-               icon="icons/sample2.gif"
+               icon="icons/32x32login.png"
                style="push">
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.borrower"
-               icon="icons/sample2.gif"
+               icon="icons/32x32login.png"
                style="push">
          </command>
          <separator
