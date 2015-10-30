@@ -81,7 +81,7 @@ public final class BindingHelper {
 	 *            to display when decoration is shown
 	 * @param isRequired
 	 *            should the required asterisk be shown?
-	 * @return created decoretion
+	 * @return created decoration
 	 */
 	public static ControlDecoration createControlDecoration(final Control control, final String decorationId, final String message,
 			final boolean isRequired) {
