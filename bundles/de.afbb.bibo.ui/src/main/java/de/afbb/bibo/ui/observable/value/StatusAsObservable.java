@@ -4,11 +4,11 @@ import org.eclipse.core.databinding.observable.value.ComputedValue;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.runtime.IStatus;
 
-public class StatusToObservable extends ComputedValue {
+public class StatusAsObservable extends ComputedValue {
 
 	private final IObservableValue value;
 
-	public StatusToObservable(final IObservableValue value) {
+	public StatusAsObservable(final IObservableValue value) {
 		super(Boolean.class);
 		this.value = value;
 	}

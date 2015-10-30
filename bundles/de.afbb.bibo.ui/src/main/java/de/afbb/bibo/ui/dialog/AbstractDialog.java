@@ -15,7 +15,7 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.widgets.Shell;
 
 import de.afbb.bibo.databinding.BindingHelper;
-import de.afbb.bibo.ui.observable.value.StatusToObservable;
+import de.afbb.bibo.ui.observable.value.StatusAsObservable;
 
 public abstract class AbstractDialog extends TitleAreaDialog {
 
@@ -61,7 +61,7 @@ public abstract class AbstractDialog extends TitleAreaDialog {
 						return Status.OK_STATUS;
 					}
 				}));
-		bindingContext.bindValue(SWTObservables.observeEnabled(getButton(IDialogConstants.OK_ID)), new StatusToObservable(
+		bindingContext.bindValue(SWTObservables.observeEnabled(getButton(IDialogConstants.OK_ID)), new StatusAsObservable(
 				aggregateValidationStatus), null, null);
 	}
 
