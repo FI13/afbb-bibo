@@ -3,6 +3,10 @@ package de.afbb.bibo.ui.dialog;
 import java.net.ConnectException;
 
 import org.eclipse.core.databinding.beans.BeansObservables;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -79,8 +83,20 @@ public class CreateCuratorDialog extends AbstractDialog {
 					if (!password2.equals(curator.getPassword())) {
 						setMessage("Passwort & Passwort-Wiederholung stimmen nicht überein!", IMessageProvider.ERROR);
 					} else {
-						// persist
-						ServiceLocator.getInstance().getCuratorService().create(curator);
+						// persist in background job
+						final Job job = new Job("Neuanlage Verwalter") {
+
+							@Override
+							protected IStatus run(final IProgressMonitor monitor) {
+								try {
+									ServiceLocator.getInstance().getCuratorService().create(curator);
+									return Status.OK_STATUS;
+								} catch (final ConnectException e) {
+									return Status.CANCEL_STATUS;
+								}
+							}
+						};
+						job.schedule();
 						okPressed();
 					}
 				}
