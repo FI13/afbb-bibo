@@ -13,11 +13,11 @@ import de.afbb.bibo.ui.dialog.ManageCuratorDialog;
  * 
  * @author dbecker
  */
-public class CreateCuratorHandler extends AbstractHandler {
+public class ManageCuratorHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		new ManageCuratorDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), true).open();
+		new ManageCuratorDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), false).open();
 		return null;
 	}
 

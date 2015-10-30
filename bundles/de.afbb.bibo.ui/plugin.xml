@@ -75,6 +75,10 @@
             id="de.afbb.bibo.ui.return"
             name="Zurückgeben">
       </command>
+      <command
+            id="de.afbb.bibo.ui.manage.curator"
+            name="Eigenes Passwort Ändern">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -113,12 +117,18 @@
             locationURI="toolbar:de.afbb.bibo.coolbar">
          <command
                commandId="org.eclipse.ui.file.save"
+               icon="icons/32x32login.png"
                style="push">
          </command>
          <separator
                name="de.afbb.bibo.ui.separator.coolbar1"
                visible="true">
          </separator>
+         <command
+               commandId="de.afbb.bibo.ui.manage.curator"
+               icon="icons/32x32benutzerverwaltung.png"
+               style="push">
+         </command>
          <command
                commandId="de.afbb.bibo.ui.create.curator"
                icon="icons/32x32benutzerverwaltung.png"
@@ -131,12 +141,12 @@
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.Exemplar"
-               icon="icons/sample2.gif"
+               icon="icons/32x32login.png"
                style="push">
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.borrower"
-               icon="icons/sample2.gif"
+               icon="icons/32x32login.png"
                style="push">
          </command>
          <separator
@@ -176,6 +186,10 @@
       <handler
             class="de.afbb.bibo.ui.handler.CreateTypeHandler"
             commandId="de.afbb.bibo.ui.create.type">
+      </handler>
+      <handler
+            class="de.afbb.bibo.ui.handler.ManageCuratorHandler"
+            commandId="de.afbb.bibo.ui.manage.curator">
       </handler>
    </extension>
 

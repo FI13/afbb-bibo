@@ -53,9 +53,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		register(aboutAction);
 
 		newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(window);
-
-		messagePopupAction = new MessagePopupAction("Open Message", window);
-		register(messagePopupAction);
 	}
 
 	@Override
@@ -71,8 +68,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// File
 		fileMenu.add(newWindowAction);
 		fileMenu.add(new Separator());
-		fileMenu.add(messagePopupAction);
-		fileMenu.add(new Separator());
 		fileMenu.add(exitAction);
 
 		// Help
@@ -83,6 +78,5 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	protected void fillCoolBar(final ICoolBarManager coolBar) {
 		final IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
 		coolBar.add(new ToolBarContributionItem(toolbar, ID_COOLBAR));
-		toolbar.add(messagePopupAction);
 	}
 }

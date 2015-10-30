@@ -19,8 +19,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import de.afbb.bibo.crypto.CryptoUtil;
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
 
 /**
@@ -28,19 +30,23 @@ import de.afbb.bibo.share.model.Curator;
  * 
  * @author dbecker
  */
-public class CreateCuratorDialog extends AbstractDialog {
+public class ManageCuratorDialog extends AbstractDialog {
 
 	private static final String FIELD_PASSWORD2 = "password2";//$NON-NLS-1$
 
 	private Text txtName;
 	private Text txtPassword;
 	private Text txtPassword2;
-	private final Curator curator = new Curator();
+	private final Curator curator;
 
 	private String password2 = "";//$NON-NLS-1$
 
-	public CreateCuratorDialog(final Shell parentShell) {
+	private final boolean createNew;
+
+	public ManageCuratorDialog(final Shell parentShell, final boolean createNew) {
 		super(parentShell);
+		this.createNew = createNew;
+		curator = createNew ? new Curator() : SessionHolder.getInstance().getCurator();
 	}
 
 	@Override
@@ -57,6 +63,9 @@ public class CreateCuratorDialog extends AbstractDialog {
 		lblName.setText("Name");
 		txtName = new Text(container, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtName);
+		// disable name field on password change
+		lblName.setEnabled(createNew);
+		txtName.setEnabled(createNew);
 
 		final Label lblPassword = new Label(container, SWT.NONE);
 		lblPassword.setText("Passwort");
@@ -76,20 +85,28 @@ public class CreateCuratorDialog extends AbstractDialog {
 		if (buttonId == Dialog.OK) {
 			try {
 				// check that there is no curator with chosen name
-				if (ServiceLocator.getInstance().getCuratorService().exists(curator.getName())) {
+				if (createNew && ServiceLocator.getInstance().getCuratorService().exists(curator.getName())) {
 					setMessage("Es gibt schon einen Verwalter mit dem gewählten Namen", IMessageProvider.INFORMATION);
 				} else {
 					// check that passwords are the same
 					if (!password2.equals(curator.getPassword())) {
 						setMessage("Passwort & Passwort-Wiederholung stimmen nicht überein!", IMessageProvider.ERROR);
 					} else {
+						// TODO implement password strength check?
 						// persist in background job
-						final Job job = new Job("Neuanlage Verwalter") {
+						final Job job = new Job(getTitle()) {
 
 							@Override
 							protected IStatus run(final IProgressMonitor monitor) {
 								try {
-									ServiceLocator.getInstance().getCuratorService().create(curator);
+									// compute hash
+									final String salt = createNew ? CryptoUtil.generateSalt() : curator.getSalt();
+									curator.setPasswordHash(CryptoUtil.hashPassword(curator.getPassword(), salt));
+									if (createNew) {
+										ServiceLocator.getInstance().getCuratorService().create(curator);
+									} else {
+										ServiceLocator.getInstance().getCuratorService().update(curator);
+									}
 									return Status.OK_STATUS;
 								} catch (final ConnectException e) {
 									return Status.CANCEL_STATUS;
@@ -118,7 +135,7 @@ public class CreateCuratorDialog extends AbstractDialog {
 
 	@Override
 	protected String getTitle() {
-		return "Neuanlage Verwalter";
+		return createNew ? "Neuanlage Verwalter" : "Passwort ändern";
 	}
 
 	public String getPassword2() {
