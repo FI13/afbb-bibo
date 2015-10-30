@@ -28,7 +28,7 @@ import de.afbb.bibo.share.model.Curator;
  * 
  * @author dbecker
  */
-public class CreateCuratorDialog extends AbstractDialog {
+public class ManageCuratorDialog extends AbstractDialog {
 
 	private static final String FIELD_PASSWORD2 = "password2";//$NON-NLS-1$
 
@@ -39,7 +39,7 @@ public class CreateCuratorDialog extends AbstractDialog {
 
 	private String password2 = "";//$NON-NLS-1$
 
-	public CreateCuratorDialog(final Shell parentShell) {
+	public ManageCuratorDialog(final Shell parentShell) {
 		super(parentShell);
 	}
 
