@@ -64,7 +64,7 @@ public final class BindingHelper {
 		final Binding binding = bindingContext.bindValue(targetObservable, modelObservable, targetToModel, null);
 
 		if (isRequired) {
-			createControlDecoration(textField, NotEmptyValue.MSG, isRequired);
+			createControlDecoration(textField, FieldDecorationRegistry.DEC_INFORMATION, NotEmptyValue.MSG, isRequired);
 		}
 
 		return binding;
@@ -75,15 +75,18 @@ public final class BindingHelper {
 	 * 
 	 * @param control
 	 *            to add decoration to
+	 * @param decorationId
+	 *            id for decoration. like {@link FieldDecorationRegistry#DEC_ERROR} or {@link FieldDecorationRegistry#DEC_WARNING}
 	 * @param message
 	 *            to display when decoration is shown
 	 * @param isRequired
 	 *            should the required asterisk be shown?
 	 * @return created decoretion
 	 */
-	public static ControlDecoration createControlDecoration(final Control control, final String message, final boolean isRequired) {
+	public static ControlDecoration createControlDecoration(final Control control, final String decorationId, final String message,
+			final boolean isRequired) {
 		final ControlDecoration controlDecoration = new ControlDecoration(control, SWT.RIGHT | SWT.BOTTOM);
-		final FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
+		final FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(decorationId);
 		controlDecoration.setImage(fieldDecoration.getImage());
 		decorations.put(control, controlDecoration);
 		control.addDisposeListener(new DisposeListener() {

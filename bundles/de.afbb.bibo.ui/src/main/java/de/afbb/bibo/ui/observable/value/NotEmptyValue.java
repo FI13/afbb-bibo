@@ -16,10 +16,10 @@ public class NotEmptyValue implements IValidator {
 	@Override
 	public IStatus validate(final Object value) {
 		if (value == null) {
-			return ValidationStatus.error(MSG);
+			return ValidationStatus.info(MSG);
 		}
 		if (value instanceof String && ((String) value).isEmpty()) {
-			return ValidationStatus.error(MSG);
+			return ValidationStatus.info(MSG);
 		}
 		return ValidationStatus.ok();
 	}
