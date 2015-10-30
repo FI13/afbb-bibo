@@ -50,18 +50,21 @@ public final class BindingHelper {
 	 *            name of the property that should be binded. expected to be of {@link String} type
 	 * @param bindingContext
 	 *            context of the binding
+	 * @param isRequired
+	 *            should the field be filled by the user?
 	 * @return binding
 	 */
 	public static Binding bindStringToTextField(final Text textField, final Object entity, final Class<?> entityClass,
-			final String propertyName, final DataBindingContext bindingContext, final boolean required) {
+			final String propertyName, final DataBindingContext bindingContext, final boolean isRequired) {
 		final ISWTObservableValue targetObservable = SWTObservables.observeText(textField, SWT.Modify);
 		final IObservableValue modelObservable = BeanProperties.value(entityClass, propertyName).observe(entity);
-		final UpdateValueStrategy targetToModel = required ? new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyValue()) : null;
+		final UpdateValueStrategy targetToModel = isRequired ? new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyValue())
+				: null;
 
 		final Binding binding = bindingContext.bindValue(targetObservable, modelObservable, targetToModel, null);
 
-		if (required) {
-			createControlDecoration(textField, NotEmptyValue.MSG, required);
+		if (isRequired) {
+			createControlDecoration(textField, NotEmptyValue.MSG, isRequired);
 		}
 
 		return binding;
@@ -74,11 +77,11 @@ public final class BindingHelper {
 	 *            to add decoration to
 	 * @param message
 	 *            to display when decoration is shown
-	 * @param required
+	 * @param isRequired
 	 *            should the required asterisk be shown?
 	 * @return created decoretion
 	 */
-	public static ControlDecoration createControlDecoration(final Control control, final String message, final boolean required) {
+	public static ControlDecoration createControlDecoration(final Control control, final String message, final boolean isRequired) {
 		final ControlDecoration controlDecoration = new ControlDecoration(control, SWT.RIGHT | SWT.BOTTOM);
 		final FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 		controlDecoration.setImage(fieldDecoration.getImage());
@@ -92,7 +95,7 @@ public final class BindingHelper {
 			}
 
 		});
-		if (required) {
+		if (isRequired) {
 			final ControlDecoration requiredDecoration = new ControlDecoration(control, SWT.RIGHT | SWT.TOP);
 			final FieldDecoration requiredFieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(
 					FieldDecorationRegistry.DEC_REQUIRED);
