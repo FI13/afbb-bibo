@@ -115,7 +115,7 @@ public class CreateTypeDialog extends TitleAreaDialog {
 	}
 
 	private void createBinding() {
-		BindingHelper.bindStringToTextField(txtName, type, Typ.class, Typ.FIELD_NAME, bindingContext);
+		BindingHelper.bindStringToTextField(txtName, type, Typ.class, Typ.FIELD_NAME, bindingContext, true);
 	}
 
 }
