@@ -2,10 +2,8 @@ package de.afbb.bibo.ui.dialog;
 
 import java.net.ConnectException;
 
-import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
-import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.SWT;
@@ -26,11 +24,10 @@ import de.afbb.bibo.share.model.Typ;
 import de.afbb.bibo.ui.Activator;
 import de.afbb.bibo.ui.ImagePath;
 
-public class CreateTypeDialog extends TitleAreaDialog {
+public class CreateTypeDialog extends AbstractDialog {
 
 	private Text txtName;
 	private final Typ type = new Typ();
-	private final DataBindingContext bindingContext = new DataBindingContext();
 	ImageRegistry imageRegistry = new ImageRegistry();
 
 	public CreateTypeDialog(final Shell parentShell) {
@@ -38,12 +35,6 @@ public class CreateTypeDialog extends TitleAreaDialog {
 
 		imageRegistry.put(ImagePath.ICON_BOOK2, Activator.getImageDescriptor(ImagePath.ICON_BOOK2));
 		imageRegistry.put(ImagePath.ICON_CD, Activator.getImageDescriptor(ImagePath.ICON_CD));
-	}
-
-	@Override
-	public void create() {
-		super.create();
-		setTitle("Neuanlage Medien-Typ");
 	}
 
 	@Override
@@ -81,7 +72,6 @@ public class CreateTypeDialog extends TitleAreaDialog {
 
 		btnNone.setSelection(true);
 
-		createBinding();
 		return area;
 	}
 
@@ -114,8 +104,14 @@ public class CreateTypeDialog extends TitleAreaDialog {
 		}
 	}
 
-	private void createBinding() {
+	@Override
+	protected void createBinding() {
 		BindingHelper.bindStringToTextField(txtName, type, Typ.class, Typ.FIELD_NAME, bindingContext, true);
+	}
+
+	@Override
+	protected String getTitle() {
+		return "Neuanlage Medien-Typ";
 	}
 
 }
