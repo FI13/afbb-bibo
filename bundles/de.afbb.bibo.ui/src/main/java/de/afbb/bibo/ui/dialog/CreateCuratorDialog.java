@@ -1,10 +1,6 @@
 package de.afbb.bibo.ui.dialog;
 
-import java.net.ConnectException;
-
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -15,41 +11,31 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
 
-import de.afbb.bibo.crypto.CryptoUtil;
 import de.afbb.bibo.databinding.BindingHelper;
-import de.afbb.bibo.share.ServiceLocator;
-import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
 
 /**
- * dialog that tries to log the user in.<br>
- * will set the returned session token into {@link SessionHolder} on success and will terminate the program if the user cancels the dialog
+ * dialog that creates a new instance of type {@link Curator}
  * 
  * @author dbecker
  */
-public class LoginDialog extends TitleAreaDialog {
+public class CreateCuratorDialog extends TitleAreaDialog {
 
-	private Text txtPassword;
 	private Text txtName;
+	private Text txtPassword;
+	private Text txtPassword2;
 	private final Curator curator = new Curator();
 	private final DataBindingContext bindingContext = new DataBindingContext();
-	private boolean loginSuccessful = false;
 
-	public LoginDialog(final Shell parentShell) {
+	public CreateCuratorDialog(final Shell parentShell) {
 		super(parentShell);
 	}
 
 	@Override
 	public void create() {
 		super.create();
-		setTitle("Benutzer-Anmeldung");
-	}
-
-	@Override
-	public boolean close() {
-		return loginSuccessful ? super.close() : loginSuccessful;
+		setTitle("Neuanlage Verwalter");
 	}
 
 	@Override
@@ -72,39 +58,14 @@ public class LoginDialog extends TitleAreaDialog {
 		txtPassword = new Text(container, SWT.BORDER | SWT.PASSWORD);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPassword);
 
+		final Label lblPassword2 = new Label(container, SWT.NONE);
+		lblPassword2.setText("Passwort (Wiederholung)");
+		txtPassword2 = new Text(container, SWT.BORDER | SWT.PASSWORD);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPassword2);
+
 		createBinding();
 
 		return area;
-	}
-
-	@Override
-	protected void buttonPressed(final int buttonId) {
-		if (Dialog.OK == buttonId) {
-			loginSuccessful = validateLogin();
-			okPressed();
-		} else {
-			PlatformUI.getWorkbench().close();
-		}
-	}
-
-	private boolean validateLogin() {
-		try {
-			final String salt = ServiceLocator.getInstance().getLoginService().requestSaltForUserName(curator.getName());
-			final String hashPassword = CryptoUtil.hashPassword(curator.getPassword(), salt);
-			final String sessionToken = ServiceLocator.getInstance().getLoginService().requestSessionTokenForHash(curator.getName(),
-					hashPassword);
-			if (sessionToken == null || sessionToken.isEmpty()) {
-				setMessage("Name und Passwort stimmen nicht überein !", IMessageProvider.ERROR);
-				return false;
-			}
-			setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
-			SessionHolder.getInstance().setSessionToken(sessionToken);
-			SessionHolder.getInstance().setCurator(curator);
-			return true;
-		} catch (final ConnectException e) {
-			setMessage("Es besteht ein Verbindungs-Problem mit dem Server", IMessageProvider.WARNING);
-		}
-		return false;
 	}
 
 	private void createBinding() {
