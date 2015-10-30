@@ -1,6 +1,10 @@
 package de.afbb.bibo.share.model;
 
-public class Typ {
+import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
+
+public class Typ extends AbstractPropertyChangeSupport {
+
+	public static final String FIELD_NAME = "typname";//$NON-NLS-1$
 
 	private Integer id;
 	private String typname;
@@ -27,7 +31,7 @@ public class Typ {
 	}
 
 	public void setTypname(final String typname) {
-		this.typname = typname;
+		changeSupport.firePropertyChange(FIELD_NAME, this.typname, this.typname = typname);
 	}
 
 }

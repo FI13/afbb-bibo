@@ -1,5 +1,6 @@
 package de.afbb.bibo.databinding;
 
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -32,12 +33,13 @@ public final class BindingHelper {
 	 *            name of the property that should be binded. expected to be of {@link String} type
 	 * @param bindingContext
 	 *            context of the binding
+	 * @return binding
 	 */
-	public static void bindStringToTextField(final Text textField, final Object entity, final Class<?> entityClass,
+	public static Binding bindStringToTextField(final Text textField, final Object entity, final Class<?> entityClass,
 			final String propertyName, final DataBindingContext bindingContext) {
 		final ISWTObservableValue targetObservable = SWTObservables.observeText(textField, SWT.Modify);
 		final IObservableValue modelObservable = BeanProperties.value(entityClass, propertyName).observe(entity);
-		bindingContext.bindValue(targetObservable, modelObservable);
+		return bindingContext.bindValue(targetObservable, modelObservable);
 	}
 
 }
