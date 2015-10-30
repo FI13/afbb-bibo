@@ -16,10 +16,12 @@ public class printExampleList {
 
 	public static void main(final String[] args) throws Exception {
 
+		final String s = "<!DOCTYPE html><html><body><h1>My First Heading</h1><p>My first paragraph.</p></body></html>";
 		final PrinterJob pj = PrinterJob.getPrinterJob();
 
 		final JEditorPane text = new JEditorPane("text/html", "text");
 		text.read(new BufferedReader(new InputStreamReader(new FileInputStream(new File("h:/test.html")))), "");
+		// text.setText(s);
 		text.repaint();
 		pj.setPrintable(text.getPrintable(head, foot));
 		pj.print();
