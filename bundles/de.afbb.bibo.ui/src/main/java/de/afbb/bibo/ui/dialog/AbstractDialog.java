@@ -1,5 +1,8 @@
 package de.afbb.bibo.ui.dialog;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 import org.eclipse.core.databinding.AggregateValidationStatus;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -21,9 +24,18 @@ public abstract class AbstractDialog extends TitleAreaDialog {
 
 	protected final DataBindingContext bindingContext = new DataBindingContext();
 	private final IObservableValue validationStatus = new WritableValue(IStatus.OK, IStatus.class);
+	protected final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
 	protected AbstractDialog(final Shell parentShell) {
 		super(parentShell);
+	}
+
+	public void addPropertyChangeListener(final String propertyName, final PropertyChangeListener listener) {
+		changeSupport.addPropertyChangeListener(propertyName, listener);
+	}
+
+	public void removePropertyChangeListener(final String propertyName, final PropertyChangeListener listener) {
+		changeSupport.removePropertyChangeListener(propertyName, listener);
 	}
 
 	@Override

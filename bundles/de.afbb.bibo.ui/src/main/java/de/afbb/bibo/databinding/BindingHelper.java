@@ -56,8 +56,13 @@ public final class BindingHelper {
 	 */
 	public static Binding bindStringToTextField(final Text textField, final Object entity, final Class<?> entityClass,
 			final String propertyName, final DataBindingContext bindingContext, final boolean isRequired) {
+		return bindStringToTextField(textField, BeanProperties.value(entityClass, propertyName).observe(entity), bindingContext,
+				isRequired);
+	}
+
+	public static Binding bindStringToTextField(final Text textField, final IObservableValue modelObservable,
+			final DataBindingContext bindingContext, final boolean isRequired) {
 		final ISWTObservableValue targetObservable = SWTObservables.observeText(textField, SWT.Modify);
-		final IObservableValue modelObservable = BeanProperties.value(entityClass, propertyName).observe(entity);
 		final UpdateValueStrategy targetToModel = isRequired ? new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyValue())
 				: null;
 
@@ -84,14 +89,15 @@ public final class BindingHelper {
 	public static ControlDecoration createControlDecoration(final Control control, final String message, final boolean isRequired) {
 		final ControlDecoration controlDecoration = new ControlDecoration(control, SWT.RIGHT | SWT.BOTTOM);
 		final FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
-		controlDecoration.setImage(fieldDecoration.getImage());
 		decorations.put(control, controlDecoration);
+		controlDecoration.setImage(fieldDecoration.getImage());
+		controlDecoration.hide();
 		control.addDisposeListener(new DisposeListener() {
 
 			@Override
 			public void widgetDisposed(final DisposeEvent e) {
 				final ControlDecoration remove = decorations.remove(control);
-				remove.dispose();
+				controlDecoration.dispose();
 			}
 
 		});
@@ -135,7 +141,7 @@ public final class BindingHelper {
 						control = (Control) swtObservableValue.getWidget();
 					}
 					final ControlDecoration decoration = decorations.get(control);
-					if (decoration != null) {
+					if (decoration != null && !control.isDisposed()) {
 						if (status.isOK()) {
 							decoration.hide();
 						} else {

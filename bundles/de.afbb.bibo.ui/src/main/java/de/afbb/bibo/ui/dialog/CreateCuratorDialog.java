@@ -1,9 +1,10 @@
 package de.afbb.bibo.ui.dialog;
 
-import org.eclipse.core.databinding.Binding;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.jface.databinding.swt.ISWTObservableValue;
-import org.eclipse.jface.databinding.swt.SWTObservables;
+import java.net.ConnectException;
+
+import org.eclipse.core.databinding.beans.BeansObservables;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -15,8 +16,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import de.afbb.bibo.databinding.BindingHelper;
+import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.Curator;
-import de.afbb.bibo.ui.observable.value.EqualsValue;
 
 /**
  * dialog that creates a new instance of type {@link Curator}
@@ -25,10 +26,14 @@ import de.afbb.bibo.ui.observable.value.EqualsValue;
  */
 public class CreateCuratorDialog extends AbstractDialog {
 
+	private static final String FIELD_PASSWORD2 = "password2";//$NON-NLS-1$
+
 	private Text txtName;
 	private Text txtPassword;
 	private Text txtPassword2;
 	private final Curator curator = new Curator();
+
+	private String password2 = "";//$NON-NLS-1$
 
 	public CreateCuratorDialog(final Shell parentShell) {
 		super(parentShell);
@@ -63,21 +68,49 @@ public class CreateCuratorDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected void createBinding() {
-		final Binding bindingName = BindingHelper.bindStringToTextField(txtName, curator, Curator.class, Curator.FIELD_NAME, bindingContext,
-				true);
-		final Binding bindingPassword = BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD,
-				bindingContext, true);
+	protected void buttonPressed(final int buttonId) {
+		if (buttonId == Dialog.OK) {
+			try {
+				// check that there is no curator with chosen name
+				if (ServiceLocator.getInstance().getCuratorService().exists(curator.getName())) {
+					setMessage("Es gibt schon einen Verwalter mit dem gewählten Namen", IMessageProvider.INFORMATION);
+				} else {
+					// check that passwords are the same
+					if (!password2.equals(curator.getPassword())) {
+						setMessage("Passwort & Passwort-Wiederholung stimmen nicht überein!", IMessageProvider.ERROR);
+					} else {
+						// persist
+						ServiceLocator.getInstance().getCuratorService().create(curator);
+						okPressed();
+					}
+				}
+			} catch (final ConnectException e) {
+				setMessage("Es besteht ein Verbindungs-Problem mit dem Server", IMessageProvider.WARNING);
+			}
+		} else {
+			cancelPressed();
+		}
+	}
 
-		// validate that the two passwords are the same
-		final ISWTObservableValue observePassword2 = SWTObservables.observeText(txtPassword2, SWT.Modify);
-		new EqualsValue((IObservableValue) bindingPassword.getModel(), observePassword2,
-				"Passwort & Passwort-Wiederholung passen nicht zusammen!");
+	@Override
+	protected void createBinding() {
+		BindingHelper.bindStringToTextField(txtName, curator, Curator.class, Curator.FIELD_NAME, bindingContext, true);
+		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext, true);
+		BindingHelper.bindStringToTextField(txtPassword2, BeansObservables.observeValue(this, FIELD_PASSWORD2), bindingContext, true);
+
 	}
 
 	@Override
 	protected String getTitle() {
 		return "Neuanlage Verwalter";
+	}
+
+	public String getPassword2() {
+		return password2;
+	}
+
+	public void setPassword2(final String password2) {
+		changeSupport.firePropertyChange(FIELD_PASSWORD2, this.password2, this.password2 = password2);
 	}
 
 }

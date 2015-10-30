@@ -1,5 +1,7 @@
 package de.afbb.bibo.share;
 
+import java.net.ConnectException;
+
 import de.afbb.bibo.share.model.Curator;
 
 public interface ICuratorService {
@@ -11,6 +13,11 @@ public interface ICuratorService {
 	 *            curator to check
 	 * @return
 	 */
-	boolean exists(Curator curator);
+	boolean exists(String curatorName) throws ConnectException;;
+
+	/**
+	 * @param curator
+	 */
+	void create(Curator curator) throws ConnectException;
 
 }
