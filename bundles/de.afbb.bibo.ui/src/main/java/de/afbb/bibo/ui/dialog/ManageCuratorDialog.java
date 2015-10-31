@@ -24,6 +24,7 @@ import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
+import de.afbb.bibo.ui.Messages;
 
 /**
  * dialog that creates a new instance of type {@link Curator}
@@ -118,7 +119,7 @@ public class ManageCuratorDialog extends AbstractDialog {
 					}
 				}
 			} catch (final ConnectException e) {
-				setMessage("Es besteht ein Verbindungs-Problem mit dem Server", IMessageProvider.WARNING);
+				setMessage(Messages.MSG_CONNECTION_ERROR, IMessageProvider.WARNING);
 			}
 		} else {
 			cancelPressed();

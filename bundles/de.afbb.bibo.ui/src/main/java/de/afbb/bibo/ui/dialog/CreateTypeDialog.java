@@ -23,6 +23,7 @@ import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.Typ;
 import de.afbb.bibo.ui.Activator;
 import de.afbb.bibo.ui.ImagePath;
+import de.afbb.bibo.ui.Messages;
 
 public class CreateTypeDialog extends AbstractDialog {
 
@@ -99,7 +100,7 @@ public class CreateTypeDialog extends AbstractDialog {
 				ServiceLocator.getInstance().getTypService().create(type);
 				okPressed();
 			} catch (final ConnectException e) {
-				setMessage("Es besteht ein Verbindungs-Problem mit dem Server", IMessageProvider.WARNING);
+				setMessage(Messages.MSG_CONNECTION_ERROR, IMessageProvider.WARNING);
 			}
 		} else {
 			cancelPressed();
