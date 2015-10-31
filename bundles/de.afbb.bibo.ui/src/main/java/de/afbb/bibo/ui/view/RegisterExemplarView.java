@@ -24,7 +24,7 @@ public class RegisterExemplarView extends AbstractEditView {
 	private Text messageText;
 
 	@Override
-	public void createPartControl(final Composite parent) {
+	public void initUi(final Composite parent) {
 		final Composite top = new Composite(parent, SWT.NONE);
 		final GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
@@ -34,6 +34,12 @@ public class RegisterExemplarView extends AbstractEditView {
 		messageText = new Text(top, SWT.MULTI | SWT.WRAP);
 		messageText.setText("TODO: hier Begrüßung des Nutzer einfügen und allgemeine Informationen zur Bedienung der Software anzeigen");
 		messageText.setLayoutData(new GridData(GridData.FILL_BOTH));
+	}
+
+	@Override
+	protected void initBinding() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("TODO: implement");
 	}
 
 	@Override
