@@ -152,7 +152,7 @@ Erstellt von FI13">
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.Exemplar"
-               icon="icons/32x32login.png"
+               icon="icons/32x32book.png"
                style="push">
          </command>
          <command
