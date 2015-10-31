@@ -1,6 +1,5 @@
 package de.afbb.bibo.ui.view;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -9,14 +8,13 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.EditorPart;
 
 /**
  * this view allows the registration of new exemplars
  * 
  * @author dbecker
  */
-public class RegisterExemplarView extends EditorPart {
+public class RegisterExemplarView extends AbstractEditView {
 
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 
@@ -44,26 +42,8 @@ public class RegisterExemplarView extends EditorPart {
 	}
 
 	@Override
-	public void doSave(final IProgressMonitor monitor) {
-	}
-
-	@Override
-	public void doSaveAs() {
-	}
-
-	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setSite(site);
 		setInput(input);
-	}
-
-	@Override
-	public boolean isDirty() {
-		return false;
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
 	}
 }
