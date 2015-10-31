@@ -64,7 +64,7 @@ public class LoginDialog extends AbstractDialog {
 		txtPassword = new Text(container, SWT.BORDER | SWT.PASSWORD);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPassword);
 
-		createBinding();
+		initBinding();
 
 		return area;
 	}
@@ -100,7 +100,7 @@ public class LoginDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected void createBinding() {
+	protected void initBinding() {
 		BindingHelper.bindStringToTextField(txtName, curator, Curator.class, Curator.FIELD_NAME, bindingContext, true);
 		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext, true);
 	}

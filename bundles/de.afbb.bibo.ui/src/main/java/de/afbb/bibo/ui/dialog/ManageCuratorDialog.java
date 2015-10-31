@@ -127,7 +127,7 @@ public class ManageCuratorDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected void createBinding() {
+	protected void initBinding() {
 		BindingHelper.bindStringToTextField(txtName, curator, Curator.class, Curator.FIELD_NAME, bindingContext, true);
 		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext, true);
 		BindingHelper.bindStringToTextField(txtPassword2, BeansObservables.observeValue(this, FIELD_PASSWORD2), bindingContext, true);

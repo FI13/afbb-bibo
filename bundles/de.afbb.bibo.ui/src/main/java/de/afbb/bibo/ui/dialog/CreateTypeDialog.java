@@ -108,7 +108,7 @@ public class CreateTypeDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected void createBinding() {
+	protected void initBinding() {
 		BindingHelper.bindStringToTextField(txtName, type, Typ.class, Typ.FIELD_NAME, bindingContext, true);
 	}
 
