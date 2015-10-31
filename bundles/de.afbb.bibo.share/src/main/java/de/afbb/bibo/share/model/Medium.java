@@ -1,6 +1,16 @@
 package de.afbb.bibo.share.model;
 
-public class Medium {
+import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
+
+public class Medium extends AbstractPropertyChangeSupport {
+
+	public static final String FIELD_ISBN = "isbn";//$NON-NLS-1$
+	public static final String FIELD_TITLE = "title";//$NON-NLS-1$
+	public static final String FIELD_AUTHOR = "author";//$NON-NLS-1$
+	public static final String FIELD_LANGUAGE = "language";//$NON-NLS-1$
+	public static final String FIELD_TYP_ID = "typId";//$NON-NLS-1$
+	public static final String FIELD_PUBLISHER = "publisher";//$NON-NLS-1$
+
 	private Integer id;
 	private String isbn;
 	private String title;
@@ -14,7 +24,7 @@ public class Medium {
 	}
 
 	public void setTitle(final String title) {
-		this.title = title;
+		changeSupport.firePropertyChange(FIELD_TITLE, this.title, this.title = title);
 	}
 
 	public Integer getTypId() {
@@ -22,7 +32,7 @@ public class Medium {
 	}
 
 	public void setTypId(final Integer typId) {
-		this.typId = typId;
+		changeSupport.firePropertyChange(FIELD_TYP_ID, this.typId, this.typId = typId);
 	}
 
 	public String getPublisher() {
@@ -30,7 +40,7 @@ public class Medium {
 	}
 
 	public void setPublisher(final String publisher) {
-		this.publisher = publisher;
+		changeSupport.firePropertyChange(FIELD_PUBLISHER, this.publisher, this.publisher = publisher);
 	}
 
 	public Integer getId() {
@@ -46,7 +56,7 @@ public class Medium {
 	}
 
 	public void setIsbn(final String isbn) {
-		this.isbn = isbn;
+		changeSupport.firePropertyChange(FIELD_ISBN, this.isbn, this.isbn = isbn);
 	}
 
 	public String getAuthor() {
@@ -54,7 +64,7 @@ public class Medium {
 	}
 
 	public void setAuthor(final String author) {
-		this.author = author;
+		changeSupport.firePropertyChange(FIELD_AUTHOR, this.author, this.author = author);
 	}
 
 	public String getLanguage() {
@@ -62,7 +72,7 @@ public class Medium {
 	}
 
 	public void setLanguage(final String language) {
-		this.language = language;
+		changeSupport.firePropertyChange(FIELD_LANGUAGE, this.language, this.language = language);
 	}
 
 }
