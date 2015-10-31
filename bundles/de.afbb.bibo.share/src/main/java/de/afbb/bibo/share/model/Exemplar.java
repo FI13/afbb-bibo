@@ -17,7 +17,7 @@ public class Exemplar extends Medium implements IEditorInput {
 
 	private Integer id;
 	private String edition;
-	private String barcode;
+	private String barcode = "";
 	private Date inventoryDate;
 	private String condition;
 	private Date borrowDate;

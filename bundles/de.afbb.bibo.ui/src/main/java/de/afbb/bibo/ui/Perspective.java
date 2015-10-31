@@ -3,6 +3,8 @@ package de.afbb.bibo.ui;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
+import de.afbb.bibo.ui.view.NavigationView;
+
 public class Perspective implements IPerspectiveFactory {
 
 	public static final String ID = "de.afbb.bibo.ui.perspective";//$NON-NLS-1$
