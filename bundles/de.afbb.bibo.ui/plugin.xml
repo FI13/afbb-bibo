@@ -111,13 +111,15 @@
          </property>
          <property
                name="aboutText"
-               value="Bibliotheks-Verwaltung für AfbB.
-
-Erstellt von FI13">
+               value="Bibliotheks-Verwaltung für AfbB.&#x0A;&#x0A;Erstellt von FI13">
          </property>
          <property
                name="aboutImage"
                value="product_lg.gif">
+         </property>
+         <property
+               name="windowImages"
+               value="icons/16x16book2.png,icons/32x32book2.png">
          </property>
       </product>
    </extension>
