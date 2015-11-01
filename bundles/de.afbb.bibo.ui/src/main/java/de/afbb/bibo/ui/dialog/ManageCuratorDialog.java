@@ -24,6 +24,7 @@ import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
+import de.afbb.bibo.ui.Messages;
 
 /**
  * dialog that creates a new instance of type {@link Curator}
@@ -118,7 +119,7 @@ public class ManageCuratorDialog extends AbstractDialog {
 					}
 				}
 			} catch (final ConnectException e) {
-				setMessage("Es besteht ein Verbindungs-Problem mit dem Server", IMessageProvider.WARNING);
+				setMessage(Messages.MSG_CONNECTION_ERROR, IMessageProvider.WARNING);
 			}
 		} else {
 			cancelPressed();
@@ -126,7 +127,7 @@ public class ManageCuratorDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected void createBinding() {
+	protected void initBinding() {
 		BindingHelper.bindStringToTextField(txtName, curator, Curator.class, Curator.FIELD_NAME, bindingContext, true);
 		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext, true);
 		BindingHelper.bindStringToTextField(txtPassword2, BeansObservables.observeValue(this, FIELD_PASSWORD2), bindingContext, true);

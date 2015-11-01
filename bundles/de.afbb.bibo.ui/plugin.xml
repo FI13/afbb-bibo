@@ -22,11 +22,12 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            name="Mailboxes"
-            allowMultiple="true"
-            icon="icons/sample3.gif"
-            class="de.afbb.bibo.ui.NavigationView"
-            id="de.afbb.bibo.ui.navigationView">
+            allowMultiple="false"
+            class="de.afbb.bibo.ui.view.NavigationView"
+            icon="icons/16x16user.png"
+            id="de.afbb.bibo.ui.navigationView"
+            name="Navigation"
+            restorable="true">
       </view>
    </extension>
    <extension
@@ -110,13 +111,15 @@
          </property>
          <property
                name="aboutText"
-               value="Bibliotheks-Verwaltung für AfbB.
-
-Erstellt von FI13">
+               value="Bibliotheks-Verwaltung für AfbB.&#x0A;&#x0A;Erstellt von FI13">
          </property>
          <property
                name="aboutImage"
                value="product_lg.gif">
+         </property>
+         <property
+               name="windowImages"
+               value="icons/16x16book2.png,icons/32x32book2.png">
          </property>
       </product>
    </extension>
@@ -151,7 +154,7 @@ Erstellt von FI13">
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.Exemplar"
-               icon="icons/32x32login.png"
+               icon="icons/32x32book.png"
                style="push">
          </command>
          <command
@@ -178,6 +181,13 @@ Erstellt von FI13">
             id="de.afbb.bibo.ui.view.welcome"
             name="Willkommen">
       </editor>
+      <editor
+            class="de.afbb.bibo.ui.view.RegisterExemplarView"
+            default="false"
+            icon="icons/16x16book.png"
+            id="de.afbb.bibo.ui.registerexemplar"
+            name="Erfassung Medien">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -186,7 +196,7 @@ Erstellt von FI13">
             commandId="de.afbb.bibo.ui.create.curator">
       </handler>
       <handler
-            class="de.afbb.bibo.ui.handler.CreateExemplarHandler"
+            class="de.afbb.bibo.ui.handler.RegisterExemplarHandler"
             commandId="de.afbb.bibo.ui.create.Exemplar">
       </handler>
       <handler

@@ -23,6 +23,7 @@ import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.Typ;
 import de.afbb.bibo.ui.Activator;
 import de.afbb.bibo.ui.ImagePath;
+import de.afbb.bibo.ui.Messages;
 
 public class CreateTypeDialog extends AbstractDialog {
 
@@ -52,8 +53,10 @@ public class CreateTypeDialog extends AbstractDialog {
 		txtName = new Text(container, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtName);
 
+		final Label lblIcon = new Label(container, SWT.NONE);
+		lblIcon.setText("Icon");
 		final Composite iconComposite = new Composite(container, SWT.NONE);
-		GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER).span(2, 1).applyTo(iconComposite);
+		GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER).applyTo(iconComposite);
 		final GridLayout buttonLayout = new GridLayout(3, false);
 		buttonLayout.marginWidth = 30;
 		buttonLayout.horizontalSpacing = 10;
@@ -97,7 +100,7 @@ public class CreateTypeDialog extends AbstractDialog {
 				ServiceLocator.getInstance().getTypService().create(type);
 				okPressed();
 			} catch (final ConnectException e) {
-				setMessage("Es besteht ein Verbindungs-Problem mit dem Server", IMessageProvider.WARNING);
+				setMessage(Messages.MSG_CONNECTION_ERROR, IMessageProvider.WARNING);
 			}
 		} else {
 			cancelPressed();
@@ -105,7 +108,7 @@ public class CreateTypeDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected void createBinding() {
+	protected void initBinding() {
 		BindingHelper.bindStringToTextField(txtName, type, Typ.class, Typ.FIELD_NAME, bindingContext, true);
 	}
 

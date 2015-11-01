@@ -20,6 +20,11 @@ import org.eclipse.swt.widgets.Shell;
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.ui.observable.value.StatusAsObservable;
 
+/**
+ * abstract super class for dialogs that provide consolidation of error messages in title area
+ * 
+ * @author dbecker
+ */
 public abstract class AbstractDialog extends TitleAreaDialog {
 
 	protected final DataBindingContext bindingContext = new DataBindingContext();
@@ -43,11 +48,13 @@ public abstract class AbstractDialog extends TitleAreaDialog {
 		super.create();
 		setTitle(getTitle());
 
-		createBinding();
+		initBinding();
 		aggregateStatus();
-
 	}
 
+	/**
+	 * aggregates the validation status for binding context and displays message in title area
+	 */
 	protected void aggregateStatus() {
 		final AggregateValidationStatus aggregateValidationStatus = BindingHelper.aggregateValidationStatus(bindingContext);
 		bindingContext.bindValue(validationStatus, aggregateValidationStatus, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER),
@@ -77,8 +84,16 @@ public abstract class AbstractDialog extends TitleAreaDialog {
 				aggregateValidationStatus), null, null);
 	}
 
-	protected abstract void createBinding();
+	/**
+	 * initializes the databinding for the dialog
+	 */
+	protected abstract void initBinding();
 
+	/**
+	 * get the title for the dialog
+	 * 
+	 * @return title
+	 */
 	protected abstract String getTitle();
 
 }
