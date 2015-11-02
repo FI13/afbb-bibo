@@ -9,6 +9,18 @@ import de.afbb.bibo.share.model.Medium;
 
 public interface ICopyService {
 
+	void update(Copy copy) throws ConnectException;
+
+	/**
+	 * gets all copies that are grouped to the given id
+	 * 
+	 * @param id
+	 *            of copy
+	 * @return collection of all copies that are in the same group
+	 * @throws ConnectException
+	 */
+	Collection<Copy> getGrouped(Integer id) throws ConnectException;
+
 	/**
 	 * tries to read the medium information for given isbn number (database first -> if not found amazon API)
 	 * 
