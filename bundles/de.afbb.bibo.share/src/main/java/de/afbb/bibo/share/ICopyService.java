@@ -3,10 +3,23 @@ package de.afbb.bibo.share;
 import java.net.ConnectException;
 import java.util.Collection;
 
+import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Medium;
 
-public interface IExemplarService {
+public interface ICopyService {
+
+	void update(Copy copy) throws ConnectException;
+
+	/**
+	 * gets all copies that are grouped to the given id
+	 * 
+	 * @param id
+	 *            of copy
+	 * @return collection of all copies that are in the same group
+	 * @throws ConnectException
+	 */
+	Collection<Copy> getGrouped(Integer id) throws ConnectException;
 
 	/**
 	 * tries to read the medium information for given isbn number (database first -> if not found amazon API)
@@ -38,5 +51,14 @@ public interface IExemplarService {
 	 * @return
 	 */
 	Collection<Collection<Copy>> listCopies(String isbn) throws ConnectException;
+
+	/**
+	 * returns a collection of borrowers that currently have lent a copy with the given isbn
+	 * 
+	 * @param isbn
+	 * @return
+	 * @throws ConnectException
+	 */
+	Collection<Borrower> listLent(String isbn) throws ConnectException;
 
 }
