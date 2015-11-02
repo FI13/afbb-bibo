@@ -39,8 +39,6 @@ public class RegisterExemplarView extends AbstractEditView {
 
 	@Override
 	protected void initBinding() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("TODO: implement");
 	}
 
 	@Override
