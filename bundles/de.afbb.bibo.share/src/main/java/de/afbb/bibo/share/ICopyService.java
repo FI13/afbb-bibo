@@ -7,7 +7,7 @@ import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Medium;
 
-public interface IExemplarService {
+public interface ICopyService {
 
 	/**
 	 * tries to read the medium information for given isbn number (database first -> if not found amazon API)
