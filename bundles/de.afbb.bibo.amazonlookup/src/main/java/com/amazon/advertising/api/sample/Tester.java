@@ -18,7 +18,8 @@ public class Tester {
 		 */
 
 		// System.out.println("Signed URL: \"" + requestUrl + "\"");
-		Medium med = new Medium();
-		med = ParserMedium.getMedium("9783804553804");
+		final Medium med = new Medium();
+		// med = ParserMedium.getMedium("9783804553804");
+		System.out.println("ISBN-Check: " + ISBN.checkISBN("9783804553805"));
 	}
 }

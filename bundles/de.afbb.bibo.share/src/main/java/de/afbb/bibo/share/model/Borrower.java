@@ -1,7 +1,7 @@
 package de.afbb.bibo.share.model;
 
 public class Borrower {
-	private Integer id;
+	private int id;
 	private String surname;
 	private String firstName;
 	private String info;
