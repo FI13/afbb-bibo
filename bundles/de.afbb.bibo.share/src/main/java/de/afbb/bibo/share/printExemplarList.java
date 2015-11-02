@@ -15,6 +15,14 @@ import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Curator;
 import de.afbb.bibo.share.model.Exemplar;
 
+/**
+ * prints over the method print a list of Exemplars to the default printer; No
+ * PrintDialog is shown
+ *
+ * @author fi13.melberling
+ *
+ */
+
 public class printExemplarList {
 
 	public static void print(final Exemplar[] list, final Curator cur, final Borrower bor) throws PrinterException {
