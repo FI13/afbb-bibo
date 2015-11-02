@@ -38,6 +38,7 @@ abstract class AbstractEditView extends EditorPart {
 //		scrolledComposite.setExpandHorizontal(true);
 //		scrolledComposite.setExpandVertical(true);
 		initUi(parent);
+		initBinding();
 	}
 
 	/**
