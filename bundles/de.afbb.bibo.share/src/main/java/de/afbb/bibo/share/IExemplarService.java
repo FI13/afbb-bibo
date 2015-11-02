@@ -3,6 +3,7 @@ package de.afbb.bibo.share;
 import java.net.ConnectException;
 import java.util.Collection;
 
+import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Medium;
 
@@ -38,5 +39,14 @@ public interface IExemplarService {
 	 * @return
 	 */
 	Collection<Collection<Copy>> listCopies(String isbn) throws ConnectException;
+
+	/**
+	 * returns a collection of borrowers that currently have lent a copy with the given isbn
+	 * 
+	 * @param isbn
+	 * @return
+	 * @throws ConnectException
+	 */
+	Collection<Borrower> listLent(String isbn) throws ConnectException;
 
 }
