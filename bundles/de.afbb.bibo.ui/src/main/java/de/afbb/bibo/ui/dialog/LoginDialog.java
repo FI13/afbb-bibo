@@ -2,10 +2,8 @@ package de.afbb.bibo.ui.dialog;
 
 import java.net.ConnectException;
 
-import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
-import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -22,6 +20,7 @@ import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
+import de.afbb.bibo.ui.Messages;
 
 /**
  * dialog that tries to log the user in.<br>
@@ -29,22 +28,15 @@ import de.afbb.bibo.share.model.Curator;
  * 
  * @author dbecker
  */
-public class LoginDialog extends TitleAreaDialog {
+public class LoginDialog extends AbstractDialog {
 
 	private Text txtPassword;
 	private Text txtName;
 	private final Curator curator = new Curator();
-	private final DataBindingContext bindingContext = new DataBindingContext();
 	private boolean loginSuccessful = false;
 
 	public LoginDialog(final Shell parentShell) {
 		super(parentShell);
-	}
-
-	@Override
-	public void create() {
-		super.create();
-		setTitle("Benutzer-Anmeldung");
 	}
 
 	@Override
@@ -72,7 +64,7 @@ public class LoginDialog extends TitleAreaDialog {
 		txtPassword = new Text(container, SWT.BORDER | SWT.PASSWORD);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPassword);
 
-		createBinding();
+		initBinding();
 
 		return area;
 	}
@@ -102,14 +94,20 @@ public class LoginDialog extends TitleAreaDialog {
 			SessionHolder.getInstance().setCurator(curator);
 			return true;
 		} catch (final ConnectException e) {
-			setMessage("Es besteht ein Verbindungs-Problem mit dem Server", IMessageProvider.WARNING);
+			setMessage(Messages.MSG_CONNECTION_ERROR, IMessageProvider.WARNING);
 		}
 		return false;
 	}
 
-	private void createBinding() {
-		BindingHelper.bindStringToTextField(txtName, curator, Curator.class, Curator.FIELD_NAME, bindingContext);
-		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext);
+	@Override
+	protected void initBinding() {
+		BindingHelper.bindStringToTextField(txtName, curator, Curator.class, Curator.FIELD_NAME, bindingContext, true);
+		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext, true);
+	}
+
+	@Override
+	protected String getTitle() {
+		return "Benutzer-Anmeldung";
 	}
 
 }

@@ -6,7 +6,6 @@ import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
@@ -31,7 +30,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// when fillActionBars is called with FILL_PROXY.
 	private IWorkbenchAction exitAction;
 	private IWorkbenchAction aboutAction;
-	private IWorkbenchAction newWindowAction;
+//	private IWorkbenchAction newWindowAction;
 	private Action messagePopupAction;
 
 	public ApplicationActionBarAdvisor(final IActionBarConfigurer configurer) {
@@ -47,21 +46,20 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// the window is closed.
 
 		exitAction = ActionFactory.QUIT.create(window);
+		exitAction.setText("Beenden");
 		register(exitAction);
 
 		aboutAction = ActionFactory.ABOUT.create(window);
+		aboutAction.setText("Über dieses Programm");
 		register(aboutAction);
 
-		newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(window);
-
-		messagePopupAction = new MessagePopupAction("Open Message", window);
-		register(messagePopupAction);
+//		newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(window);
 	}
 
 	@Override
 	protected void fillMenuBar(final IMenuManager menuBar) {
-		final MenuManager fileMenu = new MenuManager("&File", IWorkbenchActionConstants.M_FILE);
-		final MenuManager helpMenu = new MenuManager("&Help", IWorkbenchActionConstants.M_HELP);
+		final MenuManager fileMenu = new MenuManager("&Datei", IWorkbenchActionConstants.M_FILE);
+		final MenuManager helpMenu = new MenuManager("&Hilfe", IWorkbenchActionConstants.M_HELP);
 
 		menuBar.add(fileMenu);
 		// Add a group marker indicating where action set menus will appear.
@@ -69,10 +67,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menuBar.add(helpMenu);
 
 		// File
-		fileMenu.add(newWindowAction);
-		fileMenu.add(new Separator());
-		fileMenu.add(messagePopupAction);
-		fileMenu.add(new Separator());
+//		fileMenu.add(newWindowAction);
+//		fileMenu.add(new Separator());
 		fileMenu.add(exitAction);
 
 		// Help
@@ -83,6 +79,5 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	protected void fillCoolBar(final ICoolBarManager coolBar) {
 		final IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
 		coolBar.add(new ToolBarContributionItem(toolbar, ID_COOLBAR));
-		toolbar.add(messagePopupAction);
 	}
 }
