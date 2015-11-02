@@ -13,15 +13,15 @@ public final class SessionHolder {
 	private String sessionToken = null;
 	private Curator curator = null;
 
+	private SessionHolder() {
+	}
+
 	public Curator getCurator() {
 		return curator;
 	}
 
 	public void setCurator(final Curator curator) {
 		this.curator = curator;
-	}
-
-	private SessionHolder() {
 	}
 
 	public String getSessionToken() {
