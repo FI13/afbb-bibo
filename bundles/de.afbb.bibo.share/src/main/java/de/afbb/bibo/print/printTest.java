@@ -1,4 +1,4 @@
-package de.afbb.bibo.share;
+package de.afbb.bibo.print;
 
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;

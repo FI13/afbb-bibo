@@ -1,4 +1,4 @@
-package de.afbb.bibo.share;
+package de.afbb.bibo.print;
 
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;

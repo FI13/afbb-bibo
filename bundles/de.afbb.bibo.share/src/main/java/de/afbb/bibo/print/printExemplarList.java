@@ -1,4 +1,4 @@
-package de.afbb.bibo.share;
+package de.afbb.bibo.print;
 
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
