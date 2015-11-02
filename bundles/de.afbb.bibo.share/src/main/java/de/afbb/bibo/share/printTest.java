@@ -5,8 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import de.afbb.bibo.share.model.Borrower;
+import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Curator;
-import de.afbb.bibo.share.model.Exemplar;
 
 public class printTest {
 
@@ -29,15 +29,15 @@ public class printTest {
 		// pj.setPrintable(text.getPrintable(head, foot));
 		// pj.print();
 
-		final Exemplar[] e = new Exemplar[22];
-		e[0] = new Exemplar();
+		final Copy[] e = new Copy[22];
+		e[0] = new Copy();
 		e[0].setBarcode("12345");
 		e[0].setTitle("Test123");
-		e[1] = new Exemplar();
+		e[1] = new Copy();
 		e[1].setBarcode("244421");
 		e[1].setTitle("Bla Blü bBälbBlaBlaDumdidudmlänge immer länger");
 		for (int i = 2; i < 22; i++) {
-			e[i] = new Exemplar();
+			e[i] = new Copy();
 			e[i].setBarcode("98836");
 			e[i].setTitle("Heil Satan!");
 		}
