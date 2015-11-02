@@ -31,4 +31,11 @@ public interface ILoginService {
 	 */
 	String requestSessionTokenForHash(String userName, String hashedPassword) throws ConnectException;
 
+	/**
+	 * invalidates the given session token
+	 * 
+	 * @param sessionToken
+	 */
+	void invalidateSession(String sessionToken);
+
 }

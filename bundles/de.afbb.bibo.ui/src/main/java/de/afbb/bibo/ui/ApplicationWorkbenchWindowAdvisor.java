@@ -30,14 +30,15 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
 	public void preWindowOpen() {
 		final IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-		configurer.setInitialSize(new Point(1000, 400));
+		configurer.setInitialSize(new Point(1200, 1024));
 		configurer.setShowCoolBar(true);
-		configurer.setShowStatusLine(false);
+		configurer.setShowProgressIndicator(true);
 	}
 
 	@Override
 	public void postWindowOpen() {
 		final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+
 		// FIXME for debugging purposes only! comment out when server is ready!
 //		new LoginDialog(shell).open();
 		// TODO start remove here
@@ -46,15 +47,18 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		curator.setName("Hugo");//$NON-NLS-1$
 		SessionHolder.getInstance().setCurator(curator);
 		// TODO end remove here
-		shell.setText(TITLE + " - Angemeldet als: " + SessionHolder.getInstance().getCurator().getName());
 
-		// open welcome view
-		final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		try {
-			page.openEditor(SessionHolder.getInstance().getCurator(), WelcomeView.ID);
-		} catch (final PartInitException e) {
-			e.printStackTrace();
-			// shouldn't happen
+		if (shell != null && !shell.isDisposed()) {
+			shell.setText(TITLE + " - Angemeldet als: " + SessionHolder.getInstance().getCurator().getName());
+
+			// open welcome view
+			final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			try {
+				page.openEditor(SessionHolder.getInstance().getCurator(), WelcomeView.ID);
+			} catch (final PartInitException e) {
+				e.printStackTrace();
+				// shouldn't happen
+			}
 		}
 	}
 

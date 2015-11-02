@@ -10,13 +10,13 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
 /**
- * this view greets the user and gives hints to use the software
+ * this view allows the registration of new exemplars
  * 
  * @author dbecker
  */
-public class WelcomeView extends AbstractEditView {
+public class RegisterExemplarView extends AbstractEditView {
 
-	public static final String ID = "de.afbb.bibo.ui.view.welcome";//$NON-NLS-1$
+	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 
 	/**
 	 * The text control that's displaying the content of the email message.

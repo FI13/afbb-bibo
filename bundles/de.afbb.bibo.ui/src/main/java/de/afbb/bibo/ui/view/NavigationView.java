@@ -1,4 +1,4 @@
-package de.afbb.bibo.ui;
+package de.afbb.bibo.ui.view;
 
 import java.util.ArrayList;
 
@@ -13,6 +13,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+
+import de.afbb.bibo.ui.Activator;
 
 public class NavigationView extends ViewPart {
 

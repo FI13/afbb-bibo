@@ -9,9 +9,35 @@ import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 public class Borrower extends AbstractPropertyChangeSupport implements IEditorInput {
 
 	private Integer id;
-	private String surname = "";
-	private String firstName = "";
-	private String fiClass;
+	private String surname;
+	private String firstName;
+	private String info;
+	private String email;
+	private String phoneNumber;
+
+	public String getInfo() {
+		return info;
+	}
+
+	public void setInfo(final String info) {
+		this.info = info;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(final String email) {
+		this.email = email;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(final String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 
 	public Integer getId() {
 		return id;
@@ -35,14 +61,6 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 
 	public void setFirstName(final String firstName) {
 		this.firstName = firstName;
-	}
-
-	public String getFiClass() {
-		return fiClass;
-	}
-
-	public void setFiClass(final String fiClass) {
-		this.fiClass = fiClass;
 	}
 
 	@Override
@@ -80,9 +98,11 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (fiClass == null ? 0 : fiClass.hashCode());
+		result = prime * result + (email == null ? 0 : email.hashCode());
 		result = prime * result + (firstName == null ? 0 : firstName.hashCode());
 		result = prime * result + (id == null ? 0 : id.hashCode());
+		result = prime * result + (info == null ? 0 : info.hashCode());
+		result = prime * result + (phoneNumber == null ? 0 : phoneNumber.hashCode());
 		result = prime * result + (surname == null ? 0 : surname.hashCode());
 		return result;
 	}
@@ -99,11 +119,11 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 			return false;
 		}
 		final Borrower other = (Borrower) obj;
-		if (fiClass == null) {
-			if (other.fiClass != null) {
+		if (email == null) {
+			if (other.email != null) {
 				return false;
 			}
-		} else if (!fiClass.equals(other.fiClass)) {
+		} else if (!email.equals(other.email)) {
 			return false;
 		}
 		if (firstName == null) {
@@ -120,6 +140,20 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 		} else if (!id.equals(other.id)) {
 			return false;
 		}
+		if (info == null) {
+			if (other.info != null) {
+				return false;
+			}
+		} else if (!info.equals(other.info)) {
+			return false;
+		}
+		if (phoneNumber == null) {
+			if (other.phoneNumber != null) {
+				return false;
+			}
+		} else if (!phoneNumber.equals(other.phoneNumber)) {
+			return false;
+		}
 		if (surname == null) {
 			if (other.surname != null) {
 				return false;
@@ -129,4 +163,5 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 		}
 		return true;
 	}
+
 }

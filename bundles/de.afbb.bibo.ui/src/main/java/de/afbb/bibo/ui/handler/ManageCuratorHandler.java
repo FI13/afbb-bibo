@@ -5,18 +5,19 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.PlatformUI;
 
-import de.afbb.bibo.ui.dialog.CreateTypeDialog;
+import de.afbb.bibo.share.model.Curator;
+import de.afbb.bibo.ui.dialog.ManageCuratorDialog;
 
 /**
- * handler that creates a new {@link Type}
+ * handler that creates a new {@link Curator}
  * 
  * @author dbecker
  */
-public class CreateTypeHandler extends AbstractHandler {
+public class ManageCuratorHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		new CreateTypeDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell()).open();
+		new ManageCuratorDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), false).open();
 		return null;
 	}
 

@@ -1,89 +1,257 @@
 package de.afbb.bibo.share.model;
 
-import java.sql.Blob;
 import java.sql.Date;
 
-public class Exemplar {
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IPersistableElement;
+
+public class Exemplar extends Medium implements IEditorInput {
+
+	public static final String FIELD_EDITION = "edition";//$NON-NLS-1$
+	public static final String FIELD_BARCODE = "barcode";//$NON-NLS-1$
+	public static final String FIELD_DATE_INVENTORY = "inventoryDate";//$NON-NLS-1$
+	public static final String FIELD_CONDITION = "condition";//$NON-NLS-1$
+	public static final String FIELD_DATE_BORROW = "borrowDate";//$NON-NLS-1$
+	public static final String FIELD_DATE_LAST_BORROW = "lastBorrowDate";//$NON-NLS-1$
+
 	private Integer id;
-	private Integer edition;
-	private Integer barcode;
+	private String edition;
+	private String barcode = "";
 	private Date inventoryDate;
 	private String condition;
 	private Date borrowDate;
 	private Date lastBorrowDate;
-	private Curator curatorName;
-	private Curator lastCuratorName;
-	private Medium mediumTyp;
-	private Group groupElements;
-	
-	
-	public Group getGroupElements() {
-		return groupElements;
-	}
-	public void setGroupElements(Group groupElements) {
-		this.groupElements = groupElements;
-	}
-	public Medium getMediumTyp() {
-		return mediumTyp;
-	}
-	public void setMediumTyp(Medium mediumTyp) {
-		this.mediumTyp = mediumTyp;
-	}
+	private int curatorId;
+	private int lastCuratorId;
+	private int borrowerId;
+	private int lastBorrowerId;
+	private int groupElements;
+
+	@Override
 	public Integer getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+
+	@Override
+	public void setId(final Integer id) {
 		this.id = id;
 	}
-	public Integer getEdition() {
+
+	public String getEdition() {
 		return edition;
 	}
-	public void setEdition(Integer edition) {
-		this.edition = edition;
+
+	public void setEdition(final String edition) {
+		changeSupport.firePropertyChange(FIELD_EDITION, this.edition, this.edition = edition);
 	}
-	public Integer getBarcode() {
+
+	public String getBarcode() {
 		return barcode;
 	}
-	public void setBarcode(Integer barcode) {
-		this.barcode = barcode;
+
+	public void setBarcode(final String barcode) {
+		changeSupport.firePropertyChange(FIELD_BARCODE, this.barcode, this.barcode = barcode);
 	}
+
 	public Date getInventoryDate() {
 		return inventoryDate;
 	}
-	public void setInventoryDate(Date inventoryDate) {
-		this.inventoryDate = inventoryDate;
+
+	public void setInventoryDate(final Date inventoryDate) {
+		changeSupport.firePropertyChange(FIELD_DATE_INVENTORY, this.inventoryDate, this.inventoryDate = inventoryDate);
 	}
+
 	public String getCondition() {
 		return condition;
 	}
-	public void setCondition(String condition) {
-		this.condition = condition;
+
+	public void setCondition(final String condition) {
+		changeSupport.firePropertyChange(FIELD_CONDITION, this.condition, this.condition = condition);
 	}
+
 	public Date getBorrowDate() {
 		return borrowDate;
 	}
-	public void setBorrowDate(Date borrowDate) {
-		this.borrowDate = borrowDate;
+
+	public void setBorrowDate(final Date borrowDate) {
+		changeSupport.firePropertyChange(FIELD_DATE_BORROW, this.borrowDate, this.borrowDate = borrowDate);
 	}
+
 	public Date getLastBorrowDate() {
 		return lastBorrowDate;
 	}
-	public void setLastBorrowDate(Date lastBorrowDate) {
-		this.lastBorrowDate = lastBorrowDate;
+
+	public void setLastBorrowDate(final Date lastBorrowDate) {
+		changeSupport.firePropertyChange(FIELD_DATE_LAST_BORROW, this.lastBorrowDate, this.lastBorrowDate = lastBorrowDate);
 	}
-	public Curator getCuratorName() {
-		return curatorName;
+
+	public int getCuratorId() {
+		return curatorId;
 	}
-	public void setCuratorName(Curator curatorName) {
-		this.curatorName = curatorName;
+
+	public void setCuratorId(final int curatorId) {
+		this.curatorId = curatorId;
 	}
-	public Curator getLastCuratorName() {
-		return lastCuratorName;
+
+	public int getLastCuratorId() {
+		return lastCuratorId;
 	}
-	public void setLastCuratorName(Curator lastCuratorName) {
-		this.lastCuratorName = lastCuratorName;
+
+	public void setLastCuratorId(final int lastCuratorId) {
+		this.lastCuratorId = lastCuratorId;
 	}
-	
-	
+
+	public int getBorrowerId() {
+		return borrowerId;
+	}
+
+	public void setBorrowerId(final int borrowerId) {
+		this.borrowerId = borrowerId;
+	}
+
+	public int getLastBorrowerId() {
+		return lastBorrowerId;
+	}
+
+	public void setLastBorrowerId(final int lastBorrowerId) {
+		this.lastBorrowerId = lastBorrowerId;
+	}
+
+	public int getGroupElements() {
+		return groupElements;
+	}
+
+	public void setGroupElements(final int groupElements) {
+		this.groupElements = groupElements;
+	}
+
+	@Override
+	public Object getAdapter(final Class adapter) {
+		return null;
+	}
+
+	@Override
+	public boolean exists() {
+		return false;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor() {
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		return barcode;
+	}
+
+	@Override
+	public IPersistableElement getPersistable() {
+		return null;
+	}
+
+	@Override
+	public String getToolTipText() {
+		return barcode;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + (barcode == null ? 0 : barcode.hashCode());
+		result = prime * result + (borrowDate == null ? 0 : borrowDate.hashCode());
+		result = prime * result + borrowerId;
+		result = prime * result + (condition == null ? 0 : condition.hashCode());
+		result = prime * result + curatorId;
+		result = prime * result + (edition == null ? 0 : edition.hashCode());
+		result = prime * result + groupElements;
+		result = prime * result + (id == null ? 0 : id.hashCode());
+		result = prime * result + (inventoryDate == null ? 0 : inventoryDate.hashCode());
+		result = prime * result + (lastBorrowDate == null ? 0 : lastBorrowDate.hashCode());
+		result = prime * result + lastBorrowerId;
+		result = prime * result + lastCuratorId;
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof Exemplar)) {
+			return false;
+		}
+		final Exemplar other = (Exemplar) obj;
+		if (barcode == null) {
+			if (other.barcode != null) {
+				return false;
+			}
+		} else if (!barcode.equals(other.barcode)) {
+			return false;
+		}
+		if (borrowDate == null) {
+			if (other.borrowDate != null) {
+				return false;
+			}
+		} else if (!borrowDate.equals(other.borrowDate)) {
+			return false;
+		}
+		if (borrowerId != other.borrowerId) {
+			return false;
+		}
+		if (condition == null) {
+			if (other.condition != null) {
+				return false;
+			}
+		} else if (!condition.equals(other.condition)) {
+			return false;
+		}
+		if (curatorId != other.curatorId) {
+			return false;
+		}
+		if (edition == null) {
+			if (other.edition != null) {
+				return false;
+			}
+		} else if (!edition.equals(other.edition)) {
+			return false;
+		}
+		if (groupElements != other.groupElements) {
+			return false;
+		}
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
+			return false;
+		}
+		if (inventoryDate == null) {
+			if (other.inventoryDate != null) {
+				return false;
+			}
+		} else if (!inventoryDate.equals(other.inventoryDate)) {
+			return false;
+		}
+		if (lastBorrowDate == null) {
+			if (other.lastBorrowDate != null) {
+				return false;
+			}
+		} else if (!lastBorrowDate.equals(other.lastBorrowDate)) {
+			return false;
+		}
+		if (lastBorrowerId != other.lastBorrowerId) {
+			return false;
+		}
+		if (lastCuratorId != other.lastCuratorId) {
+			return false;
+		}
+		return true;
+	}
 
 }

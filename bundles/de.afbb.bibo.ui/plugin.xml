@@ -22,11 +22,12 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            name="Mailboxes"
-            allowMultiple="true"
-            icon="icons/sample3.gif"
-            class="de.afbb.bibo.ui.NavigationView"
-            id="de.afbb.bibo.ui.navigationView">
+            allowMultiple="false"
+            class="de.afbb.bibo.ui.view.NavigationView"
+            icon="icons/16x16user.png"
+            id="de.afbb.bibo.ui.navigationView"
+            name="Navigation"
+            restorable="true">
       </view>
    </extension>
    <extension
@@ -75,6 +76,10 @@
             id="de.afbb.bibo.ui.return"
             name="Zurückgeben">
       </command>
+      <command
+            id="de.afbb.bibo.ui.manage.curator"
+            name="Eigenes Passwort Ändern">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -99,10 +104,22 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="de.afbb.bibo.ui.application"
-            name="BiBo">
+            name="AfbB Bibliothek">
          <property
                name="appName"
-               value="BiBo">
+               value="AfbB Bibliothek">
+         </property>
+         <property
+               name="aboutText"
+               value="Bibliotheks-Verwaltung für AfbB.&#x0A;&#x0A;Erstellt von FI13">
+         </property>
+         <property
+               name="aboutImage"
+               value="product_lg.gif">
+         </property>
+         <property
+               name="windowImages"
+               value="icons/16x16book2.png,icons/32x32book2.png">
          </property>
       </product>
    </extension>
@@ -113,6 +130,7 @@
             locationURI="toolbar:de.afbb.bibo.coolbar">
          <command
                commandId="org.eclipse.ui.file.save"
+               icon="icons/32x32login.png"
                style="push">
          </command>
          <separator
@@ -120,13 +138,18 @@
                visible="true">
          </separator>
          <command
+               commandId="de.afbb.bibo.ui.manage.curator"
+               icon="icons/32x32benutzerverwaltung.png"
+               style="push">
+         </command>
+         <command
                commandId="de.afbb.bibo.ui.create.curator"
                icon="icons/32x32benutzerverwaltung.png"
                style="push">
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.type"
-               icon="icons/32x32medien.png"
+               icon="icons/32x32cd.png"
                style="push">
          </command>
          <command
@@ -136,7 +159,7 @@
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.borrower"
-               icon="icons/32x32schueler.png"
+               icon="icons/32x32login.png"
                style="push">
          </command>
          <separator
@@ -159,10 +182,11 @@
             name="Willkommen">
       </editor>
       <editor
-            class="de.afbb.bibo.ui.view.BorrowerView"
+            class="de.afbb.bibo.ui.view.RegisterExemplarView"
             default="false"
-            id="de.afbb.bibo.ui.view.borrower"
-            name="Ausleiher">
+            icon="icons/16x16book.png"
+            id="de.afbb.bibo.ui.registerexemplar"
+            name="Erfassung Medien">
       </editor>
    </extension>
    <extension
@@ -172,7 +196,7 @@
             commandId="de.afbb.bibo.ui.create.curator">
       </handler>
       <handler
-            class="de.afbb.bibo.ui.handler.CreateExemplarHandler"
+            class="de.afbb.bibo.ui.handler.RegisterExemplarHandler"
             commandId="de.afbb.bibo.ui.create.Exemplar">
       </handler>
       <handler
@@ -182,6 +206,10 @@
       <handler
             class="de.afbb.bibo.ui.handler.CreateTypeHandler"
             commandId="de.afbb.bibo.ui.create.type">
+      </handler>
+      <handler
+            class="de.afbb.bibo.ui.handler.ManageCuratorHandler"
+            commandId="de.afbb.bibo.ui.manage.curator">
       </handler>
    </extension>
 
