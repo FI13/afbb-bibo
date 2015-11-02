@@ -13,7 +13,7 @@ public interface ICuratorService {
 	 *            curator to check
 	 * @return
 	 */
-	boolean exists(String curatorName) throws ConnectException;;
+	boolean exists(String curatorName) throws ConnectException;
 
 	void create(Curator curator) throws ConnectException;
 

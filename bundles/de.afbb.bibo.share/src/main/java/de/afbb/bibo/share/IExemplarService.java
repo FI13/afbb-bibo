@@ -30,13 +30,13 @@ public interface IExemplarService {
 	 * 
 	 * @return
 	 */
-	Collection<Collection<Copy>> listAll();
+	Collection<Collection<Copy>> listAll() throws ConnectException;
 
 	/**
 	 * gets a list of all copies for a given medium
 	 * 
 	 * @return
 	 */
-	Collection<Collection<Copy>> listCopies(String isbn);
+	Collection<Collection<Copy>> listCopies(String isbn) throws ConnectException;
 
 }
