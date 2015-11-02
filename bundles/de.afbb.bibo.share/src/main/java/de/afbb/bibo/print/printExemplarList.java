@@ -1,4 +1,4 @@
-package de.afbb.bibo.share;
+package de.afbb.bibo.print;
 
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
@@ -12,20 +12,19 @@ import java.util.Date;
 import javax.swing.JEditorPane;
 
 import de.afbb.bibo.share.model.Borrower;
+import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Curator;
-import de.afbb.bibo.share.model.Exemplar;
 
 /**
  * prints over the method print a list of Exemplars to the default printer; No
  * PrintDialog is shown
  *
  * @author fi13.melberling
- *
  */
 
 public class printExemplarList {
 
-	public static void print(final Exemplar[] list, final Curator cur, final Borrower bor) throws PrinterException {
+	public static void print(final Copy[] list, final Curator cur, final Borrower bor) throws PrinterException {
 		final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 		final MessageFormat head = new MessageFormat("Ausleihübersicht");
@@ -34,7 +33,7 @@ public class printExemplarList {
 		final PrinterJob pj = PrinterJob.getPrinterJob();
 
 		final JEditorPane text = new JEditorPane("text/html", "text");
-		text.setText(ExemplarListToHtmlString.convert(list, cur, bor));
+		text.setText(CopyListToHtmlString.convert(list, cur, bor));
 		text.repaint();
 		pj.setPrintable(text.getPrintable(head, foot));
 		pj.print();

@@ -25,6 +25,7 @@ public class RegisterExemplarView extends AbstractEditView {
 
 	@Override
 	public void initUi(final Composite parent) {
+
 		final Composite top = new Composite(parent, SWT.NONE);
 		final GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
