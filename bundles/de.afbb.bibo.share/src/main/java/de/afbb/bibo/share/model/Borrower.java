@@ -1,13 +1,21 @@
 package de.afbb.bibo.share.model;
 
+import java.io.Serializable;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 
-public class Borrower extends AbstractPropertyChangeSupport implements IEditorInput {
+public class Borrower extends AbstractPropertyChangeSupport implements IEditorInput, Serializable {
 
+	private static final long serialVersionUID = -3149389839841886740L;
+	public static final String FIELD_SURNAME = "surname";//$NON-NLS-1$
+	public static final String FIELD_FIRSTNAME = "firstName";//$NON-NLS-1$
+	public static final String FIELD_INFO = "info";//$NON-NLS-1$
+	public static final String FIELD_EMAIL = "email";//$NON-NLS-1$
+	public static final String FIELD_PHONENUMER = "phoneNumber";//$NON-NLS-1$
 	private Integer id;
 	private String surname;
 	private String firstName;

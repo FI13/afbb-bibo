@@ -1,9 +1,9 @@
 package de.afbb.bibo.ui.view;
 
+import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -11,76 +11,56 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.EditorPart;
 
+import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.model.Borrower;
+import de.afbb.bibo.share.model.CopyUtil;
 
 /**
- * this view greets the user and gives hints to use the software
+ * this view adds or edits a person who can borrow books
  * 
- * @author dbecker
+ * @author philippwiddra
  */
-public class BorrowerView extends EditorPart {
+public class BorrowerView extends AbstractEditView {
 
-	public static final String ID = "de.afbb.bibo.ui.view.borrower";//$NON-NLS-1$
+	public static final String ID = "de.afbb.bibo.ui.borrower";//$NON-NLS-1$
+
+	private Borrower input;
+	private Borrower inputCache;
+
+	protected final DataBindingContext bindingContext = new DataBindingContext();
 
 	private Label labelFirstname;
 	private Label labelLastname;
-	private Text firstname;
-	private Text lastname;
-
-	@Override
-	public void createPartControl(final Composite parent) {
-		final Composite top = new Composite(parent, SWT.NONE);
-		final GridLayout layout = new GridLayout();
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
-		top.setLayout(layout);
-
-		final Composite nameInputs = new Composite(top, SWT.NONE);
-//		final GridLayout nameInputsLayout = new GridLayout(2, false);
-//		nameInputs.setLayout(nameInputsLayout);
-		// new Button(nameInputs, SWT.PUSH).setText("B1");
-		// new Button(nameInputs, SWT.PUSH).setText("Wide Button 2");
-		// new Button(nameInputs, SWT.PUSH).setText("Button 3");
-		// new Button(nameInputs, SWT.PUSH).setText("B4");
-		// new Button(nameInputs, SWT.PUSH).setText("Button 5");
-
-//		labelFirstname = new Label(top, 0);
-//		labelFirstname.setText("Vorname:");
-//		final FormData formDataLabelFirstname = new FormData();
-
-//		labelLastname = new Label(top, 0);
-//		labelLastname.setText("Nachname:");
-//
-		firstname = new Text(top, SWT.BORDER);
-		firstname.setText("Vorname");
-		final GridData gd = GridDataFactory.swtDefaults().hint(200, SWT.DEFAULT).create();
-		firstname.setData(gd);
-
-		lastname = new Text(top, SWT.BORDER);
-		lastname.setText("Nachname");
-//		lastname.setSize(200, 21);
-	}
+	private Label labelEMail;
+	private Label labelTel;
+	private Label labelInfo;
+	private Text textFirstname;
+	private Text textLastname;
+	private Text textEMail;
+	private Text textTel;
+	private Text textInfo;
+//	private Button buttonSave;
+//	private Button buttonCancel;
 
 	@Override
 	protected void setInput(final IEditorInput input) {
 		if (input instanceof Borrower) {
+			this.input = (Borrower) input;
+			inputCache = (Borrower) CopyUtil.copy(this.input);
 			super.setInput(input);
 		}
 	}
 
 	@Override
 	public void setFocus() {
-		firstname.setFocus();
+		textFirstname.setFocus();
 	}
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-	}
-
-	@Override
-	public void doSaveAs() {
+		System.out.println(input == null ? "Input is null" : "Input is NOT null");
+		System.out.println(input.getFirstName());
 	}
 
 	@Override
@@ -91,11 +71,79 @@ public class BorrowerView extends EditorPart {
 
 	@Override
 	public boolean isDirty() {
-		return false;
+		// return !input.equals(inputCache);
+		return true;
 	}
 
 	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
+	protected void initUi(final Composite parent) {
+		final Composite top = new Composite(parent, SWT.NONE);
+		final GridLayout layout = new GridLayout(2, false);
+		layout.marginHeight = 10;
+		layout.marginWidth = 10;
+		top.setLayout(layout);
+
+		// Label Vorname
+		labelFirstname = new Label(top, SWT.NONE);
+		labelFirstname.setText("Vorname:");
+
+		// Label Nachname
+		labelLastname = new Label(top, SWT.NONE);
+		labelLastname.setText("Nachname:");
+
+		// Textbox Vorname
+		textFirstname = new Text(top, SWT.BORDER);
+		GridDataFactory.swtDefaults().hint(150, SWT.DEFAULT).applyTo(textFirstname);
+
+		// Textbox Nachname
+		textLastname = new Text(top, SWT.BORDER);
+		GridDataFactory.swtDefaults().hint(150, SWT.DEFAULT).applyTo(textLastname);
+
+		// Label E-Mail
+		labelEMail = new Label(top, SWT.NONE);
+		labelEMail.setText("E-Mail-Adresse:");
+		GridDataFactory.swtDefaults().span(2, 1).applyTo(labelEMail);
+
+		// Textbox E-Mail
+		textEMail = new Text(top, SWT.BORDER);
+		GridDataFactory.swtDefaults().span(2, 1).hint(150, SWT.DEFAULT).applyTo(textEMail);
+
+		// Label Telefonnummer
+		labelTel = new Label(top, SWT.NONE);
+		labelTel.setText("Telefonnummer:");
+
+		// Textbox Telefonnummer
+		textTel = new Text(top, SWT.BORDER);
+		GridDataFactory.swtDefaults().span(2, 1).hint(150, SWT.DEFAULT).applyTo(textTel);
+
+		// Label Informationen
+		labelInfo = new Label(top, SWT.NONE);
+		labelInfo.setText("Informationen:");
+
+		// Textbox Informationen
+		textInfo = new Text(top, SWT.BORDER);
+		textInfo.setData(GridDataFactory.swtDefaults().hint(SWT.DEFAULT, SWT.DEFAULT).create());
+		GridDataFactory.swtDefaults().span(2, 1).hint(150, SWT.DEFAULT).applyTo(textInfo);
+
+//		// Button Speichern
+//		buttonSave = new Button(top, SWT.NONE);
+//		buttonSave.setText("Speichern");
+//		GridDataFactory.swtDefaults().hint(150, SWT.DEFAULT).applyTo(buttonSave);
+//
+//		// Button Verwerfen
+//		buttonCancel = new Button(top, SWT.NONE);
+//		buttonCancel.setText("Verwerfen");
+//		GridDataFactory.swtDefaults().hint(150, SWT.DEFAULT).applyTo(buttonCancel);
+
+	}
+
+	@Override
+	protected void initBinding() {
+		// Databinding
+		BindingHelper.bindStringToTextField(textFirstname, input, Borrower.class, Borrower.FIELD_FIRSTNAME, bindingContext, true);
+		BindingHelper.bindStringToTextField(textLastname, input, Borrower.class, Borrower.FIELD_SURNAME, bindingContext, true);
+		BindingHelper.bindStringToTextField(textEMail, input, Borrower.class, Borrower.FIELD_EMAIL, bindingContext, false);
+		BindingHelper.bindStringToTextField(textTel, input, Borrower.class, Borrower.FIELD_PHONENUMER, bindingContext, false);
+		BindingHelper.bindStringToTextField(textInfo, input, Borrower.class, Borrower.FIELD_INFO, bindingContext, false);
 	}
 }
