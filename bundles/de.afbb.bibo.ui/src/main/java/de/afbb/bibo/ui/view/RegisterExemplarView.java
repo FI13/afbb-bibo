@@ -1,8 +1,10 @@
 package de.afbb.bibo.ui.view;
 
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
@@ -10,6 +12,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+
+import de.afbb.bibo.ui.Activator;
 
 /**
  * this view allows the registration of new exemplars
@@ -19,6 +23,7 @@ import org.eclipse.ui.PartInitException;
 public class RegisterExemplarView extends AbstractEditView {
 
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
+	private static final String IMAGE_GROUP = "icons/16x16medien.png";//$NON-NLS-1$
 
 	/**
 	 * The text control that's displaying the content of the email message.
@@ -26,6 +31,10 @@ public class RegisterExemplarView extends AbstractEditView {
 	private Text messageText;
 
 	private Group idGroup;
+
+	public RegisterExemplarView() {
+		JFaceResources.getImageRegistry().put(IMAGE_GROUP, Activator.getImageDescriptor(IMAGE_GROUP).createImage());
+	}
 
 	@Override
 	public void initUi(final Composite parent) {
@@ -47,21 +56,30 @@ public class RegisterExemplarView extends AbstractEditView {
 		final Group mediumGroup = createGroup(top, "Informationen");
 		mediumGroup.setLayout(new GridLayout(4, false));
 		toolkit.createLabel(mediumGroup, "Titel");
-		Text txtTitle = toolkit.createText(mediumGroup, "Titel");
+		final Text txtTitle = toolkit.createText(mediumGroup, "Titel");
 		toolkit.createLabel(mediumGroup, "Autor");
-		Text txtAuthor = toolkit.createText(mediumGroup, "Autor");
+		final Text txtAuthor = toolkit.createText(mediumGroup, "Autor");
 		toolkit.createLabel(mediumGroup, "Sprache");
-		Text txtLanguage = toolkit.createText(mediumGroup, "Sprache");
+		final Text txtLanguage = toolkit.createText(mediumGroup, "Sprache");
 		toolkit.createLabel(mediumGroup, "Verlag");
-		Text txtPublisher = toolkit.createText(mediumGroup, "Verlag");
+		final Text txtPublisher = toolkit.createText(mediumGroup, "Verlag");
 		toolkit.createLabel(mediumGroup, "Typ");
 		toolkit.createText(mediumGroup, "Typ");
 
-		final Table copyTable = toolkit.createTable(top, SWT.NONE);
+		final Composite bottom = toolkit.createComposite(top, SWT.NONE);
+		bottom.setLayout(new GridLayout(2, false));
+		final Table copyTable = toolkit.createTable(bottom, SWT.NONE);
+		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
+		buttonComposite.setLayout(new GridLayout());
+		final Button btnGroup = toolkit.createButton(buttonComposite, "Medien Gruppieren", SWT.TOP);
+		btnGroup.setImage(JFaceResources.getImage(IMAGE_GROUP));
+		final Button btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung Lösen", SWT.TOP);
 
 		GridDataFactory.fillDefaults().applyTo(idGroup);
 		GridDataFactory.fillDefaults().applyTo(mediumGroup);
-		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(copyTable);
+		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(bottom);
+		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).applyTo(buttonComposite);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(copyTable);
 	}
 
 	@Override
