@@ -6,7 +6,10 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
-public class Exemplar extends Medium implements IEditorInput {
+/**
+ * one copy of a medium
+ */
+public class Copy extends Medium implements IEditorInput {
 
 	public static final String FIELD_EDITION = "edition";//$NON-NLS-1$
 	public static final String FIELD_BARCODE = "barcode";//$NON-NLS-1$
@@ -183,10 +186,10 @@ public class Exemplar extends Medium implements IEditorInput {
 		if (!super.equals(obj)) {
 			return false;
 		}
-		if (!(obj instanceof Exemplar)) {
+		if (!(obj instanceof Copy)) {
 			return false;
 		}
-		final Exemplar other = (Exemplar) obj;
+		final Copy other = (Copy) obj;
 		if (barcode == null) {
 			if (other.barcode != null) {
 				return false;
