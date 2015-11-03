@@ -1,7 +1,5 @@
 package de.afbb.bibo.ui.view;
 
-import java.util.ArrayList;
-
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -14,104 +12,13 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import de.afbb.bibo.ui.Activator;
+import de.afbb.bibo.ui.view.NavigationView.TreeObject;
+import de.afbb.bibo.ui.view.NavigationView.TreeParent;
 
 public class NavigationView extends ViewPart {
 
 	public static final String ID = "de.afbb.bibo.ui.navigationView";
 	private TreeViewer viewer;
-
-	private final Image iconBookGroup = Activator.getImageDescriptor("icons/16x16book.png").createImage();
-	private final Image iconBook = Activator.getImageDescriptor("icons/16x16book2.png").createImage();
-	private final Image iconPupil = Activator.getImageDescriptor("icons/16x16schueler.png").createImage();
-	private final Image iconTeacher = Activator.getImageDescriptor("icons/16x16teacher.png").createImage();
-	private final Image iconUserGroup = Activator.getImageDescriptor("icons/16x16user.png").createImage();
-	private final Image iconCd = Activator.getImageDescriptor("icons/16x16cd.png").createImage();
-
-	/*
-	 * .. Personen
-	 * .... Lehrer
-	 * ...... Männlich
-	 * ...... Weiblich
-	 * .... Klasse
-	 * ...... Männlich
-	 * ...... Weiblich
-	 * .. Bücher
-	 * .... Buch
-	 */
-	class TreeObject {
-
-		private final String name;
-		private TreeParent parent;
-		private Image icon;
-
-		public TreeObject(final String name) {
-			this.name = name;
-		}
-
-		public TreeObject(final String name, final Image icon) {
-			this.name = name;
-			this.icon = icon;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setParent(final TreeParent parent) {
-			this.parent = parent;
-		}
-
-		public TreeParent getParent() {
-			return parent;
-		}
-
-		public boolean hasIcon() {
-			return icon != null;
-		}
-
-		public Image getIcon() {
-			return icon;
-		}
-
-		@Override
-		public String toString() {
-			return getName();
-		}
-	}
-
-	class TreeParent extends TreeObject {
-
-		private final ArrayList<TreeObject> children;
-
-		public TreeParent(final String name) {
-			super(name);
-			children = new ArrayList<TreeObject>();
-		}
-
-		public TreeParent(final String name, final Image icon) {
-			super(name, icon);
-			children = new ArrayList<TreeObject>();
-		}
-
-		public void addChild(final TreeObject child) {
-			children.add(child);
-			child.setParent(this);
-		}
-
-		public void removeChild(final TreeObject child) {
-			children.remove(child);
-			child.setParent(null);
-		}
-
-		public TreeObject[] getChildren() {
-			return children.toArray(new TreeObject[children.size()]);
-		}
-
-		public boolean hasChildren() {
-			return children.size() > 0;
-		}
-	}
 
 	class ViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
 
