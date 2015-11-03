@@ -193,7 +193,7 @@
             default="false"
             icon="icons/16x16schueler.png"
             id="de.afbb.bibo.ui.borrower"
-            name="Erfassung Ausleiher">
+            name="Anzeige Ausleiher">
       </editor>
    </extension>
    <extension

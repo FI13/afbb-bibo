@@ -59,8 +59,7 @@ public class BorrowerView extends AbstractEditView {
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		System.out.println(input == null ? "Input is null" : "Input is NOT null");
-		System.out.println(input.getFirstName());
+
 	}
 
 	@Override
@@ -71,8 +70,7 @@ public class BorrowerView extends AbstractEditView {
 
 	@Override
 	public boolean isDirty() {
-		// return !input.equals(inputCache);
-		return true;
+		return !input.equals(inputCache);
 	}
 
 	@Override
@@ -83,30 +81,32 @@ public class BorrowerView extends AbstractEditView {
 		layout.marginWidth = 10;
 		top.setLayout(layout);
 
+		final int textWidth = 250;
+
 		// Label Vorname
 		labelFirstname = new Label(top, SWT.NONE);
 		labelFirstname.setText("Vorname:");
+
+		// Textbox Vorname
+		textFirstname = new Text(top, SWT.BORDER);
+		GridDataFactory.swtDefaults().hint(textWidth, SWT.DEFAULT).applyTo(textFirstname);
 
 		// Label Nachname
 		labelLastname = new Label(top, SWT.NONE);
 		labelLastname.setText("Nachname:");
 
-		// Textbox Vorname
-		textFirstname = new Text(top, SWT.BORDER);
-		GridDataFactory.swtDefaults().hint(150, SWT.DEFAULT).applyTo(textFirstname);
-
 		// Textbox Nachname
 		textLastname = new Text(top, SWT.BORDER);
-		GridDataFactory.swtDefaults().hint(150, SWT.DEFAULT).applyTo(textLastname);
+		GridDataFactory.swtDefaults().hint(textWidth, SWT.DEFAULT).applyTo(textLastname);
 
 		// Label E-Mail
 		labelEMail = new Label(top, SWT.NONE);
 		labelEMail.setText("E-Mail-Adresse:");
-		GridDataFactory.swtDefaults().span(2, 1).applyTo(labelEMail);
+		GridDataFactory.swtDefaults().applyTo(labelEMail);
 
 		// Textbox E-Mail
 		textEMail = new Text(top, SWT.BORDER);
-		GridDataFactory.swtDefaults().span(2, 1).hint(150, SWT.DEFAULT).applyTo(textEMail);
+		GridDataFactory.swtDefaults().hint(textWidth, SWT.DEFAULT).applyTo(textEMail);
 
 		// Label Telefonnummer
 		labelTel = new Label(top, SWT.NONE);
@@ -114,7 +114,7 @@ public class BorrowerView extends AbstractEditView {
 
 		// Textbox Telefonnummer
 		textTel = new Text(top, SWT.BORDER);
-		GridDataFactory.swtDefaults().span(2, 1).hint(150, SWT.DEFAULT).applyTo(textTel);
+		GridDataFactory.swtDefaults().hint(textWidth, SWT.DEFAULT).applyTo(textTel);
 
 		// Label Informationen
 		labelInfo = new Label(top, SWT.NONE);
@@ -122,8 +122,7 @@ public class BorrowerView extends AbstractEditView {
 
 		// Textbox Informationen
 		textInfo = new Text(top, SWT.BORDER);
-		textInfo.setData(GridDataFactory.swtDefaults().hint(SWT.DEFAULT, SWT.DEFAULT).create());
-		GridDataFactory.swtDefaults().span(2, 1).hint(150, SWT.DEFAULT).applyTo(textInfo);
+		GridDataFactory.swtDefaults().hint(textWidth, SWT.DEFAULT).applyTo(textInfo);
 
 //		// Button Speichern
 //		buttonSave = new Button(top, SWT.NONE);
