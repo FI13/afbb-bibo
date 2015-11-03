@@ -47,7 +47,7 @@ public class printTest {
 		b.setFirstName("Jäns");
 		b.setSurname("Hähnoch");
 
-		printExemplarList.print(e, c, b);
+		printCopyList.print(e, c, b);
 
 	}
 }
