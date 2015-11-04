@@ -1,0 +1,73 @@
+<assembly>
+	<id>bin</id>
+	<!-- Generates a zip package containing the needed files -->
+	<formats>
+		<format>zip</format>
+	</formats>
+	<!-- Adds dependencies to zip package under lib directory -->
+	<!-- this is commented out as the default dropwizard packaging -->
+	<!-- just builds one fat jar including all the required -->
+	<!-- classes. Other modules (Go, restconnector, ...) do make -->
+	<!-- use of this, though. -->
+
+	<!-- <dependencySets> -->
+	<!-- <dependencySet> -->
+	<!-- <useProjectArtifact>false</useProjectArtifact> -->
+	<!-- <outputDirectory>./lib/</outputDirectory> -->
+	<!-- <unpack>false</unpack> -->
+	<!-- </dependencySet> -->
+	<!-- </dependencySets> -->
+	<fileSets>
+		<!-- Adds startup scripts to the root directory of zip package. The startup 
+			scripts are located to src/main/scripts directory as stated by Maven conventions. -->
+		<fileSet>
+			<directory>${project.build.scriptSourceDirectory}</directory>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>startup.*</include>
+			</includes>
+		</fileSet>
+		<!-- logback.xml, if any, is copied to lib/ folder. this is helpful -->
+		<!-- as it allows for setting / changing log levels while the application -->
+		<!-- is running (logback does scan and reload that file each 30 secs in -->
+		<!-- the default configuration). -->
+		<fileSet>
+			<directory>${project.build.directory}/../src/main/resources
+			</directory>
+			<outputDirectory>./lib</outputDirectory>
+			<includes>
+				<include>*</include>
+			</includes>
+		</fileSet>
+		<!-- adds jar package to the root directory of zip package -->
+		<fileSet>
+			<directory>${project.build.directory}</directory>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+			<excludes>
+				<exclude>original*</exclude>
+			</excludes>
+		</fileSet>
+		<!-- default place to keep any application specific configuration -->
+		<!-- (properties files, dropwizard yaml files, ...) -->
+		<fileSet>
+			<directory>${project.build.directory}/../config/</directory>
+			<outputDirectory>/config</outputDirectory>
+			<includes>
+				<include>*</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+	<files>
+		<!-- include Linux launcher script. keep in mind that this needs to be -->
+		<!-- chmod 755'd to be executable on the target system... ;) -->
+		<file>
+			<source>${project.build.directory}/../src/main/scripts/launcher.sh
+			</source>
+			<outputDirectory>/</outputDirectory>
+			<filtered>true</filtered>
+		</file>
+	</files>
+</assembly>
