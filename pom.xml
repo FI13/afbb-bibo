@@ -23,6 +23,7 @@
 		<module>bundles/de.afbb.bibo.amazonlookup</module>
 		<module>bundles/de.afbb.bibo.share</module>
 		<module>bundles/de.afbb.bibo.rcp.target</module>
+		<module>bundles/de.afbb.bibo.bibservlet</module>
 		<module>products/de.afbb.bibo.rcp.product</module>
 		<module>features/de.afbb.bibo.rcp.feature</module>
 	</modules>
