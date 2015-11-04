@@ -1,0 +1,22 @@
+<configuration scan="true" scanPeriod="30 seconds">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder>
+            <pattern>%highlight(%-5level %logger{0}[%L] %d{HH:mm:ss.SSS}: - %msg%n)</pattern>
+        </encoder>
+    </appender>
+    
+    <!--  production settings, default, per here  -->
+
+    <logger name="de.afbb.bibo">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    
+    <root>
+        
+    </root>
+    
+    
+</configuration>

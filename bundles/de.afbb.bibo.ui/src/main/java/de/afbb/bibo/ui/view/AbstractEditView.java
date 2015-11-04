@@ -3,7 +3,9 @@ package de.afbb.bibo.ui.view;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.EditorPart;
 
 abstract class AbstractEditView extends EditorPart {
@@ -11,6 +13,8 @@ abstract class AbstractEditView extends EditorPart {
 	private Image imageValidation;
 	private Label lblValidationImage;
 	private Label lblValidationMessage;
+
+	protected FormToolkit toolkit = new FormToolkit(Display.getCurrent());
 
 	@Override
 	public void createPartControl(final Composite parent) {
