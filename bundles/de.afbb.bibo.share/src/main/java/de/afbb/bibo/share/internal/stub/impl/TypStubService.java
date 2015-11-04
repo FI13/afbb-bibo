@@ -6,37 +6,37 @@ import java.util.Collection;
 import java.util.List;
 
 import de.afbb.bibo.share.ITypService;
-import de.afbb.bibo.share.model.Typ;
+import de.afbb.bibo.share.model.MediumType;
 
 public class TypStubService implements ITypService {
 
-	List<Typ> types = new ArrayList<Typ>();
+	List<MediumType> types = new ArrayList<MediumType>();
 
 	{
-		final Typ t1 = new Typ();
+		final MediumType t1 = new MediumType();
 		t1.setId(0);
-		t1.setTypname("Buch");
+		t1.setName("Buch");
 		t1.setIconPath("icons/16x16book2.png");
 		types.add(t1);
-		final Typ t2 = new Typ();
+		final MediumType t2 = new MediumType();
 		t2.setId(1);
-		t2.setTypname("CD");
+		t2.setName("CD");
 		t2.setIconPath("icons/16x16cd.png");
 		types.add(t2);
 	}
 
 	@Override
-	public void create(final Typ type) throws ConnectException {
+	public void create(final MediumType type) throws ConnectException {
 		types.add(type);
 	}
 
 	@Override
-	public Collection<Typ> list() throws ConnectException {
+	public Collection<MediumType> list() throws ConnectException {
 		return types;
 	}
 
 	@Override
-	public Typ get(final Integer id) throws ConnectException {
+	public MediumType get(final Integer id) throws ConnectException {
 		try {
 			return types.get(id);
 		} catch (final IndexOutOfBoundsException e) {

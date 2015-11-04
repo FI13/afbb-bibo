@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Text;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
-import de.afbb.bibo.share.model.Typ;
+import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.Activator;
 import de.afbb.bibo.ui.ImagePath;
 import de.afbb.bibo.ui.Messages;
@@ -28,7 +28,7 @@ import de.afbb.bibo.ui.Messages;
 public class CreateTypeDialog extends AbstractDialog {
 
 	private Text txtName;
-	private final Typ type = new Typ();
+	private final MediumType type = new MediumType();
 	ImageRegistry imageRegistry = new ImageRegistry();
 
 	public CreateTypeDialog(final Shell parentShell) {
@@ -109,7 +109,7 @@ public class CreateTypeDialog extends AbstractDialog {
 
 	@Override
 	protected void initBinding() {
-		BindingHelper.bindStringToTextField(txtName, type, Typ.class, Typ.FIELD_NAME, bindingContext, true);
+		BindingHelper.bindStringToTextField(txtName, type, MediumType.class, MediumType.FIELD_NAME, bindingContext, true);
 	}
 
 	@Override
