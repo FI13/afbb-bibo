@@ -1,20 +1,22 @@
 package de.afbb.bibo.properties;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
-import java.io.Writer;
 import java.util.Properties;
 
 public class properties {
-public static String get (final String search) throws FileNotFoundException{
-	String s = null;
-	Reader reader = null;
-	reader = new FileReader("h:/client.properties");
-	final Properties prop = new Properties();
-	s=prop.getProperty(search, "notFound")
+	private final static String path = "h:/client.properties";
 
+	public static String get(final String search) throws IOException {
+		String s = null;
+		Reader reader = null;
+		reader = new FileReader(path);
+		final Properties prop = new Properties();
+		prop.load(reader);
+		reader.close();
+		s = prop.getProperty(search, "notFound");
 
-	return s;
-}
+		return s;
+	}
 }
