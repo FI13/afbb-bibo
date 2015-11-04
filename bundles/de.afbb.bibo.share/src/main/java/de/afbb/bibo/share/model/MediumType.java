@@ -4,20 +4,20 @@ import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 
 public class MediumType extends AbstractPropertyChangeSupport {
 
-	public static final String FIELD_NAME = "typname";//$NON-NLS-1$
+	public static final String FIELD_NAME = "name";//$NON-NLS-1$
 
 	private Integer id;
 	private String name;
 	private String iconPath;
-	
-	public MediumType(int id, String name, String iconPath) {
-        this.id = id;
-        this.name = name;
-        this.iconPath = iconPath;
-    }
-	
+
+	public MediumType(final int id, final String name, final String iconPath) {
+		this.id = id;
+		this.name = name;
+		this.iconPath = iconPath;
+	}
+
 	public MediumType() {
-		
+
 	}
 
 	public String getIconPath() {
@@ -41,12 +41,12 @@ public class MediumType extends AbstractPropertyChangeSupport {
 	}
 
 	public void setName(final String typname) {
-		changeSupport.firePropertyChange(FIELD_NAME, this.name, this.name = typname);
+		changeSupport.firePropertyChange(FIELD_NAME, name, name = typname);
 	}
 
-    @Override
-    public String toString() {
-        return "MediumType{" + "id=" + id + ", name=" + name + ", iconPath=" + iconPath + '}';
-    }
+	@Override
+	public String toString() {
+		return "MediumType{" + "id=" + id + ", name=" + name + ", iconPath=" + iconPath + '}';
+	}
 
 }

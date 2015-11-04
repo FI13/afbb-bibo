@@ -58,7 +58,7 @@
       </command>
       <command
             id="de.afbb.bibo.ui.create.Exemplar"
-            name="Erfassung Exemplar">
+            name="Erfassung Medien">
       </command>
       <command
             id="de.afbb.bibo.ui.create.borrower"
@@ -111,7 +111,7 @@
          </property>
          <property
                name="aboutText"
-               value="Bibliotheks-Verwaltung für AfbB.&#x0A;&#x0A;Erstellt von FI13">
+               value="Bibliotheks-Verwaltung für AfbB.&#x0D;&#x0A;Erstellt von:&#x0D;&#x0A;&#x0D;&#x0A;David Becker&#x0D;&#x0A;Matthias Elberling&#x0D;&#x0A;Philipp Endrulat&#x0D;&#x0A;Tom Ewald&#x0D;&#x0A;Michelé Lingel&#x0D;&#x0A;Philipp Widdra">
          </property>
          <property
                name="aboutImage"
@@ -130,7 +130,7 @@
             locationURI="toolbar:de.afbb.bibo.coolbar">
          <command
                commandId="org.eclipse.ui.file.save"
-               icon="icons/32x32login.png"
+               icon="icons/32x32Save.png"
                style="push">
          </command>
          <separator
@@ -149,12 +149,12 @@
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.type"
-               icon="icons/32x32cd.png"
+               icon="icons/32x32medien.png"
                style="push">
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.Exemplar"
-               icon="icons/32x32book.png"
+               icon="icons/32x32add_book.png"
                style="push">
          </command>
          <command
