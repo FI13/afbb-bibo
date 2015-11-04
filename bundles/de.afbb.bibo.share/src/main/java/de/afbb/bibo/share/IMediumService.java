@@ -18,6 +18,14 @@ public interface IMediumService {
 	void update(Medium medium) throws ConnectException;
 	
 	/**
+	 * creates the given medium and populates the ID field
+	 * 
+	 * @param medium
+	 * @throws ConnectException
+	 */
+	void create(Medium medium) throws ConnectException;
+	
+	/**
 	 * tries to read the medium from the database with the given ID
 	 * 
 	 * @param id
