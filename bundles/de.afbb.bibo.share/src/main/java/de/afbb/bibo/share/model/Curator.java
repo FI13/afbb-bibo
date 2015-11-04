@@ -17,6 +17,16 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 	private String passwordHash;
 	private String password;
 
+	public Curator(int id, String name, String salt, String passwordHash) {
+		this.id = id;
+		this.name = name;
+		this.salt = salt;
+		this.passwordHash = passwordHash;
+	}
+
+	public Curator() {
+	}
+
 	/**
 	 * getter for password
 	 *
@@ -137,5 +147,10 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 	@Override
 	public String getToolTipText() {
 		return name;
+	}
+
+	@Override
+	public String toString() {
+		return "Curator{" + "id=" + id + ", name=" + name + ", salt=" + salt + ", passwordHash=" + passwordHash + '}';
 	}
 }

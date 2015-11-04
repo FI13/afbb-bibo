@@ -8,7 +8,7 @@ public class Medium extends AbstractPropertyChangeSupport {
 	public static final String FIELD_TITLE = "title";//$NON-NLS-1$
 	public static final String FIELD_AUTHOR = "author";//$NON-NLS-1$
 	public static final String FIELD_LANGUAGE = "language";//$NON-NLS-1$
-	public static final String FIELD_TYP_ID = "typId";//$NON-NLS-1$
+	public static final String FIELD_TYP_ID = "typeId";//$NON-NLS-1$
 	public static final String FIELD_PUBLISHER = "publisher";//$NON-NLS-1$
 
 	private Integer id;
@@ -16,8 +16,22 @@ public class Medium extends AbstractPropertyChangeSupport {
 	private String title;
 	private String author;
 	private String language;
-	private Integer typId;
+	private Integer typeId;
 	private String publisher;
+	
+	public Medium(int id, String isbn, String title, String author, String language, int typeId, String publisher) {
+        this.id = id;
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.language = language;
+        this.typeId = typeId;
+        this.publisher = publisher;
+    }
+	
+    public Medium() {
+    	
+    }
 
 	public String getTitle() {
 		return title;
@@ -27,12 +41,12 @@ public class Medium extends AbstractPropertyChangeSupport {
 		changeSupport.firePropertyChange(FIELD_TITLE, this.title, this.title = title);
 	}
 
-	public Integer getTypId() {
-		return typId;
+	public Integer getTypeId() {
+		return typeId;
 	}
 
-	public void setTypId(final Integer typId) {
-		changeSupport.firePropertyChange(FIELD_TYP_ID, this.typId, this.typId = typId);
+	public void setTypeId(final Integer typId) {
+		changeSupport.firePropertyChange(FIELD_TYP_ID, this.typeId, this.typeId = typId);
 	}
 
 	public String getPublisher() {
@@ -43,11 +57,11 @@ public class Medium extends AbstractPropertyChangeSupport {
 		changeSupport.firePropertyChange(FIELD_PUBLISHER, this.publisher, this.publisher = publisher);
 	}
 
-	public Integer getId() {
+	public Integer getMediumId() {
 		return id;
 	}
 
-	public void setId(final Integer id) {
+	public void setMediumId(final Integer id) {
 		this.id = id;
 	}
 
@@ -85,7 +99,7 @@ public class Medium extends AbstractPropertyChangeSupport {
 		result = prime * result + (language == null ? 0 : language.hashCode());
 		result = prime * result + (publisher == null ? 0 : publisher.hashCode());
 		result = prime * result + (title == null ? 0 : title.hashCode());
-		result = prime * result + (typId == null ? 0 : typId.hashCode());
+		result = prime * result + (typeId == null ? 0 : typeId.hashCode());
 		return result;
 	}
 
@@ -143,14 +157,19 @@ public class Medium extends AbstractPropertyChangeSupport {
 		} else if (!title.equals(other.title)) {
 			return false;
 		}
-		if (typId == null) {
-			if (other.typId != null) {
+		if (typeId == null) {
+			if (other.typeId != null) {
 				return false;
 			}
-		} else if (!typId.equals(other.typId)) {
+		} else if (!typeId.equals(other.typeId)) {
 			return false;
 		}
 		return true;
 	}
+
+    @Override
+    public String toString() {
+        return "Medium{" + "id=" + id + ", isbn=" + isbn + ", title=" + title + ", author=" + author + ", language=" + language + ", typeId=" + typeId + ", publisher=" + publisher + '}';
+    }
 
 }

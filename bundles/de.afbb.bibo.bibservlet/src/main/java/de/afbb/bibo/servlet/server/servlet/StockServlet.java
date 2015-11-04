@@ -5,18 +5,22 @@
  */
 package de.afbb.bibo.servlet.server.servlet;
 
-import com.google.gson.Gson;
-import de.afbb.bibo.servlet.db.DBConnector;
-import de.afbb.bibo.servlet.server.Utils;
-import de.afbb.bibo.servlet.model.Copy;
-import de.afbb.bibo.servlet.model.Medium;
-import de.afbb.bibo.servlet.model.MediumType;
 import java.io.IOException;
 import java.sql.SQLException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+
+import de.afbb.bibo.servlet.db.DBConnector;
+import de.afbb.bibo.servlet.server.Utils;
+import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.share.model.Medium;
+import de.afbb.bibo.share.model.MediumType;
 
 /**
  *
@@ -58,7 +62,7 @@ public class StockServlet {
 
     private void addMediaType() throws IOException, SQLException {
         MediumType type = gson.fromJson(request.getReader(), MediumType.class);
-        int mediumId = DBConnector.getInstance().createMediumType(type.getName(), type.getIcon());
+        int mediumId = DBConnector.getInstance().createMediumType(type.getName(), type.getIconPath());
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println(mediumId);
         response.setContentType("text/plain");

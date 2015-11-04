@@ -12,16 +12,16 @@ import java.io.Reader;
 import java.util.Properties;
 
 /**
- *
  * @author fi13.pendrulat
  */
 public class Config {
-	private final String pASSWORD;
-	private final String uSER_NAME;
-	private final String uRL;
-	private final String dATABASE_NAME;
-	private final int tOKEN_EXPIRATION_TIME_IN_HOURS;
-	private final static String path = "./server.properties";
+
+	public static String PASSWORD;
+	public static String USER_NAME;
+	public static String URL;
+	public static String DATABASE_NAME;
+	public static int TOKEN_EXPIRATION_TIME_IN_HOURS;
+	public static String path = "./server.properties";
 
 	public static String get(final String search) throws IOException {
 		String s = null;
@@ -35,11 +35,10 @@ public class Config {
 	}
 
 	public Config() throws IOException {
-
-		tOKEN_EXPIRATION_TIME_IN_HOURS = Integer.valueOf(get("TOKEN_EXPIRATION_TIME_IN_HOURS"));
-		dATABASE_NAME = get("DATABASE_NAME");
-		uRL = get("URL");
-		uSER_NAME = get("USER_NAME");
-		pASSWORD = get("PASSWORD");
+		TOKEN_EXPIRATION_TIME_IN_HOURS = Integer.valueOf(get("TOKEN_EXPIRATION_TIME_IN_HOURS"));
+		DATABASE_NAME = get("DATABASE_NAME");
+		URL = get("URL");
+		USER_NAME = get("USER_NAME");
+		PASSWORD = get("PASSWORD");
 	}
 }
