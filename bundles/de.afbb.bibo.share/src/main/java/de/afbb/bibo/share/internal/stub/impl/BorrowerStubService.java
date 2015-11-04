@@ -21,18 +21,27 @@ public class BorrowerStubService implements IBorrowerService {
 		b1.setId(++currentBorrowerId);
 		b1.setFirstName("Philipp");
 		b1.setSurname("Widdra");
+		b1.setInfo("FI13");
 		final Borrower b2 = new Borrower();
-		b1.setId(++currentBorrowerId);
+		b2.setId(++currentBorrowerId);
 		b2.setFirstName("Michelé");
 		b2.setSurname("Lingel");
+		b2.setInfo("FI13");
 		final Borrower b3 = new Borrower();
-		b1.setId(++currentBorrowerId);
+		b3.setId(++currentBorrowerId);
 		b3.setFirstName("David");
 		b3.setSurname("Becker");
+		b3.setInfo("FI13");
+		final Borrower b4 = new Borrower();
+		b4.setId(++currentBorrowerId);
+		b4.setFirstName("Jens");
+		b4.setSurname("Henoch");
+		b4.setInfo("Lehrer");
 
 		borrowers.add(b1);
 		borrowers.add(b2);
 		borrowers.add(b3);
+		borrowers.add(b4);
 
 		final Copy c1 = new Copy();
 		c1.setId(++currentCopyId);
