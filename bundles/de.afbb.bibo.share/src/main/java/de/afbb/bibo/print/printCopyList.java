@@ -22,7 +22,7 @@ import de.afbb.bibo.share.model.Curator;
  * @author fi13.melberling
  */
 
-public class printExemplarList {
+public class printCopyList {
 
 	public static void print(final Copy[] list, final Curator cur, final Borrower bor) throws PrinterException {
 		final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");

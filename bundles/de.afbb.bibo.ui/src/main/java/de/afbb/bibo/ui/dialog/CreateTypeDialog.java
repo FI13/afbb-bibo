@@ -6,6 +6,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -29,13 +30,13 @@ public class CreateTypeDialog extends AbstractDialog {
 
 	private Text txtName;
 	private final MediumType type = new MediumType();
-	ImageRegistry imageRegistry = new ImageRegistry();
+	ImageRegistry imageRegistry = JFaceResources.getImageRegistry();
 
 	public CreateTypeDialog(final Shell parentShell) {
 		super(parentShell);
 
-		imageRegistry.put(ImagePath.ICON_BOOK2, Activator.getImageDescriptor(ImagePath.ICON_BOOK2));
-		imageRegistry.put(ImagePath.ICON_CD, Activator.getImageDescriptor(ImagePath.ICON_CD));
+		imageRegistry.put(ImagePath.ICON_BOOK2_32, Activator.getImageDescriptor(ImagePath.ICON_BOOK2_32));
+		imageRegistry.put(ImagePath.ICON_CD_32, Activator.getImageDescriptor(ImagePath.ICON_CD_32));
 	}
 
 	@Override
@@ -70,8 +71,8 @@ public class CreateTypeDialog extends AbstractDialog {
 		btnCd.setText("CD");
 
 		setUpButton(btnNone, null);
-		setUpButton(btnBook, ImagePath.ICON_BOOK2);
-		setUpButton(btnCd, ImagePath.ICON_CD);
+		setUpButton(btnBook, ImagePath.ICON_BOOK2_32);
+		setUpButton(btnCd, ImagePath.ICON_CD_32);
 
 		btnNone.setSelection(true);
 
