@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Client
+Bundle-SymbolicName: de.afbb.bibo.bibservlet.client
+Bundle-Version: 1.0.0.qualifier
+Export-Package: de.afbb.bibo.servletclient.connection
+Import-Package: de.afbb.bibo.share,
+ de.afbb.bibo.share.model,
+ javax.servlet.http
