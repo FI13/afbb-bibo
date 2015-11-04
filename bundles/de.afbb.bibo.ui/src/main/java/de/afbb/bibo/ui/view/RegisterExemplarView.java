@@ -17,6 +17,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
+import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.ui.Activator;
 
@@ -31,6 +32,7 @@ public class RegisterExemplarView extends AbstractEditView {
 	private static final String IMAGE_GROUP = "icons/16x16medien.png";//$NON-NLS-1$
 
 	private final Set<Set<Copy>> copies = new HashSet<Set<Copy>>();
+	private final Copy copyToModify = new Copy();
 
 	/**
 	 * The text control that's displaying the content of the email message.
@@ -38,6 +40,13 @@ public class RegisterExemplarView extends AbstractEditView {
 	private Text messageText;
 
 	private Group idGroup;
+	private Text txtBarcode;
+	private Text txtIsbn;
+	private Text txtEdition;
+	private Text txtTitle;
+	private Text txtAuthor;
+	private Text txtLanguage;
+	private Text txtPublisher;
 
 	public RegisterExemplarView() {
 		JFaceResources.getImageRegistry().put(IMAGE_GROUP, Activator.getImageDescriptor(IMAGE_GROUP).createImage());
@@ -52,24 +61,22 @@ public class RegisterExemplarView extends AbstractEditView {
 		idGroup = createGroup(top, "Nummer");
 		idGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(idGroup, "Inventar-Nummer");
-		final Text txtNumber = toolkit.createText(idGroup, "");
+		txtBarcode = toolkit.createText(idGroup, "");
 		toolkit.createLabel(idGroup, "ISBN");
-		final Text txtIsbn = toolkit.createText(idGroup, "");
-		toolkit.createLabel(idGroup, "Erscheinungsjahr");
-		toolkit.createText(idGroup, "");
+		txtIsbn = toolkit.createText(idGroup, "");
 		toolkit.createLabel(idGroup, "Auflage");
-		toolkit.createText(idGroup, "");
+		txtEdition = toolkit.createText(idGroup, "");
 
 		final Group mediumGroup = createGroup(top, "Informationen");
 		mediumGroup.setLayout(new GridLayout(4, false));
 		toolkit.createLabel(mediumGroup, "Titel");
-		final Text txtTitle = toolkit.createText(mediumGroup, "Titel");
+		txtTitle = toolkit.createText(mediumGroup, "Titel");
 		toolkit.createLabel(mediumGroup, "Autor");
-		final Text txtAuthor = toolkit.createText(mediumGroup, "Autor");
+		txtAuthor = toolkit.createText(mediumGroup, "Autor");
 		toolkit.createLabel(mediumGroup, "Sprache");
-		final Text txtLanguage = toolkit.createText(mediumGroup, "Sprache");
+		txtLanguage = toolkit.createText(mediumGroup, "Sprache");
 		toolkit.createLabel(mediumGroup, "Verlag");
-		final Text txtPublisher = toolkit.createText(mediumGroup, "Verlag");
+		txtPublisher = toolkit.createText(mediumGroup, "Verlag");
 		toolkit.createLabel(mediumGroup, "Typ");
 		toolkit.createText(mediumGroup, "Typ");
 
@@ -100,6 +107,13 @@ public class RegisterExemplarView extends AbstractEditView {
 
 	@Override
 	protected void initBinding() {
+		BindingHelper.bindStringToTextField(txtBarcode, copyToModify, Copy.class, Copy.FIELD_BARCODE, bindingContext, true);
+		BindingHelper.bindStringToTextField(txtIsbn, copyToModify, Copy.class, Copy.FIELD_ISBN, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtEdition, copyToModify, Copy.class, Copy.FIELD_EDITION, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtTitle, copyToModify, Copy.class, Copy.FIELD_TITLE, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtAuthor, copyToModify, Copy.class, Copy.FIELD_AUTHOR, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtLanguage, copyToModify, Copy.class, Copy.FIELD_LANGUAGE, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtPublisher, copyToModify, Copy.class, Copy.FIELD_PUBLISHER, bindingContext, false);
 	}
 
 	@Override
