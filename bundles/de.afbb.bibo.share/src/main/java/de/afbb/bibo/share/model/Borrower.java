@@ -12,16 +12,29 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 
 	private static final long serialVersionUID = -3149389839841886740L;
 	public static final String FIELD_SURNAME = "surname";//$NON-NLS-1$
-	public static final String FIELD_FIRSTNAME = "firstName";//$NON-NLS-1$
+	public static final String FIELD_FIRSTNAME = "forename";//$NON-NLS-1$
 	public static final String FIELD_INFO = "info";//$NON-NLS-1$
 	public static final String FIELD_EMAIL = "email";//$NON-NLS-1$
 	public static final String FIELD_PHONENUMER = "phoneNumber";//$NON-NLS-1$
 	private Integer id;
 	private String surname;
-	private String firstName;
+	private String forename;
 	private String info;
 	private String email;
 	private String phoneNumber;
+	
+	public Borrower(int id, String forename, String surname, String info, String email, String phoneNumber) {
+        this.id = id;
+        this.forename = forename;
+        this.surname = surname;
+        this.info = info;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+	
+	public Borrower() {
+		
+	}
 
 	public String getInfo() {
 		return info;
@@ -63,12 +76,12 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 		this.surname = surname;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getForename() {
+		return forename;
 	}
 
-	public void setFirstName(final String firstName) {
-		this.firstName = firstName;
+	public void setForename(final String firstName) {
+		this.forename = firstName;
 	}
 
 	@Override
@@ -94,12 +107,12 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 
 	@Override
 	public String getToolTipText() {
-		return "Ausleiher erstellen: " + firstName + " " + surname;
+		return "Ausleiher erstellen: " + forename + " " + surname;
 	}
 
 	@Override
 	public String getName() {
-		return firstName + " " + surname;
+		return forename + " " + surname;
 	}
 
 	@Override
@@ -107,7 +120,7 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (email == null ? 0 : email.hashCode());
-		result = prime * result + (firstName == null ? 0 : firstName.hashCode());
+		result = prime * result + (forename == null ? 0 : forename.hashCode());
 		result = prime * result + (id == null ? 0 : id.hashCode());
 		result = prime * result + (info == null ? 0 : info.hashCode());
 		result = prime * result + (phoneNumber == null ? 0 : phoneNumber.hashCode());
@@ -134,11 +147,11 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 		} else if (!email.equals(other.email)) {
 			return false;
 		}
-		if (firstName == null) {
-			if (other.firstName != null) {
+		if (forename == null) {
+			if (other.forename != null) {
 				return false;
 			}
-		} else if (!firstName.equals(other.firstName)) {
+		} else if (!forename.equals(other.forename)) {
 			return false;
 		}
 		if (id == null) {
@@ -171,5 +184,10 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 		}
 		return true;
 	}
+	
+	@Override
+    public String toString() {
+        return "Borrower{" + "id=" + id + ", forename=" + forename + ", surname=" + surname + ", info=" + info + ", email=" + email + ", phoneNumber=" + phoneNumber + '}';
+    }
 
 }

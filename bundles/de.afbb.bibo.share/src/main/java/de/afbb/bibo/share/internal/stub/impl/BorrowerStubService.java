@@ -19,35 +19,44 @@ public class BorrowerStubService implements IBorrowerService {
 	public BorrowerStubService() {
 		final Borrower b1 = new Borrower();
 		b1.setId(++currentBorrowerId);
-		b1.setFirstName("Philipp");
+		b1.setForename("Philipp");
 		b1.setSurname("Widdra");
+		b1.setInfo("FI13");
 		final Borrower b2 = new Borrower();
 		b1.setId(++currentBorrowerId);
-		b2.setFirstName("Michelé");
+		b2.setForename("Michelé");
 		b2.setSurname("Lingel");
+		b2.setInfo("FI13");
 		final Borrower b3 = new Borrower();
 		b1.setId(++currentBorrowerId);
-		b3.setFirstName("David");
+		b3.setForename("David");
 		b3.setSurname("Becker");
+		b3.setInfo("FI13");
+		final Borrower b4 = new Borrower();
+		b4.setId(++currentBorrowerId);
+		b4.setForename("Jens");
+		b4.setSurname("Henoch");
+		b4.setInfo("Lehrer");
 
 		borrowers.add(b1);
 		borrowers.add(b2);
 		borrowers.add(b3);
+		borrowers.add(b4);
 
 		final Copy c1 = new Copy();
-		c1.setId(++currentCopyId);
+		c1.setMediumId(++currentCopyId);
 		c1.setTitle("IT-Handbuch");
 		c1.setAuthor("Autor");
 		c1.setLanguage("de");
-		c1.setBarcode(c1.getId().toString());
+		c1.setBarcode(c1.getMediumId().toString());
 		c1.setInventoryDate(new java.sql.Date(2015, 5, 15));
 
 		final Copy c2 = new Copy();
-		c2.setId(++currentCopyId);
+		c2.setMediumId(++currentCopyId);
 		c2.setTitle("Kusch: Mathematik");
 		c2.setAuthor("Rudolf Borgmann, Jost Knapp, Rolf Schöwe");
 		c2.setIsbn("3464413055");
-		c2.setBarcode(c2.getId().toString());
+		c2.setBarcode(c2.getMediumId().toString());
 		c2.setLanguage("de");
 		c2.setEdition("Aktuelle Ausgabe: Band K");
 		c2.setPublisher("Cornelsen Verlag");
@@ -63,7 +72,7 @@ public class BorrowerStubService implements IBorrowerService {
 		final Iterator<Borrower> i = borrowers.iterator();
 		while (i.hasNext()) {
 			final Borrower b = i.next();
-			if (firstName == b.getFirstName() && surname == b.getSurname()) {
+			if (firstName == b.getForename() && surname == b.getSurname()) {
 				return true;
 			}
 		}

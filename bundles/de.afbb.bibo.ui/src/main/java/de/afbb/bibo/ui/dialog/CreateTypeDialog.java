@@ -6,6 +6,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -20,7 +21,7 @@ import org.eclipse.swt.widgets.Text;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
-import de.afbb.bibo.share.model.Typ;
+import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.Activator;
 import de.afbb.bibo.ui.ImagePath;
 import de.afbb.bibo.ui.Messages;
@@ -28,14 +29,14 @@ import de.afbb.bibo.ui.Messages;
 public class CreateTypeDialog extends AbstractDialog {
 
 	private Text txtName;
-	private final Typ type = new Typ();
-	ImageRegistry imageRegistry = new ImageRegistry();
+	private final MediumType type = new MediumType();
+	ImageRegistry imageRegistry = JFaceResources.getImageRegistry();
 
 	public CreateTypeDialog(final Shell parentShell) {
 		super(parentShell);
 
-		imageRegistry.put(ImagePath.ICON_BOOK2, Activator.getImageDescriptor(ImagePath.ICON_BOOK2));
-		imageRegistry.put(ImagePath.ICON_CD, Activator.getImageDescriptor(ImagePath.ICON_CD));
+		imageRegistry.put(ImagePath.ICON_BOOK2_32, Activator.getImageDescriptor(ImagePath.ICON_BOOK2_32));
+		imageRegistry.put(ImagePath.ICON_CD_32, Activator.getImageDescriptor(ImagePath.ICON_CD_32));
 	}
 
 	@Override
@@ -70,8 +71,8 @@ public class CreateTypeDialog extends AbstractDialog {
 		btnCd.setText("CD");
 
 		setUpButton(btnNone, null);
-		setUpButton(btnBook, ImagePath.ICON_BOOK2);
-		setUpButton(btnCd, ImagePath.ICON_CD);
+		setUpButton(btnBook, ImagePath.ICON_BOOK2_32);
+		setUpButton(btnCd, ImagePath.ICON_CD_32);
 
 		btnNone.setSelection(true);
 
@@ -109,7 +110,7 @@ public class CreateTypeDialog extends AbstractDialog {
 
 	@Override
 	protected void initBinding() {
-		BindingHelper.bindStringToTextField(txtName, type, Typ.class, Typ.FIELD_NAME, bindingContext, true);
+		BindingHelper.bindStringToTextField(txtName, type, MediumType.class, MediumType.FIELD_NAME, bindingContext, true);
 	}
 
 	@Override

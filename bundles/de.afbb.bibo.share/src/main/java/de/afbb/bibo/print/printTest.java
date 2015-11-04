@@ -44,10 +44,10 @@ public class printTest {
 		final Curator c = new Curator();
 		c.setName("Hans");
 		final Borrower b = new Borrower();
-		b.setFirstName("Jäns");
+		b.setForename("Jäns");
 		b.setSurname("Hähnoch");
 
-		printExemplarList.print(e, c, b);
+		printCopyList.print(e, c, b);
 
 	}
 }
