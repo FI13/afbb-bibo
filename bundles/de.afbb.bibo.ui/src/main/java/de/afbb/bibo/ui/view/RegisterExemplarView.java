@@ -10,7 +10,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
@@ -33,12 +35,6 @@ public class RegisterExemplarView extends AbstractEditView {
 
 	private final Set<Set<Copy>> copies = new HashSet<Set<Copy>>();
 	private final Copy copyToModify = new Copy();
-
-	/**
-	 * The text control that's displaying the content of the email message.
-	 */
-	private Text messageText;
-
 	private Group idGroup;
 	private Text txtBarcode;
 	private Text txtIsbn;
@@ -47,6 +43,21 @@ public class RegisterExemplarView extends AbstractEditView {
 	private Text txtAuthor;
 	private Text txtLanguage;
 	private Text txtPublisher;
+
+	Listener toListListener = new Listener() {
+
+		@Override
+		public void handleEvent(final Event event) {
+			System.err.println("to list");
+		}
+	};
+	Listener toEditListener = new Listener() {
+
+		@Override
+		public void handleEvent(final Event event) {
+			System.err.println("to edit");
+		}
+	};
 
 	public RegisterExemplarView() {
 		JFaceResources.getImageRegistry().put(IMAGE_GROUP, Activator.getImageDescriptor(IMAGE_GROUP).createImage());
@@ -84,7 +95,9 @@ public class RegisterExemplarView extends AbstractEditView {
 		GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
 		middle.setLayout(new GridLayout(2, false));
 		final Button btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
+		btnToList.addListener(SWT.MouseDown, toListListener);
 		final Button btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
+		btnToEdit.addListener(SWT.MouseDown, toEditListener);
 
 		final Composite bottom = toolkit.createComposite(top, SWT.NONE);
 		bottom.setLayout(new GridLayout(2, false));
