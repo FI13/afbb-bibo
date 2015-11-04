@@ -74,7 +74,7 @@ public class RegisterExemplarView extends AbstractEditView {
 		toolkit.createText(mediumGroup, "Typ");
 
 		final Composite middle = toolkit.createComposite(top, SWT.NONE);
-		middle.setLayoutData(new GridData(SWT.CENTER, SWT.DEFAULT, true, false));
+		GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
 		middle.setLayout(new GridLayout(2, false));
 		final Button btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
 		final Button btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
@@ -93,9 +93,6 @@ public class RegisterExemplarView extends AbstractEditView {
 
 		GridDataFactory.fillDefaults().applyTo(idGroup);
 		GridDataFactory.fillDefaults().applyTo(mediumGroup);
-//		GridDataFactory.fillDefaults().span(2, 1).grab(true, false).applyTo(middle);
-//		btnToList.setLayoutData(GridDataFactory.swtDefaults().align(SWT.END, SWT.DEFAULT).create());
-//		btnToEdit.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.DEFAULT).create());
 		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(bottom);
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).applyTo(buttonComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(copyTable);
