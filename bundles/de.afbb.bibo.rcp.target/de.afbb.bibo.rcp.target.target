@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Eclipse RCP 3.7.1" sequenceNumber="3">
+<?pde version="3.8"?><target name="Eclipse RCP 3.7.1" sequenceNumber="4">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.rcp.sdk.id" version="3.7.1.M20110909-1335"/>
@@ -10,6 +10,10 @@
 <unit id="org.hamcrest.core" version="1.1.0.v20090501071000"/>
 <unit id="org.eclipse.ui.forms" version="3.5.100.v20110425"/>
 <repository location="http://download.eclipse.org/releases/indigo/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.widgets.xviewer.feature.feature.group" version="0.9.9.201509301423"/>
+<repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
 </location>
 </locations>
 </target>
