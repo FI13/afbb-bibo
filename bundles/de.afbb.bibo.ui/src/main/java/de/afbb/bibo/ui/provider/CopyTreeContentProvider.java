@@ -1,7 +1,13 @@
 package de.afbb.bibo.ui.provider;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+
+import de.afbb.bibo.share.model.Copy;
 
 public class CopyTreeContentProvider implements ITreeContentProvider {
 
@@ -15,7 +21,17 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(final Object inputElement) {
-		return null;
+		final HashSet<Copy> elements = new HashSet<>();
+		if (inputElement != null && inputElement instanceof Collection<?>) {
+			final Iterator<?> iterator = ((Collection<?>) inputElement).iterator();
+			while (iterator.hasNext()) {
+				final Object next = iterator.next();
+				if (next != null && next instanceof Collection<?>) {
+					elements.addAll((Collection<Copy>) next);
+				}
+			}
+		}
+		return elements.toArray();
 	}
 
 	@Override

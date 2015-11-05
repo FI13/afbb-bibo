@@ -23,6 +23,7 @@ import org.eclipse.ui.PartInitException;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.share.model.CopyUtil;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
 import de.afbb.bibo.ui.IconType;
@@ -43,7 +44,7 @@ public class RegisterExemplarView extends AbstractEditView {
 	private static final String BARCODE = "Barcode";
 
 	private final Set<Set<Copy>> copies = new HashSet<Set<Copy>>();
-	private final Copy copyToModify = new Copy();
+	private Copy copyToModify = new Copy();
 	private Group idGroup;
 	private Text txtBarcode;
 	private Text txtIsbn;
@@ -53,6 +54,7 @@ public class RegisterExemplarView extends AbstractEditView {
 	private Text txtLanguage;
 	private Text txtPublisher;
 
+	private XViewer xViewer;
 	private final XViewerFactory factory = new BiboXViewerFactory(REGISTER_COPY);
 	private XViewerColumn columnType;
 	private XViewerColumn columnBarcode;
@@ -61,7 +63,11 @@ public class RegisterExemplarView extends AbstractEditView {
 
 		@Override
 		public void handleEvent(final Event event) {
-			System.err.println("to list");
+			final HashSet<Copy> add = new HashSet<Copy>();
+			add.add((Copy) CopyUtil.copy(copyToModify));
+			copies.add(add);
+			copyToModify = new Copy();
+			xViewer.setInput(copies);
 		}
 	};
 	Listener toEditListener = new Listener() {
@@ -115,7 +121,7 @@ public class RegisterExemplarView extends AbstractEditView {
 		layoutDataMiddle.horizontalSpan = 2;
 		bottom.setLayoutData(layoutDataMiddle);
 
-		final XViewer xViewer = new XViewer(bottom, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION, factory);
+		xViewer = new XViewer(bottom, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION, factory);
 		xViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		xViewer.setContentProvider(new CopyTreeContentProvider());
 		xViewer.setLabelProvider(new CopyLabelProvider(xViewer));
@@ -168,8 +174,9 @@ public class RegisterExemplarView extends AbstractEditView {
 	}
 
 	private void initTableColumns() {
-		columnType = new XViewerColumn(TYPE, TYPE, 50, SWT.LEFT, true, SortDataType.String, false, "Typ des Mediums");
-		columnBarcode = new XViewerColumn(BARCODE, BARCODE, 50, SWT.RIGHT, true, SortDataType.Integer, false, "Barcode des Mediums");
+		columnType = new XViewerColumn(REGISTER_COPY + "." + TYPE, TYPE, 50, SWT.LEFT, true, SortDataType.String, false, "Typ des Mediums");
+		columnBarcode = new XViewerColumn(REGISTER_COPY + "." + BARCODE, BARCODE, 50, SWT.RIGHT, true, SortDataType.Integer, false,
+				"Barcode des Mediums");
 		factory.registerColumns(columnType, columnBarcode);
 
 	}
