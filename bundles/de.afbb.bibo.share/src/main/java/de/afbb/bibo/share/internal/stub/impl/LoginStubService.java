@@ -23,12 +23,12 @@ public class LoginStubService implements ILoginService {
 	}
 
 	@Override
-	public String requestSessionTokenForHash(final String userName, final String hashedPassword) throws ConnectException {
-		return USER.equals(userName) && HASH.equals(hashedPassword) ? "token" : null;
+	public boolean loginWithHash(final String userName, final String hashedPassword) throws ConnectException {
+		return USER.equals(userName) && HASH.equals(hashedPassword);
 	}
 
 	@Override
-	public void invalidateSession(final String sessionToken) {
+	public void invalidateSession() {
 		// nothing to do in stub service
 	}
 

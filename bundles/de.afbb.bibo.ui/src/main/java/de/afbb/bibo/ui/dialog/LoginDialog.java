@@ -83,14 +83,13 @@ public class LoginDialog extends AbstractDialog {
 		try {
 			final String salt = ServiceLocator.getInstance().getLoginService().requestSaltForUserName(curator.getName());
 			final String hashPassword = CryptoUtil.hashPassword(curator.getPassword(), salt);
-			final String sessionToken = ServiceLocator.getInstance().getLoginService().requestSessionTokenForHash(curator.getName(),
+			boolean loggedIn = ServiceLocator.getInstance().getLoginService().loginWithHash(curator.getName(),
 					hashPassword);
-			if (sessionToken == null || sessionToken.isEmpty()) {
+			if (!loggedIn) {
 				setMessage("Name und Passwort stimmen nicht überein !", IMessageProvider.ERROR);
 				return false;
 			}
 			setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
-			SessionHolder.getInstance().setSessionToken(sessionToken);
 			SessionHolder.getInstance().setCurator(curator);
 			return true;
 		} catch (final ConnectException e) {

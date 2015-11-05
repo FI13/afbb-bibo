@@ -29,13 +29,12 @@ public interface ILoginService {
 	 * @return session token or empty String when hashedPassword isn't valid for given userName
 	 * @throws ConnectException
 	 */
-	String requestSessionTokenForHash(String userName, String hashedPassword) throws ConnectException;
+	boolean loginWithHash(String userName, String hashedPassword) throws ConnectException;
 
 	/**
 	 * invalidates the given session token
 	 * 
-	 * @param sessionToken
 	 */
-	void invalidateSession(String sessionToken);
+	void invalidateSession();
 
 }
