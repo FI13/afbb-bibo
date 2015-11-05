@@ -1,7 +1,7 @@
 package de.afbb.bibo.share.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
@@ -12,7 +12,7 @@ import org.eclipse.ui.IPersistableElement;
  */
 public class Copy extends Medium implements IEditorInput, Serializable {
 
-	private static final long serialVersionUID = -596217857652412137L;
+	private static final long serialVersionUID = 2495284605877332896L;
 	public static final String FIELD_EDITION = "edition";//$NON-NLS-1$
 	public static final String FIELD_BARCODE = "barcode";//$NON-NLS-1$
 	public static final String FIELD_DATE_INVENTORY = "inventoryDate";//$NON-NLS-1$
@@ -33,18 +33,18 @@ public class Copy extends Medium implements IEditorInput, Serializable {
 	private int lastBorrowerId;
 	private int groupId;
 
-	public Copy(final int id, final String edition, final String barcode, final Date inventoryDate, final String condition,
-			final Date borrowDate, final Date lastBorrowDate, final int groupId, final int borrowerId, final int lastBorrowerId,
-			final int curatorId, final int lastCuratorId, final int mediumId, final String isbn, final String title, final String author,
-			final String language, final int typeId, final String publisher) {
+	public Copy(final int id, final String edition, final String barcode, final Date date, final String condition, final Date date2,
+			final Date date3, final int groupId, final int borrowerId, final int lastBorrowerId, final int curatorId,
+			final int lastCuratorId, final int mediumId, final String isbn, final String title, final String author, final String language,
+			final int typeId, final String publisher) {
 		super(mediumId, isbn, title, author, language, typeId, publisher);
 		this.id = id;
 		this.edition = edition;
 		this.barcode = barcode;
-		this.inventoryDate = inventoryDate;
+		inventoryDate = date;
 		this.condition = condition;
-		this.borrowDate = borrowDate;
-		this.lastBorrowDate = lastBorrowDate;
+		borrowDate = date2;
+		lastBorrowDate = date3;
 		this.groupId = groupId;
 		this.borrowerId = borrowerId;
 		this.lastBorrowerId = lastBorrowerId;
