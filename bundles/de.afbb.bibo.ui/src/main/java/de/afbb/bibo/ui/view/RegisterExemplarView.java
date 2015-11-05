@@ -5,6 +5,9 @@ import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
+import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
+import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
+import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -35,6 +38,8 @@ public class RegisterExemplarView extends AbstractEditView {
 
 	private static final String REGISTER_COPY = "register.copy";
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
+	private static final String TYPE = "Typ";
+	private static final String BARCODE = "Barcode";
 
 	private final Set<Set<Copy>> copies = new HashSet<Set<Copy>>();
 	private final Copy copyToModify = new Copy();
@@ -46,6 +51,10 @@ public class RegisterExemplarView extends AbstractEditView {
 	private Text txtAuthor;
 	private Text txtLanguage;
 	private Text txtPublisher;
+
+	private final XViewerFactory factory = new BiboXViewerFactory(REGISTER_COPY);
+	private XViewerColumn columnType;
+	private XViewerColumn columnBarcode;
 
 	Listener toListListener = new Listener() {
 
@@ -105,10 +114,11 @@ public class RegisterExemplarView extends AbstractEditView {
 		layoutDataMiddle.horizontalSpan = 2;
 		bottom.setLayoutData(layoutDataMiddle);
 
-		final XViewer xViewer = new XViewer(bottom, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION, new BiboXViewerFactory(REGISTER_COPY));
+		final XViewer xViewer = new XViewer(bottom, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION, factory);
 		xViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		xViewer.setContentProvider(new CopyTreeContentProvider());
 		xViewer.setLabelProvider(new CopyLabelProvider(xViewer));
+		initTableColumns();
 
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
 		buttonComposite.setLayout(new GridLayout());
@@ -154,5 +164,12 @@ public class RegisterExemplarView extends AbstractEditView {
 		group.setForeground(toolkit.getColors().getForeground());
 		toolkit.paintBordersFor(group);
 		return group;
+	}
+
+	private void initTableColumns() {
+		columnType = new XViewerColumn(TYPE, TYPE, 50, SWT.LEFT, true, SortDataType.String, false, "Typ des Mediums");
+		columnBarcode = new XViewerColumn(BARCODE, BARCODE, 50, SWT.RIGHT, true, SortDataType.Integer, false, "Barcode des Mediums");
+		factory.registerColumns(columnType, columnBarcode);
+
 	}
 }
