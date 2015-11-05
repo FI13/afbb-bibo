@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -21,7 +20,8 @@ import org.eclipse.ui.PartInitException;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.model.Copy;
-import de.afbb.bibo.ui.Activator;
+import de.afbb.bibo.ui.BiboImageRegistry;
+import de.afbb.bibo.ui.ImagePath;
 import de.afbb.bibo.ui.provider.BiboXViewerFactory;
 import de.afbb.bibo.ui.provider.CopyLabelProvider;
 import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
@@ -35,7 +35,6 @@ public class RegisterExemplarView extends AbstractEditView {
 
 	private static final String REGISTER_COPY = "register.copy";
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
-	private static final String IMAGE_GROUP = "icons/16x16medien.png";//$NON-NLS-1$
 
 	private final Set<Set<Copy>> copies = new HashSet<Set<Copy>>();
 	private final Copy copyToModify = new Copy();
@@ -62,10 +61,6 @@ public class RegisterExemplarView extends AbstractEditView {
 			System.err.println("to edit");
 		}
 	};
-
-	public RegisterExemplarView() {
-		JFaceResources.getImageRegistry().put(IMAGE_GROUP, Activator.getImageDescriptor(IMAGE_GROUP).createImage());
-	}
 
 	@Override
 	public void initUi(final Composite parent) {
@@ -98,8 +93,10 @@ public class RegisterExemplarView extends AbstractEditView {
 		final Composite middle = toolkit.createComposite(top, SWT.NONE);
 		middle.setLayout(new GridLayout(2, false));
 		final Button btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
+		btnToList.setImage(BiboImageRegistry.getImage(ImagePath.ICON_ARROW_DOWN_16));
 		btnToList.addListener(SWT.MouseDown, toListListener);
 		final Button btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
+		btnToEdit.setImage(BiboImageRegistry.getImage(ImagePath.ICON_ARROW_UP_16));
 		btnToEdit.addListener(SWT.MouseDown, toEditListener);
 
 		final Composite bottom = toolkit.createComposite(top, SWT.NONE);
@@ -116,8 +113,9 @@ public class RegisterExemplarView extends AbstractEditView {
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
 		buttonComposite.setLayout(new GridLayout());
 		final Button btnGroup = toolkit.createButton(buttonComposite, "Medien Gruppieren", SWT.TOP);
-		btnGroup.setImage(JFaceResources.getImage(IMAGE_GROUP));
+		btnGroup.setImage(BiboImageRegistry.getImage(ImagePath.ICON_PLUS_16));
 		final Button btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung Lösen", SWT.TOP);
+		btnUngroup.setImage(BiboImageRegistry.getImage(ImagePath.ICON_MINUS_16));
 
 		GridDataFactory.fillDefaults().applyTo(idGroup);
 		GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);

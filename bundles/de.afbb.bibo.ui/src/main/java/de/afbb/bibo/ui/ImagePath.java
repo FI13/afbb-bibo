@@ -29,7 +29,7 @@ public class ImagePath {
 	public static final String ICON_PUPIL_16 = "icons/16x16schueler.png";//$NON-NLS-1$
 	public static final String ICON_TEACHER_16 = "icons/16x16teacher.png";//$NON-NLS-1$
 	public static final String ICON_USER_16 = "icons/16x16user.png";//$NON-NLS-1$
-	public static final String ICON_ARROW_UP_16 = "icons/16x16arrow-down.png";//$NON-NLS-1$
+	public static final String ICON_ARROW_UP_16 = "icons/16x16arrow-up.png";//$NON-NLS-1$
 	public static final String ICON_ARROW_DOWN_16 = "icons/16x16arrow-down.png";//$NON-NLS-1$
 	public static final String ICON_PLUS_16 = "icons/16x16plus.png";//$NON-NLS-1$
 	public static final String ICON_MINUS_16 = "icons/16x16minus.png";//$NON-NLS-1$
