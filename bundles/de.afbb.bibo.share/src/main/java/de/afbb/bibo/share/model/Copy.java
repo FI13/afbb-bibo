@@ -29,15 +29,35 @@ public class Copy extends Medium implements IEditorInput {
 	private int lastCuratorId;
 	private int borrowerId;
 	private int lastBorrowerId;
-	private int groupElements;
+	private int groupId;
+	
+	public Copy(int id, String edition, String barcode, Date inventoryDate, String condition, Date borrowDate, Date lastBorrowDate, int groupId, int borrowerId, int lastBorrowerId, int curatorId, int lastCuratorId, int mediumId, String isbn, String title, String author, String language, int typeId, String publisher) {
+        super(mediumId, isbn, title, author, language, typeId, publisher);
+        this.id = id;
+        this.edition = edition;
+        this.barcode = barcode;
+        this.inventoryDate = inventoryDate;
+        this.condition = condition;
+        this.borrowDate = borrowDate;
+        this.lastBorrowDate = lastBorrowDate;
+        this.groupId = groupId;
+        this.borrowerId = borrowerId;
+        this.lastBorrowerId = lastBorrowerId;
+        this.curatorId = curatorId;
+        this.lastCuratorId = lastCuratorId;
+    }
+	
+	public Copy() {
+		super();
+	}
 
 	@Override
-	public Integer getId() {
+	public Integer getMediumId() {
 		return id;
 	}
 
 	@Override
-	public void setId(final Integer id) {
+	public void setMediumId(final Integer id) {
 		this.id = id;
 	}
 
@@ -121,12 +141,12 @@ public class Copy extends Medium implements IEditorInput {
 		this.lastBorrowerId = lastBorrowerId;
 	}
 
-	public int getGroupElements() {
-		return groupElements;
+	public int getGroupId() {
+		return groupId;
 	}
 
-	public void setGroupElements(final int groupElements) {
-		this.groupElements = groupElements;
+	public void setGroupId(final int groupElements) {
+		this.groupId = groupElements;
 	}
 
 	@Override
@@ -169,7 +189,7 @@ public class Copy extends Medium implements IEditorInput {
 		result = prime * result + (condition == null ? 0 : condition.hashCode());
 		result = prime * result + curatorId;
 		result = prime * result + (edition == null ? 0 : edition.hashCode());
-		result = prime * result + groupElements;
+		result = prime * result + groupId;
 		result = prime * result + (id == null ? 0 : id.hashCode());
 		result = prime * result + (inventoryDate == null ? 0 : inventoryDate.hashCode());
 		result = prime * result + (lastBorrowDate == null ? 0 : lastBorrowDate.hashCode());
@@ -224,7 +244,7 @@ public class Copy extends Medium implements IEditorInput {
 		} else if (!edition.equals(other.edition)) {
 			return false;
 		}
-		if (groupElements != other.groupElements) {
+		if (groupId != other.groupId) {
 			return false;
 		}
 		if (id == null) {
@@ -256,5 +276,10 @@ public class Copy extends Medium implements IEditorInput {
 		}
 		return true;
 	}
+	
+	@Override
+    public String toString() {
+        return "Copy{" + "id=" + id + ", edition=" + edition + ", barcode=" + barcode + ", inventoryDate=" + inventoryDate + ", condition=" + condition + ", borrowDate=" + borrowDate + ", lastBorrowDate=" + lastBorrowDate + ", groupId=" + groupId + ", borrowerId=" + borrowerId + ", lastBorrowerId=" + lastBorrowerId + ", curatorId=" + curatorId + ", lastCuratorId=" + lastCuratorId + '}';
+    }
 
 }

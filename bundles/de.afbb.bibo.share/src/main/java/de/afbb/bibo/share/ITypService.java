@@ -3,7 +3,7 @@ package de.afbb.bibo.share;
 import java.net.ConnectException;
 import java.util.Collection;
 
-import de.afbb.bibo.share.model.Typ;
+import de.afbb.bibo.share.model.MediumType;
 
 public interface ITypService {
 
@@ -13,7 +13,7 @@ public interface ITypService {
 	 * @param type
 	 * @throws ConnectException
 	 */
-	void create(Typ type) throws ConnectException;
+	void create(MediumType type) throws ConnectException;
 
 	/**
 	 * lists all types
@@ -21,8 +21,8 @@ public interface ITypService {
 	 * @return
 	 * @throws ConnectException
 	 */
-	Collection<Typ> list() throws ConnectException;
+	Collection<MediumType> list() throws ConnectException;
 
-	Typ get(Integer id) throws ConnectException;
+	MediumType get(Integer id) throws ConnectException;
 
 }

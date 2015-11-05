@@ -59,7 +59,7 @@ public class NavigationTreeService {
 				groups.put(borrower.getInfo(), personsNode);
 			}
 
-			pupilNode = new NavigationTreeViewNode(borrower.getFirstName() + " " + borrower.getSurname(), NavigationTreeNodeType.PERSON);
+			pupilNode = new NavigationTreeViewNode(borrower.getForename() + " " + borrower.getSurname(), NavigationTreeNodeType.PERSON);
 
 			personsNode.addChild(pupilNode);
 		}

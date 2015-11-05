@@ -16,7 +16,7 @@ public class CopyListToHtmlString {
 	public static String convert(final Copy[] list, final Curator cur, final Borrower bor) {
 		String s = "<!doctype html><html><head><meta charset=\"utf-8\"><title>Ausleihuebersicht</title><style>td, th { border-bottom: thin short } table { border: solid 1px } tr { border-bottom: solid 1px }</style></head><body>";
 		// Create Header
-		s += "<h3>Ausgeliehen an: <u>" + cur.getName() + "</u> durch: <u>" + bor.getFirstName() + " " + bor.getSurname() + "</u></h3>"
+		s += "<h3>Ausgeliehen an: <u>" + cur.getName() + "</u> durch: <u>" + bor.getForename() + " " + bor.getSurname() + "</u></h3>"
 				+ "<table WIDTH=100%><tr><th>ID</th><th>Titel</th><th>Name Schüler</th><th>Unterschrift</th></tr>";
 
 		// End Header

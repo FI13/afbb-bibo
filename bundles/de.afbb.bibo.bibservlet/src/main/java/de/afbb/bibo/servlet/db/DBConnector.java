@@ -5,12 +5,6 @@
  */
 package de.afbb.bibo.servlet.db;
 
-import de.afbb.bibo.servlet.Config;
-import de.afbb.bibo.servlet.model.Borrower;
-import de.afbb.bibo.servlet.model.Copy;
-import de.afbb.bibo.servlet.model.Curator;
-import de.afbb.bibo.servlet.model.Medium;
-import de.afbb.bibo.servlet.model.MediumType;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
@@ -28,7 +22,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.slf4j.LoggerFactory;
+
+import de.afbb.bibo.servlet.Config;
+import de.afbb.bibo.share.model.Borrower;
+import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.share.model.Curator;
+import de.afbb.bibo.share.model.Medium;
+import de.afbb.bibo.share.model.MediumType;
 
 /**
  *
@@ -79,7 +81,7 @@ public class DBConnector {
         log.debug("add curator: " + user);
         try (Statement statement = connect.createStatement()) {
             statement.execute("insert into " + Config.DATABASE_NAME + ".benutzer (Name, Hash, Salt) values ("
-                    + user.getName() + ", " + user.getPasswordHash() + ", " + user.getSalt() + ")");
+                    + user.getName() + ", '" + user.getPasswordHash() + "', '" + user.getSalt() + "')");
             return getCuratorId(user.getName());
         }
     }
@@ -116,7 +118,7 @@ public class DBConnector {
         try (Statement statement = connect.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery("select Id, Name, Salt from " + Config.DATABASE_NAME + ".benutzer")) {
                 while (resultSet.next()) {
-                    result.add(new Curator(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), null));
+                    result.add(new Curator(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), null));
                 }
             }
         }
@@ -151,7 +153,7 @@ public class DBConnector {
         try (Statement statement = connect.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery("select Id, TypName, Icon from " + Config.DATABASE_NAME + ".typ")) {
                 while (resultSet.next()) {
-                    result.add(new MediumType(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3)));
+                    result.add(new MediumType(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3)));
                 }
             }
         }

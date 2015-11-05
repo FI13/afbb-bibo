@@ -5,18 +5,22 @@
  */
 package de.afbb.bibo.servlet.server.servlet;
 
-import com.google.gson.Gson;
-import de.afbb.bibo.servlet.db.DBConnector;
-import de.afbb.bibo.servlet.server.Utils;
-import de.afbb.bibo.servlet.model.Borrower;
-import de.afbb.bibo.servlet.model.Curator;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+
+import de.afbb.bibo.servlet.db.DBConnector;
+import de.afbb.bibo.servlet.server.Utils;
+import de.afbb.bibo.share.model.Borrower;
+import de.afbb.bibo.share.model.Curator;
 
 /**
  *
