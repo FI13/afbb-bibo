@@ -6,7 +6,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.Properties;
 
-public class propertiesTester {
+public class PropertiesTester {
 
 	public static void main(final String[] args) throws IOException {
 		final Writer writer = null;
@@ -18,7 +18,7 @@ public class propertiesTester {
 		prop2.load(reader);
 		prop2.list(System.out);
 
-		final String s = properties.get("MeinNameIst");
+		final String s = BiBoProperties.get("MeinNameIst");
 		System.out.println("Output: " + s);
 
 	}
