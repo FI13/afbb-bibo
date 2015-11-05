@@ -8,6 +8,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 import de.afbb.bibo.share.impl.NavigationTreeService;
+import de.afbb.bibo.ui.provider.NavigationTreeViewContentProvider;
+import de.afbb.bibo.ui.provider.NavigationTreeViewLabelProvider;
 
 public class NavigationView extends ViewPart {
 

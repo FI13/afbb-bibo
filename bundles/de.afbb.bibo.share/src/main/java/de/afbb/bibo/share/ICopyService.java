@@ -3,12 +3,18 @@ package de.afbb.bibo.share;
 import java.net.ConnectException;
 import java.util.Collection;
 
-import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Medium;
 
 public interface ICopyService {
 
+	/**
+	 * updates the given copy
+	 * 
+	 * @param copy
+	 * 				object to update
+	 * @throws ConnectException
+	 */
 	void update(Copy copy) throws ConnectException;
 
 	/**
@@ -20,14 +26,6 @@ public interface ICopyService {
 	 * @throws ConnectException
 	 */
 	Collection<Copy> getGrouped(Integer id) throws ConnectException;
-
-	/**
-	 * tries to read the medium information for given isbn number (database first -> if not found amazon API)
-	 * 
-	 * @param isbn
-	 * @return
-	 */
-	Medium getMedium(String isbn) throws ConnectException;
 
 	/**
 	 * registers new copies and mediums as necessary
@@ -48,17 +46,18 @@ public interface ICopyService {
 	/**
 	 * gets a list of all copies for a given medium
 	 * 
-	 * @return
-	 */
-	Collection<Collection<Copy>> listCopies(String isbn) throws ConnectException;
-
-	/**
-	 * returns a collection of borrowers that currently have lent a copy with the given isbn
-	 * 
-	 * @param isbn
+	 * @param medium
+	 * 				medium of the copies you want to receive
 	 * @return
 	 * @throws ConnectException
 	 */
-	Collection<Borrower> listLent(String isbn) throws ConnectException;
+	Collection<Collection<Copy>> listCopies(Medium medium) throws ConnectException;
 
+	/**
+	 * deletes the given copy
+	 * 
+	 * @param copy
+	 * @throws ConnectException
+	 */
+	void delete(Copy copy) throws ConnectException;
 }
