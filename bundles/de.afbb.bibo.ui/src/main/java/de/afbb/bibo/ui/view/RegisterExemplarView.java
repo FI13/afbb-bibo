@@ -42,6 +42,8 @@ public class RegisterExemplarView extends AbstractEditView {
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String TYPE = "Typ";
 	private static final String BARCODE = "Barcode";
+	private static final String ISBN = "ISBN";//$NON-NLS-1$
+	private static final String TITLE = "Titel";
 
 	private final Set<Set<Copy>> copies = new HashSet<Set<Copy>>();
 	private Copy copyToModify = new Copy();
@@ -58,6 +60,8 @@ public class RegisterExemplarView extends AbstractEditView {
 	private final XViewerFactory factory = new BiboXViewerFactory(REGISTER_COPY);
 	private XViewerColumn columnType;
 	private XViewerColumn columnBarcode;
+	private XViewerColumn columnIsbn;
+	private XViewerColumn columnTitle;
 
 	Listener toListListener = new Listener() {
 
@@ -68,6 +72,7 @@ public class RegisterExemplarView extends AbstractEditView {
 			copies.add(add);
 			copyToModify = new Copy();
 			xViewer.setInput(copies);
+			bindingContext.updateTargets();
 		}
 	};
 	Listener toEditListener = new Listener() {
@@ -121,11 +126,11 @@ public class RegisterExemplarView extends AbstractEditView {
 		layoutDataMiddle.horizontalSpan = 2;
 		bottom.setLayoutData(layoutDataMiddle);
 
+		initTableColumns();
 		xViewer = new XViewer(bottom, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION, factory);
 		xViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		xViewer.setContentProvider(new CopyTreeContentProvider());
 		xViewer.setLabelProvider(new CopyLabelProvider(xViewer));
-		initTableColumns();
 
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
 		buttonComposite.setLayout(new GridLayout());
@@ -175,9 +180,12 @@ public class RegisterExemplarView extends AbstractEditView {
 
 	private void initTableColumns() {
 		columnType = new XViewerColumn(REGISTER_COPY + "." + TYPE, TYPE, 50, SWT.LEFT, true, SortDataType.String, false, "Typ des Mediums");
-		columnBarcode = new XViewerColumn(REGISTER_COPY + "." + BARCODE, BARCODE, 50, SWT.RIGHT, true, SortDataType.Integer, false,
+		columnBarcode = new XViewerColumn(REGISTER_COPY + "." + BARCODE, BARCODE, 80, SWT.RIGHT, true, SortDataType.Integer, false,
 				"Barcode des Mediums");
-		factory.registerColumns(columnType, columnBarcode);
+		columnIsbn = new XViewerColumn(REGISTER_COPY + "." + ISBN, ISBN, 80, SWT.RIGHT, true, SortDataType.Integer, false,
+				"ISBN des Mediums");
+		columnTitle = new XViewerColumn(REGISTER_COPY + "." + TITLE, TITLE, 150, SWT.LEFT, true, SortDataType.String, false, "Titel");
+		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle);
 
 	}
 }
