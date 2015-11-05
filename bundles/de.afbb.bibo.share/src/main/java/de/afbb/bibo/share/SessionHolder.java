@@ -10,7 +10,6 @@ import de.afbb.bibo.share.model.Curator;
 public final class SessionHolder {
 
 	private static final SessionHolder instance = new SessionHolder();
-	private String sessionToken = null;
 	private Curator curator = null;
 
 	private SessionHolder() {
@@ -22,14 +21,6 @@ public final class SessionHolder {
 
 	public void setCurator(final Curator curator) {
 		this.curator = curator;
-	}
-
-	public String getSessionToken() {
-		return sessionToken;
-	}
-
-	public void setSessionToken(final String sessionToken) {
-		this.sessionToken = sessionToken;
 	}
 
 	public static SessionHolder getInstance() {
