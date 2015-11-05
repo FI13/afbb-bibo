@@ -5,8 +5,6 @@ import java.net.ConnectException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -22,21 +20,18 @@ import org.eclipse.swt.widgets.Text;
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.MediumType;
-import de.afbb.bibo.ui.Activator;
-import de.afbb.bibo.ui.ImagePath;
+import de.afbb.bibo.ui.BiboImageRegistry;
+import de.afbb.bibo.ui.IconSize;
+import de.afbb.bibo.ui.IconType;
 import de.afbb.bibo.ui.Messages;
 
 public class CreateTypeDialog extends AbstractDialog {
 
 	private Text txtName;
 	private final MediumType type = new MediumType();
-	ImageRegistry imageRegistry = JFaceResources.getImageRegistry();
 
 	public CreateTypeDialog(final Shell parentShell) {
 		super(parentShell);
-
-		imageRegistry.put(ImagePath.ICON_BOOK2_32, Activator.getImageDescriptor(ImagePath.ICON_BOOK2_32));
-		imageRegistry.put(ImagePath.ICON_CD_32, Activator.getImageDescriptor(ImagePath.ICON_CD_32));
 	}
 
 	@Override
@@ -70,22 +65,23 @@ public class CreateTypeDialog extends AbstractDialog {
 		final Button btnCd = new Button(iconComposite, SWT.RADIO);
 		btnCd.setText("CD");
 
-		setUpButton(btnNone, null);
-		setUpButton(btnBook, ImagePath.ICON_BOOK2_32);
-		setUpButton(btnCd, ImagePath.ICON_CD_32);
+		setUpButton(btnNone, null, null);
+		setUpButton(btnBook, IconType.BOOK, IconSize.medium);
+		setUpButton(btnCd, IconType.CD, IconSize.medium);
 
 		btnNone.setSelection(true);
 
 		return area;
 	}
 
-	private void setUpButton(final Button button, final String imagePath) {
-		button.setImage(imageRegistry.get(imagePath));
+	private void setUpButton(final Button button, final IconType iconType, final IconSize iconSize) {
+		button.setImage(BiboImageRegistry.getImage(iconType, iconSize));
 		button.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				type.setIconPath(imagePath);
+				// FIXME imagePath wird nicht mehr übergeben, ist dies notwendig?
+				// type.setIconPath(imagePath);
 			}
 
 			@Override

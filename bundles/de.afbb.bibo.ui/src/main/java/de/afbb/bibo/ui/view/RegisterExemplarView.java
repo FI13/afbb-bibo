@@ -21,7 +21,8 @@ import org.eclipse.ui.PartInitException;
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.ui.BiboImageRegistry;
-import de.afbb.bibo.ui.ImagePath;
+import de.afbb.bibo.ui.IconSize;
+import de.afbb.bibo.ui.IconType;
 import de.afbb.bibo.ui.provider.BiboXViewerFactory;
 import de.afbb.bibo.ui.provider.CopyLabelProvider;
 import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
@@ -93,10 +94,10 @@ public class RegisterExemplarView extends AbstractEditView {
 		final Composite middle = toolkit.createComposite(top, SWT.NONE);
 		middle.setLayout(new GridLayout(2, false));
 		final Button btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
-		btnToList.setImage(BiboImageRegistry.getImage(ImagePath.ICON_ARROW_DOWN_16));
+		btnToList.setImage(BiboImageRegistry.getImage(IconType.ARROW_DOWN, IconSize.small));
 		btnToList.addListener(SWT.MouseDown, toListListener);
 		final Button btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
-		btnToEdit.setImage(BiboImageRegistry.getImage(ImagePath.ICON_ARROW_UP_16));
+		btnToEdit.setImage(BiboImageRegistry.getImage(IconType.ARROW_UP, IconSize.small));
 		btnToEdit.addListener(SWT.MouseDown, toEditListener);
 
 		final Composite bottom = toolkit.createComposite(top, SWT.NONE);
@@ -113,9 +114,9 @@ public class RegisterExemplarView extends AbstractEditView {
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
 		buttonComposite.setLayout(new GridLayout());
 		final Button btnGroup = toolkit.createButton(buttonComposite, "Medien Gruppieren", SWT.TOP);
-		btnGroup.setImage(BiboImageRegistry.getImage(ImagePath.ICON_PLUS_16));
+		btnGroup.setImage(BiboImageRegistry.getImage(IconType.PLUS, IconSize.small));
 		final Button btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung Lösen", SWT.TOP);
-		btnUngroup.setImage(BiboImageRegistry.getImage(ImagePath.ICON_MINUS_16));
+		btnUngroup.setImage(BiboImageRegistry.getImage(IconType.MINUS, IconSize.small));
 
 		GridDataFactory.fillDefaults().applyTo(idGroup);
 		GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);

@@ -1,28 +1,19 @@
 package de.afbb.bibo.ui.provider;
 
-import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import de.afbb.bibo.share.impl.NavigationTreeViewNode;
-import de.afbb.bibo.ui.Activator;
-import de.afbb.bibo.ui.ImagePath;
+import de.afbb.bibo.ui.BiboImageRegistry;
+import de.afbb.bibo.ui.IconSize;
+import de.afbb.bibo.ui.IconType;
 
 public class NavigationTreeViewLabelProvider extends LabelProvider {
 
-	ImageRegistry imageRegistry = JFaceResources.getImageRegistry();
-
 	public NavigationTreeViewLabelProvider() {
 		super();
-		imageRegistry.put(ImagePath.ICON_BOOK_16, Activator.getImageDescriptor(ImagePath.ICON_BOOK_16));
-		imageRegistry.put(ImagePath.ICON_BOOK2_16, Activator.getImageDescriptor(ImagePath.ICON_BOOK2_16));
-		imageRegistry.put(ImagePath.ICON_PUPIL_16, Activator.getImageDescriptor(ImagePath.ICON_PUPIL_16));
-		imageRegistry.put(ImagePath.ICON_TEACHER_16, Activator.getImageDescriptor(ImagePath.ICON_TEACHER_16));
-		imageRegistry.put(ImagePath.ICON_USER_16, Activator.getImageDescriptor(ImagePath.ICON_USER_16));
-		imageRegistry.put(ImagePath.ICON_CD_16, Activator.getImageDescriptor(ImagePath.ICON_CD_16));
 	}
 
 	@Override
@@ -39,15 +30,15 @@ public class NavigationTreeViewLabelProvider extends LabelProvider {
 		if (obj instanceof NavigationTreeViewNode && ((NavigationTreeViewNode) obj).hasType()) {
 			switch (((NavigationTreeViewNode) obj).getType()) {
 				case BOOK:
-					return imageRegistry.get(ImagePath.ICON_BOOK2_16);
+					return BiboImageRegistry.getImage(IconType.BOOK, IconSize.small);
 				case BOOKS:
-					return imageRegistry.get(ImagePath.ICON_BOOK_16);
+					return BiboImageRegistry.getImage(IconType.BOOK_GROUP, IconSize.small);
 				case PERSON:
-					return imageRegistry.get(ImagePath.ICON_PUPIL_16);
+					return BiboImageRegistry.getImage(IconType.PUPIL, IconSize.small);
 				case PERSONS:
-					return imageRegistry.get(ImagePath.ICON_USER_16);
+					return BiboImageRegistry.getImage(IconType.USER, IconSize.small);
 				case ROOT:
-					return imageRegistry.get(ImagePath.ICON_USER_16);
+					return BiboImageRegistry.getImage(IconType.USER, IconSize.small);
 				default:
 					throw new IllegalStateException("Illegal NavigationTreeViewNode State");
 			}
