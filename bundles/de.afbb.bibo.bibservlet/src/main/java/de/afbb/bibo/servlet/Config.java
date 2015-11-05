@@ -6,13 +6,15 @@
 
 package de.afbb.bibo.servlet;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
-import java.util.Properties;
+
+import de.afbb.bibo.properties.BiBoProperties;
 
 /**
- * @author fi13.pendrulat
+ * Die config-file muss "bibo.properties" heissen und im gleichen Verzeichnis
+ * wie die ausführbare Datei liegen
+ * 
+ * @author fi13.pendrulatz
  */
 public class Config {
 
@@ -21,24 +23,12 @@ public class Config {
 	public static String URL;
 	public static String DATABASE_NAME;
 	public static int TOKEN_EXPIRATION_TIME_IN_HOURS;
-	public static String path = "./server.properties";
 
-	public static String get(final String search) throws IOException {
-		String s = null;
-		Reader reader = null;
-		reader = new FileReader(path);
-		final Properties prop = new Properties();
-		prop.load(reader);
-		reader.close();
-		s = prop.getProperty(search, "notFound");
-		return s;
-	}
-
-	public Config() throws IOException {
-		TOKEN_EXPIRATION_TIME_IN_HOURS = Integer.valueOf(get("TOKEN_EXPIRATION_TIME_IN_HOURS"));
-		DATABASE_NAME = get("DATABASE_NAME");
-		URL = get("URL");
-		USER_NAME = get("USER_NAME");
-		PASSWORD = get("PASSWORD");
+	public Config() throws NumberFormatException, IOException {
+		TOKEN_EXPIRATION_TIME_IN_HOURS = Integer.valueOf(BiBoProperties.get("TOKEN_EXPIRATION_TIME_IN_HOURS"));
+		DATABASE_NAME = BiBoProperties.get("DATABASE_NAME");
+		URL = BiBoProperties.get("URL");
+		USER_NAME = BiBoProperties.get("USER_NAME");
+		PASSWORD = BiBoProperties.get("PASSWORD");
 	}
 }
