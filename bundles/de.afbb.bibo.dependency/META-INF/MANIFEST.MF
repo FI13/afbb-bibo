@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Dependency
+Bundle-SymbolicName: de.afbb.bibo.dependency
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ClassPath: lib/gson-2.3.1.jar,
+ .
+Export-Package: com.google.gson,
+ com.google.gson.annotations,
+ com.google.gson.internal,
+ com.google.gson.internal.bind,
+ com.google.gson.reflect,
+ com.google.gson.stream
