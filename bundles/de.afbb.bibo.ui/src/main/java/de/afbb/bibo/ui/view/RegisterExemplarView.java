@@ -5,6 +5,9 @@ import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
+import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
+import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
+import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -20,6 +23,7 @@ import org.eclipse.ui.PartInitException;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.share.model.CopyUtil;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
 import de.afbb.bibo.ui.IconType;
@@ -36,9 +40,13 @@ public class RegisterExemplarView extends AbstractEditView {
 
 	private static final String REGISTER_COPY = "register.copy";
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
+	private static final String TYPE = "Typ";
+	private static final String BARCODE = "Barcode";
+	private static final String ISBN = "ISBN";//$NON-NLS-1$
+	private static final String TITLE = "Titel";
 
 	private final Set<Set<Copy>> copies = new HashSet<Set<Copy>>();
-	private final Copy copyToModify = new Copy();
+	private Copy copyToModify = new Copy();
 	private Group idGroup;
 	private Text txtBarcode;
 	private Text txtIsbn;
@@ -48,11 +56,23 @@ public class RegisterExemplarView extends AbstractEditView {
 	private Text txtLanguage;
 	private Text txtPublisher;
 
+	private XViewer xViewer;
+	private final XViewerFactory factory = new BiboXViewerFactory(REGISTER_COPY);
+	private XViewerColumn columnType;
+	private XViewerColumn columnBarcode;
+	private XViewerColumn columnIsbn;
+	private XViewerColumn columnTitle;
+
 	Listener toListListener = new Listener() {
 
 		@Override
 		public void handleEvent(final Event event) {
-			System.err.println("to list");
+			final HashSet<Copy> add = new HashSet<Copy>();
+			add.add((Copy) CopyUtil.copy(copyToModify));
+			copies.add(add);
+			copyToModify = new Copy();
+			xViewer.setInput(copies);
+			bindingContext.updateTargets();
 		}
 	};
 	Listener toEditListener = new Listener() {
@@ -106,7 +126,8 @@ public class RegisterExemplarView extends AbstractEditView {
 		layoutDataMiddle.horizontalSpan = 2;
 		bottom.setLayoutData(layoutDataMiddle);
 
-		final XViewer xViewer = new XViewer(bottom, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION, new BiboXViewerFactory(REGISTER_COPY));
+		initTableColumns();
+		xViewer = new XViewer(bottom, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION, factory);
 		xViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		xViewer.setContentProvider(new CopyTreeContentProvider());
 		xViewer.setLabelProvider(new CopyLabelProvider(xViewer));
@@ -155,5 +176,16 @@ public class RegisterExemplarView extends AbstractEditView {
 		group.setForeground(toolkit.getColors().getForeground());
 		toolkit.paintBordersFor(group);
 		return group;
+	}
+
+	private void initTableColumns() {
+		columnType = new XViewerColumn(REGISTER_COPY + "." + TYPE, TYPE, 50, SWT.LEFT, true, SortDataType.String, false, "Typ des Mediums");
+		columnBarcode = new XViewerColumn(REGISTER_COPY + "." + BARCODE, BARCODE, 80, SWT.RIGHT, true, SortDataType.Integer, false,
+				"Barcode des Mediums");
+		columnIsbn = new XViewerColumn(REGISTER_COPY + "." + ISBN, ISBN, 80, SWT.RIGHT, true, SortDataType.Integer, false,
+				"ISBN des Mediums");
+		columnTitle = new XViewerColumn(REGISTER_COPY + "." + TITLE, TITLE, 150, SWT.LEFT, true, SortDataType.String, false, "Titel");
+		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle);
+
 	}
 }

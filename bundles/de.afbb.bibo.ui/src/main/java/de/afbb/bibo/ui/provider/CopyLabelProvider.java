@@ -6,6 +6,8 @@ import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
 import org.eclipse.nebula.widgets.xviewer.XViewerLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+import de.afbb.bibo.share.model.Copy;
+
 public class CopyLabelProvider extends XViewerLabelProvider {
 
 	public CopyLabelProvider(final XViewer viewer) {
@@ -36,7 +38,18 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 
 	@Override
 	public String getColumnText(final Object element, final XViewerColumn xCol, final int columnIndex) throws Exception {
-		return "test";
+		final Copy copy = (Copy) element;
+		String value = "";//$NON-NLS-1$
+		if (columnIndex == 0 && copy.getTypeId() != null) {
+			value = copy.getTypeId().toString();
+		} else if (columnIndex == 1 && copy.getBarcode() != null) {
+			value = copy.getBarcode();
+		} else if (columnIndex == 2 && copy.getIsbn() != null) {
+			value = copy.getIsbn();
+		} else if (columnIndex == 3 && copy.getAuthor() != null) {
+			value = copy.getAuthor();
+		}
+		return value;
 	}
 
 }
