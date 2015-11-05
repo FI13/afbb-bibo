@@ -34,9 +34,18 @@ public final class CryptoUtil {
 	}
 
 	public static String generateSalt() {
-		final byte[] salt = new byte[512];
+		final byte[] salt = new byte[50];
 		RANDOM.nextBytes(salt);
-		return new String(salt);
+		return DigestUtils.shaHex(new String(salt));
 	}
+
+	// TODO Remove
+//	public static void main(final String[] args) {
+//		System.out.println("Started");
+//		final String s = generateSalt();
+//		System.out.println("Salt: " + s);
+//		final String p = hashPassword("...", s);
+//		System.out.println("Pass: " + p);
+//	}
 
 }

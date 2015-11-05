@@ -28,10 +28,13 @@ public final class BiboImageRegistry {
 	 * @return
 	 */
 	public static Image getImage(final String imagePath) {
-		if (!pathSet.contains(imagePath)) {
-			imageRegistry.put(imagePath, Activator.getImageDescriptor(imagePath));
-			pathSet.add(imagePath);
+		if (!(imagePath == null || imagePath.isEmpty())) {
+			if (!pathSet.contains(imagePath)) {
+				imageRegistry.put(imagePath, Activator.getImageDescriptor(imagePath));
+				pathSet.add(imagePath);
+			}
+			return imageRegistry.get(imagePath);
 		}
-		return imageRegistry.get(imagePath);
+		return null;
 	}
 }
