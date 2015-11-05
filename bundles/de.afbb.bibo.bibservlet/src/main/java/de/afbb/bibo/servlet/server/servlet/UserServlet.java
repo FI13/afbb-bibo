@@ -28,88 +28,115 @@ import de.afbb.bibo.share.model.Curator;
  */
 public class UserServlet {
 
-    HttpServletRequest request;
-    HttpServletResponse response;
-    Gson gson;
-    private static final Logger log = LoggerFactory.getLogger(UserServlet.class);
+	HttpServletRequest request;
+	HttpServletResponse response;
+	Gson gson;
+	private static final Logger log = LoggerFactory.getLogger(UserServlet.class);
 
-    protected UserServlet(
-            HttpServletRequest request,
-            HttpServletResponse response) {
-        this.request = request;
-        this.response = response;
-        this.gson = new Gson();
-    }
+	protected UserServlet(HttpServletRequest request, HttpServletResponse response) {
+		this.request = request;
+		this.response = response;
+		this.gson = new Gson();
+	}
 
-    protected void processRequest()
-            throws Exception {
-        String userAction = Utils.getRequestPart(request, 1);
-        log.debug("entering USER Servlet...");
+	protected void processRequest() throws Exception {
+		String userAction = Utils.getRequestPart(request, 1);
+		log.debug("entering USER Servlet...");
 
-        switch (userAction) {
-            case "/changePassword":
-                changePassword();
-                break;
-            case "/newCurator":
-                addCurator();
-                break;
-            case "/curatorExists":
-                hasCurator();
-                break;
-            case "/newBorrower":
-                addBorrower();
-                break;
-            case "/getBorrower":
-                getBorrower();
-                break;
-            default:
-                Utils.returnErrorMessage(UserServlet.class, request, response);
-                break;
+		switch (userAction) {
+		case "/newCurator":
+			addCurator();
+			break;
+		case "/curatorExists":
+			hasCurator();
+			break;
+		case "/updateCurator":
+			updateCurator();
+			break;
+		case "/newBorrower":
+			addBorrower();
+			break;
+		case "/getBorrower":
+			getBorrower();
+			break;
+		case "/borrowerExists":
+			hasBorrower();
+			break;
+		case "/updateBorrower":
+			updateBorrower();
+			break;
+		case "/deleteBorrower":
+			deleteBorrower();
+			break;
+		default:
+			Utils.returnErrorMessage(UserServlet.class, request, response);
+			break;
 
-        }
-    }
+		}
+	}
 
-    private void changePassword() throws SQLException, IOException {
-        String userName = request.getParameter("name");
-        String passwordHash = request.getParameter("oldHash");
-        String newPasswordHash = request.getParameter("newHash");
-        if (DBConnector.getInstance().checkPassword(userName, passwordHash)) {
-            DBConnector.getInstance().updateUser(userName, newPasswordHash);
-            response.setStatus(HttpServletResponse.SC_OK);
-        } else {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        }
-    }
+	private void addCurator() throws SQLException, IOException {
+		Curator curator = gson.fromJson(request.getReader(), Curator.class);
 
-    private void addCurator() throws SQLException, IOException {
-        Curator curator = gson.fromJson(request.getReader(), Curator.class);
+		DBConnector.getInstance().createCurator(curator);
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
 
-        DBConnector.getInstance().createCurator(curator);
-        response.setStatus(HttpServletResponse.SC_OK);
-    }
+	private void hasCurator() throws SQLException, IOException {
+		String curatorName = request.getParameter("name");
+		try {
+			DBConnector.getInstance().getCuratorId(curatorName);
+			response.getWriter().println(1);
+		} catch (SQLException ex) {
+			response.getWriter().println(0);
+		}
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
 
-    private void hasCurator() throws SQLException, IOException {
-        String curatorName = request.getParameter("name");
-        try {
-            DBConnector.getInstance().getCuratorId(curatorName);
-            response.getWriter().println(1);
-        } catch (SQLException ex) {
-            response.getWriter().println(0);
-        }
-        response.setStatus(HttpServletResponse.SC_OK);
-    }
+	private void updateCurator() throws SQLException, IOException {
+		Curator curator = gson.fromJson(request.getReader(), Curator.class);
 
-    private void addBorrower() throws SQLException, IOException {
-        Borrower borrower = gson.fromJson(request.getReader(), Borrower.class);
+		DBConnector.getInstance().updateCurator(curator);
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
 
-        DBConnector.getInstance().createBorrower(borrower);
-        response.setStatus(HttpServletResponse.SC_OK);
-    }
+	private void addBorrower() throws SQLException, IOException {
+		Borrower borrower = gson.fromJson(request.getReader(), Borrower.class);
 
-    private void getBorrower() throws SQLException, IOException {
-        List<Borrower> borrowers = DBConnector.getInstance().getBorrower();
-        response.getWriter().println(gson.toJson(borrowers));
-        response.setStatus(HttpServletResponse.SC_OK);
+		DBConnector.getInstance().createBorrower(borrower);
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
 
-    }
+	private void hasBorrower() throws SQLException, IOException {
+		String fName = request.getParameter("forename");
+		String sName = request.getParameter("surname");
+		try {
+			DBConnector.getInstance().getBorrowerId(fName, sName);
+			response.getWriter().println(1);
+		} catch (SQLException ex) {
+			response.getWriter().println(0);
+		}
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void getBorrower() throws SQLException, IOException {
+		List<Borrower> borrowers = DBConnector.getInstance().getBorrower();
+		response.getWriter().println(gson.toJson(borrowers));
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void updateBorrower() throws SQLException, IOException {
+		Borrower b = gson.fromJson(request.getReader(), Borrower.class);
+
+		DBConnector.getInstance().updateBorrower(b);
+		;
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void deleteBorrower() throws SQLException, IOException {
+		Borrower b = gson.fromJson(request.getReader(), Borrower.class);
+
+		DBConnector.getInstance().deleteBorrower(b.getId());
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
 }

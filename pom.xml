@@ -21,6 +21,7 @@
 	<modules>
 		<module>bundles/de.afbb.bibo.ui</module>
 		<module>bundles/de.afbb.bibo.amazonlookup</module>
+		<module>bundles/de.afbb.bibo.dependency</module>
 		<module>bundles/de.afbb.bibo.share</module>
 		<module>bundles/de.afbb.bibo.rcp.target</module>
 		<module>bundles/de.afbb.bibo.bibservlet.client</module>

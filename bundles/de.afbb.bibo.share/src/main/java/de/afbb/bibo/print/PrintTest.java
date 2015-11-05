@@ -8,7 +8,7 @@ import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Curator;
 
-public class printTest {
+public class PrintTest {
 
 	static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -47,7 +47,7 @@ public class printTest {
 		b.setForename("Jäns");
 		b.setSurname("Hähnoch");
 
-		printCopyList.print(e, c, b);
+		PrintCopyList.print(e, c, b);
 
 	}
 }
