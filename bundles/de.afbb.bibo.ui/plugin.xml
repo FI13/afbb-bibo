@@ -111,7 +111,7 @@
          </property>
          <property
                name="aboutText"
-               value="Bibliotheks-Verwaltung für AfbB.&#x0D;&#x0A;Erstellt von:&#x0D;&#x0A;&#x0D;&#x0A;David Becker&#x0D;&#x0A;Matthias Elberling&#x0D;&#x0A;Philipp Endrulat&#x0D;&#x0A;Tom Ewald&#x0D;&#x0A;Michelé Lingel&#x0D;&#x0A;Philipp Widdra">
+               value="Bibliotheks-Verwaltung für AfbB.&#x0A;Erstellt von:&#x0A;&#x0A;David Becker&#x0A;Matthias Elberling&#x0A;Philipp Endrulat&#x0A;Tom Ewald&#x0A;Michelé Lingel&#x0A;Philipp Widdra">
          </property>
          <property
                name="aboutImage"

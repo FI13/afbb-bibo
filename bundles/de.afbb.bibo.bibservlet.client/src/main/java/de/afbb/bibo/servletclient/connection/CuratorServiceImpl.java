@@ -7,7 +7,7 @@ package de.afbb.bibo.servletclient.connection;
 
 import java.net.ConnectException;
 
-import de.afbb.bibo.servletclient.interfaces.ICuratorService;
+import de.afbb.bibo.share.ICuratorService;
 import de.afbb.bibo.share.model.Curator;
 
 /**

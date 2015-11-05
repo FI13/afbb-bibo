@@ -42,7 +42,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		// FIXME for debugging purposes only! comment out when server is ready!
 //		new LoginDialog(shell).open();
 		// TODO start remove here
-		SessionHolder.getInstance().setSessionToken("token123");//$NON-NLS-1$
+//		SessionHolder.getInstance().setSessionToken("token123");//$NON-NLS-1$
 		final Curator curator = new Curator();
 		curator.setName("Hugo");//$NON-NLS-1$
 		SessionHolder.getInstance().setCurator(curator);
