@@ -1,25 +1,29 @@
 package de.afbb.bibo.share.impl;
 
 import java.net.ConnectException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import de.afbb.bibo.share.IBorrowerService;
+import de.afbb.bibo.share.IMediumService;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.Borrower;
+import de.afbb.bibo.share.model.Medium;
 
 public class NavigationTreeService {
 
 	private final IBorrowerService borrowerService = ServiceLocator.getInstance().getBorrowerService();
+	private final IMediumService mediumService = ServiceLocator.getInstance().getMediumService();
 
 	private NavigationTreeViewNode borrowersRoot;
-	private NavigationTreeViewNode copiesRoot;
+	private NavigationTreeViewNode mediaRoot;
 
 	public NavigationTreeService() throws ConnectException {
 		borrowersRoot = new NavigationTreeViewNode("Ausleiher", NavigationTreeNodeType.PERSONS);
-		copiesRoot = new NavigationTreeViewNode("Bücher", NavigationTreeNodeType.BOOKS);
+		mediaRoot = new NavigationTreeViewNode("Bücher", NavigationTreeNodeType.BOOKS);
 		loadBorrowers(borrowersRoot);
-		loadCopies(copiesRoot);
+		loadCopies(mediaRoot);
 	}
 
 	public void reloadBorrowers() throws ConnectException {
@@ -27,20 +31,28 @@ public class NavigationTreeService {
 		loadBorrowers(borrowersRoot);
 	}
 
-	public void reloadCopies() {
-		copiesRoot = new NavigationTreeViewNode("Bücher", NavigationTreeNodeType.BOOKS);
-		loadCopies(copiesRoot);
+	public void reloadCopies() throws ConnectException {
+		mediaRoot = new NavigationTreeViewNode("Bücher", NavigationTreeNodeType.BOOKS);
+		loadCopies(mediaRoot);
 	}
 
 	public NavigationTreeViewNode getRoot() {
 		final NavigationTreeViewNode root = new NavigationTreeViewNode("");
 		root.addChild(borrowersRoot);
-		root.addChild(copiesRoot);
+		root.addChild(mediaRoot);
 		return root;
 	}
 
-	private void loadCopies(final NavigationTreeViewNode root) {
-		// TODO: Implement
+	private void loadCopies(final NavigationTreeViewNode root) throws ConnectException {
+		final Collection<Medium> media = mediumService.list();
+		final Iterator<Medium> mediaIterator = media.iterator();
+		while (mediaIterator.hasNext()) {
+			final Medium m = mediaIterator.next();
+			final NavigationTreeViewNode mediumNode = new NavigationTreeViewNode(m.getTitle(), NavigationTreeNodeType.BOOK);
+
+			root.addChild(mediumNode);
+		}
+
 	}
 
 	private void loadBorrowers(final NavigationTreeViewNode root) throws ConnectException {

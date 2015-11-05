@@ -35,9 +35,9 @@ public class NavigationTreeViewLabelProvider extends LabelProvider {
 		if (obj instanceof NavigationTreeViewNode && ((NavigationTreeViewNode) obj).hasType()) {
 			switch (((NavigationTreeViewNode) obj).getType()) {
 				case BOOK:
-					return imageRegistry.get(ImagePath.ICON_BOOK_16);
-				case BOOKS:
 					return imageRegistry.get(ImagePath.ICON_BOOK2_16);
+				case BOOKS:
+					return imageRegistry.get(ImagePath.ICON_BOOK_16);
 				case PERSON:
 					return imageRegistry.get(ImagePath.ICON_PUPIL_16);
 				case PERSONS:
