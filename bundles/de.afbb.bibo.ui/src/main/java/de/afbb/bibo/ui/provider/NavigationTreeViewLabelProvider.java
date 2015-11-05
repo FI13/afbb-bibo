@@ -1,4 +1,4 @@
-package de.afbb.bibo.ui.view;
+package de.afbb.bibo.ui.provider;
 
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
