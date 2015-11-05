@@ -5,13 +5,15 @@
  */
 package de.afbb.bibo.servletclient.connection;
 
-import de.afbb.bibo.servletclient.interfaces.ILoginService;
 import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletResponse;
+
+import de.afbb.bibo.share.ILoginService;
 
 /**
  *
