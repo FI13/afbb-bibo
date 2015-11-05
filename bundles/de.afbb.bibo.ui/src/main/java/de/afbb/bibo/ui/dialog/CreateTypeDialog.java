@@ -21,7 +21,8 @@ import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboImageRegistry;
-import de.afbb.bibo.ui.ImagePath;
+import de.afbb.bibo.ui.IconSize;
+import de.afbb.bibo.ui.IconType;
 import de.afbb.bibo.ui.Messages;
 
 public class CreateTypeDialog extends AbstractDialog {
@@ -64,22 +65,23 @@ public class CreateTypeDialog extends AbstractDialog {
 		final Button btnCd = new Button(iconComposite, SWT.RADIO);
 		btnCd.setText("CD");
 
-		setUpButton(btnNone, null);
-		setUpButton(btnBook, ImagePath.ICON_BOOK2_32);
-		setUpButton(btnCd, ImagePath.ICON_CD_32);
+		setUpButton(btnNone, null, null);
+		setUpButton(btnBook, IconType.BOOK, IconSize.medium);
+		setUpButton(btnCd, IconType.CD, IconSize.medium);
 
 		btnNone.setSelection(true);
 
 		return area;
 	}
 
-	private void setUpButton(final Button button, final String imagePath) {
-		button.setImage(BiboImageRegistry.getImage(imagePath));
+	private void setUpButton(final Button button, final IconType iconType, final IconSize iconSize) {
+		button.setImage(BiboImageRegistry.getImage(iconType, iconSize));
 		button.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				type.setIconPath(imagePath);
+				// FIXME imagePath wird nicht mehr übergeben, ist dies notwendig?
+				// type.setIconPath(imagePath);
 			}
 
 			@Override
