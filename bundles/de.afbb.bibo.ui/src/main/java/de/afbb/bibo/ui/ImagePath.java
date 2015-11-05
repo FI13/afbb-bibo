@@ -29,6 +29,10 @@ public class ImagePath {
 	public static final String ICON_PUPIL_16 = "icons/16x16schueler.png";//$NON-NLS-1$
 	public static final String ICON_TEACHER_16 = "icons/16x16teacher.png";//$NON-NLS-1$
 	public static final String ICON_USER_16 = "icons/16x16user.png";//$NON-NLS-1$
+	public static final String ICON_ARROW_UP_16 = "icons/16x16arrow-up.png";//$NON-NLS-1$
+	public static final String ICON_ARROW_DOWN_16 = "icons/16x16arrow-down.png";//$NON-NLS-1$
+	public static final String ICON_PLUS_16 = "icons/16x16plus.png";//$NON-NLS-1$
+	public static final String ICON_MINUS_16 = "icons/16x16minus.png";//$NON-NLS-1$
 
 	public static final String[] images = new String[] {ICON_USER_MANAGE_32, ICON_BOOK_32, ICON_BOOK_DAMAGED_32, ICON_BOOK_LENT_32,
 			ICON_BOOK_AVAILABLE_32, ICON_BOOK2_32, ICON_CD_32, ICON_LOGIN_32, ICON_PUPIL_32, ICON_TEACHER_32, ICON_USER_32};

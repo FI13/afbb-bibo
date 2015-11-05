@@ -8,16 +8,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 import de.afbb.bibo.share.impl.NavigationTreeService;
+import de.afbb.bibo.ui.provider.NavigationTreeViewContentProvider;
+import de.afbb.bibo.ui.provider.NavigationTreeViewLabelProvider;
 
 public class NavigationView extends ViewPart {
 
 	public static final String ID = "de.afbb.bibo.ui.navigationView";
 	private TreeViewer viewer;
 
-	/**
-	 * This is a callback that will allow us to create the viewer and initialize
-	 * it.
-	 */
 	@Override
 	public void createPartControl(final Composite parent) {
 		NavigationTreeService navigationTree;
