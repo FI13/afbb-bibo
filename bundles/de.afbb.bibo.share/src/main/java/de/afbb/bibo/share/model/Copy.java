@@ -1,6 +1,6 @@
 package de.afbb.bibo.share.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
@@ -30,23 +30,26 @@ public class Copy extends Medium implements IEditorInput {
 	private int borrowerId;
 	private int lastBorrowerId;
 	private int groupId;
-	
-	public Copy(int id, String edition, String barcode, Date inventoryDate, String condition, Date borrowDate, Date lastBorrowDate, int groupId, int borrowerId, int lastBorrowerId, int curatorId, int lastCuratorId, int mediumId, String isbn, String title, String author, String language, int typeId, String publisher) {
-        super(mediumId, isbn, title, author, language, typeId, publisher);
-        this.id = id;
-        this.edition = edition;
-        this.barcode = barcode;
-        this.inventoryDate = inventoryDate;
-        this.condition = condition;
-        this.borrowDate = borrowDate;
-        this.lastBorrowDate = lastBorrowDate;
-        this.groupId = groupId;
-        this.borrowerId = borrowerId;
-        this.lastBorrowerId = lastBorrowerId;
-        this.curatorId = curatorId;
-        this.lastCuratorId = lastCuratorId;
-    }
-	
+
+	public Copy(final int id, final String edition, final String barcode, final Date date, final String condition, final Date date2,
+			final Date date3, final int groupId, final int borrowerId, final int lastBorrowerId, final int curatorId,
+			final int lastCuratorId, final int mediumId, final String isbn, final String title, final String author, final String language,
+			final int typeId, final String publisher) {
+		super(mediumId, isbn, title, author, language, typeId, publisher);
+		this.id = id;
+		this.edition = edition;
+		this.barcode = barcode;
+		inventoryDate = date;
+		this.condition = condition;
+		borrowDate = date2;
+		lastBorrowDate = date3;
+		this.groupId = groupId;
+		this.borrowerId = borrowerId;
+		this.lastBorrowerId = lastBorrowerId;
+		this.curatorId = curatorId;
+		this.lastCuratorId = lastCuratorId;
+	}
+
 	public Copy() {
 		super();
 	}
@@ -146,7 +149,7 @@ public class Copy extends Medium implements IEditorInput {
 	}
 
 	public void setGroupId(final int groupElements) {
-		this.groupId = groupElements;
+		groupId = groupElements;
 	}
 
 	@Override
@@ -276,10 +279,12 @@ public class Copy extends Medium implements IEditorInput {
 		}
 		return true;
 	}
-	
+
 	@Override
-    public String toString() {
-        return "Copy{" + "id=" + id + ", edition=" + edition + ", barcode=" + barcode + ", inventoryDate=" + inventoryDate + ", condition=" + condition + ", borrowDate=" + borrowDate + ", lastBorrowDate=" + lastBorrowDate + ", groupId=" + groupId + ", borrowerId=" + borrowerId + ", lastBorrowerId=" + lastBorrowerId + ", curatorId=" + curatorId + ", lastCuratorId=" + lastCuratorId + '}';
-    }
+	public String toString() {
+		return "Copy{" + "id=" + id + ", edition=" + edition + ", barcode=" + barcode + ", inventoryDate=" + inventoryDate + ", condition="
+				+ condition + ", borrowDate=" + borrowDate + ", lastBorrowDate=" + lastBorrowDate + ", groupId=" + groupId + ", borrowerId="
+				+ borrowerId + ", lastBorrowerId=" + lastBorrowerId + ", curatorId=" + curatorId + ", lastCuratorId=" + lastCuratorId + '}';
+	}
 
 }
