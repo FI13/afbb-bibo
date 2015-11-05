@@ -1,4 +1,4 @@
-package de.afbb.bibo.ui.view;
+package de.afbb.bibo.ui.provider;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
