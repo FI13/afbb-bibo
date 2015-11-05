@@ -27,7 +27,11 @@ public class NavigationTreeViewLabelProvider extends LabelProvider {
 
 	@Override
 	public String getText(final Object obj) {
-		return obj.toString();
+		if (obj instanceof NavigationTreeViewNode) {
+			return ((NavigationTreeViewNode) obj).getTitle();
+		} else {
+			return obj.toString();
+		}
 	}
 
 	@Override
@@ -41,6 +45,8 @@ public class NavigationTreeViewLabelProvider extends LabelProvider {
 				case PERSON:
 					return imageRegistry.get(ImagePath.ICON_PUPIL_16);
 				case PERSONS:
+					return imageRegistry.get(ImagePath.ICON_USER_16);
+				case ROOT:
 					return imageRegistry.get(ImagePath.ICON_USER_16);
 				default:
 					throw new IllegalStateException("Illegal NavigationTreeViewNode State");

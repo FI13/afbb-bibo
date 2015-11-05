@@ -20,24 +20,24 @@ public class NavigationTreeService {
 	private NavigationTreeViewNode mediaRoot;
 
 	public NavigationTreeService() throws ConnectException {
-		borrowersRoot = new NavigationTreeViewNode("Ausleiher", NavigationTreeNodeType.PERSONS);
-		mediaRoot = new NavigationTreeViewNode("Bücher", NavigationTreeNodeType.BOOKS);
+		borrowersRoot = new NavigationTreeViewNode("Ausleiher", null, NavigationTreeNodeType.PERSONS);
+		mediaRoot = new NavigationTreeViewNode("Bücher", null, NavigationTreeNodeType.BOOKS);
 		loadBorrowers(borrowersRoot);
 		loadCopies(mediaRoot);
 	}
 
 	public void reloadBorrowers() throws ConnectException {
-		borrowersRoot = new NavigationTreeViewNode("Ausleiher", NavigationTreeNodeType.PERSONS);
+		borrowersRoot = new NavigationTreeViewNode("Ausleiher", null, NavigationTreeNodeType.PERSONS);
 		loadBorrowers(borrowersRoot);
 	}
 
 	public void reloadCopies() throws ConnectException {
-		mediaRoot = new NavigationTreeViewNode("Bücher", NavigationTreeNodeType.BOOKS);
+		mediaRoot = new NavigationTreeViewNode("Bücher", null, NavigationTreeNodeType.BOOKS);
 		loadCopies(mediaRoot);
 	}
 
 	public NavigationTreeViewNode getRoot() {
-		final NavigationTreeViewNode root = new NavigationTreeViewNode("");
+		final NavigationTreeViewNode root = new NavigationTreeViewNode("", null, NavigationTreeNodeType.ROOT);
 		root.addChild(borrowersRoot);
 		root.addChild(mediaRoot);
 		return root;
@@ -47,8 +47,8 @@ public class NavigationTreeService {
 		final Collection<Medium> media = mediumService.list();
 		final Iterator<Medium> mediaIterator = media.iterator();
 		while (mediaIterator.hasNext()) {
-			final Medium m = mediaIterator.next();
-			final NavigationTreeViewNode mediumNode = new NavigationTreeViewNode(m.getTitle(), NavigationTreeNodeType.BOOK);
+			final Medium medium = mediaIterator.next();
+			final NavigationTreeViewNode mediumNode = new NavigationTreeViewNode(medium.getTitle(), medium, NavigationTreeNodeType.BOOK);
 
 			root.addChild(mediumNode);
 		}
@@ -67,11 +67,12 @@ public class NavigationTreeService {
 			if (groups.containsKey(borrower.getInfo())) {
 				personsNode = groups.get(borrower.getInfo());
 			} else {
-				personsNode = new NavigationTreeViewNode(borrower.getInfo(), NavigationTreeNodeType.PERSONS);
+				personsNode = new NavigationTreeViewNode(borrower.getInfo(), null, NavigationTreeNodeType.PERSONS);
 				groups.put(borrower.getInfo(), personsNode);
 			}
 
-			pupilNode = new NavigationTreeViewNode(borrower.getForename() + " " + borrower.getSurname(), NavigationTreeNodeType.PERSON);
+			pupilNode = new NavigationTreeViewNode(borrower.getForename() + " " + borrower.getSurname(), borrower,
+					NavigationTreeNodeType.PERSON);
 
 			personsNode.addChild(pupilNode);
 		}
