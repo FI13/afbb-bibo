@@ -42,6 +42,7 @@ import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
  */
 public class RegisterExemplarView extends AbstractEditView {
 
+	private static final String EMPTY_STRING = "";//$NON-NLS-1$
 	private static final String DOT = ".";//$NON-NLS-1$
 	private static final String REGISTER_COPY = "register.copy";//$NON-NLS-1$
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
@@ -89,13 +90,13 @@ public class RegisterExemplarView extends AbstractEditView {
 		public void handleEvent(final Event event) {
 			final Copy clone = (Copy) copyToModify.clone();
 			copies.add(clone);
-			copyToModify.setBarcode("");
-			copyToModify.setIsbn("");
-			copyToModify.setEdition("");
-			copyToModify.setTitle("");
-			copyToModify.setAuthor("");
-			copyToModify.setLanguage("");
-			copyToModify.setPublisher("");
+			copyToModify.setBarcode(EMPTY_STRING);
+			copyToModify.setIsbn(EMPTY_STRING);
+			copyToModify.setEdition(EMPTY_STRING);
+			copyToModify.setTitle(EMPTY_STRING);
+			copyToModify.setAuthor(EMPTY_STRING);
+			copyToModify.setLanguage(EMPTY_STRING);
+			copyToModify.setPublisher(EMPTY_STRING);
 			xViewer.setInput(copies);
 			bindingContext.updateTargets();
 		}
@@ -127,6 +128,26 @@ public class RegisterExemplarView extends AbstractEditView {
 	};
 
 	/**
+	 * listener that groups the selected items to one group
+	 */
+	Listener groupListener = new Listener() {
+
+		@Override
+		public void handleEvent(final Event event) {
+		}
+	};
+
+	/**
+	 * listener that resets the group of the selected items
+	 */
+	Listener ungroupListener = new Listener() {
+
+		@Override
+		public void handleEvent(final Event event) {
+		}
+	};
+
+	/**
 	 * listener that reacts when the selection changes and enables & disables control buttons
 	 */
 	SelectionListener xViewerSelectionListener = new SelectionListener() {
@@ -139,7 +160,6 @@ public class RegisterExemplarView extends AbstractEditView {
 				btnToEdit.setEnabled(singleSelection);
 				btnGroup.setEnabled(!singleSelection);
 				btnUngroup.setEnabled(!singleSelection);
-				System.out.println("singleSelection=" + singleSelection);
 			}
 		}
 
@@ -158,22 +178,22 @@ public class RegisterExemplarView extends AbstractEditView {
 		idGroup = createGroup(top, "Nummer");
 		idGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(idGroup, BARCODE);
-		txtBarcode = toolkit.createText(idGroup, "");
+		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING);
 		toolkit.createLabel(idGroup, ISBN);
-		txtIsbn = toolkit.createText(idGroup, "");
+		txtIsbn = toolkit.createText(idGroup, EMPTY_STRING);
 		toolkit.createLabel(idGroup, EDITION);
-		txtEdition = toolkit.createText(idGroup, "");
+		txtEdition = toolkit.createText(idGroup, EMPTY_STRING);
 
 		final Group mediumGroup = createGroup(top, "Informationen");
 		mediumGroup.setLayout(new GridLayout(4, false));
 		toolkit.createLabel(mediumGroup, TITLE);
-		txtTitle = toolkit.createText(mediumGroup, "");
+		txtTitle = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, AUTHOR);
-		txtAuthor = toolkit.createText(mediumGroup, "");
+		txtAuthor = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, LANGUAGE);
-		txtLanguage = toolkit.createText(mediumGroup, "");
+		txtLanguage = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, PUBLISHER);
-		txtPublisher = toolkit.createText(mediumGroup, "");
+		txtPublisher = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, "Typ");
 		toolkit.createText(mediumGroup, "Typ");
 
@@ -181,10 +201,8 @@ public class RegisterExemplarView extends AbstractEditView {
 		middle.setLayout(new GridLayout(2, false));
 		btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
 		btnToList.setImage(BiboImageRegistry.getImage(IconType.ARROW_DOWN, IconSize.small));
-		btnToList.addListener(SWT.MouseDown, toListListener);
 		btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
 		btnToEdit.setImage(BiboImageRegistry.getImage(IconType.ARROW_UP, IconSize.small));
-		btnToEdit.addListener(SWT.MouseDown, toEditListener);
 
 		final Composite bottom = toolkit.createComposite(top, SWT.NONE);
 		bottom.setLayout(new GridLayout(2, false));
@@ -211,6 +229,12 @@ public class RegisterExemplarView extends AbstractEditView {
 		GridDataFactory.fillDefaults().applyTo(mediumGroup);
 		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(bottom);
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).applyTo(buttonComposite);
+
+		// add listener to buttons
+		btnToList.addListener(SWT.MouseDown, toListListener);
+		btnToEdit.addListener(SWT.MouseDown, toEditListener);
+		btnGroup.addListener(SWT.MouseDown, groupListener);
+		btnUngroup.addListener(SWT.MouseDown, ungroupListener);
 
 		// disable buttons
 		btnToEdit.setEnabled(false);
