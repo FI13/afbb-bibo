@@ -1,7 +1,5 @@
 package de.afbb.bibo.share.model;
 
-import java.io.Serializable;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
@@ -22,18 +20,19 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 	private String info;
 	private String email;
 	private String phoneNumber;
-	
-	public Borrower(int id, String forename, String surname, String info, String email, String phoneNumber) {
-        this.id = id;
-        this.forename = forename;
-        this.surname = surname;
-        this.info = info;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-    }
-	
+
+	public Borrower(final int id, final String forename, final String surname, final String info, final String email,
+			final String phoneNumber) {
+		this.id = id;
+		this.forename = forename;
+		this.surname = surname;
+		this.info = info;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+	}
+
 	public Borrower() {
-		
+
 	}
 
 	public String getInfo() {
@@ -81,7 +80,7 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 	}
 
 	public void setForename(final String firstName) {
-		this.forename = firstName;
+		forename = firstName;
 	}
 
 	@Override
@@ -184,15 +183,20 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 		}
 		return true;
 	}
-	
-	@Override
-    public String toString() {
-        return "Borrower{" + "id=" + id + ", forename=" + forename + ", surname=" + surname + ", info=" + info + ", email=" + email + ", phoneNumber=" + phoneNumber + '}';
-    }
 
 	@Override
-	public Object clone() throws CloneNotSupportedException {
-		// Call clone function on fields that are no primitive types here. 
-		return super.clone();
+	public String toString() {
+		return "Borrower{" + "id=" + id + ", forename=" + forename + ", surname=" + surname + ", info=" + info + ", email=" + email
+				+ ", phoneNumber=" + phoneNumber + '}';
+	}
+
+	@Override
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (final CloneNotSupportedException e) {
+			// swallow exception and return null
+			return null;
+		}
 	}
 }

@@ -46,12 +46,7 @@ public class BorrowerView extends AbstractEditView {
 	protected void setInput(final IEditorInput input) {
 		if (input instanceof Borrower) {
 			this.input = (Borrower) input;
-			try {
-				inputCache = (Borrower)((Borrower) this.input).clone();
-			} catch (CloneNotSupportedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			inputCache = (Borrower) this.input.clone();
 			super.setInput(input);
 		}
 	}

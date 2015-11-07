@@ -50,8 +50,12 @@ public class MediumType extends AbstractPropertyChangeSupport implements Cloneab
 	}
 
 	@Override
-	public Object clone() throws CloneNotSupportedException {
-		// Call clone function on fields that are no primitive types here. 
-		return super.clone();
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (final CloneNotSupportedException e) {
+			// swallow exception and return null
+			return null;
+		}
 	}
 }

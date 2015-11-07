@@ -17,7 +17,7 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 	private String passwordHash;
 	private String password;
 
-	public Curator(int id, String name, String salt, String passwordHash) {
+	public Curator(final int id, final String name, final String salt, final String passwordHash) {
 		this.id = id;
 		this.name = name;
 		this.salt = salt;
@@ -153,10 +153,14 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 	public String toString() {
 		return "Curator{" + "id=" + id + ", name=" + name + ", salt=" + salt + ", passwordHash=" + passwordHash + '}';
 	}
-	
+
 	@Override
-	public Object clone() throws CloneNotSupportedException {
-		// Call clone function on fields that are no primitive types here. 
-		return super.clone();
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (final CloneNotSupportedException e) {
+			// swallow exception and return null
+			return null;
+		}
 	}
 }
