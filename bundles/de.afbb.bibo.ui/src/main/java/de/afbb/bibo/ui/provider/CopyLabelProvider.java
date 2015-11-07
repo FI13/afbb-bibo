@@ -48,6 +48,12 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 			value = copy.getIsbn();
 		} else if (columnIndex == 3 && copy.getAuthor() != null) {
 			value = copy.getAuthor();
+		} else if (columnIndex == 4 && copy.getPublisher() != null) {
+			value = copy.getPublisher();
+		} else if (columnIndex == 5 && copy.getLanguage() != null) {
+			value = copy.getLanguage();
+		} else if (columnIndex == 6 && copy.getEdition() != null) {
+			value = copy.getEdition();
 		}
 		return value;
 	}

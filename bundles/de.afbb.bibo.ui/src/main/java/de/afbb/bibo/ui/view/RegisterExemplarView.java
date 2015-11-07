@@ -39,12 +39,17 @@ import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
  */
 public class RegisterExemplarView extends AbstractEditView {
 
-	private static final String REGISTER_COPY = "register.copy";
+	private static final String DOT = ".";//$NON-NLS-1$
+	private static final String REGISTER_COPY = "register.copy";//$NON-NLS-1$
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String TYPE = "Typ";
 	private static final String BARCODE = "Barcode";
 	private static final String ISBN = "ISBN";//$NON-NLS-1$
 	private static final String TITLE = "Titel";
+	private static final String AUTHOR = "Autor";
+	private static final String PUBLISHER = "Verlag";
+	private static final String LANGUAGE = "Sprache";
+	private static final String EDITION = "Auflage";
 
 	private final Set<Copy> copies = new HashSet<Copy>();
 	private final Copy copyToModify = new Copy();
@@ -63,6 +68,10 @@ public class RegisterExemplarView extends AbstractEditView {
 	private XViewerColumn columnBarcode;
 	private XViewerColumn columnIsbn;
 	private XViewerColumn columnTitle;
+	private XViewerColumn columnAuthor;
+	private XViewerColumn columnPublisher;
+	private XViewerColumn columnLanguage;
+	private XViewerColumn columnEdition;
 
 	Listener toListListener = new Listener() {
 
@@ -109,23 +118,23 @@ public class RegisterExemplarView extends AbstractEditView {
 
 		idGroup = createGroup(top, "Nummer");
 		idGroup.setLayout(new GridLayout(2, false));
-		toolkit.createLabel(idGroup, "Inventar-Nummer");
+		toolkit.createLabel(idGroup, BARCODE);
 		txtBarcode = toolkit.createText(idGroup, "");
-		toolkit.createLabel(idGroup, "ISBN");
+		toolkit.createLabel(idGroup, ISBN);
 		txtIsbn = toolkit.createText(idGroup, "");
-		toolkit.createLabel(idGroup, "Auflage");
+		toolkit.createLabel(idGroup, EDITION);
 		txtEdition = toolkit.createText(idGroup, "");
 
 		final Group mediumGroup = createGroup(top, "Informationen");
 		mediumGroup.setLayout(new GridLayout(4, false));
-		toolkit.createLabel(mediumGroup, "Titel");
-		txtTitle = toolkit.createText(mediumGroup, "Titel");
-		toolkit.createLabel(mediumGroup, "Autor");
-		txtAuthor = toolkit.createText(mediumGroup, "Autor");
-		toolkit.createLabel(mediumGroup, "Sprache");
-		txtLanguage = toolkit.createText(mediumGroup, "Sprache");
-		toolkit.createLabel(mediumGroup, "Verlag");
-		txtPublisher = toolkit.createText(mediumGroup, "Verlag");
+		toolkit.createLabel(mediumGroup, TITLE);
+		txtTitle = toolkit.createText(mediumGroup, "");
+		toolkit.createLabel(mediumGroup, AUTHOR);
+		txtAuthor = toolkit.createText(mediumGroup, "");
+		toolkit.createLabel(mediumGroup, LANGUAGE);
+		txtLanguage = toolkit.createText(mediumGroup, "");
+		toolkit.createLabel(mediumGroup, PUBLISHER);
+		txtPublisher = toolkit.createText(mediumGroup, "");
 		toolkit.createLabel(mediumGroup, "Typ");
 		toolkit.createText(mediumGroup, "Typ");
 
@@ -198,13 +207,20 @@ public class RegisterExemplarView extends AbstractEditView {
 	}
 
 	private void initTableColumns() {
-		columnType = new XViewerColumn(REGISTER_COPY + "." + TYPE, TYPE, 50, SWT.LEFT, true, SortDataType.String, false, "Typ des Mediums");
-		columnBarcode = new XViewerColumn(REGISTER_COPY + "." + BARCODE, BARCODE, 80, SWT.RIGHT, true, SortDataType.Integer, false,
+		columnType = new XViewerColumn(REGISTER_COPY + DOT + TYPE, TYPE, 50, SWT.LEFT, true, SortDataType.String, false, "Typ des Mediums");
+		columnBarcode = new XViewerColumn(REGISTER_COPY + DOT + BARCODE, BARCODE, 80, SWT.LEFT, true, SortDataType.Integer, false,
 				"Barcode des Mediums");
-		columnIsbn = new XViewerColumn(REGISTER_COPY + "." + ISBN, ISBN, 80, SWT.RIGHT, true, SortDataType.Integer, false,
+		columnIsbn = new XViewerColumn(REGISTER_COPY + DOT + ISBN, ISBN, 80, SWT.LEFT, true, SortDataType.Integer, false,
 				"ISBN des Mediums");
-		columnTitle = new XViewerColumn(REGISTER_COPY + "." + TITLE, TITLE, 150, SWT.LEFT, true, SortDataType.String, false, "Titel");
-		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle);
+		columnTitle = new XViewerColumn(REGISTER_COPY + DOT + TITLE, TITLE, 150, SWT.LEFT, true, SortDataType.String, false, TITLE);
+		columnAuthor = new XViewerColumn(REGISTER_COPY + DOT + AUTHOR, AUTHOR, 150, SWT.LEFT, true, SortDataType.String, false, AUTHOR);
+		columnPublisher = new XViewerColumn(REGISTER_COPY + DOT + PUBLISHER, PUBLISHER, 150, SWT.LEFT, true, SortDataType.String, false,
+				PUBLISHER);
+		columnLanguage = new XViewerColumn(REGISTER_COPY + DOT + LANGUAGE, LANGUAGE, 150, SWT.LEFT, true, SortDataType.String, false,
+				LANGUAGE);
+		columnEdition = new XViewerColumn(REGISTER_COPY + DOT + EDITION, EDITION, 150, SWT.LEFT, true, SortDataType.String, false, EDITION);
+		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher, columnLanguage,
+				columnEdition);
 
 	}
 }
