@@ -9,7 +9,7 @@ import org.eclipse.ui.IPersistableElement;
 /**
  * one copy of a medium
  */
-public class Copy extends Medium implements IEditorInput {
+public class Copy extends Medium implements IEditorInput, Cloneable {
 
 	public static final String FIELD_EDITION = "edition";//$NON-NLS-1$
 	public static final String FIELD_BARCODE = "barcode";//$NON-NLS-1$
@@ -282,4 +282,9 @@ public class Copy extends Medium implements IEditorInput {
         return "Copy{" + "id=" + id + ", edition=" + edition + ", barcode=" + barcode + ", inventoryDate=" + inventoryDate + ", condition=" + condition + ", borrowDate=" + borrowDate + ", lastBorrowDate=" + lastBorrowDate + ", groupId=" + groupId + ", borrowerId=" + borrowerId + ", lastBorrowerId=" + lastBorrowerId + ", curatorId=" + curatorId + ", lastCuratorId=" + lastCuratorId + '}';
     }
 
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// Call clone function on fields that are no primitive types here. 
+		return super.clone();
+	}
 }

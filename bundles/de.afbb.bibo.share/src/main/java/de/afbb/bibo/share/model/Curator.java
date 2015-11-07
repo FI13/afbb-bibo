@@ -6,7 +6,7 @@ import org.eclipse.ui.IPersistableElement;
 
 import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 
-public class Curator extends AbstractPropertyChangeSupport implements IEditorInput {
+public class Curator extends AbstractPropertyChangeSupport implements IEditorInput, Cloneable {
 
 	public static final String FIELD_NAME = "name";//$NON-NLS-1$
 	public static final String FIELD_PASSWORD = "password";//$NON-NLS-1$
@@ -152,5 +152,11 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 	@Override
 	public String toString() {
 		return "Curator{" + "id=" + id + ", name=" + name + ", salt=" + salt + ", passwordHash=" + passwordHash + '}';
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// Call clone function on fields that are no primitive types here. 
+		return super.clone();
 	}
 }

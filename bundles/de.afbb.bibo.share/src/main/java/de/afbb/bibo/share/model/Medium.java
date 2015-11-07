@@ -2,7 +2,7 @@ package de.afbb.bibo.share.model;
 
 import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 
-public class Medium extends AbstractPropertyChangeSupport {
+public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 
 	public static final String FIELD_ISBN = "isbn";//$NON-NLS-1$
 	public static final String FIELD_TITLE = "title";//$NON-NLS-1$
@@ -172,4 +172,9 @@ public class Medium extends AbstractPropertyChangeSupport {
         return "Medium{" + "id=" + id + ", isbn=" + isbn + ", title=" + title + ", author=" + author + ", language=" + language + ", typeId=" + typeId + ", publisher=" + publisher + '}';
     }
 
+    @Override
+	public Object clone() throws CloneNotSupportedException {
+		// Call clone function on fields that are no primitive types here. 
+		return super.clone();
+	}
 }
