@@ -99,6 +99,7 @@ public class RegisterExemplarView extends AbstractEditView {
 			copyToModify.setPublisher(EMPTY_STRING);
 			xViewer.setInput(copies);
 			bindingContext.updateTargets();
+			txtBarcode.setFocus();
 		}
 	};
 
