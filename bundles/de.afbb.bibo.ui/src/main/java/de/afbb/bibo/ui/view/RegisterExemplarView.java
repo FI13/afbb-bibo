@@ -63,6 +63,10 @@ public class RegisterExemplarView extends AbstractEditView {
 	private Text txtAuthor;
 	private Text txtLanguage;
 	private Text txtPublisher;
+	private Button btnToList;
+	private Button btnToEdit;
+	private Button btnGroup;
+	private Button btnUngroup;
 
 	private XViewer xViewer;
 	private final XViewerFactory factory = new BiboXViewerFactory(REGISTER_COPY);
@@ -75,6 +79,9 @@ public class RegisterExemplarView extends AbstractEditView {
 	private XViewerColumn columnLanguage;
 	private XViewerColumn columnEdition;
 
+	/**
+	 * listener that adds a copy to the list and clears the input fields afterwards
+	 */
 	Listener toListListener = new Listener() {
 
 		@Override
@@ -92,6 +99,10 @@ public class RegisterExemplarView extends AbstractEditView {
 			bindingContext.updateTargets();
 		}
 	};
+
+	/**
+	 * listener that removes the selected item from the list and fills the input fields with its values
+	 */
 	Listener toEditListener = new Listener() {
 
 		@Override
@@ -99,6 +110,10 @@ public class RegisterExemplarView extends AbstractEditView {
 			System.err.println("to edit");
 		}
 	};
+
+	/**
+	 * listener that reacts when the selection changes and enables & disables control buttons
+	 */
 	SelectionListener xViewerSelectionListener = new SelectionListener() {
 
 		@Override
@@ -117,10 +132,6 @@ public class RegisterExemplarView extends AbstractEditView {
 			// no double click event
 		}
 	};
-	private Button btnToList;
-	private Button btnToEdit;
-	private Button btnGroup;
-	private Button btnUngroup;
 
 	@Override
 	public void initUi(final Composite parent) {
