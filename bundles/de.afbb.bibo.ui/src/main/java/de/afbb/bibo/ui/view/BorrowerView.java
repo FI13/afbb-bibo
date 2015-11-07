@@ -14,7 +14,6 @@ import org.eclipse.ui.PartInitException;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.model.Borrower;
-import de.afbb.bibo.share.model.CopyUtil;
 
 /**
  * this view adds or edits a person who can borrow books
@@ -47,7 +46,7 @@ public class BorrowerView extends AbstractEditView {
 	protected void setInput(final IEditorInput input) {
 		if (input instanceof Borrower) {
 			this.input = (Borrower) input;
-			inputCache = (Borrower) CopyUtil.copy(this.input);
+			inputCache = (Borrower) this.input.clone();
 			super.setInput(input);
 		}
 	}

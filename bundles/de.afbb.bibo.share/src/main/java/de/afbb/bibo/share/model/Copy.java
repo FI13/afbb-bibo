@@ -1,6 +1,5 @@
 package de.afbb.bibo.share.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -10,9 +9,8 @@ import org.eclipse.ui.IPersistableElement;
 /**
  * one copy of a medium
  */
-public class Copy extends Medium implements IEditorInput, Serializable, Cloneable {
+public class Copy extends Medium implements IEditorInput, Cloneable {
 
-	private static final long serialVersionUID = 2495284605877332896L;
 	public static final String FIELD_EDITION = "edition";//$NON-NLS-1$
 	public static final String FIELD_BARCODE = "barcode";//$NON-NLS-1$
 	public static final String FIELD_DATE_INVENTORY = "inventoryDate";//$NON-NLS-1$
@@ -291,12 +289,6 @@ public class Copy extends Medium implements IEditorInput, Serializable, Cloneabl
 
 	@Override
 	public Object clone() {
-		try {
-			return super.clone();
-		} catch (final CloneNotSupportedException e) {
-			// swallow exception and return null
-			return null;
-		}
+		return super.clone();
 	}
-
 }

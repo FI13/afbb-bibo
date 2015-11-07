@@ -6,7 +6,7 @@ import org.eclipse.ui.IPersistableElement;
 
 import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 
-public class Curator extends AbstractPropertyChangeSupport implements IEditorInput {
+public class Curator extends AbstractPropertyChangeSupport implements IEditorInput, Cloneable {
 
 	public static final String FIELD_NAME = "name";//$NON-NLS-1$
 	public static final String FIELD_PASSWORD = "password";//$NON-NLS-1$
@@ -17,7 +17,7 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 	private String passwordHash;
 	private String password;
 
-	public Curator(int id, String name, String salt, String passwordHash) {
+	public Curator(final int id, final String name, final String salt, final String passwordHash) {
 		this.id = id;
 		this.name = name;
 		this.salt = salt;
@@ -152,5 +152,15 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 	@Override
 	public String toString() {
 		return "Curator{" + "id=" + id + ", name=" + name + ", salt=" + salt + ", passwordHash=" + passwordHash + '}';
+	}
+
+	@Override
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (final CloneNotSupportedException e) {
+			// swallow exception and return null
+			return null;
+		}
 	}
 }

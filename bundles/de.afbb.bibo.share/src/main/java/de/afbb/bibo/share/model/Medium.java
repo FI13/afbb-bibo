@@ -2,7 +2,7 @@ package de.afbb.bibo.share.model;
 
 import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 
-public class Medium extends AbstractPropertyChangeSupport {
+public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 
 	public static final String FIELD_ISBN = "isbn";//$NON-NLS-1$
 	public static final String FIELD_TITLE = "title";//$NON-NLS-1$
@@ -18,20 +18,21 @@ public class Medium extends AbstractPropertyChangeSupport {
 	private String language;
 	private Integer typeId;
 	private String publisher;
-	
-	public Medium(int id, String isbn, String title, String author, String language, int typeId, String publisher) {
-        this.id = id;
-        this.isbn = isbn;
-        this.title = title;
-        this.author = author;
-        this.language = language;
-        this.typeId = typeId;
-        this.publisher = publisher;
-    }
-	
-    public Medium() {
-    	
-    }
+
+	public Medium(final int id, final String isbn, final String title, final String author, final String language, final int typeId,
+			final String publisher) {
+		this.id = id;
+		this.isbn = isbn;
+		this.title = title;
+		this.author = author;
+		this.language = language;
+		this.typeId = typeId;
+		this.publisher = publisher;
+	}
+
+	public Medium() {
+
+	}
 
 	public String getTitle() {
 		return title;
@@ -46,7 +47,7 @@ public class Medium extends AbstractPropertyChangeSupport {
 	}
 
 	public void setTypeId(final Integer typId) {
-		changeSupport.firePropertyChange(FIELD_TYP_ID, this.typeId, this.typeId = typId);
+		changeSupport.firePropertyChange(FIELD_TYP_ID, typeId, typeId = typId);
 	}
 
 	public String getPublisher() {
@@ -167,9 +168,19 @@ public class Medium extends AbstractPropertyChangeSupport {
 		return true;
 	}
 
-    @Override
-    public String toString() {
-        return "Medium{" + "id=" + id + ", isbn=" + isbn + ", title=" + title + ", author=" + author + ", language=" + language + ", typeId=" + typeId + ", publisher=" + publisher + '}';
-    }
+	@Override
+	public String toString() {
+		return "Medium{" + "id=" + id + ", isbn=" + isbn + ", title=" + title + ", author=" + author + ", language=" + language
+				+ ", typeId=" + typeId + ", publisher=" + publisher + '}';
+	}
 
+	@Override
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (final CloneNotSupportedException e) {
+			// swallow exception and return null
+			return null;
+		}
+	}
 }
