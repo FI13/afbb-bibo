@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
@@ -101,7 +103,13 @@ public class RegisterExemplarView extends AbstractEditView {
 
 		@Override
 		public void widgetSelected(final SelectionEvent e) {
-			System.err.println(xViewer.getSelection());
+			final ISelection selection = xViewer.getSelection();
+			if (selection instanceof TreeSelection) {
+				final boolean singleSelection = ((TreeSelection) selection).getPaths().length == 1;
+				btnToEdit.setEnabled(singleSelection);
+				btnGroup.setEnabled(!singleSelection);
+				btnUngroup.setEnabled(!singleSelection);
+			}
 		}
 
 		@Override
@@ -109,6 +117,10 @@ public class RegisterExemplarView extends AbstractEditView {
 			// no double click event
 		}
 	};
+	private Button btnToList;
+	private Button btnToEdit;
+	private Button btnGroup;
+	private Button btnUngroup;
 
 	@Override
 	public void initUi(final Composite parent) {
@@ -140,10 +152,10 @@ public class RegisterExemplarView extends AbstractEditView {
 
 		final Composite middle = toolkit.createComposite(top, SWT.NONE);
 		middle.setLayout(new GridLayout(2, false));
-		final Button btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
+		btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
 		btnToList.setImage(BiboImageRegistry.getImage(IconType.ARROW_DOWN, IconSize.small));
 		btnToList.addListener(SWT.MouseDown, toListListener);
-		final Button btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
+		btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
 		btnToEdit.setImage(BiboImageRegistry.getImage(IconType.ARROW_UP, IconSize.small));
 		btnToEdit.addListener(SWT.MouseDown, toEditListener);
 
@@ -162,9 +174,9 @@ public class RegisterExemplarView extends AbstractEditView {
 
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
 		buttonComposite.setLayout(new GridLayout());
-		final Button btnGroup = toolkit.createButton(buttonComposite, "Medien Gruppieren", SWT.TOP);
+		btnGroup = toolkit.createButton(buttonComposite, "Medien Gruppieren", SWT.TOP);
 		btnGroup.setImage(BiboImageRegistry.getImage(IconType.PLUS, IconSize.small));
-		final Button btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung Lösen", SWT.TOP);
+		btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung Lösen", SWT.TOP);
 		btnUngroup.setImage(BiboImageRegistry.getImage(IconType.MINUS, IconSize.small));
 
 		GridDataFactory.fillDefaults().applyTo(idGroup);
@@ -172,6 +184,11 @@ public class RegisterExemplarView extends AbstractEditView {
 		GridDataFactory.fillDefaults().applyTo(mediumGroup);
 		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(bottom);
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).applyTo(buttonComposite);
+
+		// disable buttons
+		btnToEdit.setEnabled(false);
+		btnGroup.setEnabled(false);
+		btnUngroup.setEnabled(false);
 	}
 
 	@Override
