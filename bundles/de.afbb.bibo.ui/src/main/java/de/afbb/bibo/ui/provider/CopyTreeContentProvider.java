@@ -1,52 +1,93 @@
 package de.afbb.bibo.ui.provider;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import de.afbb.bibo.share.model.Copy;
 
+/**
+ * content provider for {@link Copy} in a tree viewer.
+ * 
+ * @author dbecker
+ */
 public class CopyTreeContentProvider implements ITreeContentProvider {
+
+	// map to store sets of copies grouped by their group id
+	private final HashMap<Integer, Set<Copy>> groupedCopies = new HashMap<>();
+	private final Set<Copy> input = new HashSet<>();
+	private final HashMap<Integer, Copy> dummies = new HashMap<>();
 
 	@Override
 	public void dispose() {
+		groupedCopies.clear();
+		input.clear();
+		dummies.clear();
 	}
 
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+		groupedCopies.clear();
+		input.clear();
+		if (newInput != null && newInput instanceof Collection<?>) {
+			final Collection<? extends Copy> castInput = (Collection<? extends Copy>) newInput;
+			input.addAll(castInput);
+			// avoid allocation inside loop
+			int groupId = -1;
+			final Iterator<? extends Copy> iterator = castInput.iterator();
+			while (iterator.hasNext()) {
+				final Copy next = iterator.next();
+				groupId = next.getGroupId();
+				// add copy to grouped copies if it has a valid group id
+				if (groupId > -1) {
+					final Set<Copy> group = groupedCopies.containsKey(groupId) ? groupedCopies.get(groupId) : new HashSet<Copy>();
+					group.add(next);
+					groupedCopies.put(Integer.valueOf(groupId), group);
+				}
+			}
+		}
+		// add dummy objects for each group
+		final Iterator<Integer> iterator = groupedCopies.keySet().iterator();
+		while (iterator.hasNext()) {
+			final Integer next = iterator.next();
+			final Copy dummy = new Copy();
+			dummy.setGroupId(next);
+			dummies.put(next, dummy);
+		}
 	}
 
 	@Override
 	public Object[] getElements(final Object inputElement) {
-		final HashSet<Copy> elements = new HashSet<>();
-		if (inputElement != null && inputElement instanceof Collection<?>) {
-			final Iterator<?> iterator = ((Collection<?>) inputElement).iterator();
-			while (iterator.hasNext()) {
-				final Object next = iterator.next();
-				if (next != null && next instanceof Collection<?>) {
-					elements.addAll((Collection<Copy>) next);
-				}
-			}
-		}
-		return elements.toArray();
+		return input.toArray();
 	}
 
 	@Override
 	public Object[] getChildren(final Object parentElement) {
+		if (hasChildren(parentElement)) {
+			return groupedCopies.get(Integer.valueOf(((Copy) parentElement).getGroupId())).toArray();
+		}
 		return null;
 	}
 
 	@Override
 	public Object getParent(final Object element) {
+		if (element != null && element instanceof Copy) {
+			final int groupId = ((Copy) element).getGroupId();
+			if (groupId > -1) {
+				return dummies.get(groupId);
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public boolean hasChildren(final Object element) {
-		return false;
+		return dummies.containsValue(element);
 	}
 
 }

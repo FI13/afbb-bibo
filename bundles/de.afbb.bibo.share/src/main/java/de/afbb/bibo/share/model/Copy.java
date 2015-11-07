@@ -27,11 +27,11 @@ public class Copy extends Medium implements IEditorInput, Serializable, Cloneabl
 	private String condition;
 	private Date borrowDate;
 	private Date lastBorrowDate;
-	private int curatorId;
-	private int lastCuratorId;
-	private int borrowerId;
-	private int lastBorrowerId;
-	private int groupId;
+	private int curatorId = -1;
+	private int lastCuratorId = -1;
+	private int borrowerId = -1;
+	private int lastBorrowerId = -1;
+	private int groupId = -1;
 
 	public Copy(final int id, final String edition, final String barcode, final Date date, final String condition, final Date date2,
 			final Date date3, final int groupId, final int borrowerId, final int lastBorrowerId, final int curatorId,
