@@ -42,10 +42,9 @@ import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
  */
 public class RegisterExemplarView extends AbstractEditView {
 
-	private static final String EMPTY_STRING = "";//$NON-NLS-1$
+	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String DOT = ".";//$NON-NLS-1$
 	private static final String REGISTER_COPY = "register.copy";//$NON-NLS-1$
-	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String TYPE = "Typ";
 	private static final String BARCODE = "Barcode";
 	private static final String ISBN = "ISBN";//$NON-NLS-1$
@@ -57,6 +56,7 @@ public class RegisterExemplarView extends AbstractEditView {
 
 	private final Set<Copy> copies = new HashSet<Copy>();
 	private final Copy copyToModify = new Copy();
+
 	private Group idGroup;
 	private Text txtBarcode;
 	private Text txtIsbn;
@@ -110,6 +110,7 @@ public class RegisterExemplarView extends AbstractEditView {
 
 		@Override
 		public void handleEvent(final Event event) {
+			// FIXME hack, should be solved be resetting the selection in viewer instead
 			btnToEdit.setEnabled(false);
 			final TreePath[] paths = ((TreeSelection) xViewer.getSelection()).getPaths();
 			if (paths.length > 0) {
@@ -201,9 +202,7 @@ public class RegisterExemplarView extends AbstractEditView {
 		final Composite middle = toolkit.createComposite(top, SWT.NONE);
 		middle.setLayout(new GridLayout(2, false));
 		btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
-		btnToList.setImage(BiboImageRegistry.getImage(IconType.ARROW_DOWN, IconSize.small));
 		btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
-		btnToEdit.setImage(BiboImageRegistry.getImage(IconType.ARROW_UP, IconSize.small));
 
 		final Composite bottom = toolkit.createComposite(top, SWT.NONE);
 		bottom.setLayout(new GridLayout(2, false));
@@ -221,15 +220,19 @@ public class RegisterExemplarView extends AbstractEditView {
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
 		buttonComposite.setLayout(new GridLayout());
 		btnGroup = toolkit.createButton(buttonComposite, "Medien Gruppieren", SWT.TOP);
-		btnGroup.setImage(BiboImageRegistry.getImage(IconType.PLUS, IconSize.small));
 		btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung Lösen", SWT.TOP);
-		btnUngroup.setImage(BiboImageRegistry.getImage(IconType.MINUS, IconSize.small));
 
 		GridDataFactory.fillDefaults().applyTo(idGroup);
 		GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
 		GridDataFactory.fillDefaults().applyTo(mediumGroup);
 		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(bottom);
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).applyTo(buttonComposite);
+
+		// set button images
+		btnToList.setImage(BiboImageRegistry.getImage(IconType.ARROW_DOWN, IconSize.small));
+		btnToEdit.setImage(BiboImageRegistry.getImage(IconType.ARROW_UP, IconSize.small));
+		btnGroup.setImage(BiboImageRegistry.getImage(IconType.PLUS, IconSize.small));
+		btnUngroup.setImage(BiboImageRegistry.getImage(IconType.MINUS, IconSize.small));
 
 		// add listener to buttons
 		btnToList.addListener(SWT.MouseDown, toListListener);

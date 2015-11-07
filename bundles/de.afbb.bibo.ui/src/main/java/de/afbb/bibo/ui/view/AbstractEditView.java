@@ -11,6 +11,8 @@ import org.eclipse.ui.part.EditorPart;
 
 abstract class AbstractEditView extends EditorPart {
 
+	protected static final String EMPTY_STRING = "";//$NON-NLS-1$
+
 	private Image imageValidation;
 	private Label lblValidationImage;
 	private Label lblValidationMessage;
