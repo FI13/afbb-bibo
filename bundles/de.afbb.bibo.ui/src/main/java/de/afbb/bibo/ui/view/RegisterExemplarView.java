@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
@@ -107,7 +108,21 @@ public class RegisterExemplarView extends AbstractEditView {
 
 		@Override
 		public void handleEvent(final Event event) {
-			System.err.println("to edit");
+			btnToEdit.setEnabled(false);
+			final TreePath[] paths = ((TreeSelection) xViewer.getSelection()).getPaths();
+			if (paths.length > 0) {
+				final Copy copy = (Copy) paths[0].getSegment(0);
+				copyToModify.setBarcode(copy.getBarcode());
+				copyToModify.setIsbn(copy.getIsbn());
+				copyToModify.setEdition(copy.getEdition());
+				copyToModify.setTitle(copy.getTitle());
+				copyToModify.setAuthor(copy.getAuthor());
+				copyToModify.setLanguage(copy.getLanguage());
+				copyToModify.setPublisher(copy.getPublisher());
+				copies.remove(copy);
+				xViewer.setInput(copies);
+				bindingContext.updateTargets();
+			}
 		}
 	};
 
@@ -124,6 +139,7 @@ public class RegisterExemplarView extends AbstractEditView {
 				btnToEdit.setEnabled(singleSelection);
 				btnGroup.setEnabled(!singleSelection);
 				btnUngroup.setEnabled(!singleSelection);
+				System.out.println("singleSelection=" + singleSelection);
 			}
 		}
 
