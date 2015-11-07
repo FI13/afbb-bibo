@@ -10,7 +10,7 @@ import org.eclipse.ui.IPersistableElement;
 /**
  * one copy of a medium
  */
-public class Copy extends Medium implements IEditorInput, Serializable {
+public class Copy extends Medium implements IEditorInput, Serializable, Cloneable {
 
 	private static final long serialVersionUID = 2495284605877332896L;
 	public static final String FIELD_EDITION = "edition";//$NON-NLS-1$
@@ -287,6 +287,16 @@ public class Copy extends Medium implements IEditorInput, Serializable {
 		return "Copy{" + "id=" + id + ", edition=" + edition + ", barcode=" + barcode + ", inventoryDate=" + inventoryDate + ", condition="
 				+ condition + ", borrowDate=" + borrowDate + ", lastBorrowDate=" + lastBorrowDate + ", groupId=" + groupId + ", borrowerId="
 				+ borrowerId + ", lastBorrowerId=" + lastBorrowerId + ", curatorId=" + curatorId + ", lastCuratorId=" + lastCuratorId + '}';
+	}
+
+	@Override
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (final CloneNotSupportedException e) {
+			// swallow exception and return null
+			return null;
+		}
 	}
 
 }
