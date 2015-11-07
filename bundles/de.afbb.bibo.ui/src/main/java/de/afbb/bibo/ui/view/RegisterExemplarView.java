@@ -9,6 +9,8 @@ import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
 import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -23,7 +25,6 @@ import org.eclipse.ui.PartInitException;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.model.Copy;
-import de.afbb.bibo.share.model.CopyUtil;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
 import de.afbb.bibo.ui.IconType;
@@ -45,8 +46,8 @@ public class RegisterExemplarView extends AbstractEditView {
 	private static final String ISBN = "ISBN";//$NON-NLS-1$
 	private static final String TITLE = "Titel";
 
-	private final Set<Set<Copy>> copies = new HashSet<Set<Copy>>();
-	private Copy copyToModify = new Copy();
+	private final Set<Copy> copies = new HashSet<Copy>();
+	private final Copy copyToModify = new Copy();
 	private Group idGroup;
 	private Text txtBarcode;
 	private Text txtIsbn;
@@ -67,10 +68,15 @@ public class RegisterExemplarView extends AbstractEditView {
 
 		@Override
 		public void handleEvent(final Event event) {
-			final HashSet<Copy> add = new HashSet<Copy>();
-			add.add((Copy) CopyUtil.copy(copyToModify));
-			copies.add(add);
-			copyToModify = new Copy();
+			final Copy clone = (Copy) copyToModify.clone();
+			copies.add(clone);
+			copyToModify.setBarcode("");
+			copyToModify.setIsbn("");
+			copyToModify.setEdition("");
+			copyToModify.setTitle("");
+			copyToModify.setAuthor("");
+			copyToModify.setLanguage("");
+			copyToModify.setPublisher("");
 			xViewer.setInput(copies);
 			bindingContext.updateTargets();
 		}
@@ -80,6 +86,18 @@ public class RegisterExemplarView extends AbstractEditView {
 		@Override
 		public void handleEvent(final Event event) {
 			System.err.println("to edit");
+		}
+	};
+	SelectionListener xViewerSelectionListener = new SelectionListener() {
+
+		@Override
+		public void widgetSelected(final SelectionEvent e) {
+			System.err.println(xViewer.getSelection());
+		}
+
+		@Override
+		public void widgetDefaultSelected(final SelectionEvent e) {
+			// no double click event
 		}
 	};
 
@@ -131,6 +149,7 @@ public class RegisterExemplarView extends AbstractEditView {
 		xViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		xViewer.setContentProvider(new CopyTreeContentProvider());
 		xViewer.setLabelProvider(new CopyLabelProvider(xViewer));
+		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
 
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
 		buttonComposite.setLayout(new GridLayout());
