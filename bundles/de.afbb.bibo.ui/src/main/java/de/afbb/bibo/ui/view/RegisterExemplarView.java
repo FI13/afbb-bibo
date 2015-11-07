@@ -265,6 +265,10 @@ public class RegisterExemplarView extends AbstractEditView {
 		columnEdition = new XViewerColumn(REGISTER_COPY + DOT + EDITION, EDITION, 150, SWT.LEFT, true, SortDataType.String, false, EDITION);
 		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher, columnLanguage,
 				columnEdition);
+	}
 
+	@Override
+	public boolean isDirty() {
+		return !copies.isEmpty();
 	}
 }
