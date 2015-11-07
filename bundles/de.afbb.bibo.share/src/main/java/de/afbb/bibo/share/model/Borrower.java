@@ -8,7 +8,7 @@ import org.eclipse.ui.IPersistableElement;
 
 import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 
-public class Borrower extends AbstractPropertyChangeSupport implements IEditorInput, Serializable {
+public class Borrower extends AbstractPropertyChangeSupport implements IEditorInput, Cloneable {
 
 	private static final long serialVersionUID = -3149389839841886740L;
 	public static final String FIELD_SURNAME = "surname";//$NON-NLS-1$
@@ -190,4 +190,9 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
         return "Borrower{" + "id=" + id + ", forename=" + forename + ", surname=" + surname + ", info=" + info + ", email=" + email + ", phoneNumber=" + phoneNumber + '}';
     }
 
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// Call clone function on fields that are no primitive types here. 
+		return super.clone();
+	}
 }

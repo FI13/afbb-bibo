@@ -23,7 +23,6 @@ import org.eclipse.ui.PartInitException;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.model.Copy;
-import de.afbb.bibo.share.model.CopyUtil;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
 import de.afbb.bibo.ui.IconType;
@@ -68,7 +67,12 @@ public class RegisterExemplarView extends AbstractEditView {
 		@Override
 		public void handleEvent(final Event event) {
 			final HashSet<Copy> add = new HashSet<Copy>();
-			add.add((Copy) CopyUtil.copy(copyToModify));
+			try {
+				add.add((Copy) copyToModify.clone());
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			copies.add(add);
 			copyToModify = new Copy();
 			xViewer.setInput(copies);
