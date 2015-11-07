@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import de.afbb.bibo.properties.BiBoProperties;
 import de.afbb.bibo.share.model.Medium;
 
 public final class ParserMedium {
@@ -23,18 +24,23 @@ public final class ParserMedium {
 	/*
 	 * Your AWS Access Key ID, as taken from the AWS Your Account page.
 	 */
-	private static final String AWS_ACCESS_KEY_ID = "";
+	private static final String AWS_ACCESS_KEY_ID = BiBoProperties.get("AWS_ACCESS_KEY_ID");
 
 	/*
 	 * Your AWS Secret Key corresponding to the above ID, as taken from the AWS
 	 * Your Account page.
 	 */
-	private static final String AWS_SECRET_KEY = "";
+	private static final String AWS_SECRET_KEY = BiBoProperties.get("AWS_SECRET_KEY");
 
 	/*
 	 * Use the end-point according to the region you are interested in.
 	 */
-	private static final String ENDPOINT = "webservices.amazon.de";
+	private static final String ENDPOINT = BiBoProperties.get("ENDPOINT");
+
+	/*
+	 * Use the end-point according to the region you are interested in.
+	 */
+	private static final String ASSOCIATE_TAG = BiBoProperties.get("ASSOCIATE_TAG");
 
 	/**
 	 * Bereitgestellte Funktion von Amazon
@@ -63,7 +69,7 @@ public final class ParserMedium {
 		params.put("Service", "AWSECommerceService");
 		params.put("Operation", "ItemLookup");
 		params.put("AWSAccessKeyId", AWS_ACCESS_KEY_ID);
-		params.put("AssociateTag", "ausbildungund-21");
+		params.put("AssociateTag", ASSOCIATE_TAG);
 		params.put("ItemId", isbn);
 		params.put("IdType", "ISBN");
 		params.put("ResponseGroup", "ItemAttributes");
@@ -87,11 +93,12 @@ public final class ParserMedium {
 		final Medium medium = new Medium();
 
 		final String tempurl = getUrl(isbn);
-		System.out.println("URL: " + tempurl);
 		try
 
 		{
-			System.setProperty("java.net.useSystemProxies", "true");
+			if ((Integer.valueOf(BiBoProperties.get("USE_PROXY")) == 1)) {
+				System.setProperty("java.net.useSystemProxies", "true");
+			}
 
 			final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();

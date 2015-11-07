@@ -21,12 +21,22 @@
 	<modules>
 		<module>bundles/de.afbb.bibo.ui</module>
 		<module>bundles/de.afbb.bibo.amazonlookup</module>
+		<module>bundles/de.afbb.bibo.dependency</module>
 		<module>bundles/de.afbb.bibo.share</module>
 		<module>bundles/de.afbb.bibo.rcp.target</module>
 		<module>bundles/de.afbb.bibo.bibservlet.client</module>
 		<module>products/de.afbb.bibo.rcp.product</module>
 		<module>features/de.afbb.bibo.rcp.feature</module>
 	</modules>
+	
+	<profiles>
+		<profile>
+			<id>test</id>
+			<modules>
+				<module>bundles/de.afbb.bibo.share.test</module>
+			</modules>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>
