@@ -194,6 +194,7 @@ public class Copy extends Medium implements IEditorInput, Cloneable {
 				+ borrower + ", lastBorrowerId=" + lastBorrower + ", curator=" + curator + ", lastCurator=" + lastCurator + '}';
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -213,6 +214,7 @@ public class Copy extends Medium implements IEditorInput, Cloneable {
 		return result;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {

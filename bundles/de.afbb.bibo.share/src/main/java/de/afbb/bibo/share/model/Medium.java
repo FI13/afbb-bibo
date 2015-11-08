@@ -89,6 +89,7 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 		changeSupport.firePropertyChange(FIELD_LANGUAGE, this.language, this.language = language);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -103,6 +104,7 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 		return result;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
