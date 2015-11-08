@@ -7,6 +7,8 @@ import org.eclipse.nebula.widgets.xviewer.XViewerLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.ui.BiboImageRegistry;
+import de.afbb.bibo.ui.IconSize;
 
 public class CopyLabelProvider extends XViewerLabelProvider {
 
@@ -33,7 +35,10 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 
 	@Override
 	public Image getColumnImage(final Object element, final XViewerColumn xCol, final int columnIndex) throws Exception {
-		// FIXME change to type icon when #69 is done
+		final Copy copy = (Copy) element;
+		if (columnIndex == 0 && copy.getType() != null) {
+			return BiboImageRegistry.getImage(copy.getType().getIcon(), IconSize.small);
+		}
 		return null;
 	}
 

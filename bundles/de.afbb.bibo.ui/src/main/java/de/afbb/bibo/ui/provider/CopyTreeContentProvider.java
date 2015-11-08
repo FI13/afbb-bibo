@@ -10,6 +10,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.share.model.MediumType;
 
 /**
  * content provider for {@link Copy} in a tree viewer.
@@ -22,6 +24,11 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 	private final HashMap<Integer, Set<Copy>> groupedCopies = new HashMap<>();
 	private final Set<Copy> input = new HashSet<>();
 	private final HashMap<Integer, Copy> dummies = new HashMap<>();
+
+	/**
+	 * type for groups
+	 */
+	private static final MediumType groupType = new MediumType(-1, "Gruppe", IconType.MEDIA);
 
 	@Override
 	public void dispose() {
@@ -59,6 +66,7 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 			final Integer next = iterator.next();
 			final Copy dummy = new Copy();
 			dummy.setGroupId(next);
+			dummy.setType(groupType);
 			dummies.put(next, dummy);
 			input.add(dummy);
 		}
