@@ -118,9 +118,10 @@ public class RegisterExemplarView extends AbstractEditView {
 		public void handleEvent(final Event event) {
 			// FIXME hack, should be solved be resetting the selection in viewer instead
 			btnToEdit.setEnabled(false);
+			btnUngroup.setEnabled(false);
 			final TreePath[] paths = ((TreeSelection) xViewer.getSelection()).getPaths();
 			if (paths.length > 0) {
-				final Copy copy = (Copy) paths[0].getSegment(0);
+				final Copy copy = (Copy) paths[0].getLastSegment();
 				copyToModify.setBarcode(copy.getBarcode());
 				copyToModify.setIsbn(copy.getIsbn());
 				copyToModify.setEdition(copy.getEdition());
@@ -128,7 +129,9 @@ public class RegisterExemplarView extends AbstractEditView {
 				copyToModify.setAuthor(copy.getAuthor());
 				copyToModify.setLanguage(copy.getLanguage());
 				copyToModify.setPublisher(copy.getPublisher());
+				// FIXME doesn't work when inside group
 				copies.remove(copy);
+				checkGroups();
 				xViewer.setInput(copies);
 				bindingContext.updateTargets();
 			}
@@ -166,52 +169,59 @@ public class RegisterExemplarView extends AbstractEditView {
 			final Iterator<Copy> iterator = ((TreeSelection) xViewer.getSelection()).iterator();
 			while (iterator.hasNext()) {
 				final Copy next = iterator.next();
+				// TODO copy not in copies -> parent?
 				purgedGroupes.add(next.getGroupId());
 				next.setGroupId(UNASSIGNED_GROUP);
 			}
 
 			// FIXME ungroup for parent
 
-			/*
-			 * check if there are groups left with only one member -> clear those as well
-			 */
-			// leftItems maps the group id and the amount of copies that are left with this id
-			final Map<Integer, Integer> leftItems = new HashMap<>();
-			for (final Integer i : purgedGroupes) {
-				leftItems.put(i, 0);
-			}
-
-			// calculate the amount of copies that are left for each group id. cache items for later reuse
-			final Set<Copy> possiblePurges = new HashSet<>();
-			int groupId = UNASSIGNED_GROUP;
-			for (final Copy copy : copies) {
-				groupId = copy.getGroupId();
-				if (leftItems.containsKey(groupId)) {
-					leftItems.put(groupId, leftItems.get(groupId) + 1);
-					possiblePurges.add(copy);
-				}
-			}
-
-			// check which group id has only one item left
-			purgedGroupes.clear();
-			final Iterator<Integer> iteratorGroup = leftItems.keySet().iterator();
-			while (iteratorGroup.hasNext()) {
-				final Integer key = iteratorGroup.next();
-				final Integer amountLeft = leftItems.get(key);
-				if (Integer.valueOf(1).equals(amountLeft)) {
-					purgedGroupes.add(key);
-				}
-			}
-
-			// clear group id for copies that are in list and have a group id that is in purgedGroupes
-			for (final Copy copy : possiblePurges) {
-				if (purgedGroupes.contains(copy.getGroupId())) {
-					copy.setGroupId(UNASSIGNED_GROUP);
-				}
-			}
+			checkGroups();
 			xViewer.setInput(copies);
 		}
 	};
+
+	/**
+	 * checks that there are no groups with only one member left. will reset group information on those copies
+	 */
+	private void checkGroups() {
+		/*
+		 * Map<groupId, amount>
+		 */
+		final Map<Integer, Integer> leftItems = new HashMap<>();
+
+		// calculate the amount of copies that are left for each group id
+		int groupId;
+		for (final Copy copy : copies) {
+			groupId = copy.getGroupId();
+			if (UNASSIGNED_GROUP != groupId) {
+				if (leftItems.containsKey(groupId)) {
+					leftItems.put(groupId, leftItems.get(groupId) + 1);
+				} else {
+					leftItems.put(groupId, 1);
+				}
+			}
+		}
+
+		// check which group id has only one item left
+		final Set<Integer> purgedGroupes = new HashSet<>();
+		final Iterator<Integer> it = leftItems.keySet().iterator();
+		while (it.hasNext()) {
+			final Integer key = it.next();
+			final Integer amountLeft = leftItems.get(key);
+			if (Integer.valueOf(1).equals(amountLeft)) {
+				purgedGroupes.add(key);
+			}
+		}
+
+		// clear group id for copies that are in list and have a group id that is in purgedGroupes
+		for (final Copy copy : copies) {
+			if (purgedGroupes.contains(copy.getGroupId())) {
+				copy.setGroupId(UNASSIGNED_GROUP);
+			}
+		}
+
+	}
 
 	/**
 	 * listener that reacts when the selection changes and enables & disables control buttons
