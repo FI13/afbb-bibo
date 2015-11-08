@@ -9,7 +9,7 @@ import org.eclipse.ui.IPersistableElement;
 /**
  * one copy of a medium
  */
-public class Copy extends Medium implements IEditorInput, Cloneable {
+public class Copy extends Medium implements IEditorInput {
 
 	public static final String FIELD_EDITION = "edition";//$NON-NLS-1$
 	public static final String FIELD_BARCODE = "barcode";//$NON-NLS-1$
@@ -112,11 +112,6 @@ public class Copy extends Medium implements IEditorInput, Cloneable {
 		changeSupport.firePropertyChange(FIELD_DATE_LAST_BORROW, this.lastBorrowDate, this.lastBorrowDate = lastBorrowDate);
 	}
 
-	@Override
-	public Object clone() {
-		return super.clone();
-	}
-
 	public Curator getCurator() {
 		return curator;
 	}
@@ -185,6 +180,19 @@ public class Copy extends Medium implements IEditorInput, Cloneable {
 	@Override
 	public String getToolTipText() {
 		return barcode;
+	}
+
+	@Override
+	public Object clone() {
+		final Copy clone = (Copy) super.clone();
+		clone.setCurator(curator != null ? (Curator) curator.clone() : null);
+		clone.setLastCurator(lastCurator != null ? (Curator) lastCurator.clone() : null);
+		clone.setBorrower(borrower != null ? (Borrower) borrower.clone() : null);
+		clone.setLastBorrower(lastBorrower != null ? (Borrower) lastBorrower.clone() : null);
+		clone.setInventoryDate(inventoryDate != null ? (Date) inventoryDate.clone() : null);
+		clone.setLastBorrowDate(borrowDate != null ? (Date) borrowDate.clone() : null);
+		clone.setLastBorrowDate(lastBorrowDate != null ? (Date) lastBorrowDate.clone() : null);
+		return clone;
 	}
 
 	@Override
