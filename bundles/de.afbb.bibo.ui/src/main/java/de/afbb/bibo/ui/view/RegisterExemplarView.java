@@ -177,7 +177,6 @@ public class RegisterExemplarView extends AbstractEditView {
 				}
 			}
 
-			// FIXME causes StackOverflowError
 			// ungroup for all children of parent
 			for (final Integer groupId : purgedGroupes) {
 				for (final Copy copy : copies) {

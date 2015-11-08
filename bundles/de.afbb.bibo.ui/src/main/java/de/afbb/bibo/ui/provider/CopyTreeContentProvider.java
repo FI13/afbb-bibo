@@ -41,6 +41,7 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		groupedCopies.clear();
 		input.clear();
+		dummies.clear();
 		if (newInput != null && newInput instanceof Collection<?>) {
 			final Collection<? extends Copy> castInput = (Collection<? extends Copy>) newInput;
 			// avoid allocation inside loop
