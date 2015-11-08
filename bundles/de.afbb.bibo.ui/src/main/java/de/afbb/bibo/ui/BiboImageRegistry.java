@@ -7,6 +7,8 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Image;
 
+import de.afbb.bibo.share.model.IconType;
+
 /**
  * singleton to manage images
  * 
