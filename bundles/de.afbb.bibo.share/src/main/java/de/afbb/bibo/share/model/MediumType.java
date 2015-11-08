@@ -11,7 +11,7 @@ public class MediumType extends AbstractPropertyChangeSupport implements Cloneab
 
 	private Integer id;
 	private String name;
-	private String iconPath;
+	private IconType icon;
 
 	/**
 	 * Constructor. creates a dummy object with invalid id
@@ -26,22 +26,14 @@ public class MediumType extends AbstractPropertyChangeSupport implements Cloneab
 	 * @param id
 	 */
 	public MediumType(final int id) {
-		this(id, null, null);
+		this(id, null, IconType.NONE);
 	}
 
-	public MediumType(final int id, final String name, final String iconPath) {
+	public MediumType(final int id, final String name, final IconType icon) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.iconPath = iconPath;
-	}
-
-	public String getIconPath() {
-		return iconPath;
-	}
-
-	public void setIconPath(final String iconPath) {
-		this.iconPath = iconPath;
+		this.icon = icon;
 	}
 
 	public Integer getId() {
@@ -60,9 +52,17 @@ public class MediumType extends AbstractPropertyChangeSupport implements Cloneab
 		changeSupport.firePropertyChange(FIELD_NAME, name, name = typname);
 	}
 
+	public IconType getIcon() {
+		return icon;
+	}
+
+	public void setIcon(final IconType icon) {
+		this.icon = icon;
+	}
+
 	@Override
 	public String toString() {
-		return "MediumType{" + "id=" + id + ", name=" + name + ", iconPath=" + iconPath + '}';
+		return "MediumType{" + "id=" + id + ", name=" + name + ", icon=" + icon + '}';
 	}
 
 	@Override

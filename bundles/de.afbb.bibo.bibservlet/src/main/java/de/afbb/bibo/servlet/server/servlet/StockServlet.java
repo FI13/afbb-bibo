@@ -60,7 +60,7 @@ public class StockServlet {
 
 	private void addMediaType() throws IOException, SQLException {
 		final MediumType type = gson.fromJson(request.getReader(), MediumType.class);
-		final int mediumId = DBConnector.getInstance().createMediumType(type.getName(), type.getIconPath());
+		final int mediumId = DBConnector.getInstance().createMediumType(type.getName(), type.getIcon().getCode());
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.getWriter().println(mediumId);
 		response.setContentType("text/plain");

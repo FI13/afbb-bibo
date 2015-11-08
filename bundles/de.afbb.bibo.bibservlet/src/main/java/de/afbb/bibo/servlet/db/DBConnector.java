@@ -29,6 +29,7 @@ import de.afbb.bibo.servlet.Config;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Curator;
+import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
 
@@ -155,7 +156,7 @@ public class DBConnector {
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet resultSet = statement.executeQuery("select Id, TypName, Icon from " + Config.DATABASE_NAME + ".typ")) {
 				while (resultSet.next()) {
-					result.add(new MediumType(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3)));
+					result.add(new MediumType(resultSet.getInt(1), resultSet.getString(2), IconType.fromString(resultSet.getString(3))));
 				}
 			}
 		}

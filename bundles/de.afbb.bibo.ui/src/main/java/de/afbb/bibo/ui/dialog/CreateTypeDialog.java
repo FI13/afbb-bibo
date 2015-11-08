@@ -19,10 +19,10 @@ import org.eclipse.swt.widgets.Text;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
-import de.afbb.bibo.ui.IconType;
 import de.afbb.bibo.ui.Messages;
 
 public class CreateTypeDialog extends AbstractDialog {
@@ -65,7 +65,7 @@ public class CreateTypeDialog extends AbstractDialog {
 		final Button btnCd = new Button(iconComposite, SWT.RADIO);
 		btnCd.setText("CD");
 
-		setUpButton(btnNone, null, null);
+		setUpButton(btnNone, IconType.NONE, null);
 		setUpButton(btnBook, IconType.BOOK, IconSize.medium);
 		setUpButton(btnCd, IconType.CD, IconSize.medium);
 
@@ -80,8 +80,7 @@ public class CreateTypeDialog extends AbstractDialog {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				// FIXME imagePath wird nicht mehr übergeben, ist dies notwendig?
-				// type.setIconPath(imagePath);
+				type.setIcon(iconType);
 			}
 
 			@Override
