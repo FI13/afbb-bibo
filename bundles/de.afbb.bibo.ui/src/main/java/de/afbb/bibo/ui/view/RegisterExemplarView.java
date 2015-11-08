@@ -223,8 +223,9 @@ public class RegisterExemplarView extends AbstractEditView {
 		initTableColumns();
 		xViewer = new XViewer(bottom, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION, factory);
 		xViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-		xViewer.setContentProvider(new CopyTreeContentProvider());
-		xViewer.setLabelProvider(new CopyLabelProvider(xViewer));
+		final CopyTreeContentProvider contentProvider = new CopyTreeContentProvider();
+		xViewer.setContentProvider(contentProvider);
+		xViewer.setLabelProvider(new CopyLabelProvider(xViewer, contentProvider));
 		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
 
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
