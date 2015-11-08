@@ -23,84 +23,75 @@ import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
 
 /**
- *
  * @author fi13.pendrulat
  */
 public class StockServlet {
 
-    HttpServletRequest request;
-    HttpServletResponse response;
-    Gson gson;
-    private static final Logger log = LoggerFactory.getLogger(StockServlet.class);
+	HttpServletRequest request;
+	HttpServletResponse response;
+	Gson gson;
+	private static final Logger log = LoggerFactory.getLogger(StockServlet.class);
 
-    protected StockServlet(HttpServletRequest request, HttpServletResponse response) {
-        this.request = request;
-        this.response = response;
-        this.gson = new Gson();
-    }
+	protected StockServlet(final HttpServletRequest request, final HttpServletResponse response) {
+		this.request = request;
+		this.response = response;
+		gson = new Gson();
+	}
 
-    protected void processRequest()
-            throws Exception {
-        String stockAction = Utils.getRequestPart(request, 1);
-        log.debug("entering STOCK Servlet...");
+	protected void processRequest() throws Exception {
+		final String stockAction = Utils.getRequestPart(request, 1);
+		log.debug("entering STOCK Servlet...");
 
-        switch (stockAction) {
-            case "/addMediaType":
-                addMediaType();
-                break;
-            case "/addCopies":
-                addCopyGroup();
-                break;
-            case "/getMedium":
-                getMedium();
-                break;
-                default:
-                Utils.returnErrorMessage(StockServlet.class, request, response);
-                break;
-        }
-    }
+		switch (stockAction) {
+			case "/addMediaType":
+				addMediaType();
+				break;
+			case "/addCopies":
+				addCopyGroup();
+				break;
+			case "/getMedium":
+				getMedium();
+				break;
+			default:
+				Utils.returnErrorMessage(StockServlet.class, request, response);
+				break;
+		}
+	}
 
-    private void addMediaType() throws IOException, SQLException {
-        MediumType type = gson.fromJson(request.getReader(), MediumType.class);
-        int mediumId = DBConnector.getInstance().createMediumType(type.getName(), type.getIconPath());
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println(mediumId);
-        response.setContentType("text/plain");
-    }
+	private void addMediaType() throws IOException, SQLException {
+		final MediumType type = gson.fromJson(request.getReader(), MediumType.class);
+		final int mediumId = DBConnector.getInstance().createMediumType(type.getName(), type.getIconPath());
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.getWriter().println(mediumId);
+		response.setContentType("text/plain");
+	}
 
-    private void addCopyGroup() throws IOException, SQLException {
-        Copy[] copies = gson.fromJson(request.getReader(), Copy[].class);
-        for (Copy copy : copies) {
-            try {
-                DBConnector.getInstance().getMedium(copy.getIsbn()).getMediumId();
-            } catch (SQLException ex) {
-                //medium not found, create new
-                copy.setMediumId(
-                        DBConnector.getInstance().createMedium(
-                                copy.getIsbn(), 
-                                copy.getTitle(), 
-                                copy.getAuthor(), 
-                                copy.getLanguage(), 
-                                copy.getTypeId()
-                        )
-                );
-            }
-        }
-        int groupId = DBConnector.getInstance().createCopyGroup(copies);
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println(groupId);
-        response.setContentType("text/plain");
-    }
-    
-    private void getMedium() throws IOException, SQLException {
-        String isbn = request.getParameter("ISBN");
-        Medium medium;
-        try {
-            medium = DBConnector.getInstance().getMedium(isbn);
-            response.getWriter().println(gson.toJson(medium));
-            response.setStatus(HttpServletResponse.SC_OK);
-        } catch (SQLException ex) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        }
-    }
+	private void addCopyGroup() throws IOException, SQLException {
+		final Copy[] copies = gson.fromJson(request.getReader(), Copy[].class);
+		for (final Copy copy : copies) {
+			try {
+				DBConnector.getInstance().getMedium(copy.getIsbn()).getMediumId();
+			} catch (final SQLException ex) {
+				// medium not found, create new
+				copy.setMediumId(DBConnector.getInstance().createMedium(copy.getIsbn(), copy.getTitle(), copy.getAuthor(), copy
+						.getLanguage(), copy.getType().getId()));
+			}
+		}
+		final int groupId = DBConnector.getInstance().createCopyGroup(copies);
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.getWriter().println(groupId);
+		response.setContentType("text/plain");
+	}
+
+	private void getMedium() throws IOException, SQLException {
+		final String isbn = request.getParameter("ISBN");
+		Medium medium;
+		try {
+			medium = DBConnector.getInstance().getMedium(isbn);
+			response.getWriter().println(gson.toJson(medium));
+			response.setStatus(HttpServletResponse.SC_OK);
+		} catch (final SQLException ex) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
+	}
 }

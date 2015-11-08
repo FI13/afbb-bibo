@@ -41,9 +41,8 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 	public String getColumnText(final Object element, final XViewerColumn xCol, final int columnIndex) throws Exception {
 		final Copy copy = (Copy) element;
 		String value = "";//$NON-NLS-1$
-		if (columnIndex == 0 && copy.getTypeId() != null) {
-			// FIXME change to type name when #69 is done
-			value = copy.getTypeId().toString();
+		if (columnIndex == 0 && copy.getType() != null) {
+			value = copy.getType().getName();
 		} else if (columnIndex == 1 && copy.getBarcode() != null) {
 			value = copy.getBarcode();
 		} else if (columnIndex == 2 && copy.getIsbn() != null) {

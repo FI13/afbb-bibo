@@ -2,6 +2,9 @@ package de.afbb.bibo.share.model;
 
 import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 
+/**
+ * type of a medium
+ */
 public class MediumType extends AbstractPropertyChangeSupport implements Cloneable {
 
 	public static final String FIELD_NAME = "name";//$NON-NLS-1$
@@ -10,14 +13,27 @@ public class MediumType extends AbstractPropertyChangeSupport implements Cloneab
 	private String name;
 	private String iconPath;
 
+	/**
+	 * Constructor. creates a dummy object with invalid id
+	 */
+	public MediumType() {
+		this(-1);
+	}
+
+	/**
+	 * Constructor for an instance that has only the id field filled.
+	 *
+	 * @param id
+	 */
+	public MediumType(final int id) {
+		this(id, null, null);
+	}
+
 	public MediumType(final int id, final String name, final String iconPath) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.iconPath = iconPath;
-	}
-
-	public MediumType() {
-
 	}
 
 	public String getIconPath() {

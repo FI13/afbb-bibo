@@ -6,6 +6,9 @@ import org.eclipse.ui.IPersistableElement;
 
 import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 
+/**
+ * model class for a person that can lend a {@link Copy}
+ */
 public class Borrower extends AbstractPropertyChangeSupport implements IEditorInput, Cloneable {
 
 	private static final long serialVersionUID = -3149389839841886740L;
@@ -20,6 +23,10 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 	private String info;
 	private String email;
 	private String phoneNumber;
+
+	public Borrower(final int id) {
+		this(id, null, null, null, null, null);
+	}
 
 	public Borrower(final int id, final String forename, final String surname, final String info, final String email,
 			final String phoneNumber) {
