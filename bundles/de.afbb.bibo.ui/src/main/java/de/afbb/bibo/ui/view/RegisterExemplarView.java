@@ -168,13 +168,24 @@ public class RegisterExemplarView extends AbstractEditView {
 			final Set<Integer> purgedGroupes = new HashSet<>();
 			final Iterator<Copy> iterator = ((TreeSelection) xViewer.getSelection()).iterator();
 			while (iterator.hasNext()) {
-				final Copy next = iterator.next();
-				// TODO copy not in copies -> parent?
-				purgedGroupes.add(next.getGroupId());
-				next.setGroupId(UNASSIGNED_GROUP);
+				final Copy copy = iterator.next();
+				if (copies.contains(copy)) {
+					copy.setGroupId(UNASSIGNED_GROUP);
+				} else {
+					// copy not in copies -> parent
+					purgedGroupes.add(copy.getGroupId());
+				}
 			}
 
-			// FIXME ungroup for parent
+			// FIXME causes StackOverflowError
+			// ungroup for all children of parent
+			for (final Integer groupId : purgedGroupes) {
+				for (final Copy copy : copies) {
+					if (groupId.equals(copy.getGroupId())) {
+						copy.setGroupId(UNASSIGNED_GROUP);
+					}
+				}
+			}
 
 			checkGroups();
 			xViewer.setInput(copies);
@@ -212,6 +223,11 @@ public class RegisterExemplarView extends AbstractEditView {
 			if (Integer.valueOf(1).equals(amountLeft)) {
 				purgedGroupes.add(key);
 			}
+		}
+
+		if (purgedGroupes.isEmpty()) {
+			// nothing left to do here
+			return;
 		}
 
 		// clear group id for copies that are in list and have a group id that is in purgedGroupes
