@@ -42,7 +42,7 @@ public final class BiboImageRegistry {
 	}
 
 	private static String getPath(final IconType iconType, final IconSize iconSize) {
-		if (iconType == null || iconSize == null) {
+		if (iconType == null || iconSize == null || IconType.NONE.equals(iconType)) {
 			return null;
 		}
 
@@ -138,6 +138,8 @@ public final class BiboImageRegistry {
 				break;
 			case HELP:
 				path += "Help";
+				break;
+			default:
 				break;
 		}
 

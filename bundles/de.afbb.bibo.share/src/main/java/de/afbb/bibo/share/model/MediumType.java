@@ -26,7 +26,7 @@ public class MediumType extends AbstractPropertyChangeSupport implements Cloneab
 	 * @param id
 	 */
 	public MediumType(final int id) {
-		this(id, null, null);
+		this(id, null, IconType.NONE);
 	}
 
 	public MediumType(final int id, final String name, final IconType icon) {

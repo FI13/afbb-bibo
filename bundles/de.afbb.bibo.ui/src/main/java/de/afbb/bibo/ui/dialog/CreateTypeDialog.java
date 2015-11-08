@@ -65,7 +65,7 @@ public class CreateTypeDialog extends AbstractDialog {
 		final Button btnCd = new Button(iconComposite, SWT.RADIO);
 		btnCd.setText("CD");
 
-		setUpButton(btnNone, null, null);
+		setUpButton(btnNone, IconType.NONE, null);
 		setUpButton(btnBook, IconType.BOOK, IconSize.medium);
 		setUpButton(btnCd, IconType.CD, IconSize.medium);
 
@@ -80,8 +80,7 @@ public class CreateTypeDialog extends AbstractDialog {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				// FIXME imagePath wird nicht mehr übergeben, ist dies notwendig?
-				// type.setIconPath(imagePath);
+				type.setIcon(iconType);
 			}
 
 			@Override
