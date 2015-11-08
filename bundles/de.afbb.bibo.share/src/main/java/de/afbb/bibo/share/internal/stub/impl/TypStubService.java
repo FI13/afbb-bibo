@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.afbb.bibo.share.ITypService;
+import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.MediumType;
 
 public class TypStubService implements ITypService {
@@ -16,12 +17,12 @@ public class TypStubService implements ITypService {
 		final MediumType t1 = new MediumType();
 		t1.setId(0);
 		t1.setName("Buch");
-		t1.setIconPath("icons/16x16book2.png");
+		t1.setIcon(IconType.BOOK);
 		types.add(t1);
 		final MediumType t2 = new MediumType();
 		t2.setId(1);
 		t2.setName("CD");
-		t2.setIconPath("icons/16x16cd.png");
+		t2.setIcon(IconType.CD);
 		types.add(t2);
 	}
 
