@@ -1,5 +1,7 @@
 package de.afbb.bibo.ui.view;
 
+import java.net.ConnectException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,6 +17,7 @@ import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
 import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -30,8 +33,10 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
 import de.afbb.bibo.databinding.BindingHelper;
+import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
 import de.afbb.bibo.ui.provider.BiboXViewerFactory;
@@ -72,6 +77,7 @@ public class RegisterExemplarView extends AbstractEditView {
 	private Button btnToEdit;
 	private Button btnGroup;
 	private Button btnUngroup;
+	private CCombo comboMediumType;
 
 	private XViewer xViewer;
 	private final XViewerFactory factory = new BiboXViewerFactory(REGISTER_COPY);
@@ -86,6 +92,7 @@ public class RegisterExemplarView extends AbstractEditView {
 
 	private static final int UNASSIGNED_GROUP = -1;
 	private int highestAssignedGroup = UNASSIGNED_GROUP;
+	private Collection<MediumType> mediumTypes;
 
 	/**
 	 * listener that adds a copy to the list and clears the input fields afterwards
@@ -129,7 +136,6 @@ public class RegisterExemplarView extends AbstractEditView {
 				copyToModify.setAuthor(copy.getAuthor());
 				copyToModify.setLanguage(copy.getLanguage());
 				copyToModify.setPublisher(copy.getPublisher());
-				// FIXME doesn't work when inside group
 				copies.remove(copy);
 				checkGroups();
 				xViewer.setInput(copies);
@@ -177,7 +183,6 @@ public class RegisterExemplarView extends AbstractEditView {
 				}
 			}
 
-			// FIXME causes StackOverflowError
 			// ungroup for all children of parent
 			for (final Integer groupId : purgedGroupes) {
 				for (final Copy copy : copies) {
@@ -298,7 +303,7 @@ public class RegisterExemplarView extends AbstractEditView {
 		toolkit.createLabel(mediumGroup, PUBLISHER);
 		txtPublisher = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, "Typ");
-		toolkit.createText(mediumGroup, "Typ");
+		comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
 
 		final Composite middle = toolkit.createComposite(top, SWT.NONE);
 		middle.setLayout(new GridLayout(2, false));
@@ -400,5 +405,27 @@ public class RegisterExemplarView extends AbstractEditView {
 	@Override
 	public boolean isDirty() {
 		return !copies.isEmpty();
+	}
+
+	@Override
+	protected void additionalTasks() {
+		try {
+			setMediumTypes(ServiceLocator.getInstance().getTypService().list());
+		} catch (final ConnectException e) {
+			handle(e);
+		}
+	}
+
+	private void setMediumTypes(final Collection<MediumType> mediumTypes) {
+		this.mediumTypes = mediumTypes;
+		if (mediumTypes == null || mediumTypes.isEmpty()) {
+			comboMediumType.removeAll();
+		} else {
+			final Set<String> typeNames = new HashSet<>();
+			for (final MediumType type : mediumTypes) {
+				typeNames.add(type.getName());
+			}
+			comboMediumType.setItems(typeNames.toArray(new String[] {}));
+		}
 	}
 }

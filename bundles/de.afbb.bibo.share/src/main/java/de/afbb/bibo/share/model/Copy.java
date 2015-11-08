@@ -213,7 +213,6 @@ public class Copy extends Medium implements IEditorInput {
 		result = prime * result + (condition == null ? 0 : condition.hashCode());
 		result = prime * result + (curator == null ? 0 : curator.hashCode());
 		result = prime * result + (edition == null ? 0 : edition.hashCode());
-		result = prime * result + groupId;
 		result = prime * result + (id == null ? 0 : id.hashCode());
 		result = prime * result + (inventoryDate == null ? 0 : inventoryDate.hashCode());
 		result = prime * result + (lastBorrowDate == null ? 0 : lastBorrowDate.hashCode());
@@ -275,9 +274,6 @@ public class Copy extends Medium implements IEditorInput {
 				return false;
 			}
 		} else if (!edition.equals(other.edition)) {
-			return false;
-		}
-		if (groupId != other.groupId) {
 			return false;
 		}
 		if (id == null) {

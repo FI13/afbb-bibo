@@ -1,11 +1,15 @@
 package de.afbb.bibo.ui.view;
 
+import java.net.ConnectException;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.EditorPart;
 
@@ -46,6 +50,7 @@ abstract class AbstractEditView extends EditorPart {
 //		scrolledComposite.setExpandVertical(true);
 		initUi(parent);
 		initBinding();
+		additionalTasks();
 	}
 
 	/**
@@ -57,6 +62,31 @@ abstract class AbstractEditView extends EditorPart {
 	 * initializes the databinding for the editor
 	 */
 	protected abstract void initBinding();
+
+	/**
+	 * can be overridden by clients to perform additional tasks after UI and binding are done.<br>
+	 * default implementation does nothing
+	 */
+	protected void additionalTasks() {
+		// default implementation does nothing
+	}
+
+	/**
+	 * handles an connect exception by displaying an info dialog to the user and closing the view afterwards
+	 * 
+	 * @param e
+	 */
+	protected void handle(final ConnectException e) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Fehler",
+						"Es besteht ein Verbindungsfehler mit dem Server.\nDiese Ansicht wird sich nun schließen.");
+				getSite().getPage().closeEditor(AbstractEditView.this, false);
+			}
+		});
+	}
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
