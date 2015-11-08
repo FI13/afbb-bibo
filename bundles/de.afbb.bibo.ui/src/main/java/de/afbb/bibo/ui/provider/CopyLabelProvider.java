@@ -1,17 +1,49 @@
 package de.afbb.bibo.ui.provider;
 
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
 import org.eclipse.nebula.widgets.xviewer.XViewerLabelProvider;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 
 import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.ui.BiboImageRegistry;
+import de.afbb.bibo.ui.IconSize;
 
+/**
+ * label provider for an {@link XViewer} that displays instances of {@link Copy}
+ * 
+ * @author dbecker
+ */
 public class CopyLabelProvider extends XViewerLabelProvider {
 
+	private final ITreeContentProvider contentProvider;
+
+	/**
+	 * regular Constructor. doesn't provide highlighting of parent elements
+	 *
+	 * @param viewer
+	 *            the {@link XViewer} that is used with this label provider
+	 */
 	public CopyLabelProvider(final XViewer viewer) {
+		this(viewer, null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param viewer
+	 *            the {@link XViewer} that is used with this label provider
+	 * @param contentProvider
+	 *            the content provider for viewer. can be <code>null</code>
+	 */
+	public CopyLabelProvider(final XViewer viewer, final ITreeContentProvider contentProvider) {
 		super(viewer);
+		this.contentProvider = contentProvider;
 	}
 
 	@Override
@@ -33,6 +65,10 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 
 	@Override
 	public Image getColumnImage(final Object element, final XViewerColumn xCol, final int columnIndex) throws Exception {
+		final Copy copy = (Copy) element;
+		if (columnIndex == 0 && copy.getType() != null) {
+			return BiboImageRegistry.getImage(copy.getType().getIcon(), IconSize.small);
+		}
 		return null;
 	}
 
@@ -56,6 +92,15 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 			value = copy.getEdition();
 		}
 		return value;
+	}
+
+	@Override
+	public Color getBackground(final Object element, final int columnIndex) {
+		// darken the background for parent elements
+		if (contentProvider != null && contentProvider.hasChildren(element)) {
+			return Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
+		}
+		return null;
 	}
 
 }

@@ -121,6 +121,7 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 		return forename + " " + surname;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -134,6 +135,7 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 		return result;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
@@ -142,7 +144,7 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
+		if (!(obj instanceof Borrower)) {
 			return false;
 		}
 		final Borrower other = (Borrower) obj;

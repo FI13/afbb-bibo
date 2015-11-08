@@ -10,6 +10,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.share.model.MediumType;
 
 /**
  * content provider for {@link Copy} in a tree viewer.
@@ -22,6 +24,11 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 	private final HashMap<Integer, Set<Copy>> groupedCopies = new HashMap<>();
 	private final Set<Copy> input = new HashSet<>();
 	private final HashMap<Integer, Copy> dummies = new HashMap<>();
+
+	/**
+	 * type for groups
+	 */
+	private static final MediumType GROUP_TYPE = new MediumType(-1, "Gruppe", IconType.MEDIA);
 
 	@Override
 	public void dispose() {
@@ -36,7 +43,6 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 		input.clear();
 		if (newInput != null && newInput instanceof Collection<?>) {
 			final Collection<? extends Copy> castInput = (Collection<? extends Copy>) newInput;
-			input.addAll(castInput);
 			// avoid allocation inside loop
 			int groupId = -1;
 			final Iterator<? extends Copy> iterator = castInput.iterator();
@@ -48,16 +54,21 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 					final Set<Copy> group = groupedCopies.containsKey(groupId) ? groupedCopies.get(groupId) : new HashSet<Copy>();
 					group.add(next);
 					groupedCopies.put(Integer.valueOf(groupId), group);
+				} else {
+					// add to normal input list when not belonging to group
+					input.add(next);
 				}
 			}
 		}
-		// add dummy objects for each group
+		// add dummy objects for each group, and add this dummy to regular input list
 		final Iterator<Integer> iterator = groupedCopies.keySet().iterator();
 		while (iterator.hasNext()) {
 			final Integer next = iterator.next();
 			final Copy dummy = new Copy();
 			dummy.setGroupId(next);
+			dummy.setType(GROUP_TYPE);
 			dummies.put(next, dummy);
+			input.add(dummy);
 		}
 	}
 

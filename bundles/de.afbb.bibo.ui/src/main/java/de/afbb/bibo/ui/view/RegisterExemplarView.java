@@ -1,9 +1,15 @@
 package de.afbb.bibo.ui.view;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
@@ -39,9 +45,9 @@ import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
  */
 public class RegisterExemplarView extends AbstractEditView {
 
+	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String DOT = ".";//$NON-NLS-1$
 	private static final String REGISTER_COPY = "register.copy";//$NON-NLS-1$
-	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String TYPE = "Typ";
 	private static final String BARCODE = "Barcode";
 	private static final String ISBN = "ISBN";//$NON-NLS-1$
@@ -53,6 +59,7 @@ public class RegisterExemplarView extends AbstractEditView {
 
 	private final Set<Copy> copies = new HashSet<Copy>();
 	private final Copy copyToModify = new Copy();
+
 	private Group idGroup;
 	private Text txtBarcode;
 	private Text txtIsbn;
@@ -61,6 +68,10 @@ public class RegisterExemplarView extends AbstractEditView {
 	private Text txtAuthor;
 	private Text txtLanguage;
 	private Text txtPublisher;
+	private Button btnToList;
+	private Button btnToEdit;
+	private Button btnGroup;
+	private Button btnUngroup;
 
 	private XViewer xViewer;
 	private final XViewerFactory factory = new BiboXViewerFactory(REGISTER_COPY);
@@ -73,35 +84,186 @@ public class RegisterExemplarView extends AbstractEditView {
 	private XViewerColumn columnLanguage;
 	private XViewerColumn columnEdition;
 
+	private static final int UNASSIGNED_GROUP = -1;
+	private int highestAssignedGroup = UNASSIGNED_GROUP;
+
+	/**
+	 * listener that adds a copy to the list and clears the input fields afterwards
+	 */
 	Listener toListListener = new Listener() {
 
 		@Override
 		public void handleEvent(final Event event) {
 			final Copy clone = (Copy) copyToModify.clone();
 			copies.add(clone);
-			copyToModify.setBarcode("");
-			copyToModify.setIsbn("");
-			copyToModify.setEdition("");
-			copyToModify.setTitle("");
-			copyToModify.setAuthor("");
-			copyToModify.setLanguage("");
-			copyToModify.setPublisher("");
+			copyToModify.setBarcode(EMPTY_STRING);
+			copyToModify.setIsbn(EMPTY_STRING);
+			copyToModify.setEdition(EMPTY_STRING);
+			copyToModify.setTitle(EMPTY_STRING);
+			copyToModify.setAuthor(EMPTY_STRING);
+			copyToModify.setLanguage(EMPTY_STRING);
+			copyToModify.setPublisher(EMPTY_STRING);
 			xViewer.setInput(copies);
 			bindingContext.updateTargets();
+			txtBarcode.setFocus();
 		}
 	};
+
+	/**
+	 * listener that removes the selected item from the list and fills the input fields with its values
+	 */
 	Listener toEditListener = new Listener() {
 
 		@Override
 		public void handleEvent(final Event event) {
-			System.err.println("to edit");
+			// FIXME hack, should be solved be resetting the selection in viewer instead
+			btnToEdit.setEnabled(false);
+			btnUngroup.setEnabled(false);
+			final TreePath[] paths = ((TreeSelection) xViewer.getSelection()).getPaths();
+			if (paths.length > 0) {
+				final Copy copy = (Copy) paths[0].getLastSegment();
+				copyToModify.setBarcode(copy.getBarcode());
+				copyToModify.setIsbn(copy.getIsbn());
+				copyToModify.setEdition(copy.getEdition());
+				copyToModify.setTitle(copy.getTitle());
+				copyToModify.setAuthor(copy.getAuthor());
+				copyToModify.setLanguage(copy.getLanguage());
+				copyToModify.setPublisher(copy.getPublisher());
+				// FIXME doesn't work when inside group
+				copies.remove(copy);
+				checkGroups();
+				xViewer.setInput(copies);
+				bindingContext.updateTargets();
+			}
 		}
 	};
+
+	/**
+	 * listener that groups the selected items to one group
+	 */
+	Listener groupListener = new Listener() {
+
+		@Override
+		public void handleEvent(final Event event) {
+			highestAssignedGroup++;
+			final Iterator<Copy> iterator = ((TreeSelection) xViewer.getSelection()).iterator();
+			while (iterator.hasNext()) {
+				final Copy next = iterator.next();
+				next.setGroupId(highestAssignedGroup);
+			}
+			xViewer.setInput(copies);
+		}
+	};
+
+	/**
+	 * listener that resets the group of the selected items
+	 */
+	Listener ungroupListener = new Listener() {
+
+		@Override
+		public void handleEvent(final Event event) {
+			/*
+			 * set groupId to UNASSIGNED_GROUP for selection
+			 */
+			final Set<Integer> purgedGroupes = new HashSet<>();
+			final Iterator<Copy> iterator = ((TreeSelection) xViewer.getSelection()).iterator();
+			while (iterator.hasNext()) {
+				final Copy copy = iterator.next();
+				if (copies.contains(copy)) {
+					copy.setGroupId(UNASSIGNED_GROUP);
+				} else {
+					// copy not in copies -> parent
+					purgedGroupes.add(copy.getGroupId());
+				}
+			}
+
+			// FIXME causes StackOverflowError
+			// ungroup for all children of parent
+			for (final Integer groupId : purgedGroupes) {
+				for (final Copy copy : copies) {
+					if (groupId.equals(copy.getGroupId())) {
+						copy.setGroupId(UNASSIGNED_GROUP);
+					}
+				}
+			}
+
+			checkGroups();
+			xViewer.setInput(copies);
+		}
+	};
+
+	/**
+	 * checks that there are no groups with only one member left. will reset group information on those copies
+	 */
+	private void checkGroups() {
+		/*
+		 * Map<groupId, amount>
+		 */
+		final Map<Integer, Integer> leftItems = new HashMap<>();
+
+		// calculate the amount of copies that are left for each group id
+		int groupId;
+		for (final Copy copy : copies) {
+			groupId = copy.getGroupId();
+			if (UNASSIGNED_GROUP != groupId) {
+				if (leftItems.containsKey(groupId)) {
+					leftItems.put(groupId, leftItems.get(groupId) + 1);
+				} else {
+					leftItems.put(groupId, 1);
+				}
+			}
+		}
+
+		// check which group id has only one item left
+		final Set<Integer> purgedGroupes = new HashSet<>();
+		final Iterator<Integer> it = leftItems.keySet().iterator();
+		while (it.hasNext()) {
+			final Integer key = it.next();
+			final Integer amountLeft = leftItems.get(key);
+			if (Integer.valueOf(1).equals(amountLeft)) {
+				purgedGroupes.add(key);
+			}
+		}
+
+		if (purgedGroupes.isEmpty()) {
+			// nothing left to do here
+			return;
+		}
+
+		// clear group id for copies that are in list and have a group id that is in purgedGroupes
+		for (final Copy copy : copies) {
+			if (purgedGroupes.contains(copy.getGroupId())) {
+				copy.setGroupId(UNASSIGNED_GROUP);
+			}
+		}
+
+	}
+
+	/**
+	 * listener that reacts when the selection changes and enables & disables control buttons
+	 */
 	SelectionListener xViewerSelectionListener = new SelectionListener() {
 
 		@Override
 		public void widgetSelected(final SelectionEvent e) {
-			System.err.println(xViewer.getSelection());
+			final ISelection selection = xViewer.getSelection();
+			if (selection instanceof TreeSelection) {
+				final boolean singleSelection = ((TreeSelection) selection).size() == 1;
+
+				// check if any item on the selection is grouped
+				boolean grouped = false;
+				final Iterator<Copy> iterator = ((TreeSelection) selection).iterator();
+				while (iterator.hasNext()) {
+					final Copy next = iterator.next();
+					if (next.getGroupId() > UNASSIGNED_GROUP) {
+						grouped = true;
+						break;
+					}
+				}
+				btnToEdit.setEnabled(singleSelection);
+				btnGroup.setEnabled(!singleSelection && !grouped);
+				btnUngroup.setEnabled(singleSelection && grouped);
+			}
 		}
 
 		@Override
@@ -119,33 +281,29 @@ public class RegisterExemplarView extends AbstractEditView {
 		idGroup = createGroup(top, "Nummer");
 		idGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(idGroup, BARCODE);
-		txtBarcode = toolkit.createText(idGroup, "");
+		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING);
 		toolkit.createLabel(idGroup, ISBN);
-		txtIsbn = toolkit.createText(idGroup, "");
+		txtIsbn = toolkit.createText(idGroup, EMPTY_STRING);
 		toolkit.createLabel(idGroup, EDITION);
-		txtEdition = toolkit.createText(idGroup, "");
+		txtEdition = toolkit.createText(idGroup, EMPTY_STRING);
 
 		final Group mediumGroup = createGroup(top, "Informationen");
 		mediumGroup.setLayout(new GridLayout(4, false));
 		toolkit.createLabel(mediumGroup, TITLE);
-		txtTitle = toolkit.createText(mediumGroup, "");
+		txtTitle = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, AUTHOR);
-		txtAuthor = toolkit.createText(mediumGroup, "");
+		txtAuthor = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, LANGUAGE);
-		txtLanguage = toolkit.createText(mediumGroup, "");
+		txtLanguage = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, PUBLISHER);
-		txtPublisher = toolkit.createText(mediumGroup, "");
+		txtPublisher = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, "Typ");
 		toolkit.createText(mediumGroup, "Typ");
 
 		final Composite middle = toolkit.createComposite(top, SWT.NONE);
 		middle.setLayout(new GridLayout(2, false));
-		final Button btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
-		btnToList.setImage(BiboImageRegistry.getImage(IconType.ARROW_DOWN, IconSize.small));
-		btnToList.addListener(SWT.MouseDown, toListListener);
-		final Button btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
-		btnToEdit.setImage(BiboImageRegistry.getImage(IconType.ARROW_UP, IconSize.small));
-		btnToEdit.addListener(SWT.MouseDown, toEditListener);
+		btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
+		btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
 
 		final Composite bottom = toolkit.createComposite(top, SWT.NONE);
 		bottom.setLayout(new GridLayout(2, false));
@@ -156,22 +314,38 @@ public class RegisterExemplarView extends AbstractEditView {
 		initTableColumns();
 		xViewer = new XViewer(bottom, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION, factory);
 		xViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-		xViewer.setContentProvider(new CopyTreeContentProvider());
-		xViewer.setLabelProvider(new CopyLabelProvider(xViewer));
+		final CopyTreeContentProvider contentProvider = new CopyTreeContentProvider();
+		xViewer.setContentProvider(contentProvider);
+		xViewer.setLabelProvider(new CopyLabelProvider(xViewer, contentProvider));
 		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
 
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
 		buttonComposite.setLayout(new GridLayout());
-		final Button btnGroup = toolkit.createButton(buttonComposite, "Medien Gruppieren", SWT.TOP);
-		btnGroup.setImage(BiboImageRegistry.getImage(IconType.PLUS, IconSize.small));
-		final Button btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung Lösen", SWT.TOP);
-		btnUngroup.setImage(BiboImageRegistry.getImage(IconType.MINUS, IconSize.small));
+		btnGroup = toolkit.createButton(buttonComposite, "Medien Gruppieren", SWT.TOP);
+		btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung Lösen", SWT.TOP);
 
 		GridDataFactory.fillDefaults().applyTo(idGroup);
 		GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
 		GridDataFactory.fillDefaults().applyTo(mediumGroup);
 		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(bottom);
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).applyTo(buttonComposite);
+
+		// set button images
+		btnToList.setImage(BiboImageRegistry.getImage(IconType.ARROW_DOWN, IconSize.small));
+		btnToEdit.setImage(BiboImageRegistry.getImage(IconType.ARROW_UP, IconSize.small));
+		btnGroup.setImage(BiboImageRegistry.getImage(IconType.PLUS, IconSize.small));
+		btnUngroup.setImage(BiboImageRegistry.getImage(IconType.MINUS, IconSize.small));
+
+		// add listener to buttons
+		btnToList.addListener(SWT.MouseDown, toListListener);
+		btnToEdit.addListener(SWT.MouseDown, toEditListener);
+		btnGroup.addListener(SWT.MouseDown, groupListener);
+		btnUngroup.addListener(SWT.MouseDown, ungroupListener);
+
+		// disable buttons
+		btnToEdit.setEnabled(false);
+		btnGroup.setEnabled(false);
+		btnUngroup.setEnabled(false);
 	}
 
 	@Override
@@ -207,7 +381,7 @@ public class RegisterExemplarView extends AbstractEditView {
 	}
 
 	private void initTableColumns() {
-		columnType = new XViewerColumn(REGISTER_COPY + DOT + TYPE, TYPE, 50, SWT.LEFT, true, SortDataType.String, false, "Typ des Mediums");
+		columnType = new XViewerColumn(REGISTER_COPY + DOT + TYPE, TYPE, 90, SWT.LEFT, true, SortDataType.String, false, "Typ des Mediums");
 		columnBarcode = new XViewerColumn(REGISTER_COPY + DOT + BARCODE, BARCODE, 80, SWT.LEFT, true, SortDataType.Integer, false,
 				"Barcode des Mediums");
 		columnIsbn = new XViewerColumn(REGISTER_COPY + DOT + ISBN, ISBN, 80, SWT.LEFT, true, SortDataType.Integer, false,
@@ -221,6 +395,10 @@ public class RegisterExemplarView extends AbstractEditView {
 		columnEdition = new XViewerColumn(REGISTER_COPY + DOT + EDITION, EDITION, 150, SWT.LEFT, true, SortDataType.String, false, EDITION);
 		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher, columnLanguage,
 				columnEdition);
+	}
 
+	@Override
+	public boolean isDirty() {
+		return !copies.isEmpty();
 	}
 }
