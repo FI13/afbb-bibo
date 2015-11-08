@@ -50,6 +50,7 @@ abstract class AbstractEditView extends EditorPart {
 //		scrolledComposite.setExpandVertical(true);
 		initUi(parent);
 		initBinding();
+		additionalTasks();
 	}
 
 	/**
@@ -61,6 +62,14 @@ abstract class AbstractEditView extends EditorPart {
 	 * initializes the databinding for the editor
 	 */
 	protected abstract void initBinding();
+
+	/**
+	 * can be overridden by clients to perform additional tasks after UI and binding are done.<br>
+	 * default implementation does nothing
+	 */
+	protected void additionalTasks() {
+		// default implementation does nothing
+	}
 
 	/**
 	 * handles an connect exception by displaying an info dialog to the user and closing the view afterwards
