@@ -28,7 +28,7 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 	/**
 	 * type for groups
 	 */
-	private static final MediumType groupType = new MediumType(-1, "Gruppe", IconType.MEDIA);
+	private static final MediumType GROUP_TYPE = new MediumType(-1, "Gruppe", IconType.MEDIA);
 
 	@Override
 	public void dispose() {
@@ -66,7 +66,7 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 			final Integer next = iterator.next();
 			final Copy dummy = new Copy();
 			dummy.setGroupId(next);
-			dummy.setType(groupType);
+			dummy.setType(GROUP_TYPE);
 			dummies.put(next, dummy);
 			input.add(dummy);
 		}

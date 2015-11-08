@@ -82,7 +82,8 @@ public class RegisterExemplarView extends AbstractEditView {
 	private XViewerColumn columnLanguage;
 	private XViewerColumn columnEdition;
 
-	private int highestAssignedGroup = -1;
+	private static final int UNASSIGNED_GROUP = -1;
+	private int highestAssignedGroup = UNASSIGNED_GROUP;
 
 	/**
 	 * listener that adds a copy to the list and clears the input fields afterwards
@@ -168,10 +169,21 @@ public class RegisterExemplarView extends AbstractEditView {
 		public void widgetSelected(final SelectionEvent e) {
 			final ISelection selection = xViewer.getSelection();
 			if (selection instanceof TreeSelection) {
-				final boolean singleSelection = ((TreeSelection) selection).getPaths().length == 1;
+				final boolean singleSelection = ((TreeSelection) selection).size() == 1;
+
+				// check if any item on the selection is grouped
+				boolean grouped = false;
+				final Iterator<Copy> iterator = ((TreeSelection) selection).iterator();
+				while (iterator.hasNext()) {
+					final Copy next = iterator.next();
+					if (next.getGroupId() > UNASSIGNED_GROUP) {
+						grouped = true;
+						break;
+					}
+				}
 				btnToEdit.setEnabled(singleSelection);
-				btnGroup.setEnabled(!singleSelection);
-				btnUngroup.setEnabled(!singleSelection);
+				btnGroup.setEnabled(!singleSelection && !grouped);
+				btnUngroup.setEnabled(singleSelection && grouped);
 			}
 		}
 
