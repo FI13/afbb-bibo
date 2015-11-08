@@ -129,7 +129,6 @@ public class RegisterExemplarView extends AbstractEditView {
 				copyToModify.setAuthor(copy.getAuthor());
 				copyToModify.setLanguage(copy.getLanguage());
 				copyToModify.setPublisher(copy.getPublisher());
-				// FIXME doesn't work when inside group
 				copies.remove(copy);
 				checkGroups();
 				xViewer.setInput(copies);
