@@ -33,6 +33,7 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 
 	@Override
 	public Image getColumnImage(final Object element, final XViewerColumn xCol, final int columnIndex) throws Exception {
+		// FIXME change to type icon when #69 is done
 		return null;
 	}
 
@@ -41,6 +42,7 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 		final Copy copy = (Copy) element;
 		String value = "";//$NON-NLS-1$
 		if (columnIndex == 0 && copy.getTypeId() != null) {
+			// FIXME change to type name when #69 is done
 			value = copy.getTypeId().toString();
 		} else if (columnIndex == 1 && copy.getBarcode() != null) {
 			value = copy.getBarcode();
