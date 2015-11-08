@@ -25,16 +25,16 @@ public class Copy extends Medium implements IEditorInput, Cloneable {
 	private String condition;
 	private Date borrowDate;
 	private Date lastBorrowDate;
-	private int curatorId = -1;
-	private int lastCuratorId = -1;
-	private int borrowerId = -1;
-	private int lastBorrowerId = -1;
+	private Curator curator;
+	private Curator lastCurator;
+	private Borrower borrower;
+	private Borrower lastBorrower;
 	private int groupId = -1;
 
 	public Copy(final int id, final String edition, final String barcode, final Date date, final String condition, final Date date2,
-			final Date date3, final int groupId, final int borrowerId, final int lastBorrowerId, final int curatorId,
-			final int lastCuratorId, final int mediumId, final String isbn, final String title, final String author, final String language,
-			final int typeId, final String publisher) {
+			final Date date3, final int groupId, final Borrower borrower, final Borrower lastBorrower, final Curator curator,
+			final Curator lastCurator, final int mediumId, final String isbn, final String title, final String author,
+			final String language, final int typeId, final String publisher) {
 		super(mediumId, isbn, title, author, language, typeId, publisher);
 		this.id = id;
 		this.edition = edition;
@@ -44,10 +44,10 @@ public class Copy extends Medium implements IEditorInput, Cloneable {
 		borrowDate = date2;
 		lastBorrowDate = date3;
 		this.groupId = groupId;
-		this.borrowerId = borrowerId;
-		this.lastBorrowerId = lastBorrowerId;
-		this.curatorId = curatorId;
-		this.lastCuratorId = lastCuratorId;
+		this.borrower = borrower;
+		this.lastBorrower = lastBorrower;
+		this.curator = curator;
+		this.lastCurator = lastCurator;
 	}
 
 	public Copy() {
@@ -112,36 +112,41 @@ public class Copy extends Medium implements IEditorInput, Cloneable {
 		changeSupport.firePropertyChange(FIELD_DATE_LAST_BORROW, this.lastBorrowDate, this.lastBorrowDate = lastBorrowDate);
 	}
 
-	public int getCuratorId() {
-		return curatorId;
+	@Override
+	public Object clone() {
+		return super.clone();
 	}
 
-	public void setCuratorId(final int curatorId) {
-		this.curatorId = curatorId;
+	public Curator getCurator() {
+		return curator;
 	}
 
-	public int getLastCuratorId() {
-		return lastCuratorId;
+	public void setCurator(final Curator curator) {
+		this.curator = curator;
 	}
 
-	public void setLastCuratorId(final int lastCuratorId) {
-		this.lastCuratorId = lastCuratorId;
+	public Curator getLastCurator() {
+		return lastCurator;
 	}
 
-	public int getBorrowerId() {
-		return borrowerId;
+	public void setLastCurator(final Curator lastCurator) {
+		this.lastCurator = lastCurator;
 	}
 
-	public void setBorrowerId(final int borrowerId) {
-		this.borrowerId = borrowerId;
+	public Borrower getBorrower() {
+		return borrower;
 	}
 
-	public int getLastBorrowerId() {
-		return lastBorrowerId;
+	public void setBorrower(final Borrower borrower) {
+		this.borrower = borrower;
 	}
 
-	public void setLastBorrowerId(final int lastBorrowerId) {
-		this.lastBorrowerId = lastBorrowerId;
+	public Borrower getLastBorrower() {
+		return lastBorrower;
+	}
+
+	public void setLastBorrower(final Borrower lastBorrower) {
+		this.lastBorrower = lastBorrower;
 	}
 
 	public int getGroupId() {
@@ -183,21 +188,28 @@ public class Copy extends Medium implements IEditorInput, Cloneable {
 	}
 
 	@Override
+	public String toString() {
+		return "Copy{" + "id=" + id + ", edition=" + edition + ", barcode=" + barcode + ", inventoryDate=" + inventoryDate + ", condition="
+				+ condition + ", borrowDate=" + borrowDate + ", lastBorrowDate=" + lastBorrowDate + ", groupId=" + groupId + ", borrowerId="
+				+ borrower + ", lastBorrowerId=" + lastBorrower + ", curator=" + curator + ", lastCurator=" + lastCurator + '}';
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + (barcode == null ? 0 : barcode.hashCode());
 		result = prime * result + (borrowDate == null ? 0 : borrowDate.hashCode());
-		result = prime * result + borrowerId;
+		result = prime * result + (borrower == null ? 0 : borrower.hashCode());
 		result = prime * result + (condition == null ? 0 : condition.hashCode());
-		result = prime * result + curatorId;
+		result = prime * result + (curator == null ? 0 : curator.hashCode());
 		result = prime * result + (edition == null ? 0 : edition.hashCode());
 		result = prime * result + groupId;
 		result = prime * result + (id == null ? 0 : id.hashCode());
 		result = prime * result + (inventoryDate == null ? 0 : inventoryDate.hashCode());
 		result = prime * result + (lastBorrowDate == null ? 0 : lastBorrowDate.hashCode());
-		result = prime * result + lastBorrowerId;
-		result = prime * result + lastCuratorId;
+		result = prime * result + (lastBorrower == null ? 0 : lastBorrower.hashCode());
+		result = prime * result + (lastCurator == null ? 0 : lastCurator.hashCode());
 		return result;
 	}
 
@@ -227,7 +239,11 @@ public class Copy extends Medium implements IEditorInput, Cloneable {
 		} else if (!borrowDate.equals(other.borrowDate)) {
 			return false;
 		}
-		if (borrowerId != other.borrowerId) {
+		if (borrower == null) {
+			if (other.borrower != null) {
+				return false;
+			}
+		} else if (!borrower.equals(other.borrower)) {
 			return false;
 		}
 		if (condition == null) {
@@ -237,7 +253,11 @@ public class Copy extends Medium implements IEditorInput, Cloneable {
 		} else if (!condition.equals(other.condition)) {
 			return false;
 		}
-		if (curatorId != other.curatorId) {
+		if (curator == null) {
+			if (other.curator != null) {
+				return false;
+			}
+		} else if (!curator.equals(other.curator)) {
 			return false;
 		}
 		if (edition == null) {
@@ -271,24 +291,20 @@ public class Copy extends Medium implements IEditorInput, Cloneable {
 		} else if (!lastBorrowDate.equals(other.lastBorrowDate)) {
 			return false;
 		}
-		if (lastBorrowerId != other.lastBorrowerId) {
+		if (lastBorrower == null) {
+			if (other.lastBorrower != null) {
+				return false;
+			}
+		} else if (!lastBorrower.equals(other.lastBorrower)) {
 			return false;
 		}
-		if (lastCuratorId != other.lastCuratorId) {
+		if (lastCurator == null) {
+			if (other.lastCurator != null) {
+				return false;
+			}
+		} else if (!lastCurator.equals(other.lastCurator)) {
 			return false;
 		}
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Copy{" + "id=" + id + ", edition=" + edition + ", barcode=" + barcode + ", inventoryDate=" + inventoryDate + ", condition="
-				+ condition + ", borrowDate=" + borrowDate + ", lastBorrowDate=" + lastBorrowDate + ", groupId=" + groupId + ", borrowerId="
-				+ borrowerId + ", lastBorrowerId=" + lastBorrowerId + ", curatorId=" + curatorId + ", lastCuratorId=" + lastCuratorId + '}';
-	}
-
-	@Override
-	public Object clone() {
-		return super.clone();
 	}
 }
