@@ -6,9 +6,9 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import de.afbb.bibo.share.impl.NavigationTreeViewNode;
+import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
-import de.afbb.bibo.ui.IconType;
 
 public class NavigationTreeViewLabelProvider extends LabelProvider {
 

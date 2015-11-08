@@ -7,6 +7,8 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Image;
 
+import de.afbb.bibo.share.model.IconType;
+
 /**
  * singleton to manage images
  * 
@@ -40,7 +42,7 @@ public final class BiboImageRegistry {
 	}
 
 	private static String getPath(final IconType iconType, final IconSize iconSize) {
-		if (iconType == null || iconSize == null) {
+		if (iconType == null || iconSize == null || IconType.NONE.equals(iconType)) {
 			return null;
 		}
 
@@ -136,6 +138,8 @@ public final class BiboImageRegistry {
 				break;
 			case HELP:
 				path += "Help";
+				break;
+			default:
 				break;
 		}
 
