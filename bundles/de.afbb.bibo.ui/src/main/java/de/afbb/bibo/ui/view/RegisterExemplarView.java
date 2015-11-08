@@ -1,6 +1,7 @@
 package de.afbb.bibo.ui.view;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
@@ -81,6 +82,8 @@ public class RegisterExemplarView extends AbstractEditView {
 	private XViewerColumn columnLanguage;
 	private XViewerColumn columnEdition;
 
+	private int highestAssignedGroup = -1;
+
 	/**
 	 * listener that adds a copy to the list and clears the input fields afterwards
 	 */
@@ -136,6 +139,13 @@ public class RegisterExemplarView extends AbstractEditView {
 
 		@Override
 		public void handleEvent(final Event event) {
+			highestAssignedGroup++;
+			final Iterator<Copy> iterator = ((TreeSelection) xViewer.getSelection()).iterator();
+			while (iterator.hasNext()) {
+				final Copy next = iterator.next();
+				next.setGroupId(highestAssignedGroup);
+			}
+			xViewer.setInput(copies);
 		}
 	};
 
