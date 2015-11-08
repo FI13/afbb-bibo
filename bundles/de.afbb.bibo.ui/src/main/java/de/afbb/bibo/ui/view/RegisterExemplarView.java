@@ -1,7 +1,9 @@
 package de.afbb.bibo.ui.view;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
@@ -157,6 +159,57 @@ public class RegisterExemplarView extends AbstractEditView {
 
 		@Override
 		public void handleEvent(final Event event) {
+			/*
+			 * set groupId to UNASSIGNED_GROUP for selection
+			 */
+			final Set<Integer> purgedGroupes = new HashSet<>();
+			final Iterator<Copy> iterator = ((TreeSelection) xViewer.getSelection()).iterator();
+			while (iterator.hasNext()) {
+				final Copy next = iterator.next();
+				purgedGroupes.add(next.getGroupId());
+				next.setGroupId(UNASSIGNED_GROUP);
+			}
+
+			// FIXME ungroup for parent
+
+			/*
+			 * check if there are groups left with only one member -> clear those as well
+			 */
+			// leftItems maps the group id and the amount of copies that are left with this id
+			final Map<Integer, Integer> leftItems = new HashMap<>();
+			for (final Integer i : purgedGroupes) {
+				leftItems.put(i, 0);
+			}
+
+			// calculate the amount of copies that are left for each group id. cache items for later reuse
+			final Set<Copy> possiblePurges = new HashSet<>();
+			int groupId = UNASSIGNED_GROUP;
+			for (final Copy copy : copies) {
+				groupId = copy.getGroupId();
+				if (leftItems.containsKey(groupId)) {
+					leftItems.put(groupId, leftItems.get(groupId) + 1);
+					possiblePurges.add(copy);
+				}
+			}
+
+			// check which group id has only one item left
+			purgedGroupes.clear();
+			final Iterator<Integer> iteratorGroup = leftItems.keySet().iterator();
+			while (iteratorGroup.hasNext()) {
+				final Integer key = iteratorGroup.next();
+				final Integer amountLeft = leftItems.get(key);
+				if (Integer.valueOf(1).equals(amountLeft)) {
+					purgedGroupes.add(key);
+				}
+			}
+
+			// clear group id for copies that are in list and have a group id that is in purgedGroupes
+			for (final Copy copy : possiblePurges) {
+				if (purgedGroupes.contains(copy.getGroupId())) {
+					copy.setGroupId(UNASSIGNED_GROUP);
+				}
+			}
+			xViewer.setInput(copies);
 		}
 	};
 
