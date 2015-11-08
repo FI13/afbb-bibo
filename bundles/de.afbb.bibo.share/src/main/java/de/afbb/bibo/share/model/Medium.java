@@ -16,22 +16,21 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 	private String title;
 	private String author;
 	private String language;
-	private Integer typeId;
+	private MediumType type;
 	private String publisher;
 
-	public Medium(final int id, final String isbn, final String title, final String author, final String language, final int typeId,
+	public Medium() {
+	}
+
+	public Medium(final int id, final String isbn, final String title, final String author, final String language, final MediumType type,
 			final String publisher) {
 		this.id = id;
 		this.isbn = isbn;
 		this.title = title;
 		this.author = author;
 		this.language = language;
-		this.typeId = typeId;
+		this.type = type;
 		this.publisher = publisher;
-	}
-
-	public Medium() {
-
 	}
 
 	public String getTitle() {
@@ -42,12 +41,12 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 		changeSupport.firePropertyChange(FIELD_TITLE, this.title, this.title = title);
 	}
 
-	public Integer getTypeId() {
-		return typeId;
+	public MediumType getType() {
+		return type;
 	}
 
-	public void setTypeId(final Integer typId) {
-		changeSupport.firePropertyChange(FIELD_TYP_ID, typeId, typeId = typId);
+	public void setType(final MediumType type) {
+		this.type = type;
 	}
 
 	public String getPublisher() {
@@ -100,7 +99,7 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 		result = prime * result + (language == null ? 0 : language.hashCode());
 		result = prime * result + (publisher == null ? 0 : publisher.hashCode());
 		result = prime * result + (title == null ? 0 : title.hashCode());
-		result = prime * result + (typeId == null ? 0 : typeId.hashCode());
+		result = prime * result + (type == null ? 0 : type.hashCode());
 		return result;
 	}
 
@@ -112,7 +111,7 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
+		if (!(obj instanceof Medium)) {
 			return false;
 		}
 		final Medium other = (Medium) obj;
@@ -158,11 +157,11 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 		} else if (!title.equals(other.title)) {
 			return false;
 		}
-		if (typeId == null) {
-			if (other.typeId != null) {
+		if (type == null) {
+			if (other.type != null) {
 				return false;
 			}
-		} else if (!typeId.equals(other.typeId)) {
+		} else if (!type.equals(other.type)) {
 			return false;
 		}
 		return true;
@@ -170,8 +169,8 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "Medium{" + "id=" + id + ", isbn=" + isbn + ", title=" + title + ", author=" + author + ", language=" + language
-				+ ", typeId=" + typeId + ", publisher=" + publisher + '}';
+		return "Medium{" + "id=" + id + ", isbn=" + isbn + ", title=" + title + ", author=" + author + ", language=" + language + ", type="
+				+ type + ", publisher=" + publisher + '}';
 	}
 
 	@Override

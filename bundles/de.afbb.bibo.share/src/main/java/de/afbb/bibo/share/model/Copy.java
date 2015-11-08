@@ -34,8 +34,8 @@ public class Copy extends Medium implements IEditorInput, Cloneable {
 	public Copy(final int id, final String edition, final String barcode, final Date date, final String condition, final Date date2,
 			final Date date3, final int groupId, final Borrower borrower, final Borrower lastBorrower, final Curator curator,
 			final Curator lastCurator, final int mediumId, final String isbn, final String title, final String author,
-			final String language, final int typeId, final String publisher) {
-		super(mediumId, isbn, title, author, language, typeId, publisher);
+			final String language, final MediumType type, final String publisher) {
+		super(mediumId, isbn, title, author, language, type, publisher);
 		this.id = id;
 		this.edition = edition;
 		this.barcode = barcode;

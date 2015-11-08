@@ -196,7 +196,7 @@ public class DBConnector {
 					+ Config.DATABASE_NAME + ".medium where ISBN='" + isbn + "'")) {
 				mediaSet.first();
 				return new Medium(mediaSet.getInt(2), mediaSet.getString(3), mediaSet.getString(4), mediaSet.getString(5), mediaSet
-						.getString(6), mediaSet.getInt(1), mediaSet.getString(7));
+						.getString(6), new MediumType(mediaSet.getInt(1)), mediaSet.getString(7));
 
 			}
 		}
@@ -210,7 +210,7 @@ public class DBConnector {
 					+ Config.DATABASE_NAME + ".medium")) {
 				while (mediaSet.next()) {
 					result.add(new Medium(mediaSet.getInt(2), mediaSet.getString(3), mediaSet.getString(4), mediaSet.getString(5), mediaSet
-							.getString(6), mediaSet.getInt(1), mediaSet.getString(7)));
+							.getString(6), new MediumType(mediaSet.getInt(1)), mediaSet.getString(7)));
 				}
 			}
 		}
@@ -298,7 +298,7 @@ public class DBConnector {
 						final String publisher = mediaSet.getString(6);
 						final Copy copy = new Copy(copyId, edition, barcode, inventorised, condition, borrowDate, lastBorrowDate, groupId,
 								new Borrower(borrowerId), new Borrower(lastBorrowerId), new Curator(curatorId), new Curator(lastCuratorId),
-								mediaId, isbn, title, author, language, typeId, publisher);
+								mediaId, isbn, title, author, language, new MediumType(typeId), publisher);
 						if (!result.containsKey(groupId)) {
 							result.put(groupId, new ArrayList());
 						}
