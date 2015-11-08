@@ -6,6 +6,9 @@ import org.eclipse.ui.IPersistableElement;
 
 import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 
+/**
+ * model class for an administrator of the application
+ */
 public class Curator extends AbstractPropertyChangeSupport implements IEditorInput, Cloneable {
 
 	public static final String FIELD_NAME = "name";//$NON-NLS-1$
@@ -17,14 +20,40 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 	private String passwordHash;
 	private String password;
 
+	/**
+	 * Constructor. creates a dummy object with invalid id
+	 */
+	public Curator() {
+		this(-1);
+	}
+
+	/**
+	 * Constructor for an instance that has only the id field filled.
+	 *
+	 * @param id
+	 */
+	public Curator(final int id) {
+		this(id, null, null, null);
+	}
+
+	/**
+	 * regular Constructor.
+	 *
+	 * @param id
+	 *            primary key
+	 * @param name
+	 *            displayable name
+	 * @param salt
+	 *            salt used for password hashing
+	 * @param passwordHash
+	 *            hashed password
+	 */
 	public Curator(final int id, final String name, final String salt, final String passwordHash) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.salt = salt;
 		this.passwordHash = passwordHash;
-	}
-
-	public Curator() {
 	}
 
 	/**
