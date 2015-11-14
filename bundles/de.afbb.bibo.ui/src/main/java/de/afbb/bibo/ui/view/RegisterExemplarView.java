@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -35,6 +36,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.Saveable;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
@@ -84,6 +86,7 @@ public class RegisterExemplarView extends AbstractEditView {
 	private Button btnToEdit;
 	private Button btnGroup;
 	private Button btnUngroup;
+	private Button btnSave;
 	private CCombo comboMediumType;
 
 	private XViewer xViewer;
@@ -120,6 +123,7 @@ public class RegisterExemplarView extends AbstractEditView {
 			copyToModify.setPublisher(EMPTY_STRING);
 			copyToModify.setCondition(EMPTY_STRING);
 			copyToModify.setType(null);
+			updateSaveButton();
 			xViewer.setInput(copies);
 			bindingContext.updateTargets();
 			txtBarcode.setFocus();
@@ -152,6 +156,7 @@ public class RegisterExemplarView extends AbstractEditView {
 				copyToModify.setCondition(copy.getCondition());
 				copies.remove(copy);
 				checkGroups();
+				updateSaveButton();
 				xViewer.setInput(copies);
 				bindingContext.updateTargets();
 			}
@@ -347,8 +352,9 @@ public class RegisterExemplarView extends AbstractEditView {
 
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
 		buttonComposite.setLayout(new GridLayout());
-		btnGroup = toolkit.createButton(buttonComposite, "Medien Gruppieren", SWT.TOP);
-		btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung Lösen", SWT.TOP);
+		btnGroup = toolkit.createButton(buttonComposite, "Medien gruppieren", SWT.TOP);
+		btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung lösen", SWT.TOP);
+		btnSave = toolkit.createButton(buttonComposite, "Erfassung abschließen", SWT.TOP);
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(content);
 		GridDataFactory.fillDefaults().applyTo(idGroup);
@@ -363,17 +369,26 @@ public class RegisterExemplarView extends AbstractEditView {
 		btnToEdit.setImage(BiboImageRegistry.getImage(IconType.ARROW_UP, IconSize.small));
 		btnGroup.setImage(BiboImageRegistry.getImage(IconType.PLUS, IconSize.small));
 		btnUngroup.setImage(BiboImageRegistry.getImage(IconType.MINUS, IconSize.small));
+		btnSave.setImage(BiboImageRegistry.getImage(IconType.SAVE, IconSize.small));
 
 		// add listener to buttons
 		btnToList.addListener(SWT.MouseDown, toListListener);
 		btnToEdit.addListener(SWT.MouseDown, toEditListener);
 		btnGroup.addListener(SWT.MouseDown, groupListener);
 		btnUngroup.addListener(SWT.MouseDown, ungroupListener);
+		btnSave.addListener(SWT.MouseDown, new Listener() {
+			
+			@Override
+			public void handleEvent(Event event) {
+				doSave(null);
+			}
+		});
 
 		// disable buttons
 		btnToEdit.setEnabled(false);
 		btnGroup.setEnabled(false);
 		btnUngroup.setEnabled(false);
+		updateSaveButton();
 	}
 
 	@Override
@@ -420,6 +435,10 @@ public class RegisterExemplarView extends AbstractEditView {
 		toolkit.paintBordersFor(group);
 		return group;
 	}
+	
+	private void updateSaveButton(){
+		btnSave.setEnabled(!copies.isEmpty());
+	}
 
 	private void initTableColumns() {
 		columnType = new XViewerColumn(REGISTER_COPY + DOT + TYPE, TYPE, 90, SWT.LEFT, true, SortDataType.String, false,
@@ -440,10 +459,5 @@ public class RegisterExemplarView extends AbstractEditView {
 				SortDataType.String, false, EDITION);
 		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
 				columnLanguage, columnEdition);
-	}
-
-	@Override
-	public boolean isDirty() {
-		return !copies.isEmpty();
 	}
 }
