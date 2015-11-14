@@ -59,7 +59,7 @@ import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
  * 
  * @author dbecker
  */
-public class RegisterExemplarView extends AbstractEditView {
+public class RegisterCopyView extends AbstractEditView {
 
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String DOT = ".";//$NON-NLS-1$

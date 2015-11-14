@@ -57,7 +57,7 @@
             name="Neuanlage Verwalter">
       </command>
       <command
-            id="de.afbb.bibo.ui.create.Exemplar"
+            id="de.afbb.bibo.ui.create.copy"
             name="Erfassung Medien">
       </command>
       <command
@@ -153,7 +153,7 @@
                style="push">
          </command>
          <command
-               commandId="de.afbb.bibo.ui.create.Exemplar"
+               commandId="de.afbb.bibo.ui.create.copy"
                icon="icons/32x32add_book.png"
                style="push">
          </command>
@@ -182,7 +182,7 @@
             name="Willkommen">
       </editor>
       <editor
-            class="de.afbb.bibo.ui.view.RegisterExemplarView"
+            class="de.afbb.bibo.ui.view.RegisterCopyView"
             default="false"
             icon="icons/16x16book.png"
             id="de.afbb.bibo.ui.registerexemplar"
@@ -203,8 +203,8 @@
             commandId="de.afbb.bibo.ui.create.curator">
       </handler>
       <handler
-            class="de.afbb.bibo.ui.handler.RegisterExemplarHandler"
-            commandId="de.afbb.bibo.ui.create.Exemplar">
+            class="de.afbb.bibo.ui.handler.RegisterCopyHandler"
+            commandId="de.afbb.bibo.ui.create.copy">
       </handler>
       <handler
             class="de.afbb.bibo.ui.handler.CreateBorrowerHandler"
