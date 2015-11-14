@@ -33,7 +33,7 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 	 * @param id
 	 */
 	public Curator(final int id) {
-		this(id, null, null, null);
+		this(id, "", null, null);
 	}
 
 	/**
