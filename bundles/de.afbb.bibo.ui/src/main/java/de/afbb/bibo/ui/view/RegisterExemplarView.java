@@ -351,11 +351,13 @@ public class RegisterExemplarView extends AbstractEditView {
 		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
 
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
-		buttonComposite.setLayout(new GridLayout());
+		GridLayout layoutButtonComposite = new GridLayout();
+		layoutButtonComposite.marginHeight = layoutButtonComposite.marginWidth = 0;
+		buttonComposite.setLayout(layoutButtonComposite);
 		btnGroup = toolkit.createButton(buttonComposite, "Medien gruppieren", SWT.TOP);
 		btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung lösen", SWT.TOP);
 		btnSave = toolkit.createButton(buttonComposite, "Erfassung abschließen", SWT.TOP);
-
+		
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(content);
 		GridDataFactory.fillDefaults().applyTo(idGroup);
 		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
@@ -363,6 +365,9 @@ public class RegisterExemplarView extends AbstractEditView {
 		GridDataFactory.fillDefaults().applyTo(conditionGroup);
 		GridDataFactory.fillDefaults().span(3, 1).grab(true, true).applyTo(bottom);
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).applyTo(buttonComposite);
+		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.END).applyTo(btnGroup);
+		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.END).applyTo(btnUngroup);
+		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.END).applyTo(btnSave);
 
 		// set button images
 		btnToList.setImage(BiboImageRegistry.getImage(IconType.ARROW_DOWN, IconSize.small));
