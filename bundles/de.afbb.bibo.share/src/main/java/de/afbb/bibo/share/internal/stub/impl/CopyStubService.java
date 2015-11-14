@@ -22,6 +22,7 @@ public class CopyStubService implements ICopyService {
 	@Override
 	public void registerCopy(Collection<Copy> copies) throws ConnectException {
 		// TODO Auto-generated method stub
+		throw new ConnectException();
 		
 	}
 

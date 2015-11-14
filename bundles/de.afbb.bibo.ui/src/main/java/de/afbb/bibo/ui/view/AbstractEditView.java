@@ -29,6 +29,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.EditorPart;
 
 import de.afbb.bibo.databinding.BindingHelper;
+import de.afbb.bibo.ui.Messages;
 
 abstract class AbstractEditView extends EditorPart {
 
@@ -150,10 +151,14 @@ abstract class AbstractEditView extends EditorPart {
 
 			@Override
 			public void run() {
-				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Fehler",
-						"Es besteht ein Verbindungsfehler mit dem Server.\nDiese Ansicht wird sich nun schließen.");
+				StringBuilder msg = new StringBuilder(Messages.MESSAGE_ERROR_CONNECTION);
+				if (getSite().getPage().isPartVisible(AbstractEditView.this)) {
+					msg.append(Messages.NEW_LINE);
+					msg.append(Messages.MESSAGE_VIEW_CLOSE);
+				}
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+						Messages.MESSAGE_ERROR, msg.toString());
 				closeEditor();
-				// TODO log error
 			}
 		});
 	}

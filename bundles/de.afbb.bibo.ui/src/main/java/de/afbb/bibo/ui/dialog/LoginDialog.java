@@ -93,7 +93,7 @@ public class LoginDialog extends AbstractDialog {
 			SessionHolder.getInstance().setCurator(curator);
 			return true;
 		} catch (final ConnectException e) {
-			setMessage(Messages.MSG_CONNECTION_ERROR, IMessageProvider.WARNING);
+			setMessage(Messages.MESSAGE_ERROR_CONNECTION, IMessageProvider.WARNING);
 		}
 		return false;
 	}

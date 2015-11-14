@@ -96,7 +96,7 @@ public class CreateTypeDialog extends AbstractDialog {
 				ServiceLocator.getInstance().getTypService().create(type);
 				okPressed();
 			} catch (final ConnectException e) {
-				setMessage(Messages.MSG_CONNECTION_ERROR, IMessageProvider.WARNING);
+				setMessage(Messages.MESSAGE_ERROR_CONNECTION, IMessageProvider.WARNING);
 			}
 		} else {
 			cancelPressed();
