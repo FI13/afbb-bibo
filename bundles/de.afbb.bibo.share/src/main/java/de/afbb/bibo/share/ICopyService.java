@@ -12,7 +12,7 @@ public interface ICopyService {
 	 * updates the given copy
 	 * 
 	 * @param copy
-	 * 				object to update
+	 *            object to update
 	 * @throws ConnectException
 	 */
 	void update(Copy copy) throws ConnectException;
@@ -28,30 +28,31 @@ public interface ICopyService {
 	Collection<Copy> getGrouped(Integer id) throws ConnectException;
 
 	/**
-	 * registers new copies and mediums as necessary
+	 * registers new copies and mediums as necessary. <br>
+	 * copies with same {@link Copy#getGroupId()} belong to each other
 	 * 
-	 * @param copy
+	 * @param copies
 	 *            collection of grouped copies.
 	 * @throws ConnectException
 	 */
-	void registerCopy(Collection<Collection<Copy>> copy) throws ConnectException;
+	void registerCopy(Collection<Copy> copies) throws ConnectException;
 
 	/**
 	 * gets a list of all copies of all mediums
 	 * 
 	 * @return
 	 */
-	Collection<Collection<Copy>> listAll() throws ConnectException;
+	Collection<Copy> listAll() throws ConnectException;
 
 	/**
 	 * gets a list of all copies for a given medium
 	 * 
 	 * @param medium
-	 * 				medium of the copies you want to receive
+	 *            medium of the copies you want to receive
 	 * @return
 	 * @throws ConnectException
 	 */
-	Collection<Collection<Copy>> listCopies(Medium medium) throws ConnectException;
+	Collection<Copy> listCopies(Medium medium) throws ConnectException;
 
 	/**
 	 * deletes the given copy
