@@ -152,10 +152,14 @@ abstract class AbstractEditView extends EditorPart {
 			public void run() {
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Fehler",
 						"Es besteht ein Verbindungsfehler mit dem Server.\nDiese Ansicht wird sich nun schließen.");
-				getSite().getPage().closeEditor(AbstractEditView.this, false);
+				closeEditor();
 				// TODO log error
 			}
 		});
+	}
+
+	protected void closeEditor() {
+		getSite().getPage().closeEditor(AbstractEditView.this, false);
 	}
 
 	/**
