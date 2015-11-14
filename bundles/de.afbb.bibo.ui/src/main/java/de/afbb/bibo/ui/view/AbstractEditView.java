@@ -23,6 +23,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.EditorPart;
@@ -116,7 +117,12 @@ abstract class AbstractEditView extends EditorPart {
 	private void setMessage(String message, Image image) {
 		lblValidationImage.setImage(image);
 		lblValidationMessage.setText(message);
+		// update dirty state when validation message changes
+		updateDirtyState();
+	}
 
+	protected void updateDirtyState() {
+		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
 	/**
