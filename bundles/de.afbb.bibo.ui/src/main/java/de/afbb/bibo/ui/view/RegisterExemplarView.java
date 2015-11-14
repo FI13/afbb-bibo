@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
@@ -16,6 +17,7 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
+import org.eclipse.osgi.service.resolver.DisabledInfo;
 import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -25,6 +27,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
@@ -76,6 +79,7 @@ public class RegisterExemplarView extends AbstractEditView {
 	private Text txtAuthor;
 	private Text txtLanguage;
 	private Text txtPublisher;
+	private Text txtCondition;
 	private Button btnToList;
 	private Button btnToEdit;
 	private Button btnGroup;
@@ -114,6 +118,8 @@ public class RegisterExemplarView extends AbstractEditView {
 			copyToModify.setAuthor(EMPTY_STRING);
 			copyToModify.setLanguage(EMPTY_STRING);
 			copyToModify.setPublisher(EMPTY_STRING);
+			copyToModify.setCondition(EMPTY_STRING);
+			copyToModify.setType(null);
 			xViewer.setInput(copies);
 			bindingContext.updateTargets();
 			txtBarcode.setFocus();
@@ -143,6 +149,7 @@ public class RegisterExemplarView extends AbstractEditView {
 				copyToModify.setLanguage(copy.getLanguage());
 				copyToModify.setPublisher(copy.getPublisher());
 				copyToModify.setType(copy.getType());
+				copyToModify.setCondition(copy.getCondition());
 				copies.remove(copy);
 				checkGroups();
 				xViewer.setInput(copies);
@@ -290,8 +297,7 @@ public class RegisterExemplarView extends AbstractEditView {
 	@Override
 	public void initUi(final Composite parent) {
 		final Composite top = toolkit.createComposite(parent, SWT.NONE);
-		final GridLayout layout = new GridLayout(2, false);
-		top.setLayout(layout);
+		top.setLayout(new GridLayout(3, false));
 
 		idGroup = createGroup(top, "Nummer");
 		idGroup.setLayout(new GridLayout(2, false));
@@ -314,6 +320,11 @@ public class RegisterExemplarView extends AbstractEditView {
 		txtPublisher = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, "Typ");
 		comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
+
+		final Group conditionGroup = createGroup(top, "Zustand");
+		conditionGroup.setLayout(new GridLayout(1, false));
+		txtCondition = toolkit.createText(conditionGroup, EMPTY_STRING, SWT.MULTI);
+		txtCondition.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		final Composite middle = toolkit.createComposite(top, SWT.NONE);
 		middle.setLayout(new GridLayout(2, false));
@@ -340,9 +351,10 @@ public class RegisterExemplarView extends AbstractEditView {
 		btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung Lösen", SWT.TOP);
 
 		GridDataFactory.fillDefaults().applyTo(idGroup);
-		GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
+		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
 		GridDataFactory.fillDefaults().applyTo(mediumGroup);
-		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(bottom);
+		GridDataFactory.fillDefaults().applyTo(conditionGroup);
+		GridDataFactory.fillDefaults().span(3, 1).grab(true, true).applyTo(bottom);
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).applyTo(buttonComposite);
 
 		// set button images
@@ -377,6 +389,8 @@ public class RegisterExemplarView extends AbstractEditView {
 		BindingHelper.bindStringToTextField(txtLanguage, copyToModify, Copy.class, Copy.FIELD_LANGUAGE, bindingContext,
 				false);
 		BindingHelper.bindStringToTextField(txtPublisher, copyToModify, Copy.class, Copy.FIELD_PUBLISHER,
+				bindingContext, false);
+		BindingHelper.bindStringToTextField(txtCondition, copyToModify, Copy.class, Copy.FIELD_CONDITION,
 				bindingContext, false);
 
 		try {
