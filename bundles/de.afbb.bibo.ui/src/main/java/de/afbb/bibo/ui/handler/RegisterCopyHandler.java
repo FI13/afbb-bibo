@@ -26,7 +26,7 @@ public class RegisterCopyHandler extends AbstractHandler {
 			e.printStackTrace();
 			// shouldn't happen
 		}
-		return event;
+		return null;
 	}
 
 }

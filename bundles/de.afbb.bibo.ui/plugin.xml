@@ -177,7 +177,7 @@
       <editor
             class="de.afbb.bibo.ui.view.WelcomeView"
             default="false"
-            icon="icons/sample.gif"
+            icon="icons/16x16logo.png"
             id="de.afbb.bibo.ui.view.welcome"
             name="Willkommen">
       </editor>
@@ -194,6 +194,12 @@
             icon="icons/16x16schueler.png"
             id="de.afbb.bibo.ui.borrower"
             name="Anzeige Ausleiher">
+      </editor>
+      <editor
+            class="de.afbb.bibo.ui.view.ReturnCopyView"
+            default="false"
+            id="de.afbb.bibo.ui.return.copy"
+            name="Rückgabe">
       </editor>
    </extension>
    <extension
@@ -217,6 +223,10 @@
       <handler
             class="de.afbb.bibo.ui.handler.ManageCuratorHandler"
             commandId="de.afbb.bibo.ui.manage.curator">
+      </handler>
+      <handler
+            class="de.afbb.bibo.ui.handler.ReturnCopyHandler"
+            commandId="de.afbb.bibo.ui.return">
       </handler>
    </extension>
 
