@@ -152,6 +152,16 @@ abstract class AbstractEditView extends EditorPart {
 		});
 	}
 
+	/**
+	 * checks if all bindings in {@link #bindingContext} are ok
+	 * 
+	 * @return
+	 * @see IStatus#isOK()
+	 */
+	protected boolean isSaveAble() {
+		return ((IStatus) validationStatus.getValue()).isOK();
+	}
+
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 	}
