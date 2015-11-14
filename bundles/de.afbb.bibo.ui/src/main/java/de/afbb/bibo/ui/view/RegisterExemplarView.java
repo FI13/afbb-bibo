@@ -376,7 +376,7 @@ public class RegisterExemplarView extends AbstractEditView {
 	}
 
 	@Override
-	protected void initBinding() {
+	protected void initBinding() throws ConnectException {
 		BindingHelper.bindStringToTextField(txtBarcode, copyToModify, Copy.class, Copy.FIELD_BARCODE, bindingContext,
 				true);
 		BindingHelper.bindStringToTextField(txtIsbn, copyToModify, Copy.class, Copy.FIELD_ISBN, bindingContext, false);
@@ -393,13 +393,10 @@ public class RegisterExemplarView extends AbstractEditView {
 		BindingHelper.bindStringToTextField(txtCondition, copyToModify, Copy.class, Copy.FIELD_CONDITION,
 				bindingContext, false);
 
-		try {
-			BindingHelper.bindObjectToCCombo(comboMediumType, copyToModify, Copy.class, Medium.FIELD_TYPE,
-					MediumType.class, ServiceLocator.getInstance().getTypService().list(),
-					new MediumTypeLabelProvider(), bindingContext, false);
-		} catch (ConnectException e) {
-			handle(e);
-		}
+		BindingHelper.bindObjectToCCombo(comboMediumType, copyToModify, Copy.class, Medium.FIELD_TYPE, MediumType.class,
+				ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(), bindingContext,
+				false);
+
 	}
 
 	@Override

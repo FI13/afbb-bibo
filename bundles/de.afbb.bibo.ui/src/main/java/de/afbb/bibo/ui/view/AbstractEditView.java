@@ -25,32 +25,43 @@ abstract class AbstractEditView extends EditorPart {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-//		final ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
-//		scrolledComposite.setLayout(new GridLayout(1, false));
-//
-//		final Composite wrapperComposite = new Composite(scrolledComposite, SWT.NONE);
-//		wrapperComposite.setLayout(new GridLayout(2, false));
-//		wrapperComposite.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-//		GridDataFactory.fillDefaults().grab(true, true).applyTo(wrapperComposite);
-//
-//		lblValidationImage = new Label(wrapperComposite, SWT.NONE);
-//		lblValidationMessage = new Label(wrapperComposite, SWT.NONE);
-//		lblValidationImage.setText("image");
-//		lblValidationMessage.setText("text");
-//
-//		final Composite content = new Composite(wrapperComposite, SWT.NONE);
-//		GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(content);
-//
-//		initUi(content);
-//
-//		scrolledComposite.setContent(wrapperComposite);
-//		wrapperComposite.setSize(wrapperComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-//		scrolledComposite.setMinSize(wrapperComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-//		scrolledComposite.setExpandHorizontal(true);
-//		scrolledComposite.setExpandVertical(true);
-		initUi(parent);
-		initBinding();
-		additionalTasks();
+		try {
+			// final ScrolledComposite scrolledComposite = new
+			// ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+			// scrolledComposite.setLayout(new GridLayout(1, false));
+			//
+			// final Composite wrapperComposite = new
+			// Composite(scrolledComposite, SWT.NONE);
+			// wrapperComposite.setLayout(new GridLayout(2, false));
+			// wrapperComposite.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+			// GridDataFactory.fillDefaults().grab(true,
+			// true).applyTo(wrapperComposite);
+			//
+			// lblValidationImage = new Label(wrapperComposite, SWT.NONE);
+			// lblValidationMessage = new Label(wrapperComposite, SWT.NONE);
+			// lblValidationImage.setText("image");
+			// lblValidationMessage.setText("text");
+			//
+			// final Composite content = new Composite(wrapperComposite,
+			// SWT.NONE);
+			// GridDataFactory.fillDefaults().grab(true, true).span(2,
+			// 1).applyTo(content);
+			//
+			// initUi(content);
+			//
+			// scrolledComposite.setContent(wrapperComposite);
+			// wrapperComposite.setSize(wrapperComposite.computeSize(SWT.DEFAULT,
+			// SWT.DEFAULT));
+			// scrolledComposite.setMinSize(wrapperComposite.computeSize(SWT.DEFAULT,
+			// SWT.DEFAULT));
+			// scrolledComposite.setExpandHorizontal(true);
+			// scrolledComposite.setExpandVertical(true);
+			initUi(parent);
+			initBinding();
+			additionalTasks();
+		} catch (ConnectException e) {
+			handle(e);
+		}
 	}
 
 	/**
@@ -61,18 +72,20 @@ abstract class AbstractEditView extends EditorPart {
 	/**
 	 * initializes the databinding for the editor
 	 */
-	protected abstract void initBinding();
+	protected abstract void initBinding() throws ConnectException;
 
 	/**
-	 * can be overridden by clients to perform additional tasks after UI and binding are done.<br>
+	 * can be overridden by clients to perform additional tasks after UI and
+	 * binding are done.<br>
 	 * default implementation does nothing
 	 */
-	protected void additionalTasks() {
+	protected void additionalTasks() throws ConnectException {
 		// default implementation does nothing
 	}
 
 	/**
-	 * handles an connect exception by displaying an info dialog to the user and closing the view afterwards
+	 * handles an connect exception by displaying an info dialog to the user and
+	 * closing the view afterwards
 	 * 
 	 * @param e
 	 */
