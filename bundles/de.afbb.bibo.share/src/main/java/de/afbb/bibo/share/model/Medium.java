@@ -8,7 +8,7 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 	public static final String FIELD_TITLE = "title";//$NON-NLS-1$
 	public static final String FIELD_AUTHOR = "author";//$NON-NLS-1$
 	public static final String FIELD_LANGUAGE = "language";//$NON-NLS-1$
-	public static final String FIELD_TYP_ID = "typeId";//$NON-NLS-1$
+	public static final String FIELD_TYPE = "type";//$NON-NLS-1$
 	public static final String FIELD_PUBLISHER = "publisher";//$NON-NLS-1$
 
 	private Integer id;
@@ -46,7 +46,7 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 	}
 
 	public void setType(final MediumType type) {
-		this.type = type;
+		changeSupport.firePropertyChange(FIELD_TYPE, this.type, this.type = type);
 	}
 
 	public String getPublisher() {

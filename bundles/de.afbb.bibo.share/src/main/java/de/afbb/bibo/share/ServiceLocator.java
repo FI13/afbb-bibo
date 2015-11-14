@@ -1,6 +1,7 @@
 package de.afbb.bibo.share;
 
 import de.afbb.bibo.share.internal.stub.impl.BorrowerStubService;
+import de.afbb.bibo.share.internal.stub.impl.CopyStubService;
 import de.afbb.bibo.share.internal.stub.impl.CuratorStubService;
 import de.afbb.bibo.share.internal.stub.impl.LoginStubService;
 import de.afbb.bibo.share.internal.stub.impl.MediumStubService;
@@ -18,6 +19,7 @@ public final class ServiceLocator {
 	private final ITypService TYP_SERVICE = new TypStubService();
 	private final IBorrowerService BORROWER_SERVICE = new BorrowerStubService();
 	private final IMediumService MEDIUM_SERVICE = new MediumStubService();
+	private final ICopyService COPY_SERVICE = new CopyStubService();
 
 	private static final ServiceLocator INSTANCE = new ServiceLocator();
 
@@ -46,5 +48,9 @@ public final class ServiceLocator {
 
 	public IMediumService getMediumService() {
 		return MEDIUM_SERVICE;
+	}
+
+	public ICopyService getCopyService() {
+		return COPY_SERVICE;
 	}
 }

@@ -27,8 +27,6 @@ public class BorrowerView extends AbstractEditView {
 	private Borrower input;
 	private Borrower inputCache;
 
-	protected final DataBindingContext bindingContext = new DataBindingContext();
-
 	private Label labelFirstname;
 	private Label labelLastname;
 	private Label labelEMail;
