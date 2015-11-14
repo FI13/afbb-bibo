@@ -23,12 +23,16 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.EditorPart;
 
 import de.afbb.bibo.databinding.BindingHelper;
+import de.afbb.bibo.ui.BiboFormToolkit;
 import de.afbb.bibo.ui.Messages;
 
 abstract class AbstractEditView extends EditorPart {
@@ -40,7 +44,7 @@ abstract class AbstractEditView extends EditorPart {
 	private Label lblValidationMessage;
 	private final IObservableValue validationStatus = new WritableValue(IStatus.OK, IStatus.class);
 	protected final DataBindingContext bindingContext = new DataBindingContext();
-	protected FormToolkit toolkit = new FormToolkit(Display.getCurrent());
+	protected BiboFormToolkit toolkit = new BiboFormToolkit(Display.getCurrent());
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -175,6 +179,12 @@ abstract class AbstractEditView extends EditorPart {
 	 */
 	protected boolean isSaveAble() {
 		return ((IStatus) validationStatus.getValue()).isOK();
+	}
+
+	@Override
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		setSite(site);
+		setInput(input);
 	}
 
 	@Override

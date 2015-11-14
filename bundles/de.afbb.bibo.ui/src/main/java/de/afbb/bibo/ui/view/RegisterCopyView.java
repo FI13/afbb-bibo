@@ -12,16 +12,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
-import org.eclipse.osgi.service.resolver.DisabledInfo;
 import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -31,16 +28,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.Saveable;
-
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.Copy;
@@ -59,7 +50,7 @@ import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
  * 
  * @author dbecker
  */
-public class RegisterExemplarView extends AbstractEditView {
+public class RegisterCopyView extends AbstractEditView {
 
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String DOT = ".";//$NON-NLS-1$
@@ -307,7 +298,7 @@ public class RegisterExemplarView extends AbstractEditView {
 		final Composite content = toolkit.createComposite(parent, SWT.NONE);
 		content.setLayout(new GridLayout(3, false));
 
-		idGroup = createGroup(content, "Nummer");
+		idGroup = toolkit.createGroup(content, "Nummer");
 		idGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(idGroup, BARCODE);
 		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING);
@@ -316,7 +307,7 @@ public class RegisterExemplarView extends AbstractEditView {
 		toolkit.createLabel(idGroup, EDITION);
 		txtEdition = toolkit.createText(idGroup, EMPTY_STRING);
 
-		final Group mediumGroup = createGroup(content, "Informationen");
+		final Group mediumGroup = toolkit.createGroup(content, "Informationen");
 		mediumGroup.setLayout(new GridLayout(4, false));
 		toolkit.createLabel(mediumGroup, TITLE);
 		txtTitle = toolkit.createText(mediumGroup, EMPTY_STRING);
@@ -329,7 +320,7 @@ public class RegisterExemplarView extends AbstractEditView {
 		toolkit.createLabel(mediumGroup, "Typ");
 		comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
 
-		final Group conditionGroup = createGroup(content, "Zustand");
+		final Group conditionGroup = toolkit.createGroup(content, "Zustand");
 		conditionGroup.setLayout(new GridLayout(1, false));
 		txtCondition = toolkit.createText(conditionGroup, EMPTY_STRING, SWT.MULTI);
 		txtCondition.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -441,22 +432,6 @@ public class RegisterExemplarView extends AbstractEditView {
 	@Override
 	public void setFocus() {
 		idGroup.setFocus();
-	}
-
-	@Override
-	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setSite(site);
-		setInput(input);
-	}
-
-	private Group createGroup(final Composite parent, final String text) {
-		final Group group = new Group(parent, SWT.SHADOW_NONE);
-		toolkit.adapt(group);
-		group.setText(text);
-		group.setBackground(toolkit.getColors().getBackground());
-		group.setForeground(toolkit.getColors().getForeground());
-		toolkit.paintBordersFor(group);
-		return group;
 	}
 
 	private void updateSaveButton() {
