@@ -379,7 +379,7 @@ public class RegisterExemplarView extends AbstractEditView {
 	@Override
 	protected void initBinding() throws ConnectException {
 		BindingHelper.bindStringToTextField(txtBarcode, copyToModify, Copy.class, Copy.FIELD_BARCODE, bindingContext,
-				true);
+				false);
 		BindingHelper.bindStringToTextField(txtIsbn, copyToModify, Copy.class, Copy.FIELD_ISBN, bindingContext, false);
 		BindingHelper.bindStringToTextField(txtEdition, copyToModify, Copy.class, Copy.FIELD_EDITION, bindingContext,
 				false);
