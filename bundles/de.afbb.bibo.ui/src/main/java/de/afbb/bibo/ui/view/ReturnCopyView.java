@@ -1,6 +1,7 @@
 package de.afbb.bibo.ui.view;
 
 import java.net.ConnectException;
+import java.util.HashMap;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
@@ -18,12 +19,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
+import de.afbb.bibo.databinding.BindingHelper;
+import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.share.model.Medium;
+import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
 import de.afbb.bibo.ui.provider.BiboXViewerFactory;
 import de.afbb.bibo.ui.provider.CopyLabelProvider;
 import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
+import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 
 public class ReturnCopyView extends AbstractEditView {
 
@@ -62,6 +69,9 @@ public class ReturnCopyView extends AbstractEditView {
 	private XViewerColumn columnPublisher;
 	private XViewerColumn columnLanguage;
 	private XViewerColumn columnEdition;
+
+	private final HashMap<String, Copy> copyCache = new HashMap<>();
+	private Copy copyToModify = new Copy();
 
 	@Override
 	protected void initUi(Composite parent) {
@@ -107,14 +117,14 @@ public class ReturnCopyView extends AbstractEditView {
 		middle.setLayout(new GridLayout(2, false));
 		btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
 		btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
-		
+
 		initTableColumns();
 		xViewer = new XViewer(content, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION, factory);
 		xViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		final CopyTreeContentProvider contentProvider = new CopyTreeContentProvider();
 		xViewer.setContentProvider(contentProvider);
 		xViewer.setLabelProvider(new CopyLabelProvider(xViewer, contentProvider));
-//		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
+		// xViewer.getTree().addSelectionListener(xViewerSelectionListener);
 		xViewer.getMenuManager().dispose();
 
 		final Composite footer = toolkit.createComposite(content, SWT.NONE);
@@ -155,7 +165,25 @@ public class ReturnCopyView extends AbstractEditView {
 
 	@Override
 	protected void initBinding() throws ConnectException {
-		// TODO Auto-generated method stub
+		BindingHelper.bindStringToTextField(txtBarcode, copyToModify, Copy.class, Copy.FIELD_BARCODE, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtIsbn, copyToModify, Copy.class, Copy.FIELD_ISBN, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtEdition, copyToModify, Copy.class, Copy.FIELD_EDITION, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtTitle, copyToModify, Copy.class, Copy.FIELD_TITLE, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtAuthor, copyToModify, Copy.class, Copy.FIELD_AUTHOR, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtLanguage, copyToModify, Copy.class, Copy.FIELD_LANGUAGE, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtPublisher, copyToModify, Copy.class, Copy.FIELD_PUBLISHER,
+				bindingContext, false);
+		BindingHelper.bindStringToTextField(txtCondition, copyToModify, Copy.class, Copy.FIELD_CONDITION,
+				bindingContext, false);
+
+		BindingHelper.bindObjectToCCombo(comboMediumType, copyToModify, Copy.class, Medium.FIELD_TYPE, MediumType.class,
+				ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(), bindingContext,
+				false);
 
 	}
 
@@ -165,7 +193,27 @@ public class ReturnCopyView extends AbstractEditView {
 	}
 
 	private void loadCopy() {
-		// TODO implement
+		try {
+			Copy copy = ServiceLocator.getInstance().getCopyService().get(txtBarcode.getText());
+			copyToModify.setAuthor(copy != null ? copy.getAuthor() : null);
+			copyToModify.setBorrowDate(copy != null ? copy.getBorrowDate() : null);
+			copyToModify.setBorrower(copy != null ? copy.getBorrower() : null);
+			copyToModify.setCondition(copy != null ? copy.getCondition() : null);
+			copyToModify.setCurator(copy != null ? copy.getCurator() : null);
+			copyToModify.setEdition(copy != null ? copy.getEdition() : null);
+			copyToModify.setInventoryDate(copy != null ? copy.getInventoryDate() : null);
+			copyToModify.setIsbn(copy != null ? copy.getIsbn() : null);
+			copyToModify.setLanguage(copy != null ? copy.getLanguage() : null);
+			copyToModify.setLastBorrowDate(copy != null ? copy.getLastBorrowDate() : null);
+			copyToModify.setLastBorrower(copy != null ? copy.getLastBorrower() : null);
+			copyToModify.setLastCurator(copy != null ? copy.getLastCurator() : null);
+			copyToModify.setPublisher(copy != null ? copy.getPublisher() : null);
+			copyToModify.setTitle(copy != null ? copy.getTitle() : null);
+			copyToModify.setType(copy != null ? copy.getType() : null);
+			bindingContext.updateTargets();
+		} catch (ConnectException e) {
+			handle(e);
+		}
 	}
 
 	private void initTableColumns() {
