@@ -30,6 +30,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import de.afbb.bibo.ui.observable.value.NotEmptyValue;
+import org.eclipse.nebula.jface.cdatetime.CDateTimeObservableValue;
+import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 
 /**
  * utility class to hold common binding methods
@@ -127,6 +129,14 @@ public final class BindingHelper {
 			createControlDecoration(textField, NotEmptyValue.MSG, isRequired);
 		}
 
+		return binding;
+	}
+
+	public static <E> Binding bindDate(final CDateTime dateTime, final E entity, final Class<E> entityClass,
+			final String propertyName, final DataBindingContext bindingContext) {
+		CDateTimeObservableValue targetObservable = new CDateTimeObservableValue(dateTime);
+		IObservableValue modelObservable = BeanProperties.value(entityClass, propertyName).observe(entity);
+		final Binding binding = bindingContext.bindValue(targetObservable, modelObservable);
 		return binding;
 	}
 
