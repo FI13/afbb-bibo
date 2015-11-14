@@ -23,7 +23,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.EditorPart;
@@ -175,6 +178,12 @@ abstract class AbstractEditView extends EditorPart {
 	 */
 	protected boolean isSaveAble() {
 		return ((IStatus) validationStatus.getValue()).isOK();
+	}
+
+	@Override
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		setSite(site);
+		setInput(input);
 	}
 
 	@Override

@@ -12,16 +12,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
-import org.eclipse.osgi.service.resolver.DisabledInfo;
 import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -31,16 +28,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.Saveable;
-
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.Copy;
@@ -441,12 +432,6 @@ public class RegisterCopyView extends AbstractEditView {
 	@Override
 	public void setFocus() {
 		idGroup.setFocus();
-	}
-
-	@Override
-	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setSite(site);
-		setInput(input);
 	}
 
 	private Group createGroup(final Composite parent, final String text) {

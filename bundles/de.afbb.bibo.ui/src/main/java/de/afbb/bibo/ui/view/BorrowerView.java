@@ -1,6 +1,5 @@
 package de.afbb.bibo.ui.view;
 
-import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -9,9 +8,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.PartInitException;
-
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.model.Borrower;
 
@@ -57,12 +53,6 @@ public class BorrowerView extends AbstractEditView {
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 
-	}
-
-	@Override
-	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setSite(site);
-		setInput(input);
 	}
 
 	@Override
