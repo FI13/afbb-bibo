@@ -4,6 +4,8 @@ import java.net.ConnectException;
 import java.util.HashMap;
 
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.nebula.widgets.cdatetime.CDT;
+import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
 import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
@@ -16,6 +18,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
@@ -58,6 +61,7 @@ public class ReturnCopyView extends AbstractEditView {
 	private Button btnToEdit;
 	private Button btnSave;
 	private CCombo comboMediumType;
+	private DateTime timeBorrowDate;
 
 	private XViewer xViewer;
 	private final XViewerFactory factory = new BiboXViewerFactory(RETURN_COPY);
@@ -76,7 +80,7 @@ public class ReturnCopyView extends AbstractEditView {
 	@Override
 	protected void initUi(Composite parent) {
 		final Composite content = toolkit.createComposite(parent, SWT.NONE);
-		content.setLayout(new GridLayout(2, false));
+		content.setLayout(new GridLayout(3, false));
 
 		Group copyGroup = toolkit.createGroup(content, "Exemplar");
 		copyGroup.setLayout(new GridLayout(2, false));
@@ -96,7 +100,12 @@ public class ReturnCopyView extends AbstractEditView {
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(copyGroup, "Zustand"));
 		txtCondition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.MULTI);
 
-		Group mediumGroup = toolkit.createGroup(content, "Informationen");
+		Group statusGroup = toolkit.createGroup(content, "Informationen");
+		statusGroup.setLayout(new GridLayout(2, false));
+		toolkit.createLabel(statusGroup, "Ausgeliehen am");
+		timeBorrowDate = toolkit.createDateTime(statusGroup);
+
+		Group mediumGroup = toolkit.createGroup(content, "Allgemein");
 		mediumGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(mediumGroup, TITLE);
 		txtTitle = toolkit.createText(mediumGroup, EMPTY_STRING);
@@ -133,6 +142,7 @@ public class ReturnCopyView extends AbstractEditView {
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(content);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(copyGroup);
+		GridDataFactory.fillDefaults().applyTo(statusGroup);
 		GridDataFactory.fillDefaults().hint(200, SWT.DEFAULT).applyTo(mediumGroup);
 		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(txtCondition);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtBarcode);
@@ -143,9 +153,9 @@ public class ReturnCopyView extends AbstractEditView {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtIsbn);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtEdition);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(comboMediumType);
-		GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
-		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(xViewer.getControl());
-		GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(footer);
+		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
+		GridDataFactory.fillDefaults().span(3, 1).grab(true, true).applyTo(xViewer.getControl());
+		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(footer);
 
 		btnToList.setImage(BiboImageRegistry.getImage(IconType.ARROW_DOWN, IconSize.small));
 		btnToEdit.setImage(BiboImageRegistry.getImage(IconType.ARROW_UP, IconSize.small));
@@ -161,6 +171,7 @@ public class ReturnCopyView extends AbstractEditView {
 		btnToList.setEnabled(false);
 		btnToEdit.setEnabled(false);
 		btnSave.setEnabled(false);
+		timeBorrowDate.setEnabled(false);
 	}
 
 	@Override
@@ -184,6 +195,8 @@ public class ReturnCopyView extends AbstractEditView {
 		BindingHelper.bindObjectToCCombo(comboMediumType, copyToModify, Copy.class, Medium.FIELD_TYPE, MediumType.class,
 				ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(), bindingContext,
 				false);
+
+		BindingHelper.bindDate(timeBorrowDate, copyToModify, Copy.class, Copy.FIELD_DATE_BORROW, bindingContext);
 
 	}
 
