@@ -2,12 +2,29 @@ package de.afbb.bibo.share.internal.stub.impl;
 
 import java.net.ConnectException;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 
 import de.afbb.bibo.share.ICopyService;
+import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.share.model.Curator;
+import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.Medium;
+import de.afbb.bibo.share.model.MediumType;
 
 public class CopyStubService implements ICopyService {
+
+	private final HashMap<String, Copy> copies = new HashMap<>();
+
+	public CopyStubService() {
+		Borrower b = (Borrower) new BorrowerStubService().borrowers.toArray()[0];
+		Curator c = new CuratorStubService().curator;
+		Copy c1 = new Copy(1, "1.Auflage", "1", new Date(), "Kaffeefleck", new Date(), new Date(), -1, b, b, c, c, 1,
+				"9780553582024", "Game of Thrones", "George R. R. Martin", "en",
+				new MediumType(1, "Buch", IconType.BOOK), "Bantam Books");
+		copies.put("1", c1);
+	}
 
 	@Override
 	public void update(Copy copy) throws ConnectException {
@@ -15,8 +32,7 @@ public class CopyStubService implements ICopyService {
 
 	@Override
 	public Copy get(String barcode) throws ConnectException {
-		// TODO Auto-generated method stub
-		return null;
+		return copies.get(barcode);
 	}
 
 	@Override
