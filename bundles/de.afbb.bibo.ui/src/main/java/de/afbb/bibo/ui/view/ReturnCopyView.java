@@ -15,6 +15,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
+import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.ui.BiboImageRegistry;
+import de.afbb.bibo.ui.IconSize;
+
 public class ReturnCopyView extends AbstractEditView {
 
 	public static final String ID = "de.afbb.bibo.ui.return.copy";//$NON-NLS-1$
@@ -78,6 +82,15 @@ public class ReturnCopyView extends AbstractEditView {
 		toolkit.createLabel(mediumGroup, "Typ");
 		comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
 
+		final Composite middle = toolkit.createComposite(content, SWT.NONE);
+		middle.setLayout(new GridLayout(2, false));
+		btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
+		btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
+		
+		final Composite footer = toolkit.createComposite(content, SWT.NONE);
+		footer.setLayout(new GridLayout(1, false));
+		btnSave = toolkit.createButton(footer, "Rückgabe abschließen", SWT.NONE);
+
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(content);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(copyGroup);
 		GridDataFactory.fillDefaults().hint(200, SWT.DEFAULT).applyTo(mediumGroup);
@@ -88,12 +101,21 @@ public class ReturnCopyView extends AbstractEditView {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtLanguage);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPublisher);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(comboMediumType);
+		GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
+		GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(footer);
+
+		btnToList.setImage(BiboImageRegistry.getImage(IconType.ARROW_DOWN, IconSize.small));
+		btnToEdit.setImage(BiboImageRegistry.getImage(IconType.ARROW_UP, IconSize.small));
+		btnSave.setImage(BiboImageRegistry.getImage(IconType.SAVE, IconSize.small));
 
 		txtTitle.setEnabled(false);
 		txtAuthor.setEnabled(false);
 		txtLanguage.setEnabled(false);
 		txtPublisher.setEnabled(false);
 		comboMediumType.setEnabled(false);
+		btnToList.setEnabled(false);
+		btnToEdit.setEnabled(false);
+		btnSave.setEnabled(false);
 	}
 
 	@Override
