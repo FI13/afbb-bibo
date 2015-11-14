@@ -352,6 +352,7 @@ public class RegisterExemplarView extends AbstractEditView {
 		xViewer.setContentProvider(contentProvider);
 		xViewer.setLabelProvider(new CopyLabelProvider(xViewer, contentProvider));
 		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
+		xViewer.getMenuManager().dispose();
 
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
 		GridLayout layoutButtonComposite = new GridLayout();
