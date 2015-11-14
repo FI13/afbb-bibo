@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -357,7 +360,7 @@ public class RegisterExemplarView extends AbstractEditView {
 		btnGroup = toolkit.createButton(buttonComposite, "Medien gruppieren", SWT.TOP);
 		btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung lösen", SWT.TOP);
 		btnSave = toolkit.createButton(buttonComposite, "Erfassung abschließen", SWT.TOP);
-		
+
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(content);
 		GridDataFactory.fillDefaults().applyTo(idGroup);
 		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
@@ -382,10 +385,24 @@ public class RegisterExemplarView extends AbstractEditView {
 		btnGroup.addListener(SWT.MouseDown, groupListener);
 		btnUngroup.addListener(SWT.MouseDown, ungroupListener);
 		btnSave.addListener(SWT.MouseDown, new Listener() {
-			
+
 			@Override
 			public void handleEvent(Event event) {
-				doSave(null);
+				final Job job = new Job("Erfassung abschließen") {
+
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						try {
+							ServiceLocator.getInstance().getCopyService().registerCopy(copies);
+						} catch (ConnectException e) {
+							handle(e);
+						}
+						return Status.OK_STATUS;
+					}
+					
+				};
+				job.schedule();
+				closeEditor();
 			}
 		});
 
@@ -440,8 +457,8 @@ public class RegisterExemplarView extends AbstractEditView {
 		toolkit.paintBordersFor(group);
 		return group;
 	}
-	
-	private void updateSaveButton(){
+
+	private void updateSaveButton() {
 		btnSave.setEnabled(!copies.isEmpty());
 	}
 
