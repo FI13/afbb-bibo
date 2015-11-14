@@ -21,6 +21,7 @@ import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.DisposeEvent;
@@ -59,15 +60,19 @@ public final class BindingHelper {
 	 *            all values of the property
 	 * @param bindingContext
 	 *            context of the binding
+	 * @param labelProvider
+	 *            the label provider that will be used to display the state in
+	 *            the combo. can be <code>null</code>
 	 * @param isRequired
 	 *            should the field be filled by the user?
 	 * @return binding
 	 */
 	public static <E, T> Binding bindObjectToCCombo(final CCombo combo, final E entity, final Class<E> entityClass,
 			final String propertyName, final Class<T> propertyClass, final Collection<T> values,
-			final DataBindingContext bindingContext, final boolean isRequired) {
+			IBaseLabelProvider labelProvider, final DataBindingContext bindingContext, final boolean isRequired) {
 		ComboViewer comboViewer = new ComboViewer(combo);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(labelProvider);
 		comboViewer.setInput(values);
 
 		IViewerObservableValue targetObservable = ViewersObservables.observeSingleSelection(comboViewer);

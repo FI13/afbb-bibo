@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -36,12 +37,14 @@ import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
 import de.afbb.bibo.ui.provider.BiboXViewerFactory;
 import de.afbb.bibo.ui.provider.CopyLabelProvider;
 import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
+import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 
 /**
  * this view allows the registration of new exemplars
@@ -95,7 +98,8 @@ public class RegisterExemplarView extends AbstractEditView {
 	private Collection<MediumType> mediumTypes;
 
 	/**
-	 * listener that adds a copy to the list and clears the input fields afterwards
+	 * listener that adds a copy to the list and clears the input fields
+	 * afterwards
 	 */
 	Listener toListListener = new Listener() {
 
@@ -117,13 +121,15 @@ public class RegisterExemplarView extends AbstractEditView {
 	};
 
 	/**
-	 * listener that removes the selected item from the list and fills the input fields with its values
+	 * listener that removes the selected item from the list and fills the input
+	 * fields with its values
 	 */
 	Listener toEditListener = new Listener() {
 
 		@Override
 		public void handleEvent(final Event event) {
-			// FIXME hack, should be solved be resetting the selection in viewer instead
+			// FIXME hack, should be solved be resetting the selection in viewer
+			// instead
 			btnToEdit.setEnabled(false);
 			btnUngroup.setEnabled(false);
 			final TreePath[] paths = ((TreeSelection) xViewer.getSelection()).getPaths();
@@ -136,6 +142,7 @@ public class RegisterExemplarView extends AbstractEditView {
 				copyToModify.setAuthor(copy.getAuthor());
 				copyToModify.setLanguage(copy.getLanguage());
 				copyToModify.setPublisher(copy.getPublisher());
+				copyToModify.setType(copy.getType());
 				copies.remove(copy);
 				checkGroups();
 				xViewer.setInput(copies);
@@ -198,7 +205,8 @@ public class RegisterExemplarView extends AbstractEditView {
 	};
 
 	/**
-	 * checks that there are no groups with only one member left. will reset group information on those copies
+	 * checks that there are no groups with only one member left. will reset
+	 * group information on those copies
 	 */
 	private void checkGroups() {
 		/*
@@ -235,7 +243,8 @@ public class RegisterExemplarView extends AbstractEditView {
 			return;
 		}
 
-		// clear group id for copies that are in list and have a group id that is in purgedGroupes
+		// clear group id for copies that are in list and have a group id that
+		// is in purgedGroupes
 		for (final Copy copy : copies) {
 			if (purgedGroupes.contains(copy.getGroupId())) {
 				copy.setGroupId(UNASSIGNED_GROUP);
@@ -245,7 +254,8 @@ public class RegisterExemplarView extends AbstractEditView {
 	}
 
 	/**
-	 * listener that reacts when the selection changes and enables & disables control buttons
+	 * listener that reacts when the selection changes and enables & disables
+	 * control buttons
 	 */
 	SelectionListener xViewerSelectionListener = new SelectionListener() {
 
@@ -355,13 +365,27 @@ public class RegisterExemplarView extends AbstractEditView {
 
 	@Override
 	protected void initBinding() {
-		BindingHelper.bindStringToTextField(txtBarcode, copyToModify, Copy.class, Copy.FIELD_BARCODE, bindingContext, true);
+		BindingHelper.bindStringToTextField(txtBarcode, copyToModify, Copy.class, Copy.FIELD_BARCODE, bindingContext,
+				true);
 		BindingHelper.bindStringToTextField(txtIsbn, copyToModify, Copy.class, Copy.FIELD_ISBN, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtEdition, copyToModify, Copy.class, Copy.FIELD_EDITION, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtTitle, copyToModify, Copy.class, Copy.FIELD_TITLE, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtAuthor, copyToModify, Copy.class, Copy.FIELD_AUTHOR, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtLanguage, copyToModify, Copy.class, Copy.FIELD_LANGUAGE, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtPublisher, copyToModify, Copy.class, Copy.FIELD_PUBLISHER, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtEdition, copyToModify, Copy.class, Copy.FIELD_EDITION, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtTitle, copyToModify, Copy.class, Copy.FIELD_TITLE, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtAuthor, copyToModify, Copy.class, Copy.FIELD_AUTHOR, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtLanguage, copyToModify, Copy.class, Copy.FIELD_LANGUAGE, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtPublisher, copyToModify, Copy.class, Copy.FIELD_PUBLISHER,
+				bindingContext, false);
+
+		try {
+			BindingHelper.bindObjectToCCombo(comboMediumType, copyToModify, Copy.class, Medium.FIELD_TYPE,
+					MediumType.class, ServiceLocator.getInstance().getTypService().list(),
+					new MediumTypeLabelProvider(), bindingContext, false);
+		} catch (ConnectException e) {
+			handle(e);
+		}
 	}
 
 	@Override
@@ -386,46 +410,28 @@ public class RegisterExemplarView extends AbstractEditView {
 	}
 
 	private void initTableColumns() {
-		columnType = new XViewerColumn(REGISTER_COPY + DOT + TYPE, TYPE, 90, SWT.LEFT, true, SortDataType.String, false, "Typ des Mediums");
-		columnBarcode = new XViewerColumn(REGISTER_COPY + DOT + BARCODE, BARCODE, 80, SWT.LEFT, true, SortDataType.Integer, false,
-				"Barcode des Mediums");
-		columnIsbn = new XViewerColumn(REGISTER_COPY + DOT + ISBN, ISBN, 80, SWT.LEFT, true, SortDataType.Integer, false,
-				"ISBN des Mediums");
-		columnTitle = new XViewerColumn(REGISTER_COPY + DOT + TITLE, TITLE, 150, SWT.LEFT, true, SortDataType.String, false, TITLE);
-		columnAuthor = new XViewerColumn(REGISTER_COPY + DOT + AUTHOR, AUTHOR, 150, SWT.LEFT, true, SortDataType.String, false, AUTHOR);
-		columnPublisher = new XViewerColumn(REGISTER_COPY + DOT + PUBLISHER, PUBLISHER, 150, SWT.LEFT, true, SortDataType.String, false,
-				PUBLISHER);
-		columnLanguage = new XViewerColumn(REGISTER_COPY + DOT + LANGUAGE, LANGUAGE, 150, SWT.LEFT, true, SortDataType.String, false,
-				LANGUAGE);
-		columnEdition = new XViewerColumn(REGISTER_COPY + DOT + EDITION, EDITION, 150, SWT.LEFT, true, SortDataType.String, false, EDITION);
-		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher, columnLanguage,
-				columnEdition);
+		columnType = new XViewerColumn(REGISTER_COPY + DOT + TYPE, TYPE, 90, SWT.LEFT, true, SortDataType.String, false,
+				"Typ des Mediums");
+		columnBarcode = new XViewerColumn(REGISTER_COPY + DOT + BARCODE, BARCODE, 80, SWT.LEFT, true,
+				SortDataType.Integer, false, "Barcode des Mediums");
+		columnIsbn = new XViewerColumn(REGISTER_COPY + DOT + ISBN, ISBN, 80, SWT.LEFT, true, SortDataType.Integer,
+				false, "ISBN des Mediums");
+		columnTitle = new XViewerColumn(REGISTER_COPY + DOT + TITLE, TITLE, 150, SWT.LEFT, true, SortDataType.String,
+				false, TITLE);
+		columnAuthor = new XViewerColumn(REGISTER_COPY + DOT + AUTHOR, AUTHOR, 150, SWT.LEFT, true, SortDataType.String,
+				false, AUTHOR);
+		columnPublisher = new XViewerColumn(REGISTER_COPY + DOT + PUBLISHER, PUBLISHER, 150, SWT.LEFT, true,
+				SortDataType.String, false, PUBLISHER);
+		columnLanguage = new XViewerColumn(REGISTER_COPY + DOT + LANGUAGE, LANGUAGE, 150, SWT.LEFT, true,
+				SortDataType.String, false, LANGUAGE);
+		columnEdition = new XViewerColumn(REGISTER_COPY + DOT + EDITION, EDITION, 150, SWT.LEFT, true,
+				SortDataType.String, false, EDITION);
+		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
+				columnLanguage, columnEdition);
 	}
 
 	@Override
 	public boolean isDirty() {
 		return !copies.isEmpty();
-	}
-
-	@Override
-	protected void additionalTasks() {
-		try {
-			setMediumTypes(ServiceLocator.getInstance().getTypService().list());
-		} catch (final ConnectException e) {
-			handle(e);
-		}
-	}
-
-	private void setMediumTypes(final Collection<MediumType> mediumTypes) {
-		this.mediumTypes = mediumTypes;
-		if (mediumTypes == null || mediumTypes.isEmpty()) {
-			comboMediumType.removeAll();
-		} else {
-			final Set<String> typeNames = new HashSet<>();
-			for (final MediumType type : mediumTypes) {
-				typeNames.add(type.getName());
-			}
-			comboMediumType.setItems(typeNames.toArray(new String[] {}));
-		}
 	}
 }
