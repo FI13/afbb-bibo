@@ -298,7 +298,7 @@ public class RegisterCopyView extends AbstractEditView {
 		final Composite content = toolkit.createComposite(parent, SWT.NONE);
 		content.setLayout(new GridLayout(3, false));
 
-		idGroup = createGroup(content, "Nummer");
+		idGroup = toolkit.createGroup(content, "Nummer");
 		idGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(idGroup, BARCODE);
 		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING);
@@ -307,7 +307,7 @@ public class RegisterCopyView extends AbstractEditView {
 		toolkit.createLabel(idGroup, EDITION);
 		txtEdition = toolkit.createText(idGroup, EMPTY_STRING);
 
-		final Group mediumGroup = createGroup(content, "Informationen");
+		final Group mediumGroup = toolkit.createGroup(content, "Informationen");
 		mediumGroup.setLayout(new GridLayout(4, false));
 		toolkit.createLabel(mediumGroup, TITLE);
 		txtTitle = toolkit.createText(mediumGroup, EMPTY_STRING);
@@ -320,7 +320,7 @@ public class RegisterCopyView extends AbstractEditView {
 		toolkit.createLabel(mediumGroup, "Typ");
 		comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
 
-		final Group conditionGroup = createGroup(content, "Zustand");
+		final Group conditionGroup = toolkit.createGroup(content, "Zustand");
 		conditionGroup.setLayout(new GridLayout(1, false));
 		txtCondition = toolkit.createText(conditionGroup, EMPTY_STRING, SWT.MULTI);
 		txtCondition.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -432,16 +432,6 @@ public class RegisterCopyView extends AbstractEditView {
 	@Override
 	public void setFocus() {
 		idGroup.setFocus();
-	}
-
-	private Group createGroup(final Composite parent, final String text) {
-		final Group group = new Group(parent, SWT.SHADOW_NONE);
-		toolkit.adapt(group);
-		group.setText(text);
-		group.setBackground(toolkit.getColors().getBackground());
-		group.setForeground(toolkit.getColors().getForeground());
-		toolkit.paintBordersFor(group);
-		return group;
 	}
 
 	private void updateSaveButton() {

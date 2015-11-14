@@ -32,6 +32,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.EditorPart;
 
 import de.afbb.bibo.databinding.BindingHelper;
+import de.afbb.bibo.ui.BiboFormToolkit;
 import de.afbb.bibo.ui.Messages;
 
 abstract class AbstractEditView extends EditorPart {
@@ -43,7 +44,7 @@ abstract class AbstractEditView extends EditorPart {
 	private Label lblValidationMessage;
 	private final IObservableValue validationStatus = new WritableValue(IStatus.OK, IStatus.class);
 	protected final DataBindingContext bindingContext = new DataBindingContext();
-	protected FormToolkit toolkit = new FormToolkit(Display.getCurrent());
+	protected BiboFormToolkit toolkit = new BiboFormToolkit(Display.getCurrent());
 
 	@Override
 	public void createPartControl(final Composite parent) {
