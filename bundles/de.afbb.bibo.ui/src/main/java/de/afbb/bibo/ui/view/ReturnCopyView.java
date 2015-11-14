@@ -7,11 +7,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
@@ -41,8 +39,6 @@ public class ReturnCopyView extends AbstractEditView {
 	private Text txtPublisher;
 	private Button btnToList;
 	private Button btnToEdit;
-	private Button btnGroup;
-	private Button btnUngroup;
 	private Button btnSave;
 	private CCombo comboMediumType;
 
@@ -79,14 +75,18 @@ public class ReturnCopyView extends AbstractEditView {
 		txtLanguage = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, PUBLISHER);
 		txtPublisher = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, "Typ");
+		toolkit.createLabel(mediumGroup, ISBN);
+		txtIsbn = toolkit.createText(mediumGroup, EMPTY_STRING);
+		toolkit.createLabel(mediumGroup, EDITION);
+		txtEdition = toolkit.createText(mediumGroup, EMPTY_STRING);
+		toolkit.createLabel(mediumGroup, TYPE);
 		comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
 
 		final Composite middle = toolkit.createComposite(content, SWT.NONE);
 		middle.setLayout(new GridLayout(2, false));
 		btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
 		btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
-		
+
 		final Composite footer = toolkit.createComposite(content, SWT.NONE);
 		footer.setLayout(new GridLayout(1, false));
 		btnSave = toolkit.createButton(footer, "Rückgabe abschließen", SWT.NONE);
@@ -100,6 +100,8 @@ public class ReturnCopyView extends AbstractEditView {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtAuthor);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtLanguage);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPublisher);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtIsbn);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtEdition);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(comboMediumType);
 		GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
 		GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(footer);
@@ -112,6 +114,8 @@ public class ReturnCopyView extends AbstractEditView {
 		txtAuthor.setEnabled(false);
 		txtLanguage.setEnabled(false);
 		txtPublisher.setEnabled(false);
+		txtIsbn.setEnabled(false);
+		txtEdition.setEnabled(false);
 		comboMediumType.setEnabled(false);
 		btnToList.setEnabled(false);
 		btnToEdit.setEnabled(false);
