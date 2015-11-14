@@ -20,9 +20,9 @@ public class CopyStubService implements ICopyService {
 	public CopyStubService() {
 		Borrower b = (Borrower) new BorrowerStubService().borrowers.toArray()[0];
 		Curator c = new CuratorStubService().curator;
+		MediumType t = (MediumType) new TypStubService().types.toArray()[0];
 		Copy c1 = new Copy(1, "1.Auflage", "1", new Date(), "Kaffeefleck", new Date(), new Date(), -1, b, b, c, c, 1,
-				"9780553582024", "Game of Thrones", "George R. R. Martin", "en",
-				new MediumType(1, "Buch", IconType.BOOK), "Bantam Books");
+				"9780553582024", "Game of Thrones", "George R. R. Martin", "en", t, "Bantam Books");
 		copies.put("1", c1);
 	}
 
