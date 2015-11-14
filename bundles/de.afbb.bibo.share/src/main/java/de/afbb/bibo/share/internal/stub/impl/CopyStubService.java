@@ -10,7 +10,13 @@ import de.afbb.bibo.share.model.Medium;
 public class CopyStubService implements ICopyService {
 
 	@Override
-	public void update(Copy copy) throws ConnectException {		
+	public void update(Copy copy) throws ConnectException {
+	}
+
+	@Override
+	public Copy get(String barcode) throws ConnectException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -23,7 +29,7 @@ public class CopyStubService implements ICopyService {
 	public void registerCopy(Collection<Copy> copies) throws ConnectException {
 		// TODO Auto-generated method stub
 		throw new ConnectException();
-		
+
 	}
 
 	@Override
@@ -41,7 +47,7 @@ public class CopyStubService implements ICopyService {
 	@Override
 	public void delete(Copy copy) throws ConnectException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

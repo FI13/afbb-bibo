@@ -18,6 +18,15 @@ public interface ICopyService {
 	void update(Copy copy) throws ConnectException;
 
 	/**
+	 * get the copy that is represented by the given barcode
+	 * 
+	 * @param barcode
+	 * @return
+	 * @throws ConnectException
+	 */
+	Copy get(String barcode) throws ConnectException;
+
+	/**
 	 * gets all copies that are grouped to the given id
 	 * 
 	 * @param id
