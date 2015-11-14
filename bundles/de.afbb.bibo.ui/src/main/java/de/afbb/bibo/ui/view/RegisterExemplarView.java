@@ -296,10 +296,10 @@ public class RegisterExemplarView extends AbstractEditView {
 
 	@Override
 	public void initUi(final Composite parent) {
-		final Composite top = toolkit.createComposite(parent, SWT.NONE);
-		top.setLayout(new GridLayout(3, false));
+		final Composite content = toolkit.createComposite(parent, SWT.NONE);
+		content.setLayout(new GridLayout(3, false));
 
-		idGroup = createGroup(top, "Nummer");
+		idGroup = createGroup(content, "Nummer");
 		idGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(idGroup, BARCODE);
 		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING);
@@ -308,7 +308,7 @@ public class RegisterExemplarView extends AbstractEditView {
 		toolkit.createLabel(idGroup, EDITION);
 		txtEdition = toolkit.createText(idGroup, EMPTY_STRING);
 
-		final Group mediumGroup = createGroup(top, "Informationen");
+		final Group mediumGroup = createGroup(content, "Informationen");
 		mediumGroup.setLayout(new GridLayout(4, false));
 		toolkit.createLabel(mediumGroup, TITLE);
 		txtTitle = toolkit.createText(mediumGroup, EMPTY_STRING);
@@ -321,17 +321,17 @@ public class RegisterExemplarView extends AbstractEditView {
 		toolkit.createLabel(mediumGroup, "Typ");
 		comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
 
-		final Group conditionGroup = createGroup(top, "Zustand");
+		final Group conditionGroup = createGroup(content, "Zustand");
 		conditionGroup.setLayout(new GridLayout(1, false));
 		txtCondition = toolkit.createText(conditionGroup, EMPTY_STRING, SWT.MULTI);
 		txtCondition.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final Composite middle = toolkit.createComposite(top, SWT.NONE);
+		final Composite middle = toolkit.createComposite(content, SWT.NONE);
 		middle.setLayout(new GridLayout(2, false));
 		btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
 		btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
 
-		final Composite bottom = toolkit.createComposite(top, SWT.NONE);
+		final Composite bottom = toolkit.createComposite(content, SWT.NONE);
 		bottom.setLayout(new GridLayout(2, false));
 		final GridData layoutDataMiddle = new GridData(SWT.CENTER, SWT.DEFAULT, true, false);
 		layoutDataMiddle.horizontalSpan = 2;
@@ -350,6 +350,7 @@ public class RegisterExemplarView extends AbstractEditView {
 		btnGroup = toolkit.createButton(buttonComposite, "Medien Gruppieren", SWT.TOP);
 		btnUngroup = toolkit.createButton(buttonComposite, "Gruppierung Lösen", SWT.TOP);
 
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(content);
 		GridDataFactory.fillDefaults().applyTo(idGroup);
 		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
 		GridDataFactory.fillDefaults().applyTo(mediumGroup);
