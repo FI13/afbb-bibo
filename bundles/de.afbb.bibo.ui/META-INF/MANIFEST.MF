@@ -22,6 +22,8 @@ Import-Package: de.afbb.bibo.crypto,
  org.eclipse.jface,
  org.eclipse.jface.databinding.swt,
  org.eclipse.jface.databinding.viewers,
+ org.eclipse.nebula.jface.cdatetime,
+ org.eclipse.nebula.widgets.cdatetime,
  org.eclipse.nebula.widgets.xviewer,
  org.eclipse.ui.forms,
  org.eclipse.ui.forms.widgets
