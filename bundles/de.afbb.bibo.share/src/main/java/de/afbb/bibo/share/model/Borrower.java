@@ -11,7 +11,6 @@ import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
  */
 public class Borrower extends AbstractPropertyChangeSupport implements IEditorInput, Cloneable {
 
-	private static final long serialVersionUID = -3149389839841886740L;
 	public static final String FIELD_SURNAME = "surname";//$NON-NLS-1$
 	public static final String FIELD_FIRSTNAME = "forename";//$NON-NLS-1$
 	public static final String FIELD_INFO = "info";//$NON-NLS-1$
@@ -128,7 +127,6 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 		int result = 1;
 		result = prime * result + (email == null ? 0 : email.hashCode());
 		result = prime * result + (forename == null ? 0 : forename.hashCode());
-		result = prime * result + (id == null ? 0 : id.hashCode());
 		result = prime * result + (info == null ? 0 : info.hashCode());
 		result = prime * result + (phoneNumber == null ? 0 : phoneNumber.hashCode());
 		result = prime * result + (surname == null ? 0 : surname.hashCode());
@@ -160,13 +158,6 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 				return false;
 			}
 		} else if (!forename.equals(other.forename)) {
-			return false;
-		}
-		if (id == null) {
-			if (other.id != null) {
-				return false;
-			}
-		} else if (!id.equals(other.id)) {
 			return false;
 		}
 		if (info == null) {

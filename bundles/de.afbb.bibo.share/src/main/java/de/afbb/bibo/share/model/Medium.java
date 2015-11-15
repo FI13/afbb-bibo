@@ -95,7 +95,6 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (author == null ? 0 : author.hashCode());
-		result = prime * result + (id == null ? 0 : id.hashCode());
 		result = prime * result + (isbn == null ? 0 : isbn.hashCode());
 		result = prime * result + (language == null ? 0 : language.hashCode());
 		result = prime * result + (publisher == null ? 0 : publisher.hashCode());
@@ -122,13 +121,6 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 				return false;
 			}
 		} else if (!author.equals(other.author)) {
-			return false;
-		}
-		if (id == null) {
-			if (other.id != null) {
-				return false;
-			}
-		} else if (!id.equals(other.id)) {
 			return false;
 		}
 		if (isbn == null) {

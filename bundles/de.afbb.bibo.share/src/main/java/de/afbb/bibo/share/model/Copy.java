@@ -208,28 +208,18 @@ public class Copy extends Medium implements IEditorInput {
 				+ lastBorrower + ", curator=" + curator + ", lastCurator=" + lastCurator + '}';
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + (barcode == null ? 0 : barcode.hashCode());
-		result = prime * result + (borrowDate == null ? 0 : borrowDate.hashCode());
-		result = prime * result + (borrower == null ? 0 : borrower.hashCode());
-		result = prime * result + (condition == null ? 0 : condition.hashCode());
-		result = prime * result + (curator == null ? 0 : curator.hashCode());
-		result = prime * result + (edition == null ? 0 : edition.hashCode());
-		result = prime * result + (id == null ? 0 : id.hashCode());
-		result = prime * result + (inventoryDate == null ? 0 : inventoryDate.hashCode());
-		result = prime * result + (lastBorrowDate == null ? 0 : lastBorrowDate.hashCode());
-		result = prime * result + (lastBorrower == null ? 0 : lastBorrower.hashCode());
-		result = prime * result + (lastCurator == null ? 0 : lastCurator.hashCode());
+		result = prime * result + ((barcode == null) ? 0 : barcode.hashCode());
+		result = prime * result + ((condition == null) ? 0 : condition.hashCode());
+		result = prime * result + ((edition == null) ? 0 : edition.hashCode());
 		return result;
 	}
 
-	/** {@inheritDoc} */
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -239,26 +229,12 @@ public class Copy extends Medium implements IEditorInput {
 		if (!(obj instanceof Copy)) {
 			return false;
 		}
-		final Copy other = (Copy) obj;
+		Copy other = (Copy) obj;
 		if (barcode == null) {
 			if (other.barcode != null) {
 				return false;
 			}
 		} else if (!barcode.equals(other.barcode)) {
-			return false;
-		}
-		if (borrowDate == null) {
-			if (other.borrowDate != null) {
-				return false;
-			}
-		} else if (!borrowDate.equals(other.borrowDate)) {
-			return false;
-		}
-		if (borrower == null) {
-			if (other.borrower != null) {
-				return false;
-			}
-		} else if (!borrower.equals(other.borrower)) {
 			return false;
 		}
 		if (condition == null) {
@@ -268,53 +244,11 @@ public class Copy extends Medium implements IEditorInput {
 		} else if (!condition.equals(other.condition)) {
 			return false;
 		}
-		if (curator == null) {
-			if (other.curator != null) {
-				return false;
-			}
-		} else if (!curator.equals(other.curator)) {
-			return false;
-		}
 		if (edition == null) {
 			if (other.edition != null) {
 				return false;
 			}
 		} else if (!edition.equals(other.edition)) {
-			return false;
-		}
-		if (id == null) {
-			if (other.id != null) {
-				return false;
-			}
-		} else if (!id.equals(other.id)) {
-			return false;
-		}
-		if (inventoryDate == null) {
-			if (other.inventoryDate != null) {
-				return false;
-			}
-		} else if (!inventoryDate.equals(other.inventoryDate)) {
-			return false;
-		}
-		if (lastBorrowDate == null) {
-			if (other.lastBorrowDate != null) {
-				return false;
-			}
-		} else if (!lastBorrowDate.equals(other.lastBorrowDate)) {
-			return false;
-		}
-		if (lastBorrower == null) {
-			if (other.lastBorrower != null) {
-				return false;
-			}
-		} else if (!lastBorrower.equals(other.lastBorrower)) {
-			return false;
-		}
-		if (lastCurator == null) {
-			if (other.lastCurator != null) {
-				return false;
-			}
-		} else if (!lastCurator.equals(other.lastCurator)) {
 			return false;
 		}
 		return true;
