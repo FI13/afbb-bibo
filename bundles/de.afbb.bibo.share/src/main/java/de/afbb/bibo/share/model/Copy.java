@@ -17,6 +17,10 @@ public class Copy extends Medium implements IEditorInput {
 	public static final String FIELD_CONDITION = "condition";//$NON-NLS-1$
 	public static final String FIELD_DATE_BORROW = "borrowDate";//$NON-NLS-1$
 	public static final String FIELD_DATE_LAST_BORROW = "lastBorrowDate";//$NON-NLS-1$
+	public static final String FIELD_CURATOR = "curator";//$NON-NLS-1$
+	public static final String FIELD_LAST_CURATOR = "lastCurator";//$NON-NLS-1$
+	public static final String FIELD_BORROWER = "borrower";//$NON-NLS-1$
+	public static final String FIELD_LAST_BORROWER = "lastBorrower";//$NON-NLS-1$
 
 	private Integer id;
 	private String edition;
@@ -31,10 +35,10 @@ public class Copy extends Medium implements IEditorInput {
 	private Borrower lastBorrower;
 	private int groupId = -1;
 
-	public Copy(final int id, final String edition, final String barcode, final Date date, final String condition, final Date date2,
-			final Date date3, final int groupId, final Borrower borrower, final Borrower lastBorrower, final Curator curator,
-			final Curator lastCurator, final int mediumId, final String isbn, final String title, final String author,
-			final String language, final MediumType type, final String publisher) {
+	public Copy(final int id, final String edition, final String barcode, final Date date, final String condition,
+			final Date date2, final Date date3, final int groupId, final Borrower borrower, final Borrower lastBorrower,
+			final Curator curator, final Curator lastCurator, final int mediumId, final String isbn, final String title,
+			final String author, final String language, final MediumType type, final String publisher) {
 		super(mediumId, isbn, title, author, language, type, publisher);
 		this.id = id;
 		this.edition = edition;
@@ -109,7 +113,8 @@ public class Copy extends Medium implements IEditorInput {
 	}
 
 	public void setLastBorrowDate(final Date lastBorrowDate) {
-		changeSupport.firePropertyChange(FIELD_DATE_LAST_BORROW, this.lastBorrowDate, this.lastBorrowDate = lastBorrowDate);
+		changeSupport.firePropertyChange(FIELD_DATE_LAST_BORROW, this.lastBorrowDate,
+				this.lastBorrowDate = lastBorrowDate);
 	}
 
 	public Curator getCurator() {
@@ -117,7 +122,7 @@ public class Copy extends Medium implements IEditorInput {
 	}
 
 	public void setCurator(final Curator curator) {
-		this.curator = curator;
+		changeSupport.firePropertyChange(FIELD_CURATOR, this.curator, this.curator = curator);
 	}
 
 	public Curator getLastCurator() {
@@ -125,7 +130,7 @@ public class Copy extends Medium implements IEditorInput {
 	}
 
 	public void setLastCurator(final Curator lastCurator) {
-		this.lastCurator = lastCurator;
+		changeSupport.firePropertyChange(FIELD_LAST_CURATOR, this.lastCurator, this.lastCurator = lastCurator);
 	}
 
 	public Borrower getBorrower() {
@@ -133,7 +138,7 @@ public class Copy extends Medium implements IEditorInput {
 	}
 
 	public void setBorrower(final Borrower borrower) {
-		this.borrower = borrower;
+		changeSupport.firePropertyChange(FIELD_BORROWER, this.borrower, this.borrower = borrower);
 	}
 
 	public Borrower getLastBorrower() {
@@ -141,7 +146,7 @@ public class Copy extends Medium implements IEditorInput {
 	}
 
 	public void setLastBorrower(final Borrower lastBorrower) {
-		this.lastBorrower = lastBorrower;
+		changeSupport.firePropertyChange(FIELD_LAST_BORROWER, this.lastBorrower, this.lastBorrower = lastBorrower);
 	}
 
 	public int getGroupId() {
@@ -197,9 +202,10 @@ public class Copy extends Medium implements IEditorInput {
 
 	@Override
 	public String toString() {
-		return "Copy{" + "id=" + id + ", edition=" + edition + ", barcode=" + barcode + ", inventoryDate=" + inventoryDate + ", condition="
-				+ condition + ", borrowDate=" + borrowDate + ", lastBorrowDate=" + lastBorrowDate + ", groupId=" + groupId + ", borrowerId="
-				+ borrower + ", lastBorrowerId=" + lastBorrower + ", curator=" + curator + ", lastCurator=" + lastCurator + '}';
+		return "Copy{" + "id=" + id + ", edition=" + edition + ", barcode=" + barcode + ", inventoryDate="
+				+ inventoryDate + ", condition=" + condition + ", borrowDate=" + borrowDate + ", lastBorrowDate="
+				+ lastBorrowDate + ", groupId=" + groupId + ", borrowerId=" + borrower + ", lastBorrowerId="
+				+ lastBorrower + ", curator=" + curator + ", lastCurator=" + lastCurator + '}';
 	}
 
 	/** {@inheritDoc} */
