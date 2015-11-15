@@ -275,12 +275,7 @@ public class ReturnCopyView extends AbstractEditView {
 			final TreePath[] paths = ((TreeSelection) xViewer.getSelection()).getPaths();
 			if (paths.length > 0) {
 				final Copy copy = (Copy) paths[0].getLastSegment();
-				copies.remove(copy);
-				setCopyToModify(copy);
-				updateSaveButton();
-				btnToEdit.setEnabled(false);
-				xViewer.setInput(copies);
-				bindingContext.updateTargets();
+				moveToEdit(copy);
 			}
 		}
 	};
@@ -322,16 +317,31 @@ public class ReturnCopyView extends AbstractEditView {
 		}
 	};
 
-	private void loadCopyFromDatabase(String barcode) {
-		Copy copy = null;
-		try {
-			copy = ServiceLocator.getInstance().getCopyService().get(barcode);
-			// TODO prevent copy from being fetched twice (pull out of list
-			// instead)
-		} catch (ConnectException e) {
-			handle(e);
-		}
+	private void moveToEdit(Copy copy) {
+		copies.remove(copy);
 		setCopyToModify(copy);
+		updateSaveButton();
+		btnToEdit.setEnabled(false);
+		xViewer.setInput(copies);
+		bindingContext.updateTargets();
+	}
+
+	private void loadCopyFromDatabase(String barcode) {
+		// already loaded -> get from table
+		if (copyCache.containsKey(barcode)) {
+			// FIXME removal from list doesn't work -> check equals()
+			moveToEdit(copyCache.get(barcode));
+		} else {
+			// normal fetch from database
+			Copy copy = null;
+			try {
+				copy = ServiceLocator.getInstance().getCopyService().get(barcode);
+			} catch (ConnectException e) {
+				handle(e);
+			}
+			setCopyToModify(copy);
+			copyCache.put(barcode, copy); 
+		}
 	}
 
 	/**
