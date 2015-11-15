@@ -2,6 +2,8 @@ package de.afbb.bibo.ui.view;
 
 import java.net.ConnectException;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.nebula.widgets.cdatetime.CDT;
@@ -21,7 +23,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import de.afbb.bibo.databinding.BindingHelper;
@@ -85,6 +89,7 @@ public class ReturnCopyView extends AbstractEditView {
 	private XViewerColumn columnEdition;
 
 	private final HashMap<String, Copy> copyCache = new HashMap<>();
+	private final Set<Copy> copies = new HashSet<Copy>();
 	private Copy copyToModify = new Copy();
 
 	@Override
@@ -187,6 +192,8 @@ public class ReturnCopyView extends AbstractEditView {
 		btnToEdit.setImage(BiboImageRegistry.getImage(IconType.ARROW_UP, IconSize.small));
 		btnSave.setImage(BiboImageRegistry.getImage(IconType.SAVE, IconSize.small));
 
+		btnToList.addListener(SWT.MouseDown, toListListener);
+
 		txtCondition.setEnabled(false);
 		txtTitle.setEnabled(false);
 		txtAuthor.setEnabled(false);
@@ -245,11 +252,34 @@ public class ReturnCopyView extends AbstractEditView {
 		txtBarcode.setFocus();
 	}
 
+	private void updateSaveButton() {
+		btnSave.setEnabled(
+				(copyToModify.getBarcode() == null || copyToModify.getBarcode().isEmpty()) && !copies.isEmpty());
+	}
+
+	/**
+	 * listener that adds a copy to the list and clears the input fields
+	 * afterwards
+	 */
+	Listener toListListener = new Listener() {
+
+		@Override
+		public void handleEvent(final Event event) {
+			final Copy clone = (Copy) copyToModify.clone();
+			copies.add(clone);
+			setCopyToModify(null);
+			updateSaveButton();
+			xViewer.setInput(copies);
+			txtBarcode.setFocus();
+		}
+	};
+
 	private void loadCopyFromDatabase(String barcode) {
 		Copy copy = null;
 		try {
 			copy = ServiceLocator.getInstance().getCopyService().get(barcode);
-			// TODO prevent copy from being fetched twice (pull out of list instead)
+			// TODO prevent copy from being fetched twice (pull out of list
+			// instead)
 		} catch (ConnectException e) {
 			handle(e);
 		}
@@ -262,6 +292,7 @@ public class ReturnCopyView extends AbstractEditView {
 	 * @param copy
 	 */
 	private void setCopyToModify(Copy copy) {
+		copyToModify.setBarcode(copy != null ? copy.getBarcode() : null);
 		copyToModify.setAuthor(copy != null ? copy.getAuthor() : null);
 		copyToModify.setBorrowDate(copy != null ? copy.getBorrowDate() : null);
 		copyToModify.setBorrower(copy != null ? copy.getBorrower() : null);
