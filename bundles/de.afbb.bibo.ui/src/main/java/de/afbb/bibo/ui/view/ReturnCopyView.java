@@ -187,6 +187,7 @@ public class ReturnCopyView extends AbstractEditView {
 		btnToEdit.setImage(BiboImageRegistry.getImage(IconType.ARROW_UP, IconSize.small));
 		btnSave.setImage(BiboImageRegistry.getImage(IconType.SAVE, IconSize.small));
 
+		txtCondition.setEnabled(false);
 		txtTitle.setEnabled(false);
 		txtAuthor.setEnabled(false);
 		txtLanguage.setEnabled(false);
@@ -262,6 +263,8 @@ public class ReturnCopyView extends AbstractEditView {
 			copyToModify.setPublisher(copy != null ? copy.getPublisher() : null);
 			copyToModify.setTitle(copy != null ? copy.getTitle() : null);
 			copyToModify.setType(copy != null ? copy.getType() : null);
+			txtCondition.setEnabled(copy != null);
+			// TODO disable condition text when moved to list
 			bindingContext.updateTargets();
 		} catch (ConnectException e) {
 			handle(e);
