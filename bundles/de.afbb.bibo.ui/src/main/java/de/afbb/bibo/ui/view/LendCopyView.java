@@ -32,9 +32,13 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.PartInitException;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.Medium;
@@ -46,9 +50,9 @@ import de.afbb.bibo.ui.provider.CopyLabelProvider;
 import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
 import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 
-public class ReturnCopyView extends AbstractEditView {
+public class LendCopyView extends AbstractEditView {
 
-	public static final String ID = "de.afbb.bibo.ui.return.copy";//$NON-NLS-1$
+	public static final String ID = "de.afbb.bibo.ui.lend.copy";//$NON-NLS-1$
 	private static final String RETURN_COPY = "return.copy";//$NON-NLS-1$
 	private static final String DOT = ".";//$NON-NLS-1$
 	private static final String TYPE = "Typ";
@@ -415,6 +419,14 @@ public class ReturnCopyView extends AbstractEditView {
 				SortDataType.String, false, EDITION);
 		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
 				columnLanguage, columnEdition);
+	}
+
+	@Override
+	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		super.init(site, input);
+		if (input instanceof Borrower) {
+			setPartName("Ausleihe an " + ((Borrower) input).getName());
+		}
 	}
 
 }

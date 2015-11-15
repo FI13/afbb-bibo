@@ -237,6 +237,7 @@ public final class BindingHelper {
 
 			@Override
 			public void handleChange(final ChangeEvent event) {
+				// TODO refactor - can lead to StackOverflowError
 				for (final Object o : bindingContext.getBindings()) {
 					final Binding binding = (Binding) o;
 					final IStatus status = (IStatus) binding.getValidationStatus().getValue();

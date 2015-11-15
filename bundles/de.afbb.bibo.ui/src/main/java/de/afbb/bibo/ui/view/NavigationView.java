@@ -2,10 +2,13 @@ package de.afbb.bibo.ui.view;
 
 import java.net.ConnectException;
 
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.GestureEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
+import org.ietf.jgss.GSSContext;
 
 import de.afbb.bibo.share.impl.NavigationTreeService;
 import de.afbb.bibo.ui.provider.NavigationTreeViewContentProvider;
@@ -13,7 +16,7 @@ import de.afbb.bibo.ui.provider.NavigationTreeViewLabelProvider;
 
 public class NavigationView extends ViewPart {
 
-	public static final String ID = "de.afbb.bibo.ui.navigationView";
+	public static final String ID = "de.afbb.bibo.ui.navigationView";//$NON-NLS-1$
 	private TreeViewer viewer;
 
 	@Override
@@ -25,9 +28,15 @@ public class NavigationView extends ViewPart {
 			viewer.setContentProvider(new NavigationTreeViewContentProvider());
 			viewer.setLabelProvider(new NavigationTreeViewLabelProvider());
 			viewer.setInput(navigationTree.getRoot());
+			// popup menu related stuff
+			MenuManager manager = new MenuManager();
+			viewer.getTree().setMenu(manager.createContextMenu(viewer.getTree()));
+			getSite().registerContextMenu(manager, viewer);
+			getSite().setSelectionProvider(viewer);
 		} catch (final ConnectException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	/**

@@ -159,7 +159,7 @@
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.borrower"
-               icon="icons/32x32login.png"
+               icon="icons/32x32add_schueler.png"
                style="push">
          </command>
          <separator
@@ -168,6 +168,15 @@
          </separator>
          <command
                commandId="de.afbb.bibo.ui.return"
+               icon="icons/32x32login.png"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:de.afbb.bibo.ui.navigationView">
+         <command
+               commandId="de.afbb.bibo.ui.lend"
                style="push">
          </command>
       </menuContribution>
@@ -198,8 +207,16 @@
       <editor
             class="de.afbb.bibo.ui.view.ReturnCopyView"
             default="false"
+            icon="icons/16x16login.png"
             id="de.afbb.bibo.ui.return.copy"
             name="Rückgabe">
+      </editor>
+      <editor
+            class="de.afbb.bibo.ui.view.LendCopyView"
+            default="false"
+            icon="icons/16x16book2.png"
+            id="de.afbb.bibo.ui.lend.copy"
+            name="Ausleihe">
       </editor>
    </extension>
    <extension
@@ -228,6 +245,32 @@
             class="de.afbb.bibo.ui.handler.ReturnCopyHandler"
             commandId="de.afbb.bibo.ui.return">
       </handler>
+      <handler
+            class="de.afbb.bibo.ui.handler.LendCopyHandler"
+            commandId="de.afbb.bibo.ui.lend">
+         <activeWhen>
+            <iterate
+                  ifEmpty="false"
+                  operator="and">
+               <instanceof
+                     value="de.afbb.bibo.share.impl.NavigationTreeViewNode">
+               </instanceof>
+               <test
+                     property="de.afbb.bibo.PERSON">
+               </test>
+            </iterate>
+         </activeWhen>
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="de.afbb.bibo.ui.handler.NavigationSelectionTester"
+            id="de.afbb.bibo.ui.navigation.selection"
+            namespace="de.afbb.bibo"
+            properties="PERSONS, PERSON, BOOKS, BOOK, ROOT"
+            type="de.afbb.bibo.share.impl.NavigationTreeViewNode">
+      </propertyTester>
    </extension>
 
 </plugin>
