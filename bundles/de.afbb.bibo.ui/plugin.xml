@@ -238,6 +238,10 @@
             class="de.afbb.bibo.ui.handler.ReturnCopyHandler"
             commandId="de.afbb.bibo.ui.return">
       </handler>
+      <handler
+            class="de.afbb.bibo.ui.handler.LendCopyHandler"
+            commandId="de.afbb.bibo.ui.lend">
+      </handler>
    </extension>
 
 </plugin>
