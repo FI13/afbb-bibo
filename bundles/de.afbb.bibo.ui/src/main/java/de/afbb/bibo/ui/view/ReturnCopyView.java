@@ -50,6 +50,9 @@ public class ReturnCopyView extends AbstractEditView {
 	private static final String PUBLISHER = "Verlag";
 	private static final String LANGUAGE = "Sprache";
 	private static final String EDITION = "Auflage";
+	private static final String DATE = "Datum";
+	private static final String CURATOR = "Bediener";
+	private static final String BORROWER = "Ausleiher";
 
 	private Text txtCondition;
 	private Text txtBarcode;
@@ -59,11 +62,16 @@ public class ReturnCopyView extends AbstractEditView {
 	private Text txtAuthor;
 	private Text txtLanguage;
 	private Text txtPublisher;
+	private Text txtBorrower;
+	private Text txtLastBorrower;
+	private Text txtCurator;
+	private Text txtLastCurator;
 	private Button btnToList;
 	private Button btnToEdit;
 	private Button btnSave;
 	private CCombo comboMediumType;
 	private DateTime timeBorrowDate;
+	private DateTime timeLastBorrowDate;
 
 	private XViewer xViewer;
 	private final XViewerFactory factory = new BiboXViewerFactory(RETURN_COPY);
@@ -89,14 +97,14 @@ public class ReturnCopyView extends AbstractEditView {
 		toolkit.createLabel(copyGroup, "Barcode");
 		txtBarcode = toolkit.createText(copyGroup, EMPTY_STRING);
 		txtBarcode.addFocusListener(new FocusListener() {
-			
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				loadCopy();
 			}
-			
+
 			@Override
-			public void focusGained(FocusEvent e) {				
+			public void focusGained(FocusEvent e) {
 			}
 		});
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(copyGroup, "Zustand"));
@@ -104,8 +112,20 @@ public class ReturnCopyView extends AbstractEditView {
 
 		Group statusGroup = toolkit.createGroup(content, "Informationen");
 		statusGroup.setLayout(new GridLayout(2, false));
-		toolkit.createLabel(statusGroup, "Ausgeliehen am");
+		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(statusGroup, "Aktueller Ausleihvorgang"));
+		toolkit.createLabel(statusGroup, DATE);
 		timeBorrowDate = toolkit.createDateTime(statusGroup);
+		toolkit.createLabel(statusGroup, CURATOR);
+		txtCurator = toolkit.createText(statusGroup, EMPTY_STRING);
+		toolkit.createLabel(statusGroup, BORROWER);
+		txtBorrower = toolkit.createText(statusGroup, EMPTY_STRING);
+		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(statusGroup, "Letzter Ausleihvorgang"));
+		toolkit.createLabel(statusGroup, DATE);
+		timeLastBorrowDate = toolkit.createDateTime(statusGroup);
+		toolkit.createLabel(statusGroup, CURATOR);
+		txtLastCurator = toolkit.createText(statusGroup, EMPTY_STRING);
+		toolkit.createLabel(statusGroup, BORROWER);
+		txtLastBorrower = toolkit.createText(statusGroup, EMPTY_STRING);
 
 		Group mediumGroup = toolkit.createGroup(content, "Allgemein");
 		mediumGroup.setLayout(new GridLayout(2, false));
@@ -154,6 +174,10 @@ public class ReturnCopyView extends AbstractEditView {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPublisher);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtIsbn);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtEdition);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtCurator);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtBorrower);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtLastCurator);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtLastBorrower);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(comboMediumType);
 		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
 		GridDataFactory.fillDefaults().span(3, 1).grab(true, true).applyTo(xViewer.getControl());
@@ -169,11 +193,16 @@ public class ReturnCopyView extends AbstractEditView {
 		txtPublisher.setEnabled(false);
 		txtIsbn.setEnabled(false);
 		txtEdition.setEnabled(false);
+		txtCurator.setEnabled(false);
+		txtBorrower.setEnabled(false);
+		txtLastCurator.setEnabled(false);
+		txtLastBorrower.setEnabled(false);
 		comboMediumType.setEnabled(false);
 		btnToList.setEnabled(false);
 		btnToEdit.setEnabled(false);
 		btnSave.setEnabled(false);
 		timeBorrowDate.setEnabled(false);
+		timeLastBorrowDate.setEnabled(false);
 	}
 
 	@Override
@@ -199,6 +228,7 @@ public class ReturnCopyView extends AbstractEditView {
 				false);
 
 		BindingHelper.bindDate(timeBorrowDate, copyToModify, Copy.class, Copy.FIELD_DATE_BORROW, bindingContext);
+		BindingHelper.bindDate(timeLastBorrowDate, copyToModify, Copy.class, Copy.FIELD_DATE_LAST_BORROW, bindingContext);
 
 	}
 
