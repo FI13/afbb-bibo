@@ -29,7 +29,9 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.statushandlers.AbstractStatusAreaProvider;
 
+import de.afbb.bibo.databinding.conversion.ObjectToStringConverter;
 import de.afbb.bibo.ui.observable.value.NotEmptyValue;
 import org.eclipse.nebula.jface.cdatetime.CDateTimeObservableValue;
 import org.eclipse.nebula.widgets.cdatetime.CDateTime;
@@ -130,6 +132,32 @@ public final class BindingHelper {
 			createControlDecoration(textField, NotEmptyValue.MSG, isRequired);
 		}
 
+		return binding;
+	}
+
+	/**
+	 * one-way databinding to display the content of an object in a text field
+	 * 
+	 * @param textField
+	 *            widget for input
+	 * @param entity
+	 *            class that holds the model information
+	 * @param entityClass
+	 *            class of entity
+	 * @param propertyName
+	 *            name of the property that should be binded
+	 * @param bindingContext
+	 *            context of the binding
+	 * @return
+	 */
+	public static <E> Binding bindObjectToTextField(final Text textField, final E entity, final Class<E> entityClass,
+			final String propertyName, final DataBindingContext bindingContext) {
+		final ISWTObservableValue targetObservable = SWTObservables.observeText(textField, SWT.Modify);
+		IObservableValue modelObservable = BeanProperties.value(entityClass, propertyName).observe(entity);
+		UpdateValueStrategy modelToTarget = new UpdateValueStrategy();
+		modelToTarget.setConverter(new ObjectToStringConverter());
+		Binding binding = bindingContext.bindValue(targetObservable, modelObservable,
+				new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), modelToTarget);
 		return binding;
 	}
 

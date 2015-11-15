@@ -228,8 +228,15 @@ public class ReturnCopyView extends AbstractEditView {
 				false);
 
 		BindingHelper.bindDate(timeBorrowDate, copyToModify, Copy.class, Copy.FIELD_DATE_BORROW, bindingContext);
-		BindingHelper.bindDate(timeLastBorrowDate, copyToModify, Copy.class, Copy.FIELD_DATE_LAST_BORROW, bindingContext);
+		BindingHelper.bindDate(timeLastBorrowDate, copyToModify, Copy.class, Copy.FIELD_DATE_LAST_BORROW,
+				bindingContext);
 
+		BindingHelper.bindObjectToTextField(txtCurator, copyToModify, Copy.class, Copy.FIELD_CURATOR, bindingContext);
+		BindingHelper.bindObjectToTextField(txtLastCurator, copyToModify, Copy.class, Copy.FIELD_LAST_CURATOR,
+				bindingContext);
+		BindingHelper.bindObjectToTextField(txtBorrower, copyToModify, Copy.class, Copy.FIELD_BORROWER, bindingContext);
+		BindingHelper.bindObjectToTextField(txtLastBorrower, copyToModify, Copy.class, Copy.FIELD_LAST_BORROWER,
+				bindingContext);
 	}
 
 	@Override
