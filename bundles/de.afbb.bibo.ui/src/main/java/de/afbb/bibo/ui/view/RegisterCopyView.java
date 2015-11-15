@@ -1,7 +1,6 @@
 package de.afbb.bibo.ui.view;
 
 import java.net.ConnectException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -96,7 +95,6 @@ public class RegisterCopyView extends AbstractEditView {
 
 	private static final int UNASSIGNED_GROUP = -1;
 	private int highestAssignedGroup = UNASSIGNED_GROUP;
-	private Collection<MediumType> mediumTypes;
 
 	/**
 	 * listener that adds a copy to the list and clears the input fields
