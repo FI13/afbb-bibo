@@ -159,7 +159,7 @@
          </command>
          <command
                commandId="de.afbb.bibo.ui.create.borrower"
-               icon="icons/32x32login.png"
+               icon="icons/32x32add_schueler.png"
                style="push">
          </command>
          <separator
@@ -168,6 +168,15 @@
          </separator>
          <command
                commandId="de.afbb.bibo.ui.return"
+               icon="icons/32x32login.png"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:de.afbb.bibo.ui.navigationView">
+         <command
+               commandId="de.afbb.bibo.ui.lend"
                style="push">
          </command>
       </menuContribution>
@@ -198,6 +207,7 @@
       <editor
             class="de.afbb.bibo.ui.view.ReturnCopyView"
             default="false"
+            icon="icons/16x16login.png"
             id="de.afbb.bibo.ui.return.copy"
             name="Rückgabe">
       </editor>
