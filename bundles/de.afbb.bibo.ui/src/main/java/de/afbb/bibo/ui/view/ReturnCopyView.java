@@ -3,9 +3,13 @@ package de.afbb.bibo.ui.view;
 import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.nebula.widgets.cdatetime.CDT;
 import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
@@ -16,6 +20,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
@@ -160,7 +166,7 @@ public class ReturnCopyView extends AbstractEditView {
 		final CopyTreeContentProvider contentProvider = new CopyTreeContentProvider();
 		xViewer.setContentProvider(contentProvider);
 		xViewer.setLabelProvider(new CopyLabelProvider(xViewer, contentProvider));
-		// xViewer.getTree().addSelectionListener(xViewerSelectionListener);
+		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
 		xViewer.getMenuManager().dispose();
 
 		final Composite footer = toolkit.createComposite(content, SWT.NONE);
@@ -193,6 +199,7 @@ public class ReturnCopyView extends AbstractEditView {
 		btnSave.setImage(BiboImageRegistry.getImage(IconType.SAVE, IconSize.small));
 
 		btnToList.addListener(SWT.MouseDown, toListListener);
+		btnToEdit.addListener(SWT.MouseDown, toEditListener);
 
 		txtCondition.setEnabled(false);
 		txtTitle.setEnabled(false);
@@ -258,6 +265,27 @@ public class ReturnCopyView extends AbstractEditView {
 	}
 
 	/**
+	 * listener that removes the selected item from the list and fills the input
+	 * fields with its values
+	 */
+	Listener toEditListener = new Listener() {
+
+		@Override
+		public void handleEvent(final Event event) {
+			final TreePath[] paths = ((TreeSelection) xViewer.getSelection()).getPaths();
+			if (paths.length > 0) {
+				final Copy copy = (Copy) paths[0].getLastSegment();
+				copies.remove(copy);
+				setCopyToModify(copy);
+				updateSaveButton();
+				btnToEdit.setEnabled(false);
+				xViewer.setInput(copies);
+				bindingContext.updateTargets();
+			}
+		}
+	};
+
+	/**
 	 * listener that adds a copy to the list and clears the input fields
 	 * afterwards
 	 */
@@ -271,6 +299,26 @@ public class ReturnCopyView extends AbstractEditView {
 			updateSaveButton();
 			xViewer.setInput(copies);
 			txtBarcode.setFocus();
+		}
+	};
+	/**
+	 * listener that reacts when the selection changes and enables & disables
+	 * control buttons
+	 */
+	SelectionListener xViewerSelectionListener = new SelectionListener() {
+
+		@Override
+		public void widgetSelected(final SelectionEvent e) {
+			final ISelection selection = xViewer.getSelection();
+			if (selection instanceof TreeSelection) {
+				final boolean singleSelection = ((TreeSelection) selection).size() == 1;
+				btnToEdit.setEnabled(singleSelection);
+			}
+		}
+
+		@Override
+		public void widgetDefaultSelected(final SelectionEvent e) {
+			// no double click event
 		}
 	};
 
