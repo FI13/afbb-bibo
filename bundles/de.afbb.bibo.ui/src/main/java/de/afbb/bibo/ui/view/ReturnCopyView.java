@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreePath;
@@ -195,6 +199,27 @@ public class ReturnCopyView extends AbstractEditView {
 
 		btnToList.addListener(SWT.MouseDown, toListListener);
 		btnToEdit.addListener(SWT.MouseDown, toEditListener);
+		btnSave.addListener(SWT.MouseDown, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				final Job job = new Job("Rückgabe abschließen") {
+
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						try {
+							ServiceLocator.getInstance().getCopyService().returnCopy(copies);
+						} catch (ConnectException e) {
+							handle(e);
+						}
+						return Status.OK_STATUS;
+					}
+
+				};
+				job.schedule();
+				closeEditor();
+			}
+		});
 
 		txtCondition.setEnabled(false);
 		txtTitle.setEnabled(false);
@@ -291,6 +316,7 @@ public class ReturnCopyView extends AbstractEditView {
 			txtBarcode.setFocus();
 		}
 	};
+
 	/**
 	 * listener that reacts when the selection changes and enables & disables
 	 * control buttons
@@ -334,7 +360,7 @@ public class ReturnCopyView extends AbstractEditView {
 				handle(e);
 			}
 			setCopyToModify(copy);
-			copyCache.put(barcode, copy); 
+			copyCache.put(barcode, copy);
 		}
 	}
 
