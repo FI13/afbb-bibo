@@ -249,6 +249,7 @@ public class ReturnCopyView extends AbstractEditView {
 		Copy copy = null;
 		try {
 			copy = ServiceLocator.getInstance().getCopyService().get(barcode);
+			// TODO prevent copy from being fetched twice (pull out of list instead)
 		} catch (ConnectException e) {
 			handle(e);
 		}
