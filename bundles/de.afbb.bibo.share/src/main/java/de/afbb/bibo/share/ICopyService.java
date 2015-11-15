@@ -47,6 +47,15 @@ public interface ICopyService {
 	void registerCopy(Collection<Copy> copies) throws ConnectException;
 
 	/**
+	 * marks copies as returned
+	 * 
+	 * @param copies
+	 *            collection of copies.
+	 * @throws ConnectException
+	 */
+	void returnCopy(Collection<Copy> copies) throws ConnectException;
+
+	/**
 	 * gets a list of all copies of all mediums
 	 * 
 	 * @return
