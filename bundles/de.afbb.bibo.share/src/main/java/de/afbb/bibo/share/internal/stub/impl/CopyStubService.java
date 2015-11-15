@@ -49,6 +49,12 @@ public class CopyStubService implements ICopyService {
 	}
 
 	@Override
+	public void returnCopy(Collection<Copy> copies) throws ConnectException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public Collection<Copy> listAll() throws ConnectException {
 		// TODO Auto-generated method stub
 		return null;
