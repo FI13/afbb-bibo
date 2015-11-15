@@ -241,7 +241,29 @@
       <handler
             class="de.afbb.bibo.ui.handler.LendCopyHandler"
             commandId="de.afbb.bibo.ui.lend">
+         <activeWhen>
+            <iterate
+                  ifEmpty="false"
+                  operator="and">
+               <instanceof
+                     value="de.afbb.bibo.share.impl.NavigationTreeViewNode">
+               </instanceof>
+               <test
+                     property="de.afbb.bibo.PERSON">
+               </test>
+            </iterate>
+         </activeWhen>
       </handler>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="de.afbb.bibo.ui.handler.NavigationSelectionTester"
+            id="de.afbb.bibo.ui.navigation.selection"
+            namespace="de.afbb.bibo"
+            properties="PERSONS, PERSON, BOOKS, BOOK, ROOT"
+            type="de.afbb.bibo.share.impl.NavigationTreeViewNode">
+      </propertyTester>
    </extension>
 
 </plugin>
