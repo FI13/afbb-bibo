@@ -100,7 +100,7 @@ public class ReturnCopyView extends AbstractEditView {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				loadCopy();
+				loadCopyFromDatabase(txtBarcode.getText());
 			}
 
 			@Override
@@ -245,30 +245,40 @@ public class ReturnCopyView extends AbstractEditView {
 		txtBarcode.setFocus();
 	}
 
-	private void loadCopy() {
+	private void loadCopyFromDatabase(String barcode) {
+		Copy copy = null;
 		try {
-			Copy copy = ServiceLocator.getInstance().getCopyService().get(txtBarcode.getText());
-			copyToModify.setAuthor(copy != null ? copy.getAuthor() : null);
-			copyToModify.setBorrowDate(copy != null ? copy.getBorrowDate() : null);
-			copyToModify.setBorrower(copy != null ? copy.getBorrower() : null);
-			copyToModify.setCondition(copy != null ? copy.getCondition() : null);
-			copyToModify.setCurator(copy != null ? copy.getCurator() : null);
-			copyToModify.setEdition(copy != null ? copy.getEdition() : null);
-			copyToModify.setInventoryDate(copy != null ? copy.getInventoryDate() : null);
-			copyToModify.setIsbn(copy != null ? copy.getIsbn() : null);
-			copyToModify.setLanguage(copy != null ? copy.getLanguage() : null);
-			copyToModify.setLastBorrowDate(copy != null ? copy.getLastBorrowDate() : null);
-			copyToModify.setLastBorrower(copy != null ? copy.getLastBorrower() : null);
-			copyToModify.setLastCurator(copy != null ? copy.getLastCurator() : null);
-			copyToModify.setPublisher(copy != null ? copy.getPublisher() : null);
-			copyToModify.setTitle(copy != null ? copy.getTitle() : null);
-			copyToModify.setType(copy != null ? copy.getType() : null);
-			txtCondition.setEnabled(copy != null);
-			// TODO disable condition text when moved to list
-			bindingContext.updateTargets();
+			copy = ServiceLocator.getInstance().getCopyService().get(barcode);
 		} catch (ConnectException e) {
 			handle(e);
 		}
+		setCopyToModify(copy);
+	}
+
+	/**
+	 * fills the controls with the appropriate informations
+	 * 
+	 * @param copy
+	 */
+	private void setCopyToModify(Copy copy) {
+		copyToModify.setAuthor(copy != null ? copy.getAuthor() : null);
+		copyToModify.setBorrowDate(copy != null ? copy.getBorrowDate() : null);
+		copyToModify.setBorrower(copy != null ? copy.getBorrower() : null);
+		copyToModify.setCondition(copy != null ? copy.getCondition() : null);
+		copyToModify.setCurator(copy != null ? copy.getCurator() : null);
+		copyToModify.setEdition(copy != null ? copy.getEdition() : null);
+		copyToModify.setInventoryDate(copy != null ? copy.getInventoryDate() : null);
+		copyToModify.setIsbn(copy != null ? copy.getIsbn() : null);
+		copyToModify.setLanguage(copy != null ? copy.getLanguage() : null);
+		copyToModify.setLastBorrowDate(copy != null ? copy.getLastBorrowDate() : null);
+		copyToModify.setLastBorrower(copy != null ? copy.getLastBorrower() : null);
+		copyToModify.setLastCurator(copy != null ? copy.getLastCurator() : null);
+		copyToModify.setPublisher(copy != null ? copy.getPublisher() : null);
+		copyToModify.setTitle(copy != null ? copy.getTitle() : null);
+		copyToModify.setType(copy != null ? copy.getType() : null);
+		txtCondition.setEnabled(copy != null);
+		btnToList.setEnabled(copy != null);
+		bindingContext.updateTargets();
 	}
 
 	private void initTableColumns() {
