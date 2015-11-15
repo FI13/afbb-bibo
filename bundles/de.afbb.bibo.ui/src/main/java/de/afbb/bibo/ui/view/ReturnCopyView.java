@@ -12,6 +12,8 @@ import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
@@ -86,15 +88,15 @@ public class ReturnCopyView extends AbstractEditView {
 		copyGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(copyGroup, "Barcode");
 		txtBarcode = toolkit.createText(copyGroup, EMPTY_STRING);
-		txtBarcode.addTraverseListener(new TraverseListener() {
-
+		txtBarcode.addFocusListener(new FocusListener() {
+			
 			@Override
-			public void keyTraversed(TraverseEvent e) {
-				// tab key
-				if (e.keyCode == 9) {
-					loadCopy();
-				}
-
+			public void focusLost(FocusEvent e) {
+				loadCopy();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {				
 			}
 		});
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(copyGroup, "Zustand"));
