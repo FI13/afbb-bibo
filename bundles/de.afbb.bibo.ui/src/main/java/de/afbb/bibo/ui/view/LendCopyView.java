@@ -32,9 +32,13 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.PartInitException;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.Medium;
@@ -415,6 +419,14 @@ public class LendCopyView extends AbstractEditView {
 				SortDataType.String, false, EDITION);
 		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
 				columnLanguage, columnEdition);
+	}
+
+	@Override
+	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		super.init(site, input);
+		if (input instanceof Borrower) {
+			setPartName("Ausleihe an " + ((Borrower) input).getName());
+		}
 	}
 
 }
