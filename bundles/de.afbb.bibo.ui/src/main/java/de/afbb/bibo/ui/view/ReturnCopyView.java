@@ -75,12 +75,12 @@ public class ReturnCopyView extends AbstractEditView {
 	private Text txtLastBorrower;
 	private Text txtCurator;
 	private Text txtLastCurator;
+	private Text txtBorrowDate;
+	private Text txtLastBorrowDate;
 	private Button btnToList;
 	private Button btnToEdit;
 	private Button btnSave;
 	private CCombo comboMediumType;
-	private DateTime timeBorrowDate;
-	private DateTime timeLastBorrowDate;
 
 	private XViewer xViewer;
 	private final XViewerFactory factory = new BiboXViewerFactory(RETURN_COPY);
@@ -124,14 +124,14 @@ public class ReturnCopyView extends AbstractEditView {
 		statusGroup.setLayout(new GridLayout(2, false));
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(statusGroup, "Aktueller Ausleihvorgang"));
 		toolkit.createLabel(statusGroup, DATE);
-		timeBorrowDate = toolkit.createDateTime(statusGroup);
+		txtBorrowDate = toolkit.createText(statusGroup, EMPTY_STRING);
 		toolkit.createLabel(statusGroup, CURATOR);
 		txtCurator = toolkit.createText(statusGroup, EMPTY_STRING);
 		toolkit.createLabel(statusGroup, BORROWER);
 		txtBorrower = toolkit.createText(statusGroup, EMPTY_STRING);
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(statusGroup, "Letzter Ausleihvorgang"));
 		toolkit.createLabel(statusGroup, DATE);
-		timeLastBorrowDate = toolkit.createDateTime(statusGroup);
+		txtLastBorrowDate = toolkit.createText(statusGroup, EMPTY_STRING);
 		toolkit.createLabel(statusGroup, CURATOR);
 		txtLastCurator = toolkit.createText(statusGroup, EMPTY_STRING);
 		toolkit.createLabel(statusGroup, BORROWER);
@@ -188,6 +188,9 @@ public class ReturnCopyView extends AbstractEditView {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtBorrower);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtLastCurator);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtLastBorrower);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtBorrowDate);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtLastBorrowDate);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtLastBorrower);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(comboMediumType);
 		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
 		GridDataFactory.fillDefaults().span(3, 1).grab(true, true).applyTo(xViewer.getControl());
@@ -236,8 +239,8 @@ public class ReturnCopyView extends AbstractEditView {
 		btnToList.setEnabled(false);
 		btnToEdit.setEnabled(false);
 		btnSave.setEnabled(false);
-		timeBorrowDate.setEnabled(false);
-		timeLastBorrowDate.setEnabled(false);
+		txtBorrowDate.setEnabled(false);
+		txtLastBorrowDate.setEnabled(false);
 	}
 
 	@Override
@@ -262,8 +265,9 @@ public class ReturnCopyView extends AbstractEditView {
 				ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(), bindingContext,
 				false);
 
-		BindingHelper.bindDate(timeBorrowDate, copyToModify, Copy.class, Copy.FIELD_DATE_BORROW, bindingContext);
-		BindingHelper.bindDate(timeLastBorrowDate, copyToModify, Copy.class, Copy.FIELD_DATE_LAST_BORROW,
+		BindingHelper.bindObjectToTextField(txtBorrowDate, copyToModify, Copy.class, Copy.FIELD_DATE_BORROW,
+				bindingContext);
+		BindingHelper.bindObjectToTextField(txtLastBorrowDate, copyToModify, Copy.class, Copy.FIELD_DATE_LAST_BORROW,
 				bindingContext);
 
 		BindingHelper.bindObjectToTextField(txtCurator, copyToModify, Copy.class, Copy.FIELD_CURATOR, bindingContext);
@@ -272,6 +276,7 @@ public class ReturnCopyView extends AbstractEditView {
 		BindingHelper.bindObjectToTextField(txtBorrower, copyToModify, Copy.class, Copy.FIELD_BORROWER, bindingContext);
 		BindingHelper.bindObjectToTextField(txtLastBorrower, copyToModify, Copy.class, Copy.FIELD_LAST_BORROWER,
 				bindingContext);
+
 	}
 
 	@Override
