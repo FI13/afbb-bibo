@@ -31,9 +31,6 @@ public class ObjectToStringConverter extends Converter {
 			return ((Curator) fromObject).getName();
 		}
 		if (fromObject instanceof Date) {
-//			Calendar calendar = Calendar.getInstance();
-//			calendar.setTime((Date) fromObject);
-			// new SimpleDateFormat("dd.MM.yyy").applyPattern(pattern);
 			return DateFormat.getDateInstance().format((Date) fromObject);
 		}
 		return "";//$NON-NLS-1$
