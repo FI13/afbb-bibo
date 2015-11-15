@@ -211,6 +211,13 @@
             id="de.afbb.bibo.ui.return.copy"
             name="Rückgabe">
       </editor>
+      <editor
+            class="de.afbb.bibo.ui.view.LendCopyView"
+            default="false"
+            icon="icons/16x16book2.png"
+            id="de.afbb.bibo.ui.lend.copy"
+            name="Ausleihe">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
