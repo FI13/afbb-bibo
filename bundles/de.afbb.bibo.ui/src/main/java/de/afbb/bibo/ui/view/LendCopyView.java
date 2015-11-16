@@ -13,21 +13,15 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.nebula.widgets.xviewer.XViewer;
-import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
-import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
-import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
@@ -45,27 +39,14 @@ import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
-import de.afbb.bibo.ui.provider.BiboXViewerFactory;
-import de.afbb.bibo.ui.provider.CopyLabelProvider;
-import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
+import de.afbb.bibo.ui.Messages;
+import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 
 public class LendCopyView extends AbstractEditView {
 
 	public static final String ID = "de.afbb.bibo.ui.lend.copy";//$NON-NLS-1$
-	private static final String RETURN_COPY = "return.copy";//$NON-NLS-1$
-	private static final String DOT = ".";//$NON-NLS-1$
-	private static final String TYPE = "Typ";
-	private static final String BARCODE = "Barcode";
-	private static final String ISBN = "ISBN";//$NON-NLS-1$
-	private static final String TITLE = "Titel";
-	private static final String AUTHOR = "Autor";
-	private static final String PUBLISHER = "Verlag";
-	private static final String LANGUAGE = "Sprache";
-	private static final String EDITION = "Auflage";
-	private static final String DATE = "Datum";
-	private static final String CURATOR = "Bediener";
-	private static final String BORROWER = "Ausleiher";
+	private static final String LEND_COPY = "lend.copy";//$NON-NLS-1$
 
 	private Text txtCondition;
 	private Text txtBarcode;
@@ -85,17 +66,6 @@ public class LendCopyView extends AbstractEditView {
 	private Button btnToEdit;
 	private Button btnSave;
 	private CCombo comboMediumType;
-
-	private XViewer xViewer;
-	private final XViewerFactory factory = new BiboXViewerFactory(RETURN_COPY);
-	private XViewerColumn columnType;
-	private XViewerColumn columnBarcode;
-	private XViewerColumn columnIsbn;
-	private XViewerColumn columnTitle;
-	private XViewerColumn columnAuthor;
-	private XViewerColumn columnPublisher;
-	private XViewerColumn columnLanguage;
-	private XViewerColumn columnEdition;
 
 	private final HashMap<String, Copy> copyCache = new HashMap<>();
 	private final Set<Copy> copies = new HashSet<Copy>();
@@ -127,35 +97,35 @@ public class LendCopyView extends AbstractEditView {
 		Group statusGroup = toolkit.createGroup(content, "Informationen");
 		statusGroup.setLayout(new GridLayout(2, false));
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(statusGroup, "Aktueller Ausleihvorgang"));
-		toolkit.createLabel(statusGroup, DATE);
+		toolkit.createLabel(statusGroup, Messages.DATE);
 		txtBorrowDate = toolkit.createText(statusGroup, EMPTY_STRING);
-		toolkit.createLabel(statusGroup, CURATOR);
+		toolkit.createLabel(statusGroup, Messages.CURATOR);
 		txtCurator = toolkit.createText(statusGroup, EMPTY_STRING);
-		toolkit.createLabel(statusGroup, BORROWER);
+		toolkit.createLabel(statusGroup, Messages.BORROWER);
 		txtBorrower = toolkit.createText(statusGroup, EMPTY_STRING);
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(statusGroup, "Letzter Ausleihvorgang"));
-		toolkit.createLabel(statusGroup, DATE);
+		toolkit.createLabel(statusGroup, Messages.DATE);
 		txtLastBorrowDate = toolkit.createText(statusGroup, EMPTY_STRING);
-		toolkit.createLabel(statusGroup, CURATOR);
+		toolkit.createLabel(statusGroup, Messages.CURATOR);
 		txtLastCurator = toolkit.createText(statusGroup, EMPTY_STRING);
-		toolkit.createLabel(statusGroup, BORROWER);
+		toolkit.createLabel(statusGroup, Messages.BORROWER);
 		txtLastBorrower = toolkit.createText(statusGroup, EMPTY_STRING);
 
 		Group mediumGroup = toolkit.createGroup(content, "Allgemein");
 		mediumGroup.setLayout(new GridLayout(2, false));
-		toolkit.createLabel(mediumGroup, TITLE);
+		toolkit.createLabel(mediumGroup, Messages.TITLE);
 		txtTitle = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, AUTHOR);
+		toolkit.createLabel(mediumGroup, Messages.AUTHOR);
 		txtAuthor = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, LANGUAGE);
+		toolkit.createLabel(mediumGroup, Messages.LANGUAGE);
 		txtLanguage = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, PUBLISHER);
+		toolkit.createLabel(mediumGroup, Messages.PUBLISHER);
 		txtPublisher = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, ISBN);
+		toolkit.createLabel(mediumGroup, Messages.ISBN);
 		txtIsbn = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, EDITION);
+		toolkit.createLabel(mediumGroup, Messages.EDITION);
 		txtEdition = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, TYPE);
+		toolkit.createLabel(mediumGroup, Messages.TYPE);
 		comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
 
 		final Composite middle = toolkit.createComposite(content, SWT.NONE);
@@ -163,14 +133,8 @@ public class LendCopyView extends AbstractEditView {
 		btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
 		btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
 
-		initTableColumns();
-		xViewer = new XViewer(content, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION, factory);
-		xViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-		final CopyTreeContentProvider contentProvider = new CopyTreeContentProvider();
-		xViewer.setContentProvider(contentProvider);
-		xViewer.setLabelProvider(new CopyLabelProvider(xViewer, contentProvider));
+		xViewer = new CopyXviewerForm(content, LEND_COPY);
 		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
-		xViewer.getMenuManager().dispose();
 
 		final Composite footer = toolkit.createComposite(content, SWT.NONE);
 		footer.setLayout(new GridLayout(1, false));
@@ -346,6 +310,7 @@ public class LendCopyView extends AbstractEditView {
 			// no double click event
 		}
 	};
+	private CopyXviewerForm 		xViewer;
 
 	private void moveToEdit(Copy copy) {
 		copies.remove(copy);
@@ -398,27 +363,6 @@ public class LendCopyView extends AbstractEditView {
 		txtCondition.setEnabled(copy != null);
 		btnToList.setEnabled(copy != null);
 		bindingContext.updateTargets();
-	}
-
-	private void initTableColumns() {
-		columnType = new XViewerColumn(RETURN_COPY + DOT + TYPE, TYPE, 90, SWT.LEFT, true, SortDataType.String, false,
-				"Typ des Mediums");
-		columnBarcode = new XViewerColumn(RETURN_COPY + DOT + BARCODE, BARCODE, 80, SWT.LEFT, true,
-				SortDataType.Integer, false, "Barcode des Mediums");
-		columnIsbn = new XViewerColumn(RETURN_COPY + DOT + ISBN, ISBN, 80, SWT.LEFT, true, SortDataType.Integer, false,
-				"ISBN des Mediums");
-		columnTitle = new XViewerColumn(RETURN_COPY + DOT + TITLE, TITLE, 150, SWT.LEFT, true, SortDataType.String,
-				false, TITLE);
-		columnAuthor = new XViewerColumn(RETURN_COPY + DOT + AUTHOR, AUTHOR, 150, SWT.LEFT, true, SortDataType.String,
-				false, AUTHOR);
-		columnPublisher = new XViewerColumn(RETURN_COPY + DOT + PUBLISHER, PUBLISHER, 150, SWT.LEFT, true,
-				SortDataType.String, false, PUBLISHER);
-		columnLanguage = new XViewerColumn(RETURN_COPY + DOT + LANGUAGE, LANGUAGE, 150, SWT.LEFT, true,
-				SortDataType.String, false, LANGUAGE);
-		columnEdition = new XViewerColumn(RETURN_COPY + DOT + EDITION, EDITION, 150, SWT.LEFT, true,
-				SortDataType.String, false, EDITION);
-		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
-				columnLanguage, columnEdition);
 	}
 
 	@Override

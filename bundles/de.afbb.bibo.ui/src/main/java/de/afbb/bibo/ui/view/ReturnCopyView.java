@@ -13,21 +13,15 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.nebula.widgets.xviewer.XViewer;
-import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
-import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
-import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
@@ -41,18 +35,14 @@ import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
-import de.afbb.bibo.ui.provider.BiboXViewerFactory;
-import de.afbb.bibo.ui.provider.CopyLabelProvider;
-import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
+import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 
 public class ReturnCopyView extends AbstractEditView {
 
 	public static final String ID = "de.afbb.bibo.ui.return.copy";//$NON-NLS-1$
 	private static final String RETURN_COPY = "return.copy";//$NON-NLS-1$
-	private static final String DOT = ".";//$NON-NLS-1$
 	private static final String TYPE = "Typ";
-	private static final String BARCODE = "Barcode";
 	private static final String ISBN = "ISBN";//$NON-NLS-1$
 	private static final String TITLE = "Titel";
 	private static final String AUTHOR = "Autor";
@@ -82,16 +72,7 @@ public class ReturnCopyView extends AbstractEditView {
 	private Button btnSave;
 	private CCombo comboMediumType;
 
-	private XViewer xViewer;
-	private final XViewerFactory factory = new BiboXViewerFactory(RETURN_COPY);
-	private XViewerColumn columnType;
-	private XViewerColumn columnBarcode;
-	private XViewerColumn columnIsbn;
-	private XViewerColumn columnTitle;
-	private XViewerColumn columnAuthor;
-	private XViewerColumn columnPublisher;
-	private XViewerColumn columnLanguage;
-	private XViewerColumn columnEdition;
+	private CopyXviewerForm xViewer;
 
 	private final HashMap<String, Copy> copyCache = new HashMap<>();
 	private final Set<Copy> copies = new HashSet<Copy>();
@@ -159,14 +140,8 @@ public class ReturnCopyView extends AbstractEditView {
 		btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
 		btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
 
-		initTableColumns();
-		xViewer = new XViewer(content, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION, factory);
-		xViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-		final CopyTreeContentProvider contentProvider = new CopyTreeContentProvider();
-		xViewer.setContentProvider(contentProvider);
-		xViewer.setLabelProvider(new CopyLabelProvider(xViewer, contentProvider));
+		xViewer = new CopyXviewerForm(content, RETURN_COPY);
 		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
-		xViewer.getMenuManager().dispose();
 
 		final Composite footer = toolkit.createComposite(content, SWT.NONE);
 		footer.setLayout(new GridLayout(1, false));
@@ -394,27 +369,6 @@ public class ReturnCopyView extends AbstractEditView {
 		txtCondition.setEnabled(copy != null);
 		btnToList.setEnabled(copy != null);
 		bindingContext.updateTargets();
-	}
-
-	private void initTableColumns() {
-		columnType = new XViewerColumn(RETURN_COPY + DOT + TYPE, TYPE, 90, SWT.LEFT, true, SortDataType.String, false,
-				"Typ des Mediums");
-		columnBarcode = new XViewerColumn(RETURN_COPY + DOT + BARCODE, BARCODE, 80, SWT.LEFT, true,
-				SortDataType.Integer, false, "Barcode des Mediums");
-		columnIsbn = new XViewerColumn(RETURN_COPY + DOT + ISBN, ISBN, 80, SWT.LEFT, true, SortDataType.Integer, false,
-				"ISBN des Mediums");
-		columnTitle = new XViewerColumn(RETURN_COPY + DOT + TITLE, TITLE, 150, SWT.LEFT, true, SortDataType.String,
-				false, TITLE);
-		columnAuthor = new XViewerColumn(RETURN_COPY + DOT + AUTHOR, AUTHOR, 150, SWT.LEFT, true, SortDataType.String,
-				false, AUTHOR);
-		columnPublisher = new XViewerColumn(RETURN_COPY + DOT + PUBLISHER, PUBLISHER, 150, SWT.LEFT, true,
-				SortDataType.String, false, PUBLISHER);
-		columnLanguage = new XViewerColumn(RETURN_COPY + DOT + LANGUAGE, LANGUAGE, 150, SWT.LEFT, true,
-				SortDataType.String, false, LANGUAGE);
-		columnEdition = new XViewerColumn(RETURN_COPY + DOT + EDITION, EDITION, 150, SWT.LEFT, true,
-				SortDataType.String, false, EDITION);
-		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
-				columnLanguage, columnEdition);
 	}
 
 }
