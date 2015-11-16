@@ -35,6 +35,7 @@ import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
+import de.afbb.bibo.ui.Messages;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 
@@ -42,16 +43,6 @@ public class ReturnCopyView extends AbstractEditView {
 
 	public static final String ID = "de.afbb.bibo.ui.return.copy";//$NON-NLS-1$
 	private static final String RETURN_COPY = "return.copy";//$NON-NLS-1$
-	private static final String TYPE = "Typ";
-	private static final String ISBN = "ISBN";//$NON-NLS-1$
-	private static final String TITLE = "Titel";
-	private static final String AUTHOR = "Autor";
-	private static final String PUBLISHER = "Verlag";
-	private static final String LANGUAGE = "Sprache";
-	private static final String EDITION = "Auflage";
-	private static final String DATE = "Datum";
-	private static final String CURATOR = "Bediener";
-	private static final String BORROWER = "Ausleiher";
 
 	private Text txtCondition;
 	private Text txtBarcode;
@@ -104,35 +95,35 @@ public class ReturnCopyView extends AbstractEditView {
 		Group statusGroup = toolkit.createGroup(content, "Informationen");
 		statusGroup.setLayout(new GridLayout(2, false));
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(statusGroup, "Aktueller Ausleihvorgang"));
-		toolkit.createLabel(statusGroup, DATE);
+		toolkit.createLabel(statusGroup, Messages.DATE);
 		txtBorrowDate = toolkit.createText(statusGroup, EMPTY_STRING);
-		toolkit.createLabel(statusGroup, CURATOR);
+		toolkit.createLabel(statusGroup, Messages.CURATOR);
 		txtCurator = toolkit.createText(statusGroup, EMPTY_STRING);
-		toolkit.createLabel(statusGroup, BORROWER);
+		toolkit.createLabel(statusGroup, Messages.BORROWER);
 		txtBorrower = toolkit.createText(statusGroup, EMPTY_STRING);
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(statusGroup, "Letzter Ausleihvorgang"));
-		toolkit.createLabel(statusGroup, DATE);
+		toolkit.createLabel(statusGroup, Messages.DATE);
 		txtLastBorrowDate = toolkit.createText(statusGroup, EMPTY_STRING);
-		toolkit.createLabel(statusGroup, CURATOR);
+		toolkit.createLabel(statusGroup, Messages.CURATOR);
 		txtLastCurator = toolkit.createText(statusGroup, EMPTY_STRING);
-		toolkit.createLabel(statusGroup, BORROWER);
+		toolkit.createLabel(statusGroup, Messages.BORROWER);
 		txtLastBorrower = toolkit.createText(statusGroup, EMPTY_STRING);
 
 		Group mediumGroup = toolkit.createGroup(content, "Allgemein");
 		mediumGroup.setLayout(new GridLayout(2, false));
-		toolkit.createLabel(mediumGroup, TITLE);
+		toolkit.createLabel(mediumGroup, Messages.TITLE);
 		txtTitle = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, AUTHOR);
+		toolkit.createLabel(mediumGroup, Messages.AUTHOR);
 		txtAuthor = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, LANGUAGE);
+		toolkit.createLabel(mediumGroup, Messages.LANGUAGE);
 		txtLanguage = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, PUBLISHER);
+		toolkit.createLabel(mediumGroup, Messages.PUBLISHER);
 		txtPublisher = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, ISBN);
+		toolkit.createLabel(mediumGroup, Messages.ISBN);
 		txtIsbn = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, EDITION);
+		toolkit.createLabel(mediumGroup, Messages.EDITION);
 		txtEdition = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, TYPE);
+		toolkit.createLabel(mediumGroup, Messages.TYPE);
 		comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
 
 		final Composite middle = toolkit.createComposite(content, SWT.NONE);

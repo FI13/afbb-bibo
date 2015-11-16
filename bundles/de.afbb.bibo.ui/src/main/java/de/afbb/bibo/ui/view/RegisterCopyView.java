@@ -35,6 +35,7 @@ import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
+import de.afbb.bibo.ui.Messages;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 
@@ -47,13 +48,6 @@ public class RegisterCopyView extends AbstractEditView {
 
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String REGISTER_COPY = "register.copy";//$NON-NLS-1$
-	private static final String BARCODE = "Barcode";
-	private static final String ISBN = "ISBN";//$NON-NLS-1$
-	private static final String TITLE = "Titel";
-	private static final String AUTHOR = "Autor";
-	private static final String PUBLISHER = "Verlag";
-	private static final String LANGUAGE = "Sprache";
-	private static final String EDITION = "Auflage";
 
 	private final Set<Copy> copies = new HashSet<Copy>();
 	private final Copy copyToModify = new Copy();
@@ -281,22 +275,22 @@ public class RegisterCopyView extends AbstractEditView {
 
 		idGroup = toolkit.createGroup(content, "Nummer");
 		idGroup.setLayout(new GridLayout(2, false));
-		toolkit.createLabel(idGroup, BARCODE);
+		toolkit.createLabel(idGroup, Messages.BARCODE);
 		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING);
-		toolkit.createLabel(idGroup, ISBN);
+		toolkit.createLabel(idGroup, Messages.ISBN);
 		txtIsbn = toolkit.createText(idGroup, EMPTY_STRING);
-		toolkit.createLabel(idGroup, EDITION);
+		toolkit.createLabel(idGroup, Messages.EDITION);
 		txtEdition = toolkit.createText(idGroup, EMPTY_STRING);
 
 		final Group mediumGroup = toolkit.createGroup(content, "Informationen");
 		mediumGroup.setLayout(new GridLayout(4, false));
-		toolkit.createLabel(mediumGroup, TITLE);
+		toolkit.createLabel(mediumGroup, Messages.TITLE);
 		txtTitle = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, AUTHOR);
+		toolkit.createLabel(mediumGroup, Messages.AUTHOR);
 		txtAuthor = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, LANGUAGE);
+		toolkit.createLabel(mediumGroup, Messages.LANGUAGE);
 		txtLanguage = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, PUBLISHER);
+		toolkit.createLabel(mediumGroup, Messages.PUBLISHER);
 		txtPublisher = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, "Typ");
 		comboMediumType = new CCombo(mediumGroup, SWT.BORDER);

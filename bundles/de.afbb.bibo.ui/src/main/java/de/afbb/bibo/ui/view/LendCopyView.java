@@ -67,6 +67,8 @@ public class LendCopyView extends AbstractEditView {
 	private Button btnSave;
 	private CCombo comboMediumType;
 
+	private CopyXviewerForm xViewer;
+
 	private final HashMap<String, Copy> copyCache = new HashMap<>();
 	private final Set<Copy> copies = new HashSet<Copy>();
 	private Copy copyToModify = new Copy();
@@ -310,7 +312,6 @@ public class LendCopyView extends AbstractEditView {
 			// no double click event
 		}
 	};
-	private CopyXviewerForm 		xViewer;
 
 	private void moveToEdit(Copy copy) {
 		copies.remove(copy);
