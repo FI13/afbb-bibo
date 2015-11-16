@@ -15,10 +15,6 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.nebula.widgets.xviewer.XViewer;
-import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
-import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
-import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
@@ -39,9 +35,8 @@ import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
-import de.afbb.bibo.ui.provider.BiboXViewerFactory;
-import de.afbb.bibo.ui.provider.CopyLabelProvider;
-import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
+import de.afbb.bibo.ui.Messages;
+import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 
 /**
@@ -52,16 +47,7 @@ import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 public class RegisterCopyView extends AbstractEditView {
 
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
-	private static final String DOT = ".";//$NON-NLS-1$
 	private static final String REGISTER_COPY = "register.copy";//$NON-NLS-1$
-	private static final String TYPE = "Typ";
-	private static final String BARCODE = "Barcode";
-	private static final String ISBN = "ISBN";//$NON-NLS-1$
-	private static final String TITLE = "Titel";
-	private static final String AUTHOR = "Autor";
-	private static final String PUBLISHER = "Verlag";
-	private static final String LANGUAGE = "Sprache";
-	private static final String EDITION = "Auflage";
 
 	private final Set<Copy> copies = new HashSet<Copy>();
 	private final Copy copyToModify = new Copy();
@@ -82,16 +68,7 @@ public class RegisterCopyView extends AbstractEditView {
 	private Button btnSave;
 	private CCombo comboMediumType;
 
-	private XViewer xViewer;
-	private final XViewerFactory factory = new BiboXViewerFactory(REGISTER_COPY);
-	private XViewerColumn columnType;
-	private XViewerColumn columnBarcode;
-	private XViewerColumn columnIsbn;
-	private XViewerColumn columnTitle;
-	private XViewerColumn columnAuthor;
-	private XViewerColumn columnPublisher;
-	private XViewerColumn columnLanguage;
-	private XViewerColumn columnEdition;
+	private CopyXviewerForm xViewer;
 
 	private static final int UNASSIGNED_GROUP = -1;
 	private int highestAssignedGroup = UNASSIGNED_GROUP;
@@ -298,22 +275,22 @@ public class RegisterCopyView extends AbstractEditView {
 
 		idGroup = toolkit.createGroup(content, "Nummer");
 		idGroup.setLayout(new GridLayout(2, false));
-		toolkit.createLabel(idGroup, BARCODE);
+		toolkit.createLabel(idGroup, Messages.BARCODE);
 		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING);
-		toolkit.createLabel(idGroup, ISBN);
+		toolkit.createLabel(idGroup, Messages.ISBN);
 		txtIsbn = toolkit.createText(idGroup, EMPTY_STRING);
-		toolkit.createLabel(idGroup, EDITION);
+		toolkit.createLabel(idGroup, Messages.EDITION);
 		txtEdition = toolkit.createText(idGroup, EMPTY_STRING);
 
 		final Group mediumGroup = toolkit.createGroup(content, "Informationen");
 		mediumGroup.setLayout(new GridLayout(4, false));
-		toolkit.createLabel(mediumGroup, TITLE);
+		toolkit.createLabel(mediumGroup, Messages.TITLE);
 		txtTitle = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, AUTHOR);
+		toolkit.createLabel(mediumGroup, Messages.AUTHOR);
 		txtAuthor = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, LANGUAGE);
+		toolkit.createLabel(mediumGroup, Messages.LANGUAGE);
 		txtLanguage = toolkit.createText(mediumGroup, EMPTY_STRING);
-		toolkit.createLabel(mediumGroup, PUBLISHER);
+		toolkit.createLabel(mediumGroup, Messages.PUBLISHER);
 		txtPublisher = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, "Typ");
 		comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
@@ -334,14 +311,8 @@ public class RegisterCopyView extends AbstractEditView {
 		layoutDataMiddle.horizontalSpan = 2;
 		bottom.setLayoutData(layoutDataMiddle);
 
-		initTableColumns();
-		xViewer = new XViewer(bottom, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION, factory);
-		xViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-		final CopyTreeContentProvider contentProvider = new CopyTreeContentProvider();
-		xViewer.setContentProvider(contentProvider);
-		xViewer.setLabelProvider(new CopyLabelProvider(xViewer, contentProvider));
+		xViewer = new CopyXviewerForm(bottom, REGISTER_COPY);
 		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
-		xViewer.getMenuManager().dispose();
 
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
 		GridLayout layoutButtonComposite = new GridLayout();
@@ -389,7 +360,7 @@ public class RegisterCopyView extends AbstractEditView {
 						}
 						return Status.OK_STATUS;
 					}
-					
+
 				};
 				job.schedule();
 				closeEditor();
@@ -434,26 +405,5 @@ public class RegisterCopyView extends AbstractEditView {
 
 	private void updateSaveButton() {
 		btnSave.setEnabled(!copies.isEmpty());
-	}
-
-	private void initTableColumns() {
-		columnType = new XViewerColumn(REGISTER_COPY + DOT + TYPE, TYPE, 90, SWT.LEFT, true, SortDataType.String, false,
-				"Typ des Mediums");
-		columnBarcode = new XViewerColumn(REGISTER_COPY + DOT + BARCODE, BARCODE, 80, SWT.LEFT, true,
-				SortDataType.Integer, false, "Barcode des Mediums");
-		columnIsbn = new XViewerColumn(REGISTER_COPY + DOT + ISBN, ISBN, 80, SWT.LEFT, true, SortDataType.Integer,
-				false, "ISBN des Mediums");
-		columnTitle = new XViewerColumn(REGISTER_COPY + DOT + TITLE, TITLE, 150, SWT.LEFT, true, SortDataType.String,
-				false, TITLE);
-		columnAuthor = new XViewerColumn(REGISTER_COPY + DOT + AUTHOR, AUTHOR, 150, SWT.LEFT, true, SortDataType.String,
-				false, AUTHOR);
-		columnPublisher = new XViewerColumn(REGISTER_COPY + DOT + PUBLISHER, PUBLISHER, 150, SWT.LEFT, true,
-				SortDataType.String, false, PUBLISHER);
-		columnLanguage = new XViewerColumn(REGISTER_COPY + DOT + LANGUAGE, LANGUAGE, 150, SWT.LEFT, true,
-				SortDataType.String, false, LANGUAGE);
-		columnEdition = new XViewerColumn(REGISTER_COPY + DOT + EDITION, EDITION, 150, SWT.LEFT, true,
-				SortDataType.String, false, EDITION);
-		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
-				columnLanguage, columnEdition);
 	}
 }
