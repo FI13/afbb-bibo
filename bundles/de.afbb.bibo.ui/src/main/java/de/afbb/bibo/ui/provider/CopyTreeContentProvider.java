@@ -67,7 +67,7 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 			final Integer next = iterator.next();
 			final Copy dummy = new Copy();
 			dummy.setGroupId(next);
-			dummy.setType(GROUP_TYPE);
+			dummy.getMedium().setType(GROUP_TYPE);
 			dummies.put(next, dummy);
 			input.add(dummy);
 		}

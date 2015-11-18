@@ -32,14 +32,14 @@ public class PrintTest {
 		final Copy[] e = new Copy[22];
 		e[0] = new Copy();
 		e[0].setBarcode("12345");
-		e[0].setTitle("Test123");
+		e[0].getMedium().setTitle("Test123");
 		e[1] = new Copy();
 		e[1].setBarcode("244421");
-		e[1].setTitle("Bla Blü bBälbBlaBlaDumdidudmlänge immer länger");
+		e[1].getMedium().setTitle("Bla Blü bBälbBlaBlaDumdidudmlänge immer länger");
 		for (int i = 2; i < 22; i++) {
 			e[i] = new Copy();
 			e[i].setBarcode("98836");
-			e[i].setTitle("Heil Satan!");
+			e[i].getMedium().setTitle("Heil Satan!");
 		}
 		final Curator c = new Curator();
 		c.setName("Hans");

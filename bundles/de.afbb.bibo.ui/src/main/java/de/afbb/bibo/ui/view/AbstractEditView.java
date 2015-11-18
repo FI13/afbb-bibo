@@ -38,6 +38,7 @@ import de.afbb.bibo.ui.Messages;
 abstract class AbstractEditView extends EditorPart {
 
 	protected static final String EMPTY_STRING = "";//$NON-NLS-1$
+	protected static final String DOT = ".";//$NON-NLS-1$
 	private static final String OK = LocalizationUtils.safeLocalize("ok");//$NON-NLS-1$
 
 	private Label lblValidationImage;

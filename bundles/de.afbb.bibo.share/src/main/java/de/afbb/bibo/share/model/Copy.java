@@ -6,10 +6,12 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
+import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
+
 /**
  * one copy of a medium
  */
-public class Copy extends Medium implements IEditorInput {
+public class Copy extends AbstractPropertyChangeSupport implements Cloneable, IEditorInput {
 
 	public static final String FIELD_EDITION = "edition";//$NON-NLS-1$
 	public static final String FIELD_BARCODE = "barcode";//$NON-NLS-1$
@@ -21,6 +23,7 @@ public class Copy extends Medium implements IEditorInput {
 	public static final String FIELD_LAST_CURATOR = "lastCurator";//$NON-NLS-1$
 	public static final String FIELD_BORROWER = "borrower";//$NON-NLS-1$
 	public static final String FIELD_LAST_BORROWER = "lastBorrower";//$NON-NLS-1$
+	public static final String FIELD_MEDIUM = "medium";//$NON-NLS-1$
 
 	private Integer id;
 	private String edition;
@@ -33,13 +36,17 @@ public class Copy extends Medium implements IEditorInput {
 	private Curator lastCurator;
 	private Borrower borrower;
 	private Borrower lastBorrower;
+	private Medium medium = new Medium();
 	private int groupId = -1;
+
+	public Copy() {
+		super();
+	}
 
 	public Copy(final int id, final String edition, final String barcode, final Date date, final String condition,
 			final Date date2, final Date date3, final int groupId, final Borrower borrower, final Borrower lastBorrower,
 			final Curator curator, final Curator lastCurator, final int mediumId, final String isbn, final String title,
 			final String author, final String language, final MediumType type, final String publisher) {
-		super(mediumId, isbn, title, author, language, type, publisher);
 		this.id = id;
 		this.edition = edition;
 		this.barcode = barcode;
@@ -52,20 +59,13 @@ public class Copy extends Medium implements IEditorInput {
 		this.lastBorrower = lastBorrower;
 		this.curator = curator;
 		this.lastCurator = lastCurator;
-	}
-
-	public Copy() {
-		super();
-	}
-
-	@Override
-	public Integer getMediumId() {
-		return id;
-	}
-
-	@Override
-	public void setMediumId(final Integer id) {
-		this.id = id;
+		medium.setMediumId(mediumId);
+		medium.setIsbn(isbn);
+		medium.setTitle(title);
+		medium.setAuthor(author);
+		medium.setLanguage(language);
+		medium.setType(type);
+		medium.setPublisher(publisher);
 	}
 
 	public String getEdition() {
@@ -157,6 +157,21 @@ public class Copy extends Medium implements IEditorInput {
 		groupId = groupElements;
 	}
 
+	/**
+	 * @return the medium
+	 */
+	public Medium getMedium() {
+		return medium;
+	}
+
+	/**
+	 * @param medium
+	 *            the medium to set
+	 */
+	public void setMedium(Medium medium) {
+		changeSupport.firePropertyChange(FIELD_MEDIUM, this.medium, this.medium = medium);
+	}
+
 	@Override
 	public Object getAdapter(final Class adapter) {
 		return null;
@@ -189,14 +204,20 @@ public class Copy extends Medium implements IEditorInput {
 
 	@Override
 	public Object clone() {
-		final Copy clone = (Copy) super.clone();
-		clone.setCurator(curator != null ? (Curator) curator.clone() : null);
-		clone.setLastCurator(lastCurator != null ? (Curator) lastCurator.clone() : null);
-		clone.setBorrower(borrower != null ? (Borrower) borrower.clone() : null);
-		clone.setLastBorrower(lastBorrower != null ? (Borrower) lastBorrower.clone() : null);
-		clone.setInventoryDate(inventoryDate != null ? (Date) inventoryDate.clone() : null);
-		clone.setLastBorrowDate(borrowDate != null ? (Date) borrowDate.clone() : null);
-		clone.setLastBorrowDate(lastBorrowDate != null ? (Date) lastBorrowDate.clone() : null);
+		Copy clone = null;
+		try {
+			clone = (Copy) super.clone();
+			clone.setCurator(curator != null ? (Curator) curator.clone() : null);
+			clone.setLastCurator(lastCurator != null ? (Curator) lastCurator.clone() : null);
+			clone.setBorrower(borrower != null ? (Borrower) borrower.clone() : null);
+			clone.setLastBorrower(lastBorrower != null ? (Borrower) lastBorrower.clone() : null);
+			clone.setInventoryDate(inventoryDate != null ? (Date) inventoryDate.clone() : null);
+			clone.setLastBorrowDate(borrowDate != null ? (Date) borrowDate.clone() : null);
+			clone.setLastBorrowDate(lastBorrowDate != null ? (Date) lastBorrowDate.clone() : null);
+			clone.setMedium(medium != null ? (Medium) medium.clone() : null);
+		} catch (final CloneNotSupportedException e) {
+			// swallow exception and return null
+		}
 		return clone;
 	}
 
