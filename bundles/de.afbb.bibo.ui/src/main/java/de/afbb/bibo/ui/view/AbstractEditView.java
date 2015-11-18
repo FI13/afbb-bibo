@@ -45,7 +45,7 @@ abstract class AbstractEditView extends EditorPart {
 	private Label lblValidationMessage;
 	private final IObservableValue validationStatus = new WritableValue(IStatus.OK, IStatus.class);
 	protected final DataBindingContext bindingContext = new DataBindingContext();
-	protected BiboFormToolkit toolkit = new BiboFormToolkit(Display.getCurrent());
+	protected final BiboFormToolkit toolkit = new BiboFormToolkit(Display.getCurrent());
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -71,7 +71,7 @@ abstract class AbstractEditView extends EditorPart {
 	}
 
 	/**
-	 * initializes the UX of the editor
+	 * initializes the user interface of the editor
 	 */
 	protected abstract void initUi(final Composite parent);
 
