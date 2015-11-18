@@ -50,6 +50,8 @@ public class LendCopyView extends AbstractEditView {
 
 	public static final String ID = "de.afbb.bibo.ui.lend.copy";//$NON-NLS-1$
 	private static final String LEND_COPY = "lend.copy";//$NON-NLS-1$
+	
+	private final Date now = new Date();
 
 	private Text txtCondition;
 	private Text txtBarcode;
@@ -359,10 +361,7 @@ public class LendCopyView extends AbstractEditView {
 	private void setCopyToModify(Copy copy) {
 		copyToModify.setBarcode(copy != null ? copy.getBarcode() : null);
 		copyToModify.setAuthor(copy != null ? copy.getAuthor() : null);
-		copyToModify.setBorrowDate(copy != null ? copy.getBorrowDate() : null);
-		copyToModify.setBorrower(copy != null ? copy.getBorrower() : null);
 		copyToModify.setCondition(copy != null ? copy.getCondition() : null);
-		copyToModify.setCurator(copy != null ? copy.getCurator() : null);
 		copyToModify.setEdition(copy != null ? copy.getEdition() : null);
 		copyToModify.setInventoryDate(copy != null ? copy.getInventoryDate() : null);
 		copyToModify.setIsbn(copy != null ? copy.getIsbn() : null);
@@ -373,6 +372,11 @@ public class LendCopyView extends AbstractEditView {
 		copyToModify.setPublisher(copy != null ? copy.getPublisher() : null);
 		copyToModify.setTitle(copy != null ? copy.getTitle() : null);
 		copyToModify.setType(copy != null ? copy.getType() : null);
+		
+		copyToModify.setBorrower(copy != null ? (Borrower) getEditorInput() : null);
+		copyToModify.setBorrowDate(copy != null ? now : null);
+		copyToModify.setCurator(copy != null ? SessionHolder.getInstance().getCurator() : null);
+
 		btnToList.setEnabled(copy != null);
 		bindingContext.updateTargets();
 	}
