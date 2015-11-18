@@ -1,6 +1,7 @@
 package de.afbb.bibo.ui.view;
 
 import java.net.ConnectException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,6 +30,8 @@ import org.eclipse.swt.widgets.Text;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.share.SessionHolder;
+import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.Medium;
@@ -43,6 +46,8 @@ public class ReturnCopyView extends AbstractEditView {
 
 	public static final String ID = "de.afbb.bibo.ui.return.copy";//$NON-NLS-1$
 	private static final String RETURN_COPY = "return.copy";//$NON-NLS-1$
+
+	private final Date now = new Date();
 
 	private Text txtCondition;
 	private Text txtBarcode;
@@ -177,7 +182,7 @@ public class ReturnCopyView extends AbstractEditView {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
 						try {
-							ServiceLocator.getInstance().getCopyService().returnCopy(copies);
+							ServiceLocator.getInstance().getCopyService().returnCopies(copies);
 						} catch (ConnectException e) {
 							handle(e);
 						}
@@ -351,12 +356,18 @@ public class ReturnCopyView extends AbstractEditView {
 		copyToModify.setInventoryDate(copy != null ? copy.getInventoryDate() : null);
 		copyToModify.setIsbn(copy != null ? copy.getIsbn() : null);
 		copyToModify.setLanguage(copy != null ? copy.getLanguage() : null);
-		copyToModify.setLastBorrowDate(copy != null ? copy.getLastBorrowDate() : null);
-		copyToModify.setLastBorrower(copy != null ? copy.getLastBorrower() : null);
-		copyToModify.setLastCurator(copy != null ? copy.getLastCurator() : null);
 		copyToModify.setPublisher(copy != null ? copy.getPublisher() : null);
 		copyToModify.setTitle(copy != null ? copy.getTitle() : null);
 		copyToModify.setType(copy != null ? copy.getType() : null);
+
+		/*
+		 * we don't now which person returns the book at this point -> so we
+		 * just save who had it last
+		 */
+		copyToModify.setLastBorrower(copy != null ? copy.getBorrower() : null);
+		copyToModify.setLastBorrowDate(copy != null ? now : null);
+		copyToModify.setLastCurator(copy != null ? SessionHolder.getInstance().getCurator() : null);
+
 		txtCondition.setEnabled(copy != null);
 		btnToList.setEnabled(copy != null);
 		bindingContext.updateTargets();

@@ -354,7 +354,7 @@ public class RegisterCopyView extends AbstractEditView {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
 						try {
-							ServiceLocator.getInstance().getCopyService().registerCopy(copies);
+							ServiceLocator.getInstance().getCopyService().registerCopies(copies);
 						} catch (ConnectException e) {
 							handle(e);
 						}
