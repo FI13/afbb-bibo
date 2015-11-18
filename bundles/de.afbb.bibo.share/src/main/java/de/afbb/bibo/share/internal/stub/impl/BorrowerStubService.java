@@ -44,22 +44,22 @@ public class BorrowerStubService implements IBorrowerService {
 		borrowers.add(b4);
 
 		final Copy c1 = new Copy();
-		c1.setMediumId(++currentCopyId);
-		c1.setTitle("IT-Handbuch");
-		c1.setAuthor("Autor");
-		c1.setLanguage("de");
-		c1.setBarcode(c1.getMediumId().toString());
+		c1.getMedium().setMediumId(++currentCopyId);
+		c1.getMedium().setTitle("IT-Handbuch");
+		c1.getMedium().setAuthor("Autor");
+		c1.getMedium().setLanguage("de");
+		c1.setBarcode(c1.getMedium().getMediumId().toString());
 		c1.setInventoryDate(new java.sql.Date(2015, 5, 15));
 
 		final Copy c2 = new Copy();
-		c2.setMediumId(++currentCopyId);
-		c2.setTitle("Kusch: Mathematik");
-		c2.setAuthor("Rudolf Borgmann, Jost Knapp, Rolf Schöwe");
-		c2.setIsbn("3464413055");
-		c2.setBarcode(c2.getMediumId().toString());
-		c2.setLanguage("de");
+		c2.getMedium().setMediumId(++currentCopyId);
+		c2.getMedium().setTitle("Kusch: Mathematik");
+		c2.getMedium().setAuthor("Rudolf Borgmann, Jost Knapp, Rolf Schöwe");
+		c2.getMedium().setIsbn("3464413055");
+		c2.setBarcode(c2.getMedium().getMediumId().toString());
+		c2.getMedium().setLanguage("de");
 		c2.setEdition("Aktuelle Ausgabe: Band K");
-		c2.setPublisher("Cornelsen Verlag");
+		c2.getMedium().setPublisher("Cornelsen Verlag");
 		c2.setCondition("- Seite 42 angerissen\n- Seite 101 fehlt");
 		c2.setInventoryDate(new java.sql.Date(2015, 10, 3));
 

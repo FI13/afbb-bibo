@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.core.databinding.beans.BeanProperties;
+import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -306,23 +308,26 @@ public class LendCopyView extends AbstractEditView {
 
 	@Override
 	protected void initBinding() throws ConnectException {
+		;
 		BindingHelper.bindStringToTextField(txtBarcode, copyToModify, Copy.class, Copy.FIELD_BARCODE, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(txtIsbn, copyToModify, Copy.class, Copy.FIELD_ISBN, bindingContext, false);
 		BindingHelper.bindStringToTextField(txtEdition, copyToModify, Copy.class, Copy.FIELD_EDITION, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(txtTitle, copyToModify, Copy.class, Copy.FIELD_TITLE, bindingContext,
-				false);
-		BindingHelper.bindStringToTextField(txtAuthor, copyToModify, Copy.class, Copy.FIELD_AUTHOR, bindingContext,
-				false);
-		BindingHelper.bindStringToTextField(txtLanguage, copyToModify, Copy.class, Copy.FIELD_LANGUAGE, bindingContext,
-				false);
-		BindingHelper.bindStringToTextField(txtPublisher, copyToModify, Copy.class, Copy.FIELD_PUBLISHER,
-				bindingContext, false);
 		BindingHelper.bindStringToTextField(txtCondition, copyToModify, Copy.class, Copy.FIELD_CONDITION,
 				bindingContext, false);
+		BindingHelper.bindStringToTextField(txtTitle, copyToModify, Copy.class,
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TITLE, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtAuthor, copyToModify, Copy.class,
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_AUTHOR, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtLanguage, copyToModify, Copy.class,
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_LANGUAGE, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtPublisher, copyToModify, Copy.class,
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_PUBLISHER, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtIsbn, copyToModify, Copy.class,
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_ISBN, bindingContext, false);
 
-		BindingHelper.bindObjectToCCombo(comboMediumType, copyToModify, Copy.class, Medium.FIELD_TYPE, MediumType.class,
+		BindingHelper.bindObjectToCCombo(comboMediumType, copyToModify, Copy.class,
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TYPE, MediumType.class,
 				ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(), bindingContext,
 				false);
 
@@ -387,18 +392,18 @@ public class LendCopyView extends AbstractEditView {
 	 */
 	private void setCopyToModify(Copy copy) {
 		copyToModify.setBarcode(copy != null ? copy.getBarcode() : null);
-		copyToModify.setAuthor(copy != null ? copy.getAuthor() : null);
+		copyToModify.getMedium().setAuthor(copy != null ? copy.getMedium().getAuthor() : null);
 		copyToModify.setCondition(copy != null ? copy.getCondition() : null);
 		copyToModify.setEdition(copy != null ? copy.getEdition() : null);
 		copyToModify.setInventoryDate(copy != null ? copy.getInventoryDate() : null);
-		copyToModify.setIsbn(copy != null ? copy.getIsbn() : null);
-		copyToModify.setLanguage(copy != null ? copy.getLanguage() : null);
+		copyToModify.getMedium().setIsbn(copy != null ? copy.getMedium().getIsbn() : null);
+		copyToModify.getMedium().setLanguage(copy != null ? copy.getMedium().getLanguage() : null);
 		copyToModify.setLastBorrowDate(copy != null ? copy.getLastBorrowDate() : null);
 		copyToModify.setLastBorrower(copy != null ? copy.getLastBorrower() : null);
 		copyToModify.setLastCurator(copy != null ? copy.getLastCurator() : null);
-		copyToModify.setPublisher(copy != null ? copy.getPublisher() : null);
-		copyToModify.setTitle(copy != null ? copy.getTitle() : null);
-		copyToModify.setType(copy != null ? copy.getType() : null);
+		copyToModify.getMedium().setPublisher(copy != null ? copy.getMedium().getPublisher() : null);
+		copyToModify.getMedium().setTitle(copy != null ? copy.getMedium().getTitle() : null);
+		copyToModify.getMedium().setType(copy != null ? copy.getMedium().getType() : null);
 
 		copyToModify.setBorrower(copy != null ? (Borrower) getEditorInput() : null);
 		copyToModify.setBorrowDate(copy != null ? now : null);

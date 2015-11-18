@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -84,14 +85,14 @@ public class RegisterCopyView extends AbstractEditView {
 			final Copy clone = (Copy) copyToModify.clone();
 			copies.add(clone);
 			copyToModify.setBarcode(EMPTY_STRING);
-			copyToModify.setIsbn(EMPTY_STRING);
+			copyToModify.getMedium().setIsbn(EMPTY_STRING);
 			copyToModify.setEdition(EMPTY_STRING);
-			copyToModify.setTitle(EMPTY_STRING);
-			copyToModify.setAuthor(EMPTY_STRING);
-			copyToModify.setLanguage(EMPTY_STRING);
-			copyToModify.setPublisher(EMPTY_STRING);
+			copyToModify.getMedium().setTitle(EMPTY_STRING);
+			copyToModify.getMedium().setAuthor(EMPTY_STRING);
+			copyToModify.getMedium().setLanguage(EMPTY_STRING);
+			copyToModify.getMedium().setPublisher(EMPTY_STRING);
 			copyToModify.setCondition(EMPTY_STRING);
-			copyToModify.setType(null);
+			copyToModify.getMedium().setType(null);
 			updateSaveButton();
 			xViewer.setInput(copies);
 			bindingContext.updateTargets();
@@ -115,13 +116,13 @@ public class RegisterCopyView extends AbstractEditView {
 			if (paths.length > 0) {
 				final Copy copy = (Copy) paths[0].getLastSegment();
 				copyToModify.setBarcode(copy.getBarcode());
-				copyToModify.setIsbn(copy.getIsbn());
+				copyToModify.getMedium().setIsbn(copy.getMedium().getIsbn());
 				copyToModify.setEdition(copy.getEdition());
-				copyToModify.setTitle(copy.getTitle());
-				copyToModify.setAuthor(copy.getAuthor());
-				copyToModify.setLanguage(copy.getLanguage());
-				copyToModify.setPublisher(copy.getPublisher());
-				copyToModify.setType(copy.getType());
+				copyToModify.getMedium().setTitle(copy.getMedium().getTitle());
+				copyToModify.getMedium().setAuthor(copy.getMedium().getAuthor());
+				copyToModify.getMedium().setLanguage(copy.getMedium().getLanguage());
+				copyToModify.getMedium().setPublisher(copy.getMedium().getPublisher());
+				copyToModify.getMedium().setType(copy.getMedium().getType());
 				copyToModify.setCondition(copy.getCondition());
 				copies.remove(copy);
 				checkGroups();
@@ -378,21 +379,23 @@ public class RegisterCopyView extends AbstractEditView {
 	protected void initBinding() throws ConnectException {
 		BindingHelper.bindStringToTextField(txtBarcode, copyToModify, Copy.class, Copy.FIELD_BARCODE, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(txtIsbn, copyToModify, Copy.class, Copy.FIELD_ISBN, bindingContext, false);
 		BindingHelper.bindStringToTextField(txtEdition, copyToModify, Copy.class, Copy.FIELD_EDITION, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(txtTitle, copyToModify, Copy.class, Copy.FIELD_TITLE, bindingContext,
-				false);
-		BindingHelper.bindStringToTextField(txtAuthor, copyToModify, Copy.class, Copy.FIELD_AUTHOR, bindingContext,
-				false);
-		BindingHelper.bindStringToTextField(txtLanguage, copyToModify, Copy.class, Copy.FIELD_LANGUAGE, bindingContext,
-				false);
-		BindingHelper.bindStringToTextField(txtPublisher, copyToModify, Copy.class, Copy.FIELD_PUBLISHER,
-				bindingContext, false);
 		BindingHelper.bindStringToTextField(txtCondition, copyToModify, Copy.class, Copy.FIELD_CONDITION,
 				bindingContext, false);
+		BindingHelper.bindStringToTextField(txtTitle, copyToModify, Copy.class,
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TITLE, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtAuthor, copyToModify, Copy.class,
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_AUTHOR, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtLanguage, copyToModify, Copy.class,
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_LANGUAGE, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtPublisher, copyToModify, Copy.class,
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_PUBLISHER, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtIsbn, copyToModify, Copy.class,
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_ISBN, bindingContext, false);
 
-		BindingHelper.bindObjectToCCombo(comboMediumType, copyToModify, Copy.class, Medium.FIELD_TYPE, MediumType.class,
+		BindingHelper.bindObjectToCCombo(comboMediumType, copyToModify, Copy.class,
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TYPE, MediumType.class,
 				ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(), bindingContext,
 				false);
 

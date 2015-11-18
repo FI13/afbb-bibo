@@ -64,30 +64,32 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 	}
 
 	@Override
-	public Image getColumnImage(final Object element, final XViewerColumn xCol, final int columnIndex) throws Exception {
+	public Image getColumnImage(final Object element, final XViewerColumn xCol, final int columnIndex)
+			throws Exception {
 		final Copy copy = (Copy) element;
-		if (columnIndex == 0 && copy.getType() != null) {
-			return BiboImageRegistry.getImage(copy.getType().getIcon(), IconSize.small);
+		if (columnIndex == 0 && copy.getMedium() != null && copy.getMedium().getType() != null) {
+			return BiboImageRegistry.getImage(copy.getMedium().getType().getIcon(), IconSize.small);
 		}
 		return null;
 	}
 
 	@Override
-	public String getColumnText(final Object element, final XViewerColumn xCol, final int columnIndex) throws Exception {
+	public String getColumnText(final Object element, final XViewerColumn xCol, final int columnIndex)
+			throws Exception {
 		final Copy copy = (Copy) element;
 		String value = "";//$NON-NLS-1$
-		if (columnIndex == 0 && copy.getType() != null) {
-			value = copy.getType().getName();
+		if (columnIndex == 0 && copy.getMedium() != null && copy.getMedium().getType() != null) {
+			value = copy.getMedium().getType().getName();
 		} else if (columnIndex == 1 && copy.getBarcode() != null) {
 			value = copy.getBarcode();
-		} else if (columnIndex == 2 && copy.getIsbn() != null) {
-			value = copy.getIsbn();
-		} else if (columnIndex == 3 && copy.getAuthor() != null) {
-			value = copy.getAuthor();
-		} else if (columnIndex == 4 && copy.getPublisher() != null) {
-			value = copy.getPublisher();
-		} else if (columnIndex == 5 && copy.getLanguage() != null) {
-			value = copy.getLanguage();
+		} else if (columnIndex == 2 && copy.getMedium() != null && copy.getMedium().getIsbn() != null) {
+			value = copy.getMedium().getIsbn();
+		} else if (columnIndex == 3 && copy.getMedium() != null && copy.getMedium().getAuthor() != null) {
+			value = copy.getMedium().getAuthor();
+		} else if (columnIndex == 4 && copy.getMedium() != null && copy.getMedium().getPublisher() != null) {
+			value = copy.getMedium().getPublisher();
+		} else if (columnIndex == 5 && copy.getMedium() != null && copy.getMedium().getLanguage() != null) {
+			value = copy.getMedium().getLanguage();
 		} else if (columnIndex == 6 && copy.getEdition() != null) {
 			value = copy.getEdition();
 		}
