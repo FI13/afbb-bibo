@@ -28,7 +28,7 @@ public class CopyMovementForm extends AbstractForm<Copy> {
 	private Text txtLastBorrowDate;
 
 	public CopyMovementForm(Composite parent, Copy input, DataBindingContext bindingContext, BiboFormToolkit toolkit) {
-		super(parent, SWT.NONE, input, bindingContext, toolkit);
+		super(parent, input, bindingContext, toolkit);
 	}
 
 	@Override

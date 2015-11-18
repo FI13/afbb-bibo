@@ -26,7 +26,25 @@ public abstract class AbstractForm<Input> extends Composite {
 	 * Constructor
 	 * 
 	 * @param parent
+	 *            parent composite
+	 * @param input
+	 *            input to bind in this form
+	 * @param bindingContext
+	 *            context that bindings should happen in. can be
+	 *            <code>null</code>
+	 * @param toolkit
+	 */
+	public AbstractForm(Composite parent, Input input, DataBindingContext bindingContext, BiboFormToolkit toolkit) {
+		this(parent, SWT.NONE, input, bindingContext, toolkit);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param parent
+	 *            parent composite
 	 * @param style
+	 *            the style of widget to construct
 	 * @param bindingContext
 	 *            context that bindings should happen in. can be
 	 *            <code>null</code>
@@ -39,8 +57,6 @@ public abstract class AbstractForm<Input> extends Composite {
 		this.toolkit = toolkit != null ? toolkit : new BiboFormToolkit(Display.getCurrent());
 		createUi();
 		initBinding();
-
-		setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW));
 	}
 
 	/**
