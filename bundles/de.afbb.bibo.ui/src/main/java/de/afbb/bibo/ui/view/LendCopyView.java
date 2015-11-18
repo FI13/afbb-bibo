@@ -6,19 +6,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.core.databinding.beans.BeanProperties;
-import org.eclipse.core.databinding.beans.BeansObservables;
-import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -40,15 +35,11 @@ import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
-import de.afbb.bibo.share.model.Medium;
-import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
-import de.afbb.bibo.ui.Messages;
 import de.afbb.bibo.ui.form.CopyMovementForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.form.MediumInformationForm;
-import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 
 public class LendCopyView extends AbstractEditView {
 
@@ -242,7 +233,6 @@ public class LendCopyView extends AbstractEditView {
 
 	@Override
 	protected void initBinding() throws ConnectException {
-		;
 		BindingHelper.bindStringToTextField(txtBarcode, copyToModify, Copy.class, Copy.FIELD_BARCODE, bindingContext,
 				false);
 		BindingHelper.bindStringToTextField(txtCondition, copyToModify, Copy.class, Copy.FIELD_CONDITION,

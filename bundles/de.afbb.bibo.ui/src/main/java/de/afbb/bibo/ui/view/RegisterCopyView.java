@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -373,7 +372,7 @@ public class RegisterCopyView extends AbstractEditView {
 		btnGroup.setEnabled(false);
 		btnUngroup.setEnabled(false);
 		updateSaveButton();
-		
+
 		return content;
 	}
 
