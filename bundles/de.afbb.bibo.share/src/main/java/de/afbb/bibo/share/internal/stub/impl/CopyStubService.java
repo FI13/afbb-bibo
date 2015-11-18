@@ -36,20 +36,20 @@ public class CopyStubService implements ICopyService {
 	}
 
 	@Override
-	public Collection<Copy> getGrouped(Integer id) throws ConnectException {
+	public Collection<Copy> getGroupedCopies(Integer id) throws ConnectException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void registerCopy(Collection<Copy> copies) throws ConnectException {
+	public void registerCopies(Collection<Copy> copies) throws ConnectException {
 		// TODO Auto-generated method stub
 		throw new ConnectException();
 
 	}
 
 	@Override
-	public void returnCopy(Collection<Copy> copies) throws ConnectException {
+	public void returnCopies(Collection<Copy> copies) throws ConnectException {
 		// TODO Auto-generated method stub
 
 	}

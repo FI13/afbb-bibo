@@ -182,7 +182,7 @@ public class ReturnCopyView extends AbstractEditView {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
 						try {
-							ServiceLocator.getInstance().getCopyService().returnCopy(copies);
+							ServiceLocator.getInstance().getCopyService().returnCopies(copies);
 						} catch (ConnectException e) {
 							handle(e);
 						}

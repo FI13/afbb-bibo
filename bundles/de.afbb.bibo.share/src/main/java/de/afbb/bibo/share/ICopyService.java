@@ -34,7 +34,7 @@ public interface ICopyService {
 	 * @return collection of all copies that are in the same group
 	 * @throws ConnectException
 	 */
-	Collection<Copy> getGrouped(Integer id) throws ConnectException;
+	Collection<Copy> getGroupedCopies(Integer id) throws ConnectException;
 
 	/**
 	 * registers new copies and mediums as necessary. <br>
@@ -44,7 +44,7 @@ public interface ICopyService {
 	 *            collection of grouped copies.
 	 * @throws ConnectException
 	 */
-	void registerCopy(Collection<Copy> copies) throws ConnectException;
+	void registerCopies(Collection<Copy> copies) throws ConnectException;
 
 	/**
 	 * marks copies as returned
@@ -53,7 +53,7 @@ public interface ICopyService {
 	 *            collection of copies.
 	 * @throws ConnectException
 	 */
-	void returnCopy(Collection<Copy> copies) throws ConnectException;
+	void returnCopies(Collection<Copy> copies) throws ConnectException;
 
 	/**
 	 * gets a list of all copies of all mediums
