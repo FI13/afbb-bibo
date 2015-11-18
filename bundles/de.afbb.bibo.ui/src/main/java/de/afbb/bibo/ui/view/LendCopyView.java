@@ -50,7 +50,7 @@ public class LendCopyView extends AbstractEditView {
 
 	public static final String ID = "de.afbb.bibo.ui.lend.copy";//$NON-NLS-1$
 	private static final String LEND_COPY = "lend.copy";//$NON-NLS-1$
-	
+
 	private final Date now = new Date();
 
 	private Text txtCondition;
@@ -80,6 +80,89 @@ public class LendCopyView extends AbstractEditView {
 	private final HashMap<String, Copy> copyCache = new HashMap<>();
 	private final Set<Copy> copies = new HashSet<Copy>();
 	private Copy copyToModify = new Copy();
+
+	/**
+	 * listener that removes the selected item from the list and fills the input
+	 * fields with its values
+	 */
+	Listener toEditListener = new Listener() {
+
+		@Override
+		public void handleEvent(final Event event) {
+			Copy copy = xViewer.getLastElementFromSelectionPath();
+			delete(copy);
+			moveToEdit(copy);
+		}
+	};
+	Listener deleteListener = new Listener() {
+
+		@Override
+		public void handleEvent(final Event event) {
+			Copy copy = xViewer.getLastElementFromSelectionPath();
+			delete(copy);
+		}
+	};
+
+	/**
+	 * listener that adds a copy to the list and clears the input fields
+	 * afterwards
+	 */
+	Listener toListListener = new Listener() {
+
+		@Override
+		public void handleEvent(final Event event) {
+			final Copy clone = (Copy) copyToModify.clone();
+			copies.add(clone);
+			setCopyToModify(null);
+			updateSaveButton();
+			xViewer.setInput(copies);
+			txtBarcode.setFocus();
+		}
+	};
+
+	Listener saveListener = new Listener() {
+
+		@Override
+		public void handleEvent(Event event) {
+			final Job job = new Job("Rückgabe abschließen") {
+
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					try {
+						ServiceLocator.getInstance().getCopyService().returnCopy(copies);
+					} catch (ConnectException e) {
+						handle(e);
+					}
+					return Status.OK_STATUS;
+				}
+
+			};
+			job.schedule();
+			closeEditor();
+		}
+	};
+
+	/**
+	 * listener that reacts when the selection changes and enables & disables
+	 * control buttons
+	 */
+	SelectionListener xViewerSelectionListener = new SelectionListener() {
+
+		@Override
+		public void widgetSelected(final SelectionEvent e) {
+			final ISelection selection = xViewer.getSelection();
+			if (selection instanceof TreeSelection) {
+				final boolean singleSelection = ((TreeSelection) selection).size() == 1;
+				btnToEdit.setEnabled(singleSelection);
+				btnDelete.setEnabled(singleSelection);
+			}
+		}
+
+		@Override
+		public void widgetDefaultSelected(final SelectionEvent e) {
+			// no double click event
+		}
+	};
 
 	@Override
 	protected void initUi(Composite parent) {
@@ -141,8 +224,8 @@ public class LendCopyView extends AbstractEditView {
 		final Composite middle = toolkit.createComposite(content, SWT.NONE);
 		middle.setLayout(new GridLayout(3, false));
 		btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
-		btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
-		btnDelete= toolkit.createButton(middle, "Aus Liste entfernen", SWT.NONE);
+		btnToEdit = toolkit.createButton(middle, "Details anzeigen", SWT.NONE);
+		btnDelete = toolkit.createButton(middle, "Aus Liste entfernen", SWT.NONE);
 
 		xViewer = new CopyXviewerForm(content, LEND_COPY);
 		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
@@ -183,27 +266,8 @@ public class LendCopyView extends AbstractEditView {
 
 		btnToList.addListener(SWT.MouseDown, toListListener);
 		btnToEdit.addListener(SWT.MouseDown, toEditListener);
-		btnSave.addListener(SWT.MouseDown, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				final Job job = new Job("Rückgabe abschließen") {
-
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						try {
-							ServiceLocator.getInstance().getCopyService().returnCopy(copies);
-						} catch (ConnectException e) {
-							handle(e);
-						}
-						return Status.OK_STATUS;
-					}
-
-				};
-				job.schedule();
-				closeEditor();
-			}
-		});
+		btnDelete.addListener(SWT.MouseDown, deleteListener);
+		btnSave.addListener(SWT.MouseDown, saveListener);
 
 		txtCondition.setEnabled(false);
 		txtTitle.setEnabled(false);
@@ -223,7 +287,7 @@ public class LendCopyView extends AbstractEditView {
 		btnDelete.setEnabled(false);
 		txtBorrowDate.setEnabled(false);
 		txtLastBorrowDate.setEnabled(false);
-		
+
 		btnPrint.setSelection(true);
 	}
 
@@ -273,67 +337,17 @@ public class LendCopyView extends AbstractEditView {
 				(copyToModify.getBarcode() == null || copyToModify.getBarcode().isEmpty()) && !copies.isEmpty());
 	}
 
-	/**
-	 * listener that removes the selected item from the list and fills the input
-	 * fields with its values
-	 */
-	Listener toEditListener = new Listener() {
-
-		@Override
-		public void handleEvent(final Event event) {
-			final TreePath[] paths = ((TreeSelection) xViewer.getSelection()).getPaths();
-			if (paths.length > 0) {
-				final Copy copy = (Copy) paths[0].getLastSegment();
-				moveToEdit(copy);
-			}
-		}
-	};
-
-	/**
-	 * listener that adds a copy to the list and clears the input fields
-	 * afterwards
-	 */
-	Listener toListListener = new Listener() {
-
-		@Override
-		public void handleEvent(final Event event) {
-			final Copy clone = (Copy) copyToModify.clone();
-			copies.add(clone);
-			setCopyToModify(null);
-			updateSaveButton();
-			xViewer.setInput(copies);
-			txtBarcode.setFocus();
-		}
-	};
-
-	/**
-	 * listener that reacts when the selection changes and enables & disables
-	 * control buttons
-	 */
-	SelectionListener xViewerSelectionListener = new SelectionListener() {
-
-		@Override
-		public void widgetSelected(final SelectionEvent e) {
-			final ISelection selection = xViewer.getSelection();
-			if (selection instanceof TreeSelection) {
-				final boolean singleSelection = ((TreeSelection) selection).size() == 1;
-				btnToEdit.setEnabled(singleSelection);
-			}
-		}
-
-		@Override
-		public void widgetDefaultSelected(final SelectionEvent e) {
-			// no double click event
-		}
-	};
-
 	private void moveToEdit(Copy copy) {
-		copies.remove(copy);
 		setCopyToModify(copy);
+		bindingContext.updateTargets();
+	}
+
+	private void delete(Copy copy) {
+		copies.remove(copy);
 		updateSaveButton();
 		btnToEdit.setEnabled(false);
+		btnDelete.setEnabled(false);
 		xViewer.setInput(copies);
-		bindingContext.updateTargets();
 	}
 
 	private void loadCopyFromDatabase(String barcode) {
@@ -372,7 +386,7 @@ public class LendCopyView extends AbstractEditView {
 		copyToModify.setPublisher(copy != null ? copy.getPublisher() : null);
 		copyToModify.setTitle(copy != null ? copy.getTitle() : null);
 		copyToModify.setType(copy != null ? copy.getType() : null);
-		
+
 		copyToModify.setBorrower(copy != null ? (Borrower) getEditorInput() : null);
 		copyToModify.setBorrowDate(copy != null ? now : null);
 		copyToModify.setCurator(copy != null ? SessionHolder.getInstance().getCurator() : null);

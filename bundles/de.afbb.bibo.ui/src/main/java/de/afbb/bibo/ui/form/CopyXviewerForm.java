@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
@@ -111,6 +112,20 @@ public class CopyXviewerForm {
 
 	public Control getControl() {
 		return content;
+	}
+
+	/**
+	 * get the last element of the selection path. on a flat hierarchy it is the
+	 * single row
+	 * 
+	 * @return
+	 */
+	public Copy getLastElementFromSelectionPath() {
+		final TreePath[] paths = ((TreeSelection) xViewer.getSelection()).getPaths();
+		if (paths.length > 0) {
+			return (Copy) paths[0].getLastSegment();
+		}
+		return null;
 	}
 
 }
