@@ -15,10 +15,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -28,7 +29,6 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.EditorPart;
 
 import de.afbb.bibo.databinding.BindingHelper;
@@ -45,16 +45,17 @@ abstract class AbstractEditView extends EditorPart {
 	private Label lblValidationMessage;
 	private final IObservableValue validationStatus = new WritableValue(IStatus.OK, IStatus.class);
 	protected final DataBindingContext bindingContext = new DataBindingContext();
-	protected BiboFormToolkit toolkit = new BiboFormToolkit(Display.getCurrent());
+	protected final BiboFormToolkit toolkit = new BiboFormToolkit(Display.getCurrent());
 
 	@Override
 	public void createPartControl(final Composite parent) {
 		try {
 			final Composite outer = toolkit.createComposite(parent, SWT.NONE);
-			GridLayout layoutOuter = new GridLayout(1, false);
-			layoutOuter.marginHeight = layoutOuter.marginWidth = 0;
-			outer.setLayout(layoutOuter);
-			GridDataFactory.fillDefaults().grab(true, true).applyTo(outer);
+			GridLayout layout = new GridLayout(1, false);
+			layout.marginHeight = layout.marginWidth = 0;
+			outer.setLayout(layout);
+			GridData layoutData = new GridData(GridData.FILL_BOTH);
+			outer.setLayoutData(layoutData);
 
 			Composite validationComposite = toolkit.createComposite(outer, SWT.NONE);
 			validationComposite.setLayout(new GridLayout(2, false));
@@ -62,7 +63,14 @@ abstract class AbstractEditView extends EditorPart {
 			lblValidationMessage = toolkit.createLabel(validationComposite, EMPTY_STRING);
 			lblValidationMessage.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
 
-			initUi(outer);
+			ScrolledComposite content = new ScrolledComposite(outer, SWT.H_SCROLL | SWT.V_SCROLL);
+			content.setExpandHorizontal(true);
+			content.setExpandVertical(true);
+			content.setLayout(layout);
+			content.setLayoutData(layoutData);
+			Composite children = initUi(content);
+			content.setMinSize(children.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			content.setContent(children);
 			createBinding();
 			additionalTasks();
 		} catch (ConnectException e) {
@@ -71,9 +79,11 @@ abstract class AbstractEditView extends EditorPart {
 	}
 
 	/**
-	 * initializes the UX of the editor
+	 * initializes the user interface of the editor
+	 * 
+	 * @throws ConnectException
 	 */
-	protected abstract void initUi(final Composite parent);
+	protected abstract Composite initUi(final Composite parent) throws ConnectException;
 
 	private void createBinding() throws ConnectException {
 		initBinding();
@@ -204,5 +214,12 @@ abstract class AbstractEditView extends EditorPart {
 	@Override
 	public boolean isSaveAsAllowed() {
 		return false;
+	}
+
+	@Override
+	public void dispose() {
+		toolkit.dispose();
+		bindingContext.dispose();
+		super.dispose();
 	}
 }

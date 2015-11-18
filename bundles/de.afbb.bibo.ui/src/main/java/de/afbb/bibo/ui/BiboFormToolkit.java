@@ -6,6 +6,7 @@ import org.eclipse.nebula.widgets.cdatetime.CDT;
 import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
@@ -38,6 +39,11 @@ public class BiboFormToolkit extends FormToolkit {
 		group.setBackground(getColors().getBackground());
 		group.setForeground(getColors().getForeground());
 		paintBordersFor(group);
+
+		GridLayout layout = new GridLayout(1, false);
+		layout.marginWidth = layout.marginHeight = 0;
+		group.setLayout(layout);
+		group.setLayoutData(new GridData(GridData.FILL_BOTH));
 		return group;
 	}
 

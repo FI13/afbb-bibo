@@ -24,7 +24,7 @@ public class WelcomeView extends AbstractEditView {
 	private Text messageText;
 
 	@Override
-	public void initUi(final Composite parent) {
+	public Composite initUi(final Composite parent) {
 		final Composite top = new Composite(parent, SWT.NONE);
 		final GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
@@ -34,6 +34,7 @@ public class WelcomeView extends AbstractEditView {
 		messageText = new Text(top, SWT.MULTI | SWT.WRAP);
 		messageText.setText("TODO: hier Begrüßung des Nutzer einfügen und allgemeine Informationen zur Bedienung der Software anzeigen");
 		messageText.setLayoutData(new GridData(GridData.FILL_BOTH));
+		return top;
 	}
 
 	@Override

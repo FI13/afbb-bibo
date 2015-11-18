@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -270,7 +269,7 @@ public class RegisterCopyView extends AbstractEditView {
 	};
 
 	@Override
-	public void initUi(final Composite parent) {
+	public Composite initUi(final Composite parent) {
 		final Composite content = toolkit.createComposite(parent, SWT.NONE);
 		content.setLayout(new GridLayout(3, false));
 
@@ -373,6 +372,8 @@ public class RegisterCopyView extends AbstractEditView {
 		btnGroup.setEnabled(false);
 		btnUngroup.setEnabled(false);
 		updateSaveButton();
+
+		return content;
 	}
 
 	@Override

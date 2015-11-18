@@ -74,7 +74,7 @@ public class CopyXviewerForm {
 		xViewer.setContentProvider(contentProvider);
 		xViewer.setLabelProvider(new CopyLabelProvider(xViewer, contentProvider));
 		xViewer.getMenuManager().dispose();
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(xViewer.getControl());
+		GridDataFactory.fillDefaults().hint(300, 150).grab(true, true).applyTo(xViewer.getControl());
 	}
 
 	private void initTableColumns() {

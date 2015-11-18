@@ -61,7 +61,7 @@ public class BorrowerView extends AbstractEditView {
 	}
 
 	@Override
-	protected void initUi(final Composite parent) {
+	protected Composite initUi(final Composite parent) {
 		final Composite top = new Composite(parent, SWT.NONE);
 		final GridLayout layout = new GridLayout(2, false);
 		layout.marginHeight = 10;
@@ -120,7 +120,7 @@ public class BorrowerView extends AbstractEditView {
 //		buttonCancel = new Button(top, SWT.NONE);
 //		buttonCancel.setText("Verwerfen");
 //		GridDataFactory.swtDefaults().hint(150, SWT.DEFAULT).applyTo(buttonCancel);
-
+		return top;
 	}
 
 	@Override
