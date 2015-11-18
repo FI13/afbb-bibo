@@ -72,4 +72,9 @@ public class CopyStubService implements ICopyService {
 
 	}
 
+	@Override
+	public void lendCopies(Collection<Copy> copies, boolean printList) throws ConnectException {
+		// TODO Auto-generated method stub
+	}
+
 }

@@ -56,6 +56,17 @@ public interface ICopyService {
 	void returnCopies(Collection<Copy> copies) throws ConnectException;
 
 	/**
+	 * marks copies as lend
+	 * 
+	 * @param copies
+	 *            collection of copies.
+	 * @param printList
+	 *            true if a list should be printed
+	 * @throws ConnectException
+	 */
+	void lendCopies(Collection<Copy> copies, boolean printList) throws ConnectException;
+
+	/**
 	 * gets a list of all copies of all mediums
 	 * 
 	 * @return
