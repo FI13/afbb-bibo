@@ -1,6 +1,7 @@
 package de.afbb.bibo.ui.view;
 
 import java.net.ConnectException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,8 +33,10 @@ import org.eclipse.ui.PartInitException;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.share.model.Curator;
 import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
@@ -65,6 +68,9 @@ public class LendCopyView extends AbstractEditView {
 	private Button btnToList;
 	private Button btnToEdit;
 	private Button btnSave;
+	private Button btnDelete;
+	private Button btnPrint;
+
 	private CCombo comboMediumType;
 
 	private CopyXviewerForm xViewer;
@@ -131,16 +137,18 @@ public class LendCopyView extends AbstractEditView {
 		comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
 
 		final Composite middle = toolkit.createComposite(content, SWT.NONE);
-		middle.setLayout(new GridLayout(2, false));
+		middle.setLayout(new GridLayout(3, false));
 		btnToList = toolkit.createButton(middle, "In Liste übernehmen", SWT.NONE);
 		btnToEdit = toolkit.createButton(middle, "In Beareitung übernehmen", SWT.NONE);
+		btnDelete= toolkit.createButton(middle, "Aus Liste entfernen", SWT.NONE);
 
 		xViewer = new CopyXviewerForm(content, LEND_COPY);
 		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
 
 		final Composite footer = toolkit.createComposite(content, SWT.NONE);
-		footer.setLayout(new GridLayout(1, false));
-		btnSave = toolkit.createButton(footer, "Rückgabe abschließen", SWT.NONE);
+		footer.setLayout(new GridLayout(2, false));
+		btnSave = toolkit.createButton(footer, "Ausleihe abschließen", SWT.NONE);
+		btnPrint = toolkit.createButton(footer, "Liste drucken", SWT.CHECK);
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(content);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(copyGroup);
@@ -169,6 +177,7 @@ public class LendCopyView extends AbstractEditView {
 		btnToList.setImage(BiboImageRegistry.getImage(IconType.ARROW_DOWN, IconSize.small));
 		btnToEdit.setImage(BiboImageRegistry.getImage(IconType.ARROW_UP, IconSize.small));
 		btnSave.setImage(BiboImageRegistry.getImage(IconType.SAVE, IconSize.small));
+		btnDelete.setImage(BiboImageRegistry.getImage(IconType.MINUS, IconSize.small));
 
 		btnToList.addListener(SWT.MouseDown, toListListener);
 		btnToEdit.addListener(SWT.MouseDown, toEditListener);
@@ -209,8 +218,11 @@ public class LendCopyView extends AbstractEditView {
 		btnToList.setEnabled(false);
 		btnToEdit.setEnabled(false);
 		btnSave.setEnabled(false);
+		btnDelete.setEnabled(false);
 		txtBorrowDate.setEnabled(false);
 		txtLastBorrowDate.setEnabled(false);
+		
+		btnPrint.setSelection(true);
 	}
 
 	@Override
@@ -361,7 +373,6 @@ public class LendCopyView extends AbstractEditView {
 		copyToModify.setPublisher(copy != null ? copy.getPublisher() : null);
 		copyToModify.setTitle(copy != null ? copy.getTitle() : null);
 		copyToModify.setType(copy != null ? copy.getType() : null);
-		txtCondition.setEnabled(copy != null);
 		btnToList.setEnabled(copy != null);
 		bindingContext.updateTargets();
 	}
