@@ -69,8 +69,7 @@ abstract class AbstractEditView extends EditorPart {
 			content.setLayout(layout);
 			content.setLayoutData(layoutData);
 			Composite children = initUi(content);
-			// magic numbers, WOOT!
-			content.setMinSize(600, 400);
+			content.setMinSize(children.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			content.setContent(children);
 			createBinding();
 			additionalTasks();
