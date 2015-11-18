@@ -40,6 +40,7 @@ import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
 import de.afbb.bibo.ui.Messages;
+import de.afbb.bibo.ui.form.CopyMovementForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 
@@ -76,7 +77,7 @@ public class ReturnCopyView extends AbstractEditView {
 	private Copy copyToModify = new Copy();
 
 	@Override
-	protected void initUi(Composite parent) {
+	protected Composite initUi(Composite parent) {
 		final Composite content = toolkit.createComposite(parent, SWT.NONE);
 		content.setLayout(new GridLayout(3, false));
 
@@ -213,6 +214,8 @@ public class ReturnCopyView extends AbstractEditView {
 		btnSave.setEnabled(false);
 		txtBorrowDate.setEnabled(false);
 		txtLastBorrowDate.setEnabled(false);
+		
+		return content;
 	}
 
 	@Override

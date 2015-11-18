@@ -179,7 +179,7 @@ public class LendCopyView extends AbstractEditView {
 	};
 
 	@Override
-	protected void initUi(Composite parent) {
+	protected Composite initUi(Composite parent) {
 		final Composite content = toolkit.createComposite(parent, SWT.NONE);
 		content.setLayout(new GridLayout(3, false));
 
@@ -304,6 +304,7 @@ public class LendCopyView extends AbstractEditView {
 		txtLastBorrowDate.setEnabled(false);
 
 		btnPrint.setSelection(printList);
+		return content;
 	}
 
 	@Override
