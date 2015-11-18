@@ -1,5 +1,7 @@
 package de.afbb.bibo.ui.form;
 
+import java.net.ConnectException;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -27,7 +29,8 @@ public class CopyMovementForm extends AbstractForm<Copy> {
 	private Text txtBorrowDate;
 	private Text txtLastBorrowDate;
 
-	public CopyMovementForm(Composite parent, Copy input, DataBindingContext bindingContext, BiboFormToolkit toolkit) {
+	public CopyMovementForm(Composite parent, Copy input, DataBindingContext bindingContext, BiboFormToolkit toolkit)
+			throws ConnectException {
 		super(parent, input, bindingContext, toolkit);
 	}
 

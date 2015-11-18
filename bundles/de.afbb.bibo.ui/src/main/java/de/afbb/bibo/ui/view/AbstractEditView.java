@@ -80,8 +80,10 @@ abstract class AbstractEditView extends EditorPart {
 
 	/**
 	 * initializes the user interface of the editor
+	 * 
+	 * @throws ConnectException
 	 */
-	protected abstract Composite initUi(final Composite parent);
+	protected abstract Composite initUi(final Composite parent) throws ConnectException;
 
 	private void createBinding() throws ConnectException {
 		initBinding();

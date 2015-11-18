@@ -1,5 +1,7 @@
 package de.afbb.bibo.ui.form;
 
+import java.net.ConnectException;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -16,6 +18,7 @@ import de.afbb.bibo.ui.BiboFormToolkit;
 public abstract class AbstractForm<Input> extends Composite {
 
 	protected static final String EMPTY_STRING = "";//$NON-NLS-1$
+	protected static final String DOT = ".";//$NON-NLS-1$
 
 	protected final DataBindingContext bindingContext;
 	protected final BiboFormToolkit toolkit;
@@ -33,8 +36,9 @@ public abstract class AbstractForm<Input> extends Composite {
 	 *            context that bindings should happen in. can be
 	 *            <code>null</code>
 	 * @param toolkit
+	 * @throws ConnectException
 	 */
-	public AbstractForm(Composite parent, Input input, DataBindingContext bindingContext, BiboFormToolkit toolkit) {
+	public AbstractForm(Composite parent, Input input, DataBindingContext bindingContext, BiboFormToolkit toolkit) throws ConnectException {
 		this(parent, SWT.NONE, input, bindingContext, toolkit);
 	}
 
@@ -48,9 +52,10 @@ public abstract class AbstractForm<Input> extends Composite {
 	 * @param bindingContext
 	 *            context that bindings should happen in. can be
 	 *            <code>null</code>
+	 * @throws ConnectException
 	 */
 	public AbstractForm(Composite parent, int style, Input input, DataBindingContext bindingContext,
-			BiboFormToolkit toolkit) {
+			BiboFormToolkit toolkit) throws ConnectException {
 		super(parent, style);
 		this.input = input;
 		this.bindingContext = bindingContext != null ? bindingContext : new DataBindingContext();
@@ -78,8 +83,10 @@ public abstract class AbstractForm<Input> extends Composite {
 
 	/**
 	 * initializes the databinding for this form
+	 * 
+	 * @throws ConnectException
 	 */
-	protected abstract void initBinding();
+	protected abstract void initBinding() throws ConnectException;
 
 	/**
 	 * @return the input
