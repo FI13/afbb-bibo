@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -36,7 +37,6 @@ import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
-import de.afbb.bibo.share.model.Curator;
 import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
@@ -52,6 +52,7 @@ public class LendCopyView extends AbstractEditView {
 	private static final String LEND_COPY = "lend.copy";//$NON-NLS-1$
 
 	private final Date now = new Date();
+	private boolean printList = true;
 
 	private Text txtCondition;
 	private Text txtBarcode;
@@ -125,20 +126,32 @@ public class LendCopyView extends AbstractEditView {
 		@Override
 		public void handleEvent(Event event) {
 			final Job job = new Job("Rückgabe abschließen") {
-
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
-						ServiceLocator.getInstance().getCopyService().returnCopies(copies);
+						ServiceLocator.getInstance().getCopyService().lendCopies(copies, printList);
 					} catch (ConnectException e) {
 						handle(e);
 					}
 					return Status.OK_STATUS;
 				}
-
 			};
 			job.schedule();
 			closeEditor();
+		}
+	};
+
+	SelectionListener togglePrint = new SelectionListener() {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			printList = btnPrint.getSelection();
+
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			printList = btnPrint.getSelection();
+
 		}
 	};
 
@@ -147,7 +160,6 @@ public class LendCopyView extends AbstractEditView {
 	 * control buttons
 	 */
 	SelectionListener xViewerSelectionListener = new SelectionListener() {
-
 		@Override
 		public void widgetSelected(final SelectionEvent e) {
 			final ISelection selection = xViewer.getSelection();
@@ -268,6 +280,7 @@ public class LendCopyView extends AbstractEditView {
 		btnToEdit.addListener(SWT.MouseDown, toEditListener);
 		btnDelete.addListener(SWT.MouseDown, deleteListener);
 		btnSave.addListener(SWT.MouseDown, saveListener);
+		btnPrint.addSelectionListener(togglePrint);
 
 		txtCondition.setEnabled(false);
 		txtTitle.setEnabled(false);
@@ -288,7 +301,7 @@ public class LendCopyView extends AbstractEditView {
 		txtBorrowDate.setEnabled(false);
 		txtLastBorrowDate.setEnabled(false);
 
-		btnPrint.setSelection(true);
+		btnPrint.setSelection(printList);
 	}
 
 	@Override
