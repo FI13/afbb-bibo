@@ -8,6 +8,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import de.afbb.bibo.share.model.Borrower;
+import de.afbb.bibo.ui.dialog.CreateBorrowerDialog;
+import de.afbb.bibo.ui.dialog.ManageCuratorDialog;
 import de.afbb.bibo.ui.view.BorrowerView;
 
 /**
@@ -19,13 +21,7 @@ public class CreateBorrowerHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		try {
-			page.openEditor(new Borrower(), BorrowerView.ID);
-		} catch (final PartInitException e) {
-			e.printStackTrace();
-			// shouldn't happen
-		}
+		new CreateBorrowerDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell()).open();
 		return null;
 	}
 

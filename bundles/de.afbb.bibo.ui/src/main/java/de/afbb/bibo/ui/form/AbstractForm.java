@@ -8,6 +8,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import de.afbb.bibo.ui.BiboFormToolkit;
+import de.afbb.bibo.ui.dialog.AbstractFormDialog;
 
 /**
  * super class for all forms
@@ -26,7 +27,8 @@ public abstract class AbstractForm<Input> extends Composite {
 	protected Input input;
 
 	/**
-	 * Constructor
+	 * Constructor.<br>
+	 * will be invoked by {@link AbstractFormDialog}
 	 * 
 	 * @param parent
 	 *            parent composite
@@ -38,7 +40,8 @@ public abstract class AbstractForm<Input> extends Composite {
 	 * @param toolkit
 	 * @throws ConnectException
 	 */
-	public AbstractForm(Composite parent, Input input, DataBindingContext bindingContext, BiboFormToolkit toolkit) throws ConnectException {
+	public AbstractForm(Composite parent, Input input, DataBindingContext bindingContext, BiboFormToolkit toolkit)
+			throws ConnectException {
 		this(parent, SWT.NONE, input, bindingContext, toolkit);
 	}
 
