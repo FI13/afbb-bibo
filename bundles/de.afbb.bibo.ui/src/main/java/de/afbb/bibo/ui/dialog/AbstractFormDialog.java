@@ -26,7 +26,7 @@ import de.afbb.bibo.ui.form.AbstractForm;
  * @param <Form>
  *            form to show content
  */
-public abstract class AbstractFormDialog<Input, Form extends AbstractForm<Input>> extends AbstractDialog {
+abstract class AbstractFormDialog<Input, Form extends AbstractForm<Input>> extends AbstractDialog {
 
 	protected Input input;
 	protected Form form;

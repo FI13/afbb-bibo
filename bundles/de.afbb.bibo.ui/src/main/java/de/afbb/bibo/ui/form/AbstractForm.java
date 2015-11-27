@@ -8,7 +8,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import de.afbb.bibo.ui.BiboFormToolkit;
-import de.afbb.bibo.ui.dialog.AbstractFormDialog;
 
 /**
  * super class for all forms
