@@ -22,7 +22,7 @@ public class LendCopyHandler extends AbstractHandler {
 		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		ISelection selection = window.getSelectionService().getSelection();
 		if (selection instanceof IStructuredSelection) {
-			Iterator iterator = ((IStructuredSelection) selection).iterator();
+			Iterator<?> iterator = ((IStructuredSelection) selection).iterator();
 			while (iterator.hasNext()) {
 				Object next = iterator.next();
 				if (next instanceof NavigationTreeViewNode) {
