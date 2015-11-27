@@ -1,15 +1,16 @@
 package de.afbb.bibo.ui.view;
 
+import java.net.ConnectException;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IEditorInput;
-import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.model.Borrower;
+import de.afbb.bibo.ui.form.BorrowerForm;
 
 /**
  * this view adds or edits a person who can borrow books
@@ -23,18 +24,7 @@ public class BorrowerView extends AbstractEditView {
 	private Borrower input;
 	private Borrower inputCache;
 
-	private Label labelFirstname;
-	private Label labelLastname;
-	private Label labelEMail;
-	private Label labelTel;
-	private Label labelInfo;
-	private Text textFirstname;
-	private Text textLastname;
-	private Text textEMail;
-	private Text textTel;
-	private Text textInfo;
-//	private Button buttonSave;
-//	private Button buttonCancel;
+	private BorrowerForm borrowerForm;
 
 	@Override
 	protected void setInput(final IEditorInput input) {
@@ -47,7 +37,7 @@ public class BorrowerView extends AbstractEditView {
 
 	@Override
 	public void setFocus() {
-		textFirstname.setFocus();
+		borrowerForm.setFocus();
 	}
 
 	@Override
@@ -61,75 +51,21 @@ public class BorrowerView extends AbstractEditView {
 	}
 
 	@Override
-	protected Composite initUi(final Composite parent) {
-		final Composite top = new Composite(parent, SWT.NONE);
-		final GridLayout layout = new GridLayout(2, false);
-		layout.marginHeight = 10;
-		layout.marginWidth = 10;
-		top.setLayout(layout);
+	protected Composite initUi(final Composite parent) throws ConnectException {
+		final Composite content = toolkit.createComposite(parent, SWT.NONE);
+		content.setLayout(new GridLayout(1, false));
 
-		final int textWidth = 250;
+		Group borrowerGroup = toolkit.createGroup(content, "Allgemein");
+		borrowerForm = new BorrowerForm(borrowerGroup, input, bindingContext, toolkit);
 
-		// Label Vorname
-		labelFirstname = new Label(top, SWT.NONE);
-		labelFirstname.setText("Vorname:");
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(content);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(borrowerForm);
+		GridDataFactory.fillDefaults().hint(200, SWT.DEFAULT).grab(true, false).applyTo(borrowerGroup);
 
-		// Textbox Vorname
-		textFirstname = new Text(top, SWT.BORDER);
-		GridDataFactory.swtDefaults().hint(textWidth, SWT.DEFAULT).applyTo(textFirstname);
-
-		// Label Nachname
-		labelLastname = new Label(top, SWT.NONE);
-		labelLastname.setText("Nachname:");
-
-		// Textbox Nachname
-		textLastname = new Text(top, SWT.BORDER);
-		GridDataFactory.swtDefaults().hint(textWidth, SWT.DEFAULT).applyTo(textLastname);
-
-		// Label E-Mail
-		labelEMail = new Label(top, SWT.NONE);
-		labelEMail.setText("E-Mail-Adresse:");
-		GridDataFactory.swtDefaults().applyTo(labelEMail);
-
-		// Textbox E-Mail
-		textEMail = new Text(top, SWT.BORDER);
-		GridDataFactory.swtDefaults().hint(textWidth, SWT.DEFAULT).applyTo(textEMail);
-
-		// Label Telefonnummer
-		labelTel = new Label(top, SWT.NONE);
-		labelTel.setText("Telefonnummer:");
-
-		// Textbox Telefonnummer
-		textTel = new Text(top, SWT.BORDER);
-		GridDataFactory.swtDefaults().hint(textWidth, SWT.DEFAULT).applyTo(textTel);
-
-		// Label Informationen
-		labelInfo = new Label(top, SWT.NONE);
-		labelInfo.setText("Informationen:");
-
-		// Textbox Informationen
-		textInfo = new Text(top, SWT.BORDER);
-		GridDataFactory.swtDefaults().hint(textWidth, SWT.DEFAULT).applyTo(textInfo);
-
-//		// Button Speichern
-//		buttonSave = new Button(top, SWT.NONE);
-//		buttonSave.setText("Speichern");
-//		GridDataFactory.swtDefaults().hint(150, SWT.DEFAULT).applyTo(buttonSave);
-//
-//		// Button Verwerfen
-//		buttonCancel = new Button(top, SWT.NONE);
-//		buttonCancel.setText("Verwerfen");
-//		GridDataFactory.swtDefaults().hint(150, SWT.DEFAULT).applyTo(buttonCancel);
-		return top;
+		return content;
 	}
 
 	@Override
 	protected void initBinding() {
-		// Databinding
-		BindingHelper.bindStringToTextField(textFirstname, input, Borrower.class, Borrower.FIELD_FIRSTNAME, bindingContext, true);
-		BindingHelper.bindStringToTextField(textLastname, input, Borrower.class, Borrower.FIELD_SURNAME, bindingContext, true);
-		BindingHelper.bindStringToTextField(textEMail, input, Borrower.class, Borrower.FIELD_EMAIL, bindingContext, false);
-		BindingHelper.bindStringToTextField(textTel, input, Borrower.class, Borrower.FIELD_PHONENUMER, bindingContext, false);
-		BindingHelper.bindStringToTextField(textInfo, input, Borrower.class, Borrower.FIELD_INFO, bindingContext, false);
 	}
 }

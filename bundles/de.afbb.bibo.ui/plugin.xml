@@ -32,22 +32,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.commands">
-      <category
-            name="Mail"
-            id="de.afbb.bibo.ui.category">
-      </category>
-      <command
-            name="Open Mailbox"
-            description="Opens a mailbox"
-            categoryId="de.afbb.bibo.ui.category"
-            id="de.afbb.bibo.ui.open">
-      </command>
-      <command
-            name="Open Message Dialog"
-            description="Open a message dialog"
-            categoryId="de.afbb.bibo.ui.category"
-            id="de.afbb.bibo.ui.openMessage">
-      </command>
       <command
             id="de.afbb.bibo.ui.login"
             name="Anmeldung">
@@ -80,9 +64,14 @@
             id="de.afbb.bibo.ui.manage.curator"
             name="Eigenes Passwort Ändern">
       </command>
+      <command
+            id="de.afbb.bibo.ui.manage.borrower"
+            name="Verwalten Ausleiher">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
+         <!--
       <key
             commandId="de.afbb.bibo.ui.open"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
@@ -93,6 +82,7 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+SHIFT+M">
       </key>
+      -->
       <key
             commandId="org.eclipse.ui.file.exit"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
@@ -177,6 +167,12 @@
             locationURI="popup:de.afbb.bibo.ui.navigationView">
          <command
                commandId="de.afbb.bibo.ui.lend"
+               label="Verleihen an"
+               style="push">
+         </command>
+         <command
+               commandId="de.afbb.bibo.ui.manage.borrower"
+               label="Verwalten"
                style="push">
          </command>
       </menuContribution>
@@ -248,6 +244,22 @@
       <handler
             class="de.afbb.bibo.ui.handler.LendCopyHandler"
             commandId="de.afbb.bibo.ui.lend">
+         <activeWhen>
+            <iterate
+                  ifEmpty="false"
+                  operator="and">
+               <instanceof
+                     value="de.afbb.bibo.share.impl.NavigationTreeViewNode">
+               </instanceof>
+               <test
+                     property="de.afbb.bibo.PERSON">
+               </test>
+            </iterate>
+         </activeWhen>
+      </handler>
+      <handler
+            class="de.afbb.bibo.ui.handler.ManageBorrowerHandler"
+            commandId="de.afbb.bibo.ui.manage.borrower">
          <activeWhen>
             <iterate
                   ifEmpty="false"

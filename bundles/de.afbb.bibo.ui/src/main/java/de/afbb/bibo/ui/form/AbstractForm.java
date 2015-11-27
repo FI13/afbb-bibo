@@ -26,7 +26,8 @@ public abstract class AbstractForm<Input> extends Composite {
 	protected Input input;
 
 	/**
-	 * Constructor
+	 * Constructor.<br>
+	 * will be invoked by {@link AbstractFormDialog}
 	 * 
 	 * @param parent
 	 *            parent composite
@@ -38,25 +39,9 @@ public abstract class AbstractForm<Input> extends Composite {
 	 * @param toolkit
 	 * @throws ConnectException
 	 */
-	public AbstractForm(Composite parent, Input input, DataBindingContext bindingContext, BiboFormToolkit toolkit) throws ConnectException {
-		this(parent, SWT.NONE, input, bindingContext, toolkit);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param parent
-	 *            parent composite
-	 * @param style
-	 *            the style of widget to construct
-	 * @param bindingContext
-	 *            context that bindings should happen in. can be
-	 *            <code>null</code>
-	 * @throws ConnectException
-	 */
-	public AbstractForm(Composite parent, int style, Input input, DataBindingContext bindingContext,
-			BiboFormToolkit toolkit) throws ConnectException {
-		super(parent, style);
+	public AbstractForm(Composite parent, Input input, DataBindingContext bindingContext, BiboFormToolkit toolkit)
+			throws ConnectException {
+		super(parent, SWT.NONE);
 		this.input = input;
 		this.bindingContext = bindingContext != null ? bindingContext : new DataBindingContext();
 		this.toolkit = toolkit != null ? toolkit : new BiboFormToolkit(Display.getCurrent());

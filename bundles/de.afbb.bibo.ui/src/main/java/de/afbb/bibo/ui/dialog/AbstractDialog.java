@@ -21,11 +21,12 @@ import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.ui.observable.value.StatusAsObservable;
 
 /**
- * abstract super class for dialogs that provide consolidation of error messages in title area
+ * abstract super class for dialogs that provide consolidation of error messages
+ * in title area
  * 
  * @author dbecker
  */
-public abstract class AbstractDialog extends TitleAreaDialog {
+abstract class AbstractDialog extends TitleAreaDialog {
 
 	protected final DataBindingContext bindingContext = new DataBindingContext();
 	private final IObservableValue validationStatus = new WritableValue(IStatus.OK, IStatus.class);
@@ -53,35 +54,38 @@ public abstract class AbstractDialog extends TitleAreaDialog {
 	}
 
 	/**
-	 * aggregates the validation status for binding context and displays message in title area
+	 * aggregates the validation status for binding context and displays message
+	 * in title area
 	 */
 	protected void aggregateStatus() {
-		final AggregateValidationStatus aggregateValidationStatus = BindingHelper.aggregateValidationStatus(bindingContext);
-		bindingContext.bindValue(validationStatus, aggregateValidationStatus, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER),
+		final AggregateValidationStatus aggregateValidationStatus = BindingHelper
+				.aggregateValidationStatus(bindingContext);
+		bindingContext.bindValue(validationStatus, aggregateValidationStatus,
+				new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER),
 				new UpdateValueStrategy().setAfterConvertValidator(new IValidator() {
 
 					@Override
 					public IStatus validate(final Object value) {
 						final Status status = (Status) value;
 						switch (status.getSeverity()) {
-							case IStatus.OK:
-								setMessage("", IMessageProvider.NONE);//$NON-NLS-1$
-								break;
-							case IStatus.INFO:
-								setMessage(status.getMessage(), IMessageProvider.INFORMATION);
-								break;
-							case IStatus.WARNING:
-								setMessage(status.getMessage(), IMessageProvider.WARNING);
-								break;
-							case IStatus.ERROR:
-								setMessage(status.getMessage(), IMessageProvider.ERROR);
-								break;
+						case IStatus.OK:
+							setMessage("", IMessageProvider.NONE);//$NON-NLS-1$
+							break;
+						case IStatus.INFO:
+							setMessage(status.getMessage(), IMessageProvider.INFORMATION);
+							break;
+						case IStatus.WARNING:
+							setMessage(status.getMessage(), IMessageProvider.WARNING);
+							break;
+						case IStatus.ERROR:
+							setMessage(status.getMessage(), IMessageProvider.ERROR);
+							break;
 						}
 						return Status.OK_STATUS;
 					}
 				}));
-		bindingContext.bindValue(SWTObservables.observeEnabled(getButton(IDialogConstants.OK_ID)), new StatusAsObservable(
-				aggregateValidationStatus), null, null);
+		bindingContext.bindValue(SWTObservables.observeEnabled(getButton(IDialogConstants.OK_ID)),
+				new StatusAsObservable(aggregateValidationStatus), null, null);
 	}
 
 	/**
