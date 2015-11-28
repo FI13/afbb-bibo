@@ -10,6 +10,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 import de.afbb.bibo.share.impl.NavigationTreeService;
+import de.afbb.bibo.ui.CommandExecutor;
+import de.afbb.bibo.ui.ICommandIds;
 import de.afbb.bibo.ui.handler.ManageBorrowerHandler;
 import de.afbb.bibo.ui.provider.NavigationTreeViewContentProvider;
 import de.afbb.bibo.ui.provider.NavigationTreeViewLabelProvider;
@@ -32,8 +34,8 @@ public class NavigationView extends ViewPart {
 
 				@Override
 				public void doubleClick(DoubleClickEvent event) {
-					ManageBorrowerHandler.openForSelection((IStructuredSelection) event.getSelection());
-					// TODO add handler for medium selection
+					CommandExecutor.executeCommand(ICommandIds.CMD_MANAGE_BORROWER);
+					// TODO add command for medium selection here
 				}
 			});
 			viewer.setAutoExpandLevel(2);

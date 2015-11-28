@@ -8,8 +8,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
@@ -32,7 +30,7 @@ public class ManageBorrowerHandler extends AbstractHandler {
 		return null;
 	}
 
-	public static void openForSelection(IStructuredSelection selection) {
+	private static void openForSelection(IStructuredSelection selection) {
 		Iterator<?> iterator = selection.iterator();
 		while (iterator.hasNext()) {
 			Object next = iterator.next();
@@ -40,7 +38,7 @@ public class ManageBorrowerHandler extends AbstractHandler {
 				Object input = ((NavigationTreeViewNode) next).getValue();
 				if (input instanceof Borrower) {
 					try {
-						IEditorPart openEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 								.openEditor((IEditorInput) input, BorrowerView.ID, true);
 					} catch (final PartInitException e) {
 						e.printStackTrace();
