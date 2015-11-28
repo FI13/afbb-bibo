@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 /**
@@ -56,6 +57,11 @@ public class BiboFormToolkit extends FormToolkit {
 		adapt(dateTime);
 		paintBordersFor(dateTime);
 		return dateTime;
+	}
+
+	@Override
+	public Text createText(final Composite parent, final String value) {
+		return createText(parent, value, SWT.SINGLE | SWT.BORDER);
 	}
 
 }
