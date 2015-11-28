@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
    <extension
          id="application"
          point="org.eclipse.core.runtime.applications">
@@ -94,22 +93,22 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="de.afbb.bibo.ui.application"
-            name="AfbB Bibliothek">
+            name="AFBB Bibliothek">
          <property
                name="appName"
-               value="AfbB Bibliothek">
+               value="AFBB Bibliothek">
          </property>
          <property
                name="aboutText"
-               value="Bibliotheks-Verwaltung für AfbB.&#x0A;Erstellt von:&#x0A;&#x0A;David Becker&#x0A;Matthias Elberling&#x0A;Philipp Endrulat&#x0A;Tom Ewald&#x0A;Michelé Lingel&#x0A;Philipp Widdra">
+               value="Bibliotheks-Verwaltung für AFBB.&#x0A;Erstellt von:&#x0A;&#x0A;David Becker&#x0A;Matthias Elberling&#x0A;Philipp Endrulat&#x0A;Tom Ewald&#x0A;Michelé Lingel&#x0A;Philipp Widdra">
          </property>
          <property
                name="aboutImage"
-               value="product_lg.gif">
+               value="icons/48x48logo.png">
          </property>
          <property
                name="windowImages"
-               value="icons/16x16book2.png,icons/32x32book2.png">
+               value="icons/16x16book2.png,icons/32x32book2.png,icons/48x48book2.png">
          </property>
       </product>
    </extension>
@@ -284,5 +283,4 @@
             type="de.afbb.bibo.share.impl.NavigationTreeViewNode">
       </propertyTester>
    </extension>
-
 </plugin>

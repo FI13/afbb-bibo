@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -35,7 +36,7 @@ import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.ui.BiboFormToolkit;
 import de.afbb.bibo.ui.Messages;
 
-abstract class AbstractEditView extends EditorPart {
+abstract class AbstractEditView<Input extends IEditorInput> extends EditorPart implements IDirtyEvaluate {
 
 	protected static final String EMPTY_STRING = "";//$NON-NLS-1$
 	protected static final String DOT = ".";//$NON-NLS-1$
@@ -44,43 +45,50 @@ abstract class AbstractEditView extends EditorPart {
 	private Label lblValidationImage;
 	private Label lblValidationMessage;
 	private final IObservableValue validationStatus = new WritableValue(IStatus.OK, IStatus.class);
+
 	protected final DataBindingContext bindingContext = new DataBindingContext();
 	protected final BiboFormToolkit toolkit = new BiboFormToolkit(Display.getCurrent());
+
+	protected Input input;
+	protected Input inputCache;
 
 	@Override
 	public void createPartControl(final Composite parent) {
 		try {
 			final Composite outer = toolkit.createComposite(parent, SWT.NONE);
-			GridLayout layout = new GridLayout(1, false);
+			final GridLayout layout = new GridLayout(1, false);
 			layout.marginHeight = layout.marginWidth = 0;
 			outer.setLayout(layout);
-			GridData layoutData = new GridData(GridData.FILL_BOTH);
+			final GridData layoutData = new GridData(GridData.FILL_BOTH);
 			outer.setLayoutData(layoutData);
 
-			Composite validationComposite = toolkit.createComposite(outer, SWT.NONE);
+			final Composite validationComposite = toolkit.createComposite(outer, SWT.NONE);
 			validationComposite.setLayout(new GridLayout(2, false));
 			lblValidationImage = toolkit.createLabel(validationComposite, EMPTY_STRING);
 			lblValidationMessage = toolkit.createLabel(validationComposite, EMPTY_STRING);
-			lblValidationMessage.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
 
-			ScrolledComposite content = new ScrolledComposite(outer, SWT.H_SCROLL | SWT.V_SCROLL);
+			GridDataFactory.fillDefaults().grab(true, false).applyTo(validationComposite);
+			GridDataFactory.fillDefaults().applyTo(lblValidationImage);
+			GridDataFactory.fillDefaults().grab(true, false).applyTo(lblValidationMessage);
+
+			final ScrolledComposite content = new ScrolledComposite(outer, SWT.H_SCROLL | SWT.V_SCROLL);
 			content.setExpandHorizontal(true);
 			content.setExpandVertical(true);
 			content.setLayout(layout);
 			content.setLayoutData(layoutData);
-			Composite children = initUi(content);
+			final Composite children = initUi(content);
 			content.setMinSize(children.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			content.setContent(children);
 			createBinding();
 			additionalTasks();
-		} catch (ConnectException e) {
+		} catch (final ConnectException e) {
 			handle(e);
 		}
 	}
 
 	/**
 	 * initializes the user interface of the editor
-	 * 
+	 *
 	 * @throws ConnectException
 	 */
 	protected abstract Composite initUi(final Composite parent) throws ConnectException;
@@ -99,7 +107,7 @@ abstract class AbstractEditView extends EditorPart {
 						if (OK.equals(status.getMessage())) {
 							setMessage(EMPTY_STRING, null);
 						} else {
-							String newMessage = status.getMessage();
+							final String newMessage = status.getMessage();
 							Image newImage = null;
 							if (newMessage != null) {
 								switch (status.getSeverity()) {
@@ -126,23 +134,70 @@ abstract class AbstractEditView extends EditorPart {
 
 	/**
 	 * sets validation message
-	 * 
+	 *
 	 * @param message
 	 * @param image
 	 */
-	private void setMessage(String message, Image image) {
+	private void setMessage(final String message, final Image image) {
 		lblValidationImage.setImage(image);
 		lblValidationMessage.setText(message);
+		lblValidationMessage.getParent().layout(true, true);
 		// update dirty state when validation message changes
 		updateDirtyState();
 	}
 
-	protected void updateDirtyState() {
+	@Override
+	public void updateDirtyState() {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
+	}
+
+	@Override
+	protected void setInput(final IEditorInput editorInput) {
+		input = (Input) editorInput;
+		inputCache = cloneInput(input);
+		super.setInput(editorInput);
+
+		// set the name of the input as title (if possible)
+		final String partName = computePartName(input);
+		if (partName != null && !partName.isEmpty()) {
+			/*
+			 * javadoc says that setting the empty string would be fine, but
+			 * apparently it clears the title because it tries to set the part
+			 * name of this abstract editor instead of the implementation
+			 */
+			setPartName(partName);
+		}
+	}
+
+	/**
+	 * override this method to provide a way to clone the input.<br>
+	 * default implementation returns null
+	 *
+	 * @param input
+	 * @return
+	 */
+	protected Input cloneInput(final Input input) {
+		// done this way to avoid use of reflection
+		return null;
+	}
+
+	/**
+	 * computes the part name from given input.<br>
+	 * default implementation returns null
+	 *
+	 * @param input
+	 * @see EditorPart#setPartName
+	 * @return part name
+	 */
+	protected String computePartName(final Input input) {
+		return null;
 	}
 
 	/**
 	 * initializes the databinding for the editor
+	 *
+	 * @throws ConnectException
+	 *             it is save to throw this exception from this method
 	 */
 	protected abstract void initBinding() throws ConnectException;
 
@@ -150,6 +205,9 @@ abstract class AbstractEditView extends EditorPart {
 	 * can be overridden by clients to perform additional tasks after UI and
 	 * binding are done.<br>
 	 * default implementation does nothing
+	 *
+	 * @throws ConnectException
+	 *             it is save to throw this exception from this method
 	 */
 	protected void additionalTasks() throws ConnectException {
 		// default implementation does nothing
@@ -158,7 +216,7 @@ abstract class AbstractEditView extends EditorPart {
 	/**
 	 * handles an connect exception by displaying an info dialog to the user and
 	 * closing the view afterwards
-	 * 
+	 *
 	 * @param e
 	 */
 	protected void handle(final ConnectException e) {
@@ -166,7 +224,7 @@ abstract class AbstractEditView extends EditorPart {
 
 			@Override
 			public void run() {
-				StringBuilder msg = new StringBuilder(Messages.MESSAGE_ERROR_CONNECTION);
+				final StringBuilder msg = new StringBuilder(Messages.MESSAGE_ERROR_CONNECTION);
 				if (getSite().getPage().isPartVisible(AbstractEditView.this)) {
 					msg.append(Messages.NEW_LINE);
 					msg.append(Messages.MESSAGE_VIEW_CLOSE);
@@ -184,7 +242,7 @@ abstract class AbstractEditView extends EditorPart {
 
 	/**
 	 * checks if all bindings in {@link #bindingContext} are ok
-	 * 
+	 *
 	 * @return
 	 * @see IStatus#isOK()
 	 */

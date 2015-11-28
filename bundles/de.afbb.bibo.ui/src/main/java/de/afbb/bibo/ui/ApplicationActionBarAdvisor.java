@@ -1,6 +1,5 @@
 package de.afbb.bibo.ui;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
@@ -17,21 +16,20 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
 /**
- * An action bar advisor is responsible for creating, adding, and disposing of the
- * actions added to a workbench window. Each window will be populated with
+ * An action bar advisor is responsible for creating, adding, and disposing of
+ * the actions added to a workbench window. Each window will be populated with
  * new actions.
  */
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	public static final String ID_COOLBAR = "de.afbb.bibo.coolbar";//$NON-NLS-1$
 
-	// Actions - important to allocate these only in makeActions, and then use them
+	// Actions - important to allocate these only in makeActions, and then use
+	// them
 	// in the fill methods. This ensures that the actions aren't recreated
 	// when fillActionBars is called with FILL_PROXY.
 	private IWorkbenchAction exitAction;
 	private IWorkbenchAction aboutAction;
-//	private IWorkbenchAction newWindowAction;
-	private Action messagePopupAction;
 
 	public ApplicationActionBarAdvisor(final IActionBarConfigurer configurer) {
 		super(configurer);
@@ -41,7 +39,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	protected void makeActions(final IWorkbenchWindow window) {
 		// Creates the actions and registers them.
 		// Registering is needed to ensure that key bindings work.
-		// The corresponding commands keybindings are defined in the plugin.xml file.
+		// The corresponding commands keybindings are defined in the plugin.xml
+		// file.
 		// Registering also provides automatic disposal of the actions when
 		// the window is closed.
 
@@ -53,7 +52,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		aboutAction.setText("Über dieses Programm");
 		register(aboutAction);
 
-//		newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(window);
+		// newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(window);
 	}
 
 	@Override
@@ -67,8 +66,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menuBar.add(helpMenu);
 
 		// File
-//		fileMenu.add(newWindowAction);
-//		fileMenu.add(new Separator());
+		// fileMenu.add(newWindowAction);
+		// fileMenu.add(new Separator());
 		fileMenu.add(exitAction);
 
 		// Help

@@ -3,10 +3,7 @@ package de.afbb.bibo.print;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.text.MessageFormat;
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Date;
 
 import javax.swing.JEditorPane;

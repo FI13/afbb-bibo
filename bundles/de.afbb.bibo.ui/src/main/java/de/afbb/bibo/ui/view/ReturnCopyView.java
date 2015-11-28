@@ -31,6 +31,7 @@ import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.share.model.Curator;
 import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
@@ -38,7 +39,7 @@ import de.afbb.bibo.ui.form.CopyMovementForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.form.MediumInformationForm;
 
-public class ReturnCopyView extends AbstractEditView {
+public class ReturnCopyView extends AbstractEditView<Curator> {
 
 	public static final String ID = "de.afbb.bibo.ui.return.copy";//$NON-NLS-1$
 	private static final String RETURN_COPY = "return.copy";//$NON-NLS-1$
@@ -55,35 +56,35 @@ public class ReturnCopyView extends AbstractEditView {
 
 	private final HashMap<String, Copy> copyCache = new HashMap<>();
 	private final Set<Copy> copies = new HashSet<Copy>();
-	private Copy copyToModify = new Copy();
+	private final Copy copyToModify = new Copy();
 
 	@Override
-	protected Composite initUi(Composite parent) throws ConnectException {
+	protected Composite initUi(final Composite parent) throws ConnectException {
 		final Composite content = toolkit.createComposite(parent, SWT.NONE);
 		content.setLayout(new GridLayout(3, false));
 
-		Group copyGroup = toolkit.createGroup(content, "Exemplar");
+		final Group copyGroup = toolkit.createGroup(content, "Exemplar");
 		copyGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(copyGroup, "Barcode");
-		txtBarcode = toolkit.createText(copyGroup, EMPTY_STRING);
+		txtBarcode = toolkit.createText(copyGroup, EMPTY_STRING, SWT.SINGLE);
 		txtBarcode.addFocusListener(new FocusListener() {
 
 			@Override
-			public void focusLost(FocusEvent e) {
+			public void focusLost(final FocusEvent e) {
 				loadCopyFromDatabase(txtBarcode.getText());
 			}
 
 			@Override
-			public void focusGained(FocusEvent e) {
+			public void focusGained(final FocusEvent e) {
 			}
 		});
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(copyGroup, "Zustand"));
 		txtCondition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.MULTI);
 
-		Group statusGroup = toolkit.createGroup(content, "Informationen");
+		final Group statusGroup = toolkit.createGroup(content, "Informationen");
 		new CopyMovementForm(statusGroup, copyToModify, bindingContext, toolkit);
 
-		Group mediumGroup = toolkit.createGroup(content, "Allgemein");
+		final Group mediumGroup = toolkit.createGroup(content, "Allgemein");
 		new MediumInformationForm(mediumGroup, copyToModify, bindingContext, toolkit);
 
 		final Composite middle = toolkit.createComposite(content, SWT.NONE);
@@ -97,9 +98,9 @@ public class ReturnCopyView extends AbstractEditView {
 		final Composite footer = toolkit.createComposite(content, SWT.NONE);
 		footer.setLayout(new GridLayout(1, false));
 		btnSave = toolkit.createButton(footer, "Rückgabe abschließen", SWT.NONE);
-		
+
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(content);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(copyGroup);
+		GridDataFactory.fillDefaults().hint(150, SWT.DEFAULT).grab(true, false).applyTo(copyGroup);
 		GridDataFactory.fillDefaults().applyTo(statusGroup);
 		GridDataFactory.fillDefaults().applyTo(mediumGroup);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtBarcode);
@@ -117,14 +118,14 @@ public class ReturnCopyView extends AbstractEditView {
 		btnSave.addListener(SWT.MouseDown, new Listener() {
 
 			@Override
-			public void handleEvent(Event event) {
+			public void handleEvent(final Event event) {
 				final Job job = new Job("Rückgabe abschließen") {
 
 					@Override
-					protected IStatus run(IProgressMonitor monitor) {
+					protected IStatus run(final IProgressMonitor monitor) {
 						try {
 							ServiceLocator.getInstance().getCopyService().returnCopies(copies);
-						} catch (ConnectException e) {
+						} catch (final ConnectException e) {
 							handle(e);
 						}
 						return Status.OK_STATUS;
@@ -170,7 +171,7 @@ public class ReturnCopyView extends AbstractEditView {
 
 		@Override
 		public void handleEvent(final Event event) {
-			final TreePath[] paths = ((TreeSelection) xViewer.getSelection()).getPaths();
+			final TreePath[] paths = xViewer.getSelection().getPaths();
 			if (paths.length > 0) {
 				final Copy copy = (Copy) paths[0].getLastSegment();
 				moveToEdit(copy);
@@ -216,7 +217,7 @@ public class ReturnCopyView extends AbstractEditView {
 		}
 	};
 
-	private void moveToEdit(Copy copy) {
+	private void moveToEdit(final Copy copy) {
 		copies.remove(copy);
 		setCopyToModify(copy);
 		updateSaveButton();
@@ -225,7 +226,7 @@ public class ReturnCopyView extends AbstractEditView {
 		bindingContext.updateTargets();
 	}
 
-	private void loadCopyFromDatabase(String barcode) {
+	private void loadCopyFromDatabase(final String barcode) {
 		// already loaded -> get from table
 		if (copyCache.containsKey(barcode)) {
 			moveToEdit(copyCache.get(barcode));
@@ -234,7 +235,7 @@ public class ReturnCopyView extends AbstractEditView {
 			Copy copy = null;
 			try {
 				copy = ServiceLocator.getInstance().getCopyService().get(barcode);
-			} catch (ConnectException e) {
+			} catch (final ConnectException e) {
 				handle(e);
 			}
 			setCopyToModify(copy);
@@ -244,10 +245,10 @@ public class ReturnCopyView extends AbstractEditView {
 
 	/**
 	 * fills the controls with the appropriate informations
-	 * 
+	 *
 	 * @param copy
 	 */
-	private void setCopyToModify(Copy copy) {
+	private void setCopyToModify(final Copy copy) {
 		copyToModify.setBarcode(copy != null ? copy.getBarcode() : null);
 		copyToModify.getMedium().setAuthor(copy != null ? copy.getMedium().getAuthor() : null);
 		copyToModify.setBorrowDate(copy != null ? copy.getBorrowDate() : null);

@@ -168,10 +168,11 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable, IE
 	 * @param medium
 	 *            the medium to set
 	 */
-	public void setMedium(Medium medium) {
+	public void setMedium(final Medium medium) {
 		changeSupport.firePropertyChange(FIELD_MEDIUM, this.medium, this.medium = medium);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(final Class adapter) {
 		return null;
@@ -233,14 +234,14 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable, IE
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((barcode == null) ? 0 : barcode.hashCode());
-		result = prime * result + ((condition == null) ? 0 : condition.hashCode());
-		result = prime * result + ((edition == null) ? 0 : edition.hashCode());
+		result = prime * result + (barcode == null ? 0 : barcode.hashCode());
+		result = prime * result + (condition == null ? 0 : condition.hashCode());
+		result = prime * result + (edition == null ? 0 : edition.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -250,7 +251,7 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable, IE
 		if (!(obj instanceof Copy)) {
 			return false;
 		}
-		Copy other = (Copy) obj;
+		final Copy other = (Copy) obj;
 		if (barcode == null) {
 			if (other.barcode != null) {
 				return false;

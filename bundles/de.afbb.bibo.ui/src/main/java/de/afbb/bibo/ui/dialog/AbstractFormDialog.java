@@ -53,7 +53,8 @@ abstract class AbstractFormDialog<Input, Form extends AbstractForm<Input>> exten
 		try {
 			Constructor<Form> constructor = formClass.getConstructor(Composite.class, inputClass,
 					DataBindingContext.class, BiboFormToolkit.class);
-			form = constructor.newInstance(container, inputClass.newInstance(), bindingContext, toolkit);
+			input = inputClass.newInstance();
+			form = constructor.newInstance(container, input, bindingContext, toolkit);
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {
