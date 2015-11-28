@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -61,7 +62,10 @@ abstract class AbstractEditView extends EditorPart {
 			validationComposite.setLayout(new GridLayout(2, false));
 			lblValidationImage = toolkit.createLabel(validationComposite, EMPTY_STRING);
 			lblValidationMessage = toolkit.createLabel(validationComposite, EMPTY_STRING);
-			lblValidationMessage.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+			
+			GridDataFactory.fillDefaults().grab(true, false).applyTo(validationComposite);
+			GridDataFactory.fillDefaults().applyTo(lblValidationImage);
+			GridDataFactory.fillDefaults().grab(true, false).applyTo(lblValidationMessage);
 
 			ScrolledComposite content = new ScrolledComposite(outer, SWT.H_SCROLL | SWT.V_SCROLL);
 			content.setExpandHorizontal(true);
@@ -133,6 +137,7 @@ abstract class AbstractEditView extends EditorPart {
 	private void setMessage(String message, Image image) {
 		lblValidationImage.setImage(image);
 		lblValidationMessage.setText(message);
+		lblValidationMessage.getParent().layout(true, true);
 		// update dirty state when validation message changes
 		updateDirtyState();
 	}
