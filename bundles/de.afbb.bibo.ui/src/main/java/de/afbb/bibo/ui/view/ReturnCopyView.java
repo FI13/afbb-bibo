@@ -31,6 +31,7 @@ import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.share.model.Curator;
 import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
@@ -38,7 +39,7 @@ import de.afbb.bibo.ui.form.CopyMovementForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.form.MediumInformationForm;
 
-public class ReturnCopyView extends AbstractEditView {
+public class ReturnCopyView extends AbstractEditView<Curator> {
 
 	public static final String ID = "de.afbb.bibo.ui.return.copy";//$NON-NLS-1$
 	private static final String RETURN_COPY = "return.copy";//$NON-NLS-1$
@@ -97,7 +98,7 @@ public class ReturnCopyView extends AbstractEditView {
 		final Composite footer = toolkit.createComposite(content, SWT.NONE);
 		footer.setLayout(new GridLayout(1, false));
 		btnSave = toolkit.createButton(footer, "Rückgabe abschließen", SWT.NONE);
-		
+
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(content);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(copyGroup);
 		GridDataFactory.fillDefaults().applyTo(statusGroup);

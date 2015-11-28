@@ -44,7 +44,7 @@ import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
  * 
  * @author dbecker
  */
-public class RegisterCopyView extends AbstractEditView {
+public class RegisterCopyView extends AbstractEditView<Copy> {
 
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String REGISTER_COPY = "register.copy";//$NON-NLS-1$

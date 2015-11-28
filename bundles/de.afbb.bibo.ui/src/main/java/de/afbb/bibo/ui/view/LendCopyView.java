@@ -41,7 +41,7 @@ import de.afbb.bibo.ui.form.CopyMovementForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.form.MediumInformationForm;
 
-public class LendCopyView extends AbstractEditView {
+public class LendCopyView extends AbstractEditView<Borrower> {
 
 	public static final String ID = "de.afbb.bibo.ui.lend.copy";//$NON-NLS-1$
 	private static final String LEND_COPY = "lend.copy";//$NON-NLS-1$
@@ -308,11 +308,8 @@ public class LendCopyView extends AbstractEditView {
 	}
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		super.init(site, input);
-		if (input instanceof Borrower) {
-			setPartName("Ausleihe an " + ((Borrower) input).getName());
-		}
+	protected String computePartName(Borrower input) {
+		return input != null ? "Ausleihe an " + input.getName() : null;
 	}
 
 }

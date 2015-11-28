@@ -1,5 +1,7 @@
 package de.afbb.bibo.ui.view;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.ConnectException;
 
 import org.eclipse.core.databinding.AggregateValidationStatus;
@@ -33,10 +35,11 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 
 import de.afbb.bibo.databinding.BindingHelper;
+import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.ui.BiboFormToolkit;
 import de.afbb.bibo.ui.Messages;
 
-abstract class AbstractEditView extends EditorPart {
+abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends EditorPart {
 
 	protected static final String EMPTY_STRING = "";//$NON-NLS-1$
 	protected static final String DOT = ".";//$NON-NLS-1$
@@ -45,8 +48,12 @@ abstract class AbstractEditView extends EditorPart {
 	private Label lblValidationImage;
 	private Label lblValidationMessage;
 	private final IObservableValue validationStatus = new WritableValue(IStatus.OK, IStatus.class);
+
 	protected final DataBindingContext bindingContext = new DataBindingContext();
 	protected final BiboFormToolkit toolkit = new BiboFormToolkit(Display.getCurrent());
+
+	protected Input input;
+	protected Input inputCache;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -62,7 +69,7 @@ abstract class AbstractEditView extends EditorPart {
 			validationComposite.setLayout(new GridLayout(2, false));
 			lblValidationImage = toolkit.createLabel(validationComposite, EMPTY_STRING);
 			lblValidationMessage = toolkit.createLabel(validationComposite, EMPTY_STRING);
-			
+
 			GridDataFactory.fillDefaults().grab(true, false).applyTo(validationComposite);
 			GridDataFactory.fillDefaults().applyTo(lblValidationImage);
 			GridDataFactory.fillDefaults().grab(true, false).applyTo(lblValidationMessage);
@@ -144,6 +151,48 @@ abstract class AbstractEditView extends EditorPart {
 
 	protected void updateDirtyState() {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
+	}
+
+	@Override
+	protected void setInput(final IEditorInput editorInput) {
+		input = (Input) editorInput;
+		inputCache = cloneInput(input);
+		super.setInput(editorInput);
+
+		// set the name of the input as title (if possible)
+		String partName = computePartName(input);
+		if (partName != null && !partName.isEmpty()) {
+			/*
+			 * javadoc says that setting the empty string would be fine, but
+			 * apparently it clears the title because it tries to set the part
+			 * name of this abstract editor instead of the implementation
+			 */
+			setPartName(partName);
+		}
+	}
+
+	/**
+	 * override this method to provide a way to clone the input.<br>
+	 * default implementation returns null
+	 * 
+	 * @param input
+	 * @return
+	 */
+	protected Input cloneInput(Input input) {
+		// done this way to avoid use of reflection
+		return null;
+	}
+
+	/**
+	 * computes the part name from given input.<br>
+	 * default implementation returns null
+	 * 
+	 * @param input
+	 * @see EditorPart#setPartName
+	 * @return part name
+	 */
+	protected String computePartName(Input input) {
+		return null;
 	}
 
 	/**

@@ -8,7 +8,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.ui.IEditorInput;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.ui.form.BorrowerForm;
 
@@ -16,31 +15,22 @@ import de.afbb.bibo.ui.form.BorrowerForm;
  * this view adds or edits a person who can borrow books
  * 
  * @author philippwiddra
+ * @author David Becker
  */
-public class BorrowerView extends AbstractEditView {
+public class BorrowerView extends AbstractEditView<Borrower> {
 
 	public static final String ID = "de.afbb.bibo.ui.borrower";//$NON-NLS-1$
-
-	private Borrower input;
-	private Borrower inputCache;
 
 	private BorrowerForm borrowerForm;
 
 	@Override
-	protected void setInput(final IEditorInput input) {
-		if (input instanceof Borrower) {
-			this.input = (Borrower) input;
-			inputCache = (Borrower) this.input.clone();
-			super.setInput(input);
-			StringBuilder name = new StringBuilder(((Borrower) input).getSurname());
-			if (name.length() > 0) {
-				name.append(", ");//$NON-NLS-1$
-			}
-			name.append(((Borrower) input).getForename());
-			setPartName(name.toString());
-		} else {
-			setPartName(EMPTY_STRING);
-		}
+	protected String computePartName(Borrower input) {
+		return input != null ? input.getName() : null;
+	}
+
+	@Override
+	protected Borrower cloneInput(Borrower input) {
+		return (Borrower) input.clone();
 	}
 
 	@Override

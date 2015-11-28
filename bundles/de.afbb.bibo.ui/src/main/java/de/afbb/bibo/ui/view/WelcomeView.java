@@ -9,12 +9,14 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
+import de.afbb.bibo.share.model.Curator;
+
 /**
  * this view greets the user and gives hints to use the software
  * 
  * @author dbecker
  */
-public class WelcomeView extends AbstractEditView {
+public class WelcomeView extends AbstractEditView<Curator> {
 
 	public static final String ID = "de.afbb.bibo.ui.view.welcome";//$NON-NLS-1$
 
@@ -32,23 +34,19 @@ public class WelcomeView extends AbstractEditView {
 		top.setLayout(layout);
 
 		messageText = new Text(top, SWT.MULTI | SWT.WRAP);
-		messageText.setText("TODO: hier Begrüßung des Nutzer einfügen und allgemeine Informationen zur Bedienung der Software anzeigen");
+		messageText.setText(
+				"TODO: hier Begrüßung des Nutzer einfügen und allgemeine Informationen zur Bedienung der Software anzeigen");
 		messageText.setLayoutData(new GridData(GridData.FILL_BOTH));
 		return top;
 	}
 
 	@Override
 	protected void initBinding() {
+		// nothing to do
 	}
 
 	@Override
 	public void setFocus() {
 		messageText.setFocus();
-	}
-
-	@Override
-	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setSite(site);
-		setInput(input);
 	}
 }
