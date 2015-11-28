@@ -81,8 +81,12 @@ public class BorrowerStubService implements IBorrowerService {
 
 	@Override
 	public void create(final Borrower borrower) throws ConnectException {
-		borrower.setId(++currentBorrowerId);
-		borrowers.add(borrower);
+		try {
+			Thread.sleep(5000);
+			borrower.setId(++currentBorrowerId);
+			borrowers.add(borrower);
+		} catch (InterruptedException e) {
+		}
 	}
 
 	@Override
