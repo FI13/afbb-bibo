@@ -13,22 +13,24 @@ import org.eclipse.swt.widgets.Text;
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.ui.BiboFormToolkit;
+import de.afbb.bibo.ui.events.UpdateDirtyListener;
 
 public class BorrowerForm extends AbstractForm<Borrower> {
+
 	private Text textFirstname;
 	private Text textLastname;
 	private Text textEMail;
 	private Text textTel;
 	private Text textInfo;
 
-	public BorrowerForm(Composite parent, Borrower input, DataBindingContext bindingContext, BiboFormToolkit toolkit)
-			throws ConnectException {
+	public BorrowerForm(final Composite parent, final Borrower input, final DataBindingContext bindingContext,
+			final BiboFormToolkit toolkit) throws ConnectException {
 		super(parent, input, bindingContext, toolkit);
 	}
 
 	@Override
-	protected void initUi(Composite parent) {
-		Composite content = toolkit.createComposite(parent, SWT.NONE);
+	protected void initUi(final Composite parent) {
+		final Composite content = toolkit.createComposite(parent, SWT.NONE);
 		content.setLayout(new GridLayout(2, false));
 		content.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -46,6 +48,13 @@ public class BorrowerForm extends AbstractForm<Borrower> {
 
 		toolkit.createLabel(content, "Informationen");
 		textInfo = toolkit.createText(content, EMPTY_STRING);
+
+		final UpdateDirtyListener updateDirtyListener = new UpdateDirtyListener();
+		textFirstname.addFocusListener(updateDirtyListener);
+		textLastname.addFocusListener(updateDirtyListener);
+		textEMail.addFocusListener(updateDirtyListener);
+		textTel.addFocusListener(updateDirtyListener);
+		textInfo.addFocusListener(updateDirtyListener);
 
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(textFirstname);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(textLastname);

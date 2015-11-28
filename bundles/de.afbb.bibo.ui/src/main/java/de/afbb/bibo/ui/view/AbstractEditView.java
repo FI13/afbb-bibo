@@ -1,7 +1,5 @@
 package de.afbb.bibo.ui.view;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.ConnectException;
 
 import org.eclipse.core.databinding.AggregateValidationStatus;
@@ -35,11 +33,10 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 
 import de.afbb.bibo.databinding.BindingHelper;
-import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.ui.BiboFormToolkit;
 import de.afbb.bibo.ui.Messages;
 
-abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends EditorPart {
+abstract class AbstractEditView<Input extends IEditorInput> extends EditorPart implements IDirtyEvaluate {
 
 	protected static final String EMPTY_STRING = "";//$NON-NLS-1$
 	protected static final String DOT = ".";//$NON-NLS-1$
@@ -59,13 +56,13 @@ abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends 
 	public void createPartControl(final Composite parent) {
 		try {
 			final Composite outer = toolkit.createComposite(parent, SWT.NONE);
-			GridLayout layout = new GridLayout(1, false);
+			final GridLayout layout = new GridLayout(1, false);
 			layout.marginHeight = layout.marginWidth = 0;
 			outer.setLayout(layout);
-			GridData layoutData = new GridData(GridData.FILL_BOTH);
+			final GridData layoutData = new GridData(GridData.FILL_BOTH);
 			outer.setLayoutData(layoutData);
 
-			Composite validationComposite = toolkit.createComposite(outer, SWT.NONE);
+			final Composite validationComposite = toolkit.createComposite(outer, SWT.NONE);
 			validationComposite.setLayout(new GridLayout(2, false));
 			lblValidationImage = toolkit.createLabel(validationComposite, EMPTY_STRING);
 			lblValidationMessage = toolkit.createLabel(validationComposite, EMPTY_STRING);
@@ -74,24 +71,24 @@ abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends 
 			GridDataFactory.fillDefaults().applyTo(lblValidationImage);
 			GridDataFactory.fillDefaults().grab(true, false).applyTo(lblValidationMessage);
 
-			ScrolledComposite content = new ScrolledComposite(outer, SWT.H_SCROLL | SWT.V_SCROLL);
+			final ScrolledComposite content = new ScrolledComposite(outer, SWT.H_SCROLL | SWT.V_SCROLL);
 			content.setExpandHorizontal(true);
 			content.setExpandVertical(true);
 			content.setLayout(layout);
 			content.setLayoutData(layoutData);
-			Composite children = initUi(content);
+			final Composite children = initUi(content);
 			content.setMinSize(children.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			content.setContent(children);
 			createBinding();
 			additionalTasks();
-		} catch (ConnectException e) {
+		} catch (final ConnectException e) {
 			handle(e);
 		}
 	}
 
 	/**
 	 * initializes the user interface of the editor
-	 * 
+	 *
 	 * @throws ConnectException
 	 */
 	protected abstract Composite initUi(final Composite parent) throws ConnectException;
@@ -110,7 +107,7 @@ abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends 
 						if (OK.equals(status.getMessage())) {
 							setMessage(EMPTY_STRING, null);
 						} else {
-							String newMessage = status.getMessage();
+							final String newMessage = status.getMessage();
 							Image newImage = null;
 							if (newMessage != null) {
 								switch (status.getSeverity()) {
@@ -137,11 +134,11 @@ abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends 
 
 	/**
 	 * sets validation message
-	 * 
+	 *
 	 * @param message
 	 * @param image
 	 */
-	private void setMessage(String message, Image image) {
+	private void setMessage(final String message, final Image image) {
 		lblValidationImage.setImage(image);
 		lblValidationMessage.setText(message);
 		lblValidationMessage.getParent().layout(true, true);
@@ -149,7 +146,8 @@ abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends 
 		updateDirtyState();
 	}
 
-	protected void updateDirtyState() {
+	@Override
+	public void updateDirtyState() {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
@@ -160,7 +158,7 @@ abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends 
 		super.setInput(editorInput);
 
 		// set the name of the input as title (if possible)
-		String partName = computePartName(input);
+		final String partName = computePartName(input);
 		if (partName != null && !partName.isEmpty()) {
 			/*
 			 * javadoc says that setting the empty string would be fine, but
@@ -174,11 +172,11 @@ abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends 
 	/**
 	 * override this method to provide a way to clone the input.<br>
 	 * default implementation returns null
-	 * 
+	 *
 	 * @param input
 	 * @return
 	 */
-	protected Input cloneInput(Input input) {
+	protected Input cloneInput(final Input input) {
 		// done this way to avoid use of reflection
 		return null;
 	}
@@ -186,17 +184,20 @@ abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends 
 	/**
 	 * computes the part name from given input.<br>
 	 * default implementation returns null
-	 * 
+	 *
 	 * @param input
 	 * @see EditorPart#setPartName
 	 * @return part name
 	 */
-	protected String computePartName(Input input) {
+	protected String computePartName(final Input input) {
 		return null;
 	}
 
 	/**
 	 * initializes the databinding for the editor
+	 *
+	 * @throws ConnectException
+	 *             it is save to throw this exception from this method
 	 */
 	protected abstract void initBinding() throws ConnectException;
 
@@ -204,6 +205,9 @@ abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends 
 	 * can be overridden by clients to perform additional tasks after UI and
 	 * binding are done.<br>
 	 * default implementation does nothing
+	 *
+	 * @throws ConnectException
+	 *             it is save to throw this exception from this method
 	 */
 	protected void additionalTasks() throws ConnectException {
 		// default implementation does nothing
@@ -212,7 +216,7 @@ abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends 
 	/**
 	 * handles an connect exception by displaying an info dialog to the user and
 	 * closing the view afterwards
-	 * 
+	 *
 	 * @param e
 	 */
 	protected void handle(final ConnectException e) {
@@ -220,7 +224,7 @@ abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends 
 
 			@Override
 			public void run() {
-				StringBuilder msg = new StringBuilder(Messages.MESSAGE_ERROR_CONNECTION);
+				final StringBuilder msg = new StringBuilder(Messages.MESSAGE_ERROR_CONNECTION);
 				if (getSite().getPage().isPartVisible(AbstractEditView.this)) {
 					msg.append(Messages.NEW_LINE);
 					msg.append(Messages.MESSAGE_VIEW_CLOSE);
@@ -238,7 +242,7 @@ abstract class AbstractEditView<Input extends Cloneable & IEditorInput> extends 
 
 	/**
 	 * checks if all bindings in {@link #bindingContext} are ok
-	 * 
+	 *
 	 * @return
 	 * @see IStatus#isOK()
 	 */
