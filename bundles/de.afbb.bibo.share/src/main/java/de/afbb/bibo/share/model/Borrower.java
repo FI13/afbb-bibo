@@ -89,6 +89,7 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 		forename = firstName;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(final Class adapter) {
 		// TODO Auto-generated method stub
@@ -186,8 +187,8 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 
 	@Override
 	public String toString() {
-		return "Borrower{" + "id=" + id + ", forename=" + forename + ", surname=" + surname + ", info=" + info + ", email=" + email
-				+ ", phoneNumber=" + phoneNumber + '}';
+		return "Borrower{" + "id=" + id + ", forename=" + forename + ", surname=" + surname + ", info=" + info
+				+ ", email=" + email + ", phoneNumber=" + phoneNumber + '}';
 	}
 
 	@Override

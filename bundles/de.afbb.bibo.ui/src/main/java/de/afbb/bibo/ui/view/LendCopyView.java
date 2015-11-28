@@ -25,9 +25,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.PartInitException;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
@@ -61,7 +58,7 @@ public class LendCopyView extends AbstractEditView<Borrower> {
 
 	private final HashMap<String, Copy> copyCache = new HashMap<>();
 	private final Set<Copy> copies = new HashSet<Copy>();
-	private Copy copyToModify = new Copy();
+	private final Copy copyToModify = new Copy();
 
 	/**
 	 * listener that removes the selected item from the list and fills the input
@@ -71,7 +68,7 @@ public class LendCopyView extends AbstractEditView<Borrower> {
 
 		@Override
 		public void handleEvent(final Event event) {
-			Copy copy = xViewer.getLastElementFromSelectionPath();
+			final Copy copy = xViewer.getLastElementFromSelectionPath();
 			delete(copy);
 			moveToEdit(copy);
 		}
@@ -80,7 +77,7 @@ public class LendCopyView extends AbstractEditView<Borrower> {
 
 		@Override
 		public void handleEvent(final Event event) {
-			Copy copy = xViewer.getLastElementFromSelectionPath();
+			final Copy copy = xViewer.getLastElementFromSelectionPath();
 			delete(copy);
 		}
 	};
@@ -105,13 +102,14 @@ public class LendCopyView extends AbstractEditView<Borrower> {
 	Listener saveListener = new Listener() {
 
 		@Override
-		public void handleEvent(Event event) {
+		public void handleEvent(final Event event) {
 			final Job job = new Job("Rückgabe abschließen") {
+
 				@Override
-				protected IStatus run(IProgressMonitor monitor) {
+				protected IStatus run(final IProgressMonitor monitor) {
 					try {
 						ServiceLocator.getInstance().getCopyService().lendCopies(copies, printList);
-					} catch (ConnectException e) {
+					} catch (final ConnectException e) {
 						handle(e);
 					}
 					return Status.OK_STATUS;
@@ -123,14 +121,15 @@ public class LendCopyView extends AbstractEditView<Borrower> {
 	};
 
 	SelectionListener togglePrint = new SelectionListener() {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void widgetSelected(final SelectionEvent e) {
 			printList = btnPrint.getSelection();
 
 		}
 
 		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
+		public void widgetDefaultSelected(final SelectionEvent e) {
 			printList = btnPrint.getSelection();
 
 		}
@@ -141,6 +140,7 @@ public class LendCopyView extends AbstractEditView<Borrower> {
 	 * control buttons
 	 */
 	SelectionListener xViewerSelectionListener = new SelectionListener() {
+
 		@Override
 		public void widgetSelected(final SelectionEvent e) {
 			final ISelection selection = xViewer.getSelection();
@@ -158,32 +158,32 @@ public class LendCopyView extends AbstractEditView<Borrower> {
 	};
 
 	@Override
-	protected Composite initUi(Composite parent) throws ConnectException {
+	protected Composite initUi(final Composite parent) throws ConnectException {
 		final Composite content = toolkit.createComposite(parent, SWT.NONE);
 		content.setLayout(new GridLayout(3, false));
 
-		Group copyGroup = toolkit.createGroup(content, "Exemplar");
+		final Group copyGroup = toolkit.createGroup(content, "Exemplar");
 		copyGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(copyGroup, "Barcode");
 		txtBarcode = toolkit.createText(copyGroup, EMPTY_STRING);
 		txtBarcode.addFocusListener(new FocusListener() {
 
 			@Override
-			public void focusLost(FocusEvent e) {
+			public void focusLost(final FocusEvent e) {
 				loadCopyFromDatabase(txtBarcode.getText());
 			}
 
 			@Override
-			public void focusGained(FocusEvent e) {
+			public void focusGained(final FocusEvent e) {
 			}
 		});
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(copyGroup, "Zustand"));
 		txtCondition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.MULTI);
 
-		Group statusGroup = toolkit.createGroup(content, "Informationen");
+		final Group statusGroup = toolkit.createGroup(content, "Informationen");
 		new CopyMovementForm(statusGroup, copyToModify, bindingContext, toolkit);
 
-		Group mediumGroup = toolkit.createGroup(content, "Allgemein");
+		final Group mediumGroup = toolkit.createGroup(content, "Allgemein");
 		new MediumInformationForm(mediumGroup, copyToModify, bindingContext, toolkit);
 
 		final Composite middle = toolkit.createComposite(content, SWT.NONE);
@@ -249,12 +249,12 @@ public class LendCopyView extends AbstractEditView<Borrower> {
 				(copyToModify.getBarcode() == null || copyToModify.getBarcode().isEmpty()) && !copies.isEmpty());
 	}
 
-	private void moveToEdit(Copy copy) {
+	private void moveToEdit(final Copy copy) {
 		setCopyToModify(copy);
 		bindingContext.updateTargets();
 	}
 
-	private void delete(Copy copy) {
+	private void delete(final Copy copy) {
 		copies.remove(copy);
 		updateSaveButton();
 		btnToEdit.setEnabled(false);
@@ -262,7 +262,7 @@ public class LendCopyView extends AbstractEditView<Borrower> {
 		xViewer.setInput(copies);
 	}
 
-	private void loadCopyFromDatabase(String barcode) {
+	private void loadCopyFromDatabase(final String barcode) {
 		// already loaded -> get from table
 		if (copyCache.containsKey(barcode)) {
 			moveToEdit(copyCache.get(barcode));
@@ -271,7 +271,7 @@ public class LendCopyView extends AbstractEditView<Borrower> {
 			Copy copy = null;
 			try {
 				copy = ServiceLocator.getInstance().getCopyService().get(barcode);
-			} catch (ConnectException e) {
+			} catch (final ConnectException e) {
 				handle(e);
 			}
 			setCopyToModify(copy);
@@ -281,10 +281,10 @@ public class LendCopyView extends AbstractEditView<Borrower> {
 
 	/**
 	 * fills the controls with the appropriate informations
-	 * 
+	 *
 	 * @param copy
 	 */
-	private void setCopyToModify(Copy copy) {
+	private void setCopyToModify(final Copy copy) {
 		copyToModify.setBarcode(copy != null ? copy.getBarcode() : null);
 		copyToModify.getMedium().setAuthor(copy != null ? copy.getMedium().getAuthor() : null);
 		copyToModify.setCondition(copy != null ? copy.getCondition() : null);
@@ -308,7 +308,7 @@ public class LendCopyView extends AbstractEditView<Borrower> {
 	}
 
 	@Override
-	protected String computePartName(Borrower input) {
+	protected String computePartName(final Borrower input) {
 		return input != null ? "Ausleihe an " + input.getName() : null;
 	}
 

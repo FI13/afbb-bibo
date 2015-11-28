@@ -152,6 +152,7 @@ public class Curator extends AbstractPropertyChangeSupport implements IEditorInp
 		passwordHash = hash;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(final Class adapter) {
 		// TODO Auto-generated method stub

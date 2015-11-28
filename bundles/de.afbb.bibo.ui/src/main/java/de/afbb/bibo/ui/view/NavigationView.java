@@ -1,18 +1,18 @@
 package de.afbb.bibo.ui.view;
 
 import java.net.ConnectException;
+
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
+
 import de.afbb.bibo.share.impl.NavigationTreeService;
 import de.afbb.bibo.ui.CommandExecutor;
 import de.afbb.bibo.ui.ICommandIds;
-import de.afbb.bibo.ui.handler.ManageBorrowerHandler;
 import de.afbb.bibo.ui.provider.NavigationTreeViewContentProvider;
 import de.afbb.bibo.ui.provider.NavigationTreeViewLabelProvider;
 
@@ -33,7 +33,7 @@ public class NavigationView extends ViewPart {
 			viewer.addDoubleClickListener(new IDoubleClickListener() {
 
 				@Override
-				public void doubleClick(DoubleClickEvent event) {
+				public void doubleClick(final DoubleClickEvent event) {
 					CommandExecutor.executeCommand(ICommandIds.CMD_MANAGE_BORROWER);
 					// TODO add command for medium selection here
 				}
@@ -42,7 +42,7 @@ public class NavigationView extends ViewPart {
 			viewer.setInput(navigationTree.getRoot());
 
 			// popup menu related stuff
-			MenuManager manager = new MenuManager();
+			final MenuManager manager = new MenuManager();
 			viewer.getTree().setMenu(manager.createContextMenu(viewer.getTree()));
 			getSite().registerContextMenu(manager, viewer);
 			getSite().setSelectionProvider(viewer);

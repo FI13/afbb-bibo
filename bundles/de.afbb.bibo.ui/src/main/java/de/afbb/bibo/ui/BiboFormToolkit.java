@@ -1,7 +1,5 @@
 package de.afbb.bibo.ui;
 
-import javax.swing.text.html.parser.DTD;
-
 import org.eclipse.nebula.widgets.cdatetime.CDT;
 import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.swt.SWT;
@@ -15,19 +13,19 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 /**
  * toolkit with specialized methods
- * 
+ *
  * @author david
  *
  */
 public class BiboFormToolkit extends FormToolkit {
 
-	public BiboFormToolkit(Display display) {
+	public BiboFormToolkit(final Display display) {
 		super(display);
 	}
 
 	/**
 	 * creates a group and adapts it for use with this toolkit
-	 * 
+	 *
 	 * @param parent
 	 * @param text
 	 * @return
@@ -40,7 +38,7 @@ public class BiboFormToolkit extends FormToolkit {
 		group.setForeground(getColors().getForeground());
 		paintBordersFor(group);
 
-		GridLayout layout = new GridLayout(1, false);
+		final GridLayout layout = new GridLayout(1, false);
 		layout.marginWidth = layout.marginHeight = 0;
 		group.setLayout(layout);
 		group.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -48,13 +46,13 @@ public class BiboFormToolkit extends FormToolkit {
 	}
 
 	public CDateTime createCDateTime(final Composite parent) {
-		CDateTime dateTime = new CDateTime(parent, CDT.BORDER | CDT.DATE_MEDIUM);
+		final CDateTime dateTime = new CDateTime(parent, CDT.BORDER | CDT.DATE_MEDIUM);
 		dateTime.setNullText("");
 		return dateTime;
 	}
 
 	public DateTime createDateTime(final Composite parent) {
-		DateTime dateTime = new DateTime(parent, SWT.DATE);
+		final DateTime dateTime = new DateTime(parent, SWT.DATE);
 		adapt(dateTime);
 		paintBordersFor(dateTime);
 		return dateTime;
