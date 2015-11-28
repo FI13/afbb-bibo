@@ -2,11 +2,15 @@ package de.afbb.bibo.ui.view;
 
 import java.net.ConnectException;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 import de.afbb.bibo.share.impl.NavigationTreeService;
+import de.afbb.bibo.ui.handler.ManageBorrowerHandler;
 import de.afbb.bibo.ui.provider.NavigationTreeViewContentProvider;
 import de.afbb.bibo.ui.provider.NavigationTreeViewLabelProvider;
 
@@ -24,6 +28,14 @@ public class NavigationView extends ViewPart {
 			viewer.setContentProvider(new NavigationTreeViewContentProvider());
 			viewer.setLabelProvider(new NavigationTreeViewLabelProvider());
 			viewer.addDoubleClickListener(new TreeCollapseExpandListener(viewer));
+			viewer.addDoubleClickListener(new IDoubleClickListener() {
+
+				@Override
+				public void doubleClick(DoubleClickEvent event) {
+					ManageBorrowerHandler.openForSelection((IStructuredSelection) event.getSelection());
+					// TODO add handler for medium selection
+				}
+			});
 			viewer.setAutoExpandLevel(2);
 			viewer.setInput(navigationTree.getRoot());
 

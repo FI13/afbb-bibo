@@ -8,6 +8,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -17,33 +18,36 @@ import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.ui.view.BorrowerView;
 
 /**
- * handler that creates a new {@link Borrower}
+ * handler that manages a {@link Borrower}
  * 
- * @author dbecker
+ * @author David Becker
  */
 public class ManageBorrowerHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		ISelection selection = window.getSelectionService().getSelection();
-		if (selection instanceof IStructuredSelection) {
-			Iterator<?> iterator = ((IStructuredSelection) selection).iterator();
-			while (iterator.hasNext()) {
-				Object next = iterator.next();
-				if (next instanceof NavigationTreeViewNode) {
-					Object input = ((NavigationTreeViewNode) next).getValue();
-					if (input instanceof IEditorInput) {
-						try {
-							window.getActivePage().openEditor((IEditorInput) input, BorrowerView.ID);
-						} catch (final PartInitException e) {
-							e.printStackTrace();
-							// shouldn't happen
-						}
+		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService()
+				.getSelection();
+		openForSelection((IStructuredSelection) selection);
+		return null;
+	}
+
+	public static void openForSelection(IStructuredSelection selection) {
+		Iterator<?> iterator = selection.iterator();
+		while (iterator.hasNext()) {
+			Object next = iterator.next();
+			if (next instanceof NavigationTreeViewNode) {
+				Object input = ((NavigationTreeViewNode) next).getValue();
+				if (input instanceof Borrower) {
+					try {
+						IEditorPart openEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+								.openEditor((IEditorInput) input, BorrowerView.ID, true);
+					} catch (final PartInitException e) {
+						e.printStackTrace();
 					}
 				}
 			}
 		}
-		return null;
+
 	}
 }

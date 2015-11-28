@@ -32,6 +32,14 @@ public class BorrowerView extends AbstractEditView {
 			this.input = (Borrower) input;
 			inputCache = (Borrower) this.input.clone();
 			super.setInput(input);
+			StringBuilder name = new StringBuilder(((Borrower) input).getSurname());
+			if (name.length() > 0) {
+				name.append(", ");//$NON-NLS-1$
+			}
+			name.append(((Borrower) input).getForename());
+			setPartName(name.toString());
+		} else {
+			setPartName(EMPTY_STRING);
 		}
 	}
 
