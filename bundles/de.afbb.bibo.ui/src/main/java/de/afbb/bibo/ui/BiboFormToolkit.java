@@ -3,13 +3,13 @@ package de.afbb.bibo.ui;
 import org.eclipse.nebula.widgets.cdatetime.CDT;
 import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 /**
@@ -47,7 +47,7 @@ public class BiboFormToolkit extends FormToolkit {
 	}
 
 	public CDateTime createCDateTime(final Composite parent) {
-		final CDateTime dateTime = new CDateTime(parent, CDT.BORDER | CDT.DATE_MEDIUM);
+		final CDateTime dateTime = new CDateTime(parent, CDT.DATE_MEDIUM);
 		dateTime.setNullText("");
 		return dateTime;
 	}
@@ -59,9 +59,15 @@ public class BiboFormToolkit extends FormToolkit {
 		return dateTime;
 	}
 
-	@Override
-	public Text createText(final Composite parent, final String value) {
-		return createText(parent, value, SWT.SINGLE | SWT.BORDER);
+	public CCombo createCombo(final Composite parent, final int style) {
+		final CCombo combo = new CCombo(parent, style);
+		adapt(combo);
+		paintBordersFor(combo);
+		return combo;
+	}
+
+	public CCombo createCombo(final Composite parent) {
+		return createCombo(parent, SWT.SHADOW_NONE);
 	}
 
 }

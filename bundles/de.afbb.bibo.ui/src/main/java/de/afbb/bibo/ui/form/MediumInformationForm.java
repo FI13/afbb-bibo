@@ -22,7 +22,7 @@ import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 
 /**
  * form to display the medium informations of a {@link Copy}
- * 
+ *
  * @author David Becker
  *
  */
@@ -37,33 +37,33 @@ public class MediumInformationForm extends AbstractForm<Copy> {
 
 	private CCombo comboMediumType;
 
-	public MediumInformationForm(Composite parent, Copy input, DataBindingContext bindingContext,
-			BiboFormToolkit toolkit) throws ConnectException {
+	public MediumInformationForm(final Composite parent, final Copy input, final DataBindingContext bindingContext,
+			final BiboFormToolkit toolkit) throws ConnectException {
 		super(parent, input, bindingContext, toolkit);
 	}
 
 	@Override
-	protected void initUi(Composite parent) {
-		Composite content = toolkit.createComposite(parent, SWT.NONE);
+	protected void initUi(final Composite parent) {
+		final Composite content = toolkit.createComposite(parent, SWT.NONE);
 		content.setLayout(new GridLayout(2, false));
 		content.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		toolkit.createLabel(content, Messages.TITLE);
-		txtTitle = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY);
+		txtTitle = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.AUTHOR);
-		txtAuthor = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY);
+		txtAuthor = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.LANGUAGE);
-		txtLanguage = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY);
+		txtLanguage = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.PUBLISHER);
-		txtPublisher = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY);
+		txtPublisher = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.ISBN);
-		txtIsbn = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY);
+		txtIsbn = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.EDITION);
-		txtEdition = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY);
+		txtEdition = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.TYPE);
-		comboMediumType = new CCombo(content, SWT.BORDER | SWT.READ_ONLY);
+		comboMediumType = new CCombo(content, SWT.SHADOW_NONE | SWT.BORDER | SWT.READ_ONLY);
 		toolkit.adapt(comboMediumType);
-		
+
 		comboMediumType.setEnabled(false);
 
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtTitle);

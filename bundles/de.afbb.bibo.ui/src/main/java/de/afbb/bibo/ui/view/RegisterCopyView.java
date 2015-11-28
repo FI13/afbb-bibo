@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.Copy;
@@ -41,7 +42,7 @@ import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 
 /**
  * this view allows the registration of new exemplars
- * 
+ *
  * @author dbecker
  */
 public class RegisterCopyView extends AbstractEditView<Copy> {
@@ -111,7 +112,7 @@ public class RegisterCopyView extends AbstractEditView<Copy> {
 			// instead
 			btnToEdit.setEnabled(false);
 			btnUngroup.setEnabled(false);
-			final TreePath[] paths = ((TreeSelection) xViewer.getSelection()).getPaths();
+			final TreePath[] paths = xViewer.getSelection().getPaths();
 			if (paths.length > 0) {
 				final Copy copy = (Copy) paths[0].getLastSegment();
 				copyToModify.setBarcode(copy.getBarcode());
@@ -140,7 +141,7 @@ public class RegisterCopyView extends AbstractEditView<Copy> {
 		@Override
 		public void handleEvent(final Event event) {
 			highestAssignedGroup++;
-			final Iterator<Copy> iterator = ((TreeSelection) xViewer.getSelection()).iterator();
+			final Iterator<Copy> iterator = xViewer.getSelection().iterator();
 			while (iterator.hasNext()) {
 				final Copy next = iterator.next();
 				next.setGroupId(highestAssignedGroup);
@@ -160,7 +161,7 @@ public class RegisterCopyView extends AbstractEditView<Copy> {
 			 * set groupId to UNASSIGNED_GROUP for selection
 			 */
 			final Set<Integer> purgedGroupes = new HashSet<>();
-			final Iterator<Copy> iterator = ((TreeSelection) xViewer.getSelection()).iterator();
+			final Iterator<Copy> iterator = xViewer.getSelection().iterator();
 			while (iterator.hasNext()) {
 				final Copy copy = iterator.next();
 				if (copies.contains(copy)) {
@@ -283,7 +284,7 @@ public class RegisterCopyView extends AbstractEditView<Copy> {
 		txtEdition = toolkit.createText(idGroup, EMPTY_STRING);
 
 		final Group mediumGroup = toolkit.createGroup(content, "Informationen");
-		mediumGroup.setLayout(new GridLayout(4, false));
+		mediumGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(mediumGroup, Messages.TITLE);
 		txtTitle = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, Messages.AUTHOR);
@@ -293,7 +294,8 @@ public class RegisterCopyView extends AbstractEditView<Copy> {
 		toolkit.createLabel(mediumGroup, Messages.PUBLISHER);
 		txtPublisher = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, "Typ");
-		comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
+		// comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
+		comboMediumType = toolkit.createCombo(mediumGroup);
 
 		final Group conditionGroup = toolkit.createGroup(content, "Zustand");
 		conditionGroup.setLayout(new GridLayout(1, false));
@@ -315,7 +317,7 @@ public class RegisterCopyView extends AbstractEditView<Copy> {
 		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
 
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);
-		GridLayout layoutButtonComposite = new GridLayout();
+		final GridLayout layoutButtonComposite = new GridLayout();
 		layoutButtonComposite.marginHeight = layoutButtonComposite.marginWidth = 0;
 		buttonComposite.setLayout(layoutButtonComposite);
 		btnGroup = toolkit.createButton(buttonComposite, "Medien gruppieren", SWT.TOP);
@@ -323,12 +325,20 @@ public class RegisterCopyView extends AbstractEditView<Copy> {
 		btnSave = toolkit.createButton(buttonComposite, "Erfassung abschließen", SWT.TOP);
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(content);
-		GridDataFactory.fillDefaults().applyTo(idGroup);
+		GridDataFactory.fillDefaults().hint(200, SWT.DEFAULT).applyTo(idGroup);
 		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
-		GridDataFactory.fillDefaults().applyTo(mediumGroup);
+		GridDataFactory.fillDefaults().hint(200, SWT.DEFAULT).applyTo(mediumGroup);
 		GridDataFactory.fillDefaults().applyTo(conditionGroup);
 		GridDataFactory.fillDefaults().span(3, 1).grab(true, true).applyTo(bottom);
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).applyTo(buttonComposite);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtBarcode);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtIsbn);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtEdition);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtTitle);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtAuthor);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtLanguage);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPublisher);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(comboMediumType);
 		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.END).applyTo(btnGroup);
 		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.END).applyTo(btnUngroup);
 		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.END).applyTo(btnSave);
@@ -348,14 +358,14 @@ public class RegisterCopyView extends AbstractEditView<Copy> {
 		btnSave.addListener(SWT.MouseDown, new Listener() {
 
 			@Override
-			public void handleEvent(Event event) {
+			public void handleEvent(final Event event) {
 				final Job job = new Job("Erfassung abschließen") {
 
 					@Override
-					protected IStatus run(IProgressMonitor monitor) {
+					protected IStatus run(final IProgressMonitor monitor) {
 						try {
 							ServiceLocator.getInstance().getCopyService().registerCopies(copies);
-						} catch (ConnectException e) {
+						} catch (final ConnectException e) {
 							handle(e);
 						}
 						return Status.OK_STATUS;

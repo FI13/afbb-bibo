@@ -9,6 +9,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.ui.BiboFormToolkit;
@@ -16,7 +17,7 @@ import de.afbb.bibo.ui.Messages;
 
 /**
  * form that can display the movement information of a {@link Copy}
- * 
+ *
  * @author david
  *
  */
@@ -29,30 +30,30 @@ public class CopyMovementForm extends AbstractForm<Copy> {
 	private Text txtBorrowDate;
 	private Text txtLastBorrowDate;
 
-	public CopyMovementForm(Composite parent, Copy input, DataBindingContext bindingContext, BiboFormToolkit toolkit)
-			throws ConnectException {
+	public CopyMovementForm(final Composite parent, final Copy input, final DataBindingContext bindingContext,
+			final BiboFormToolkit toolkit) throws ConnectException {
 		super(parent, input, bindingContext, toolkit);
 	}
 
 	@Override
-	protected void initUi(Composite parent) {
-		Composite content = toolkit.createComposite(parent, SWT.NONE);
+	protected void initUi(final Composite parent) {
+		final Composite content = toolkit.createComposite(parent, SWT.NONE);
 		content.setLayout(new GridLayout(2, false));
 		content.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(content, "Ausleihvorgang"));
 		toolkit.createLabel(content, Messages.DATE);
-		txtBorrowDate = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY);
+		txtBorrowDate = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.CURATOR);
-		txtCurator = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY);
+		txtCurator = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.BORROWER);
-		txtBorrower = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY);
+		txtBorrower = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(content, "Rückgabe"));
 		toolkit.createLabel(content, Messages.DATE);
-		txtLastBorrowDate = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY);
+		txtLastBorrowDate = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.CURATOR);
-		txtLastCurator = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY);
+		txtLastCurator = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.BORROWER);
-		txtLastBorrower = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY);
+		txtLastBorrower = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtCurator);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtBorrower);

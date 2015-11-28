@@ -35,19 +35,19 @@ public class BorrowerForm extends AbstractForm<Borrower> {
 		content.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		toolkit.createLabel(content, "Vorname");
-		textFirstname = toolkit.createText(content, EMPTY_STRING);
+		textFirstname = toolkit.createText(content, EMPTY_STRING, SWT.SINGLE | SWT.BORDER);
 
 		toolkit.createLabel(content, "Nachname");
-		textLastname = toolkit.createText(content, EMPTY_STRING);
+		textLastname = toolkit.createText(content, EMPTY_STRING, SWT.SINGLE | SWT.BORDER);
 
 		toolkit.createLabel(content, "E-Mail-Adresse");
-		textEMail = toolkit.createText(content, EMPTY_STRING);
+		textEMail = toolkit.createText(content, EMPTY_STRING, SWT.SINGLE | SWT.BORDER);
 
 		toolkit.createLabel(content, "Telefonnummer");
-		textTel = toolkit.createText(content, EMPTY_STRING);
+		textTel = toolkit.createText(content, EMPTY_STRING, SWT.SINGLE | SWT.BORDER);
 
 		toolkit.createLabel(content, "Informationen");
-		textInfo = toolkit.createText(content, EMPTY_STRING);
+		textInfo = toolkit.createText(content, EMPTY_STRING, SWT.SINGLE | SWT.BORDER);
 
 		final UpdateDirtyListener updateDirtyListener = new UpdateDirtyListener();
 		textFirstname.addFocusListener(updateDirtyListener);
