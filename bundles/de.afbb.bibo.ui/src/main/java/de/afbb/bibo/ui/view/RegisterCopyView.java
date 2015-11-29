@@ -313,7 +313,7 @@ public class RegisterCopyView extends AbstractEditView<Copy> {
 		layoutDataMiddle.horizontalSpan = 2;
 		bottom.setLayoutData(layoutDataMiddle);
 
-		xViewer = new CopyXviewerForm(bottom, REGISTER_COPY);
+		xViewer = new CopyXviewerForm(bottom, SWT.NONE, REGISTER_COPY, false);
 		xViewer.getTree().addSelectionListener(xViewerSelectionListener);
 
 		final Composite buttonComposite = toolkit.createComposite(bottom, SWT.NONE);

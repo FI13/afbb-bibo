@@ -1,5 +1,7 @@
 package de.afbb.bibo.ui.provider;
 
+import java.text.DateFormat;
+
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
@@ -94,6 +96,18 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 			value = copy.getMedium().getLanguage();
 		} else if (columnIndex == 7 && copy.getEdition() != null) {
 			value = copy.getEdition();
+		} else if (columnIndex == 8 && copy.getBorrowDate() != null) {
+			value = DateFormat.getDateInstance().format(copy.getBorrowDate());
+		} else if (columnIndex == 9 && copy.getCurator() != null) {
+			value = copy.getCurator().getName();
+		} else if (columnIndex == 10 && copy.getBorrower() != null) {
+			value = copy.getBorrower().getName();
+		} else if (columnIndex == 11 && copy.getLastBorrowDate() != null) {
+			value = DateFormat.getDateInstance().format(copy.getLastBorrowDate());
+		} else if (columnIndex == 12 && copy.getLastCurator() != null) {
+			value = copy.getLastCurator().getName();
+		} else if (columnIndex == 13 && copy.getLastBorrower() != null) {
+			value = copy.getLastBorrower().getName();
 		}
 		return value;
 	}
