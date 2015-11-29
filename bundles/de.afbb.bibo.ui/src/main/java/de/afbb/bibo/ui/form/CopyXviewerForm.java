@@ -1,15 +1,14 @@
 package de.afbb.bibo.ui.form;
 
 import java.util.Collection;
-import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
-import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
+import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,14 +26,14 @@ import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
 
 /**
  * Form that displays a {@link Collection} of {@link Copy}s
- * 
+ *
  * @author David Becker
  *
  */
 public class CopyXviewerForm {
 
 	private static final String DOT = ".";//$NON-NLS-1$
-	private String namespace;
+	private final String namespace;
 
 	private final XViewerFactory factory;
 	private XViewer xViewer;
@@ -50,19 +49,19 @@ public class CopyXviewerForm {
 	BiboFormToolkit toolkit = new BiboFormToolkit(Display.getCurrent());
 	private Composite content;
 
-	public CopyXviewerForm(Composite parent, String namespace) {
+	public CopyXviewerForm(final Composite parent, final String namespace) {
 		this(parent, SWT.NONE, namespace);
 	}
 
-	public CopyXviewerForm(Composite parent, int style, String namespace) {
+	public CopyXviewerForm(final Composite parent, final int style, final String namespace) {
 		this.namespace = namespace;
 		factory = new BiboXViewerFactory(namespace);
 		initUi(parent, style);
 	}
 
-	private void initUi(Composite parent, int style) {
+	private void initUi(final Composite parent, final int style) {
 		content = toolkit.createComposite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout(1, false);
+		final GridLayout layout = new GridLayout(1, false);
 		layout.marginWidth = layout.marginHeight = 0;
 		content.setLayout(layout);
 		content.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -106,7 +105,7 @@ public class CopyXviewerForm {
 		return xViewer.getTree();
 	}
 
-	public void setInput(Set<Copy> copies) {
+	public void setInput(final Collection<Copy> copies) {
 		xViewer.setInput(copies);
 	}
 
@@ -117,7 +116,7 @@ public class CopyXviewerForm {
 	/**
 	 * get the last element of the selection path. on a flat hierarchy it is the
 	 * single row
-	 * 
+	 *
 	 * @return
 	 */
 	public Copy getLastElementFromSelectionPath() {
