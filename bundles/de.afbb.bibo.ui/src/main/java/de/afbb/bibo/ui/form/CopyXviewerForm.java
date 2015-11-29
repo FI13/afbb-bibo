@@ -76,9 +76,9 @@ public class CopyXviewerForm {
 				true, SortDataType.String, false, "Typ des Mediums");
 		final XViewerColumn columnBarcode = new XViewerColumn(namespace + DOT + Messages.BARCODE, Messages.BARCODE, 80,
 				SWT.RIGHT, true, SortDataType.Integer, false, "Barcode des Mediums");
-		final XViewerColumn columnIsbn = new XViewerColumn(namespace + DOT + Messages.ISBN, Messages.ISBN, 100,
+		final XViewerColumn columnIsbn = new XViewerColumn(namespace + DOT + Messages.ISBN, Messages.ISBN, 120,
 				SWT.RIGHT, true, SortDataType.Integer, false, "ISBN des Mediums");
-		final XViewerColumn columnTitle = new XViewerColumn(namespace + DOT + Messages.TITLE, Messages.TITLE, 150,
+		final XViewerColumn columnTitle = new XViewerColumn(namespace + DOT + Messages.TITLE, Messages.TITLE, 250,
 				SWT.LEFT, true, SortDataType.String, false, Messages.TITLE);
 		final XViewerColumn columnAuthor = new XViewerColumn(namespace + DOT + Messages.AUTHOR, Messages.AUTHOR, 150,
 				SWT.LEFT, true, SortDataType.String, false, Messages.AUTHOR);
