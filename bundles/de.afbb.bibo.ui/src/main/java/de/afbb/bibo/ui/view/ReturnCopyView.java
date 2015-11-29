@@ -66,7 +66,7 @@ public class ReturnCopyView extends AbstractEditView<Curator> {
 		final Group copyGroup = toolkit.createGroup(content, "Exemplar");
 		copyGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(copyGroup, "Barcode");
-		txtBarcode = toolkit.createText(copyGroup, EMPTY_STRING, SWT.SINGLE);
+		txtBarcode = toolkit.createText(copyGroup, EMPTY_STRING, SWT.RIGHT | SWT.SINGLE);
 		txtBarcode.addFocusListener(new FocusListener() {
 
 			@Override

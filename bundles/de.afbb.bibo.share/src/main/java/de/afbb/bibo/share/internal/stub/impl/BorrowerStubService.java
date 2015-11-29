@@ -85,7 +85,7 @@ public class BorrowerStubService implements IBorrowerService {
 			Thread.sleep(5000);
 			borrower.setId(++currentBorrowerId);
 			borrowers.add(borrower);
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 		}
 	}
 
@@ -114,6 +114,11 @@ public class BorrowerStubService implements IBorrowerService {
 
 	@Override
 	public Collection<Copy> listLent(final Borrower Borrower) throws ConnectException {
+		try {
+			Thread.sleep(10000);
+		} catch (final InterruptedException e) {
+			e.printStackTrace();
+		}
 		return copies;
 	}
 

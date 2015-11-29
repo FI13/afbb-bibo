@@ -57,7 +57,7 @@ public class MediumInformationForm extends AbstractForm<Copy> {
 		toolkit.createLabel(content, Messages.PUBLISHER);
 		txtPublisher = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.ISBN);
-		txtIsbn = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
+		txtIsbn = toolkit.createText(content, EMPTY_STRING, SWT.RIGHT | SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.EDITION);
 		txtEdition = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.TYPE);

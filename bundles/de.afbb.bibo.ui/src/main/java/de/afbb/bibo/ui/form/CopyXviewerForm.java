@@ -1,15 +1,14 @@
 package de.afbb.bibo.ui.form;
 
 import java.util.Collection;
-import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn;
-import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
 import org.eclipse.nebula.widgets.xviewer.XViewerColumn.SortDataType;
+import org.eclipse.nebula.widgets.xviewer.XViewerFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,42 +26,37 @@ import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
 
 /**
  * Form that displays a {@link Collection} of {@link Copy}s
- * 
+ *
  * @author David Becker
  *
  */
 public class CopyXviewerForm {
 
 	private static final String DOT = ".";//$NON-NLS-1$
-	private String namespace;
+	private final String namespace;
 
 	private final XViewerFactory factory;
 	private XViewer xViewer;
-	private XViewerColumn columnType;
-	private XViewerColumn columnBarcode;
-	private XViewerColumn columnIsbn;
-	private XViewerColumn columnTitle;
-	private XViewerColumn columnAuthor;
-	private XViewerColumn columnPublisher;
-	private XViewerColumn columnLanguage;
-	private XViewerColumn columnEdition;
 
 	BiboFormToolkit toolkit = new BiboFormToolkit(Display.getCurrent());
 	private Composite content;
+	private final boolean showMovementColumns;
 
-	public CopyXviewerForm(Composite parent, String namespace) {
-		this(parent, SWT.NONE, namespace);
+	public CopyXviewerForm(final Composite parent, final String namespace) {
+		this(parent, SWT.NONE, namespace, true);
 	}
 
-	public CopyXviewerForm(Composite parent, int style, String namespace) {
+	public CopyXviewerForm(final Composite parent, final int style, final String namespace,
+			final boolean showMovementColumns) {
 		this.namespace = namespace;
+		this.showMovementColumns = showMovementColumns;
 		factory = new BiboXViewerFactory(namespace);
 		initUi(parent, style);
 	}
 
-	private void initUi(Composite parent, int style) {
+	private void initUi(final Composite parent, final int style) {
 		content = toolkit.createComposite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout(1, false);
+		final GridLayout layout = new GridLayout(1, false);
 		layout.marginWidth = layout.marginHeight = 0;
 		content.setLayout(layout);
 		content.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -78,24 +72,45 @@ public class CopyXviewerForm {
 	}
 
 	private void initTableColumns() {
-		columnType = new XViewerColumn(namespace + DOT + Messages.TYPE, Messages.TYPE, 90, SWT.LEFT, true,
-				SortDataType.String, false, "Typ des Mediums");
-		columnBarcode = new XViewerColumn(namespace + DOT + Messages.BARCODE, Messages.BARCODE, 80, SWT.LEFT, true,
-				SortDataType.Integer, false, "Barcode des Mediums");
-		columnIsbn = new XViewerColumn(namespace + DOT + Messages.ISBN, Messages.ISBN, 80, SWT.LEFT, true,
-				SortDataType.Integer, false, "ISBN des Mediums");
-		columnTitle = new XViewerColumn(namespace + DOT + Messages.TITLE, Messages.TITLE, 150, SWT.LEFT, true,
-				SortDataType.String, false, Messages.TITLE);
-		columnAuthor = new XViewerColumn(namespace + DOT + Messages.AUTHOR, Messages.AUTHOR, 150, SWT.LEFT, true,
-				SortDataType.String, false, Messages.AUTHOR);
-		columnPublisher = new XViewerColumn(namespace + DOT + Messages.PUBLISHER, Messages.PUBLISHER, 150, SWT.LEFT,
-				true, SortDataType.String, false, Messages.PUBLISHER);
-		columnLanguage = new XViewerColumn(namespace + DOT + Messages.LANGUAGE, Messages.LANGUAGE, 150, SWT.LEFT, true,
-				SortDataType.String, false, Messages.LANGUAGE);
-		columnEdition = new XViewerColumn(namespace + DOT + Messages.EDITION, Messages.EDITION, 150, SWT.LEFT, true,
-				SortDataType.String, false, Messages.EDITION);
-		factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
-				columnLanguage, columnEdition);
+		final XViewerColumn columnType = new XViewerColumn(namespace + DOT + Messages.TYPE, Messages.TYPE, 90, SWT.LEFT,
+				true, SortDataType.String, false, "Typ des Mediums");
+		final XViewerColumn columnBarcode = new XViewerColumn(namespace + DOT + Messages.BARCODE, Messages.BARCODE, 80,
+				SWT.RIGHT, true, SortDataType.Integer, false, "Barcode des Mediums");
+		final XViewerColumn columnIsbn = new XViewerColumn(namespace + DOT + Messages.ISBN, Messages.ISBN, 120,
+				SWT.RIGHT, true, SortDataType.Integer, false, "ISBN des Mediums");
+		final XViewerColumn columnTitle = new XViewerColumn(namespace + DOT + Messages.TITLE, Messages.TITLE, 250,
+				SWT.LEFT, true, SortDataType.String, false, Messages.TITLE);
+		final XViewerColumn columnAuthor = new XViewerColumn(namespace + DOT + Messages.AUTHOR, Messages.AUTHOR, 150,
+				SWT.LEFT, true, SortDataType.String, false, Messages.AUTHOR);
+		final XViewerColumn columnPublisher = new XViewerColumn(namespace + DOT + Messages.PUBLISHER,
+				Messages.PUBLISHER, 150, SWT.LEFT, true, SortDataType.String, false, Messages.PUBLISHER);
+		final XViewerColumn columnLanguage = new XViewerColumn(namespace + DOT + Messages.LANGUAGE, Messages.LANGUAGE,
+				150, SWT.LEFT, true, SortDataType.String, false, Messages.LANGUAGE);
+		final XViewerColumn columnEdition = new XViewerColumn(namespace + DOT + Messages.EDITION, Messages.EDITION, 150,
+				SWT.LEFT, true, SortDataType.String, false, Messages.EDITION);
+
+		if (showMovementColumns) {
+			final XViewerColumn columnLendDate = new XViewerColumn(namespace + DOT + Messages.LEND_DATE,
+					Messages.LEND_DATE, 150, SWT.CENTER, true, SortDataType.Date, false, Messages.LEND_DATE);
+			final XViewerColumn columnLendCurator = new XViewerColumn(namespace + DOT + Messages.LEND_CURATOR,
+					Messages.LEND_CURATOR, 150, SWT.LEFT, true, SortDataType.String, false, Messages.LEND_CURATOR);
+			final XViewerColumn columnLendBorrower = new XViewerColumn(namespace + DOT + Messages.LEND_BORROWER,
+					Messages.LEND_BORROWER, 150, SWT.LEFT, true, SortDataType.String, false, Messages.LEND_BORROWER);
+			final XViewerColumn columnReturnDate = new XViewerColumn(namespace + DOT + Messages.RETURN_DATE,
+					Messages.RETURN_DATE, 150, SWT.CENTER, true, SortDataType.Date, false, Messages.RETURN_DATE);
+			final XViewerColumn columnReturnCurator = new XViewerColumn(namespace + DOT + Messages.RETURN_CURATOR,
+					Messages.RETURN_CURATOR, 150, SWT.LEFT, true, SortDataType.String, false, Messages.RETURN_CURATOR);
+			final XViewerColumn columnReturnBorrower = new XViewerColumn(namespace + DOT + Messages.RETURN_BORROWER,
+					Messages.RETURN_BORROWER, 150, SWT.LEFT, true, SortDataType.String, false,
+					Messages.RETURN_BORROWER);
+
+			factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
+					columnLanguage, columnEdition, columnLendDate, columnLendCurator, columnLendBorrower,
+					columnReturnDate, columnReturnCurator, columnReturnBorrower);
+		} else {
+			factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
+					columnLanguage, columnEdition);
+		}
 	}
 
 	public TreeSelection getSelection() {
@@ -106,7 +121,7 @@ public class CopyXviewerForm {
 		return xViewer.getTree();
 	}
 
-	public void setInput(Set<Copy> copies) {
+	public void setInput(final Collection<Copy> copies) {
 		xViewer.setInput(copies);
 	}
 
@@ -117,7 +132,7 @@ public class CopyXviewerForm {
 	/**
 	 * get the last element of the selection path. on a flat hierarchy it is the
 	 * single row
-	 * 
+	 *
 	 * @return
 	 */
 	public Copy getLastElementFromSelectionPath() {

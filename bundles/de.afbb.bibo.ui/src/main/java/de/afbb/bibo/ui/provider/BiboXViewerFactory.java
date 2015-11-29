@@ -15,7 +15,7 @@ public class BiboXViewerFactory extends XViewerFactory {
 
 	@Override
 	public boolean isFilterUiAvailable() {
-		return false;
+		return true;
 	}
 
 	@Override
