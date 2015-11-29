@@ -16,7 +16,7 @@ import de.afbb.bibo.ui.IconSize;
 
 /**
  * label provider for an {@link XViewer} that displays instances of {@link Copy}
- * 
+ *
  * @author dbecker
  */
 public class CopyLabelProvider extends XViewerLabelProvider {
@@ -84,13 +84,15 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 			value = copy.getBarcode();
 		} else if (columnIndex == 2 && copy.getMedium() != null && copy.getMedium().getIsbn() != null) {
 			value = copy.getMedium().getIsbn();
-		} else if (columnIndex == 3 && copy.getMedium() != null && copy.getMedium().getAuthor() != null) {
+		} else if (columnIndex == 3 && copy.getMedium() != null && copy.getMedium().getTitle() != null) {
+			value = copy.getMedium().getTitle();
+		} else if (columnIndex == 4 && copy.getMedium() != null && copy.getMedium().getAuthor() != null) {
 			value = copy.getMedium().getAuthor();
-		} else if (columnIndex == 4 && copy.getMedium() != null && copy.getMedium().getPublisher() != null) {
+		} else if (columnIndex == 5 && copy.getMedium() != null && copy.getMedium().getPublisher() != null) {
 			value = copy.getMedium().getPublisher();
-		} else if (columnIndex == 5 && copy.getMedium() != null && copy.getMedium().getLanguage() != null) {
+		} else if (columnIndex == 6 && copy.getMedium() != null && copy.getMedium().getLanguage() != null) {
 			value = copy.getMedium().getLanguage();
-		} else if (columnIndex == 6 && copy.getEdition() != null) {
+		} else if (columnIndex == 7 && copy.getEdition() != null) {
 			value = copy.getEdition();
 		}
 		return value;
