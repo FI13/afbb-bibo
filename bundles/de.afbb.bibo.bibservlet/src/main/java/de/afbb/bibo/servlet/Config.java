@@ -12,8 +12,8 @@ import de.afbb.bibo.properties.BiBoProperties;
 
 /**
  * Die config-file muss "bibo.properties" heissen und im gleichen Verzeichnis
- * wie die ausführbare Datei liegen
- * 
+ * wie die ausfÃ¼hrbare Datei liegen
+ *
  * @author fi13.pendrulatz
  */
 public class Config {
