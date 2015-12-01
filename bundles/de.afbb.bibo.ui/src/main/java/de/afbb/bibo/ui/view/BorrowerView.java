@@ -20,6 +20,7 @@ import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.ui.form.BorrowerForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
+import de.afbb.bibo.ui.form.StatisticForm;
 
 /**
  * this view adds or edits a person who can borrow books
@@ -35,6 +36,7 @@ public class BorrowerView extends AbstractEditView<Borrower> {
 	private BorrowerForm borrowerForm;
 	private CopyXviewerForm xViewer;
 	private Job job;
+	private StatisticForm statisticForm;
 
 	@Override
 	protected String computePartName(final Borrower input) {
@@ -64,17 +66,22 @@ public class BorrowerView extends AbstractEditView<Borrower> {
 	@Override
 	protected Composite initUi(final Composite parent) throws ConnectException {
 		final Composite content = toolkit.createComposite(parent, SWT.NONE);
-		content.setLayout(new GridLayout(1, false));
+		content.setLayout(new GridLayout(2, false));
 
 		final Group borrowerGroup = toolkit.createGroup(content, "Allgemein");
 		borrowerForm = new BorrowerForm(borrowerGroup, input, bindingContext, toolkit);
+
+		final Group statisticGroup = toolkit.createGroup(content, "Statistik");
+		statisticForm = new StatisticForm(statisticGroup);
 
 		final Group lendGroup = toolkit.createGroup(content, "Aktuell ausgeliehene Medien");
 		xViewer = new CopyXviewerForm(lendGroup, BORROWER_SHOW);
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(content);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(borrowerForm);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(borrowerForm);
+		GridDataFactory.fillDefaults().applyTo(statisticGroup);
 		GridDataFactory.fillDefaults().hint(200, SWT.DEFAULT).grab(true, false).applyTo(borrowerGroup);
+		GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(lendGroup);
 
 		return content;
 	}
@@ -110,6 +117,9 @@ public class BorrowerView extends AbstractEditView<Borrower> {
 						public void run() {
 							if (xViewer != null && xViewer.getTree() != null && !xViewer.getTree().isDisposed()) {
 								xViewer.setInput(listLent);
+							}
+							if (statisticForm != null && !statisticForm.isDisposed()) {
+								statisticForm.setInput(listLent);
 							}
 						}
 					});
