@@ -95,11 +95,11 @@ public class BorrowerView extends AbstractView<Borrower> {
 				null);
 	}
 
-	// @Override
-	// protected void setInput(final IEditorInput editorInput) {
-	// super.setInput(editorInput);
-	// setXViewerInput();
-	// }
+	@Override
+	public void setInput(final Borrower editorInput) {
+		super.setInput(editorInput);
+		setXViewerInput();
+	}
 
 	/**
 	 * load the list of copies in a background thread to not block the user
