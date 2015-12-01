@@ -30,7 +30,6 @@ import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.internal.model.BorrowerInput;
-import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.ui.BiboImageRegistry;
@@ -39,7 +38,7 @@ import de.afbb.bibo.ui.form.CopyMovementForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.form.MediumInformationForm;
 
-public class LendCopyView extends AbstractEditView<BorrowerInput> {
+public class LendCopyView extends AbstractView<BorrowerInput> {
 
 	public static final String ID = "de.afbb.bibo.ui.lend.copy";//$NON-NLS-1$
 	private static final String LEND_COPY = "lend.copy";//$NON-NLS-1$
@@ -117,7 +116,7 @@ public class LendCopyView extends AbstractEditView<BorrowerInput> {
 				}
 			};
 			job.schedule();
-			closeEditor();
+			closeView();
 		}
 	};
 
@@ -234,10 +233,10 @@ public class LendCopyView extends AbstractEditView<BorrowerInput> {
 
 	@Override
 	protected void initBinding() throws ConnectException {
-		BindingHelper.bindStringToTextField(txtBarcode, copyToModify, Copy.class, Copy.FIELD_BARCODE, bindingContext,
+		BindingHelper.bindStringToTextField(txtBarcode, getInputObservable(), Copy.FIELD_BARCODE, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(txtCondition, copyToModify, Copy.class, Copy.FIELD_CONDITION,
-				bindingContext, false);
+		BindingHelper.bindStringToTextField(txtCondition, getInputObservable(), Copy.FIELD_CONDITION, bindingContext,
+				false);
 	}
 
 	@Override
@@ -300,7 +299,8 @@ public class LendCopyView extends AbstractEditView<BorrowerInput> {
 		copyToModify.getMedium().setTitle(copy != null ? copy.getMedium().getTitle() : null);
 		copyToModify.getMedium().setType(copy != null ? copy.getMedium().getType() : null);
 
-		copyToModify.setBorrower(copy != null ? (Borrower) getEditorInput() : null);
+		// copyToModify.setBorrower(copy != null ? (Borrower) getEditorInput() :
+		// null);
 		copyToModify.setBorrowDate(copy != null ? now : null);
 		copyToModify.setCurator(copy != null ? SessionHolder.getInstance().getCurator() : null);
 

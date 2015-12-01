@@ -13,9 +13,10 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="RCP Perspective"
             class="de.afbb.bibo.ui.Perspective"
-            id="de.afbb.bibo.ui.perspective">
+            icon="icons/16x16logo.png"
+            id="de.afbb.bibo.ui.perspective"
+            name="AFBB BIBO">
       </perspective>
    </extension>
    <extension
@@ -27,6 +28,55 @@
             id="de.afbb.bibo.ui.navigationView"
             name="Navigation"
             restorable="true">
+      </view>
+      <category
+            id="de.afbb.bibo.ui.category.main"
+            name="Hauptkategorie">
+      </category>
+      <view
+            allowMultiple="false"
+            category="de.afbb.bibo.ui.category.main"
+            class="de.afbb.bibo.ui.view.WelcomeView"
+            icon="icons/16x16logo.png"
+            id="de.afbb.bibo.ui.view.welcome"
+            name="Willkommen"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="false"
+            category="de.afbb.bibo.ui.category.main"
+            class="de.afbb.bibo.ui.view.RegisterCopyView"
+            icon="icons/16x16book.png"
+            id="de.afbb.bibo.ui.registerexemplar"
+            name="Erfassung Medien"
+            restorable="false">
+      </view>
+      <view
+            allowMultiple="true"
+            category="de.afbb.bibo.ui.category.main"
+            class="de.afbb.bibo.ui.view.BorrowerView"
+            icon="icons/16x16schueler.png"
+            id="de.afbb.bibo.ui.borrower"
+            name="Bearbeiten Ausleiher"
+            restorable="false">
+      </view>
+      <view
+            allowMultiple="false"
+            category="de.afbb.bibo.ui.category.main"
+            class="de.afbb.bibo.ui.view.ReturnCopyView"
+            icon="icons/16x16login.png"
+            id="de.afbb.bibo.ui.return.copy"
+            name="Rückgabe"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="true"
+            category="de.afbb.bibo.ui.category.main"
+            class="de.afbb.bibo.ui.view.LendCopyView"
+            icon="icons/16x16book2.png"
+            id="de.afbb.bibo.ui.lend.copy"
+            name="Ausleihe"
+            restorable="false">
       </view>
    </extension>
    <extension
@@ -175,44 +225,6 @@
                style="push">
          </command>
       </menuContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            class="de.afbb.bibo.ui.view.WelcomeView"
-            default="false"
-            icon="icons/16x16logo.png"
-            id="de.afbb.bibo.ui.view.welcome"
-            name="Willkommen">
-      </editor>
-      <editor
-            class="de.afbb.bibo.ui.view.RegisterCopyView"
-            default="false"
-            icon="icons/16x16book.png"
-            id="de.afbb.bibo.ui.registerexemplar"
-            name="Erfassung Medien">
-      </editor>
-      <editor
-            class="de.afbb.bibo.ui.view.BorrowerView"
-            default="false"
-            icon="icons/16x16schueler.png"
-            id="de.afbb.bibo.ui.borrower"
-            name="Anzeige Ausleiher">
-      </editor>
-      <editor
-            class="de.afbb.bibo.ui.view.ReturnCopyView"
-            default="false"
-            icon="icons/16x16login.png"
-            id="de.afbb.bibo.ui.return.copy"
-            name="Rückgabe">
-      </editor>
-      <editor
-            class="de.afbb.bibo.ui.view.LendCopyView"
-            default="false"
-            icon="icons/16x16book2.png"
-            id="de.afbb.bibo.ui.lend.copy"
-            name="Ausleihe">
-      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">

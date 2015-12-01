@@ -46,7 +46,7 @@ import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
  *
  * @author dbecker
  */
-public class RegisterCopyView extends AbstractEditView<CopyInput> {
+public class RegisterCopyView extends AbstractView<CopyInput> {
 
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String REGISTER_COPY = "register.copy";//$NON-NLS-1$
@@ -375,7 +375,7 @@ public class RegisterCopyView extends AbstractEditView<CopyInput> {
 
 				};
 				job.schedule();
-				closeEditor();
+				closeView();
 			}
 		});
 
@@ -390,22 +390,22 @@ public class RegisterCopyView extends AbstractEditView<CopyInput> {
 
 	@Override
 	protected void initBinding() throws ConnectException {
-		BindingHelper.bindStringToTextField(txtBarcode, copyToModify, Copy.class, Copy.FIELD_BARCODE, bindingContext,
+		BindingHelper.bindStringToTextField(txtBarcode, getInputObservable(), Copy.FIELD_BARCODE, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(txtEdition, copyToModify, Copy.class, Copy.FIELD_EDITION, bindingContext,
+		BindingHelper.bindStringToTextField(txtEdition, getInputObservable(), Copy.FIELD_EDITION, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(txtCondition, copyToModify, Copy.class, Copy.FIELD_CONDITION,
-				bindingContext, false);
-		BindingHelper.bindStringToTextField(txtTitle, copyToModify, Copy.class,
+		BindingHelper.bindStringToTextField(txtCondition, getInputObservable(), Copy.FIELD_CONDITION, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtTitle, getInputObservable(),
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TITLE, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtAuthor, copyToModify, Copy.class,
+		BindingHelper.bindStringToTextField(txtAuthor, getInputObservable(),
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_AUTHOR, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtLanguage, copyToModify, Copy.class,
+		BindingHelper.bindStringToTextField(txtLanguage, getInputObservable(),
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_LANGUAGE, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtPublisher, copyToModify, Copy.class,
+		BindingHelper.bindStringToTextField(txtPublisher, getInputObservable(),
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_PUBLISHER, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtIsbn, copyToModify, Copy.class,
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_ISBN, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtIsbn, getInputObservable(), Copy.FIELD_MEDIUM + DOT + Medium.FIELD_ISBN,
+				bindingContext, false);
 
 		BindingHelper.bindObjectToCCombo(comboMediumType, copyToModify, Copy.class,
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TYPE, MediumType.class,

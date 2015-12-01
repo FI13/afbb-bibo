@@ -13,7 +13,7 @@ import de.afbb.bibo.share.internal.model.CuratorInput;
  *
  * @author dbecker
  */
-public class WelcomeView extends AbstractEditView<CuratorInput> {
+public class WelcomeView extends AbstractView<CuratorInput> {
 
 	public static final String ID = "de.afbb.bibo.ui.view.welcome";//$NON-NLS-1$
 

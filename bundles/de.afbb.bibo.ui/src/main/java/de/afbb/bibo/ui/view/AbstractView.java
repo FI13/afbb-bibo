@@ -1,15 +1,17 @@
 package de.afbb.bibo.ui.view;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.net.ConnectException;
 
 import org.eclipse.core.databinding.AggregateValidationStatus;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.internal.runtime.LocalizationUtils;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
@@ -25,32 +27,41 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.ViewPart;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.ui.BiboFormToolkit;
 import de.afbb.bibo.ui.Messages;
 
-abstract class AbstractEditView<Input extends IEditorInput> extends EditorPart implements IDirtyEvaluate {
+abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate {
 
 	protected static final String EMPTY_STRING = "";//$NON-NLS-1$
+	public static final String INPUT = "input";//$NON-NLS-1$
 	protected static final String DOT = ".";//$NON-NLS-1$
 	private static final String OK = LocalizationUtils.safeLocalize("ok");//$NON-NLS-1$
 
 	private Label lblValidationImage;
 	private Label lblValidationMessage;
 	private final IObservableValue validationStatus = new WritableValue(IStatus.OK, IStatus.class);
+	private final IObservableValue inputObservable = BeansObservables.observeValue(this, INPUT);
 
 	protected final DataBindingContext bindingContext = new DataBindingContext();
 	protected final BiboFormToolkit toolkit = new BiboFormToolkit(Display.getCurrent());
+	protected final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
 	protected Input input;
 	protected Input inputCache;
+
+	public void addPropertyChangeListener(final String propertyName, final PropertyChangeListener listener) {
+		changeSupport.addPropertyChangeListener(propertyName, listener);
+	}
+
+	public void removePropertyChangeListener(final String propertyName, final PropertyChangeListener listener) {
+		changeSupport.removePropertyChangeListener(propertyName, listener);
+	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -149,13 +160,12 @@ abstract class AbstractEditView<Input extends IEditorInput> extends EditorPart i
 	@Override
 	public void updateDirtyState() {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
+
 	}
 
-	@Override
-	protected void setInput(final IEditorInput editorInput) {
-		input = (Input) editorInput;
+	public void setInput(final Input editorInput) {
+		changeSupport.firePropertyChange(INPUT, input, input = editorInput);
 		inputCache = cloneInput(input);
-		super.setInput(editorInput);
 
 		// set the name of the input as title (if possible)
 		final String partName = computePartName(input);
@@ -167,6 +177,10 @@ abstract class AbstractEditView<Input extends IEditorInput> extends EditorPart i
 			 */
 			setPartName(partName);
 		}
+	}
+
+	public Input getInput() {
+		return input;
 	}
 
 	/**
@@ -225,19 +239,22 @@ abstract class AbstractEditView<Input extends IEditorInput> extends EditorPart i
 			@Override
 			public void run() {
 				final StringBuilder msg = new StringBuilder(Messages.MESSAGE_ERROR_CONNECTION);
-				if (getSite().getPage().isPartVisible(AbstractEditView.this)) {
+				if (getSite().getPage().isPartVisible(AbstractView.this)) {
 					msg.append(Messages.NEW_LINE);
 					msg.append(Messages.MESSAGE_VIEW_CLOSE);
 				}
 				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 						Messages.MESSAGE_ERROR, msg.toString());
-				closeEditor();
+				closeView();
 			}
 		});
 	}
 
-	protected void closeEditor() {
-		getSite().getPage().closeEditor(AbstractEditView.this, false);
+	protected void closeView() {
+		getViewSite().getPage().hideView(AbstractView.this);
+		// IViewReference[] viewReferences =
+		// getSite().getPage().hideView(getSite().ge);
+		// VgetActivePart(closEditor(AbstractEditView.this, false);
 	}
 
 	/**
@@ -250,34 +267,42 @@ abstract class AbstractEditView<Input extends IEditorInput> extends EditorPart i
 		return ((IStatus) validationStatus.getValue()).isOK();
 	}
 
-	@Override
-	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setSite(site);
-		setInput(input);
-	}
-
-	@Override
-	public void doSave(final IProgressMonitor monitor) {
-	}
-
-	@Override
-	public void doSaveAs() {
-	}
-
-	@Override
-	public boolean isDirty() {
-		return false;
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
-	}
+	// @Override
+	// public void init(final IEditorSite site, final IEditorInput input) throws
+	// PartInitException {
+	// setSite(site);
+	// setInput(input);
+	// }
+	//
+	// @Override
+	// public void doSave(final IProgressMonitor monitor) {
+	// }
+	//
+	// @Override
+	// public void doSaveAs() {
+	// }
+	//
+	// @Override
+	// public boolean isDirty() {
+	// return false;
+	// }
+	//
+	// @Override
+	// public boolean isSaveAsAllowed() {
+	// return false;
+	// }
 
 	@Override
 	public void dispose() {
 		toolkit.dispose();
 		bindingContext.dispose();
 		super.dispose();
+	}
+
+	/**
+	 * @return the inputObservable
+	 */
+	public IObservableValue getInputObservable() {
+		return inputObservable;
 	}
 }

@@ -42,7 +42,7 @@ public class Borrower extends AbstractPropertyChangeSupport implements Cloneable
 	}
 
 	public void setInfo(final String info) {
-		this.info = info;
+		changeSupport.firePropertyChange(FIELD_INFO, this.info, this.info = info);
 	}
 
 	public String getEmail() {
@@ -50,7 +50,7 @@ public class Borrower extends AbstractPropertyChangeSupport implements Cloneable
 	}
 
 	public void setEmail(final String email) {
-		this.email = email;
+		changeSupport.firePropertyChange(FIELD_EMAIL, this.email, this.email = email);
 	}
 
 	public String getPhoneNumber() {
@@ -58,7 +58,7 @@ public class Borrower extends AbstractPropertyChangeSupport implements Cloneable
 	}
 
 	public void setPhoneNumber(final String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+		changeSupport.firePropertyChange(FIELD_PHONENUMER, this.phoneNumber, this.phoneNumber = phoneNumber);
 	}
 
 	public Integer getId() {
@@ -74,7 +74,7 @@ public class Borrower extends AbstractPropertyChangeSupport implements Cloneable
 	}
 
 	public void setSurname(final String surname) {
-		this.surname = surname;
+		changeSupport.firePropertyChange(FIELD_SURNAME, this.surname, this.surname = surname);
 	}
 
 	public String getForename() {
@@ -82,7 +82,11 @@ public class Borrower extends AbstractPropertyChangeSupport implements Cloneable
 	}
 
 	public void setForename(final String firstName) {
-		forename = firstName;
+		changeSupport.firePropertyChange(FIELD_FIRSTNAME, this.forename, this.forename = firstName);
+	}
+
+	public String getName() {
+		return forename + " " + surname;
 	}
 
 	/** {@inheritDoc} */

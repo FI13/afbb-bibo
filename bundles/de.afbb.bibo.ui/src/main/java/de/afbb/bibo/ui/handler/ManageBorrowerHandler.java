@@ -7,7 +7,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
@@ -17,29 +17,34 @@ import de.afbb.bibo.ui.view.BorrowerView;
 
 /**
  * handler that manages a {@link Borrower}
- * 
+ *
  * @author David Becker
  */
 public class ManageBorrowerHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService()
+		final ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService()
 				.getSelection();
 		openForSelection((IStructuredSelection) selection);
 		return null;
 	}
 
-	private static void openForSelection(IStructuredSelection selection) {
-		Iterator<?> iterator = selection.iterator();
+	private static void openForSelection(final IStructuredSelection selection) {
+		final Iterator<?> iterator = selection.iterator();
 		while (iterator.hasNext()) {
-			Object next = iterator.next();
+			final Object next = iterator.next();
 			if (next instanceof NavigationTreeViewNode) {
-				Object input = ((NavigationTreeViewNode) next).getValue();
+				final Object input = ((NavigationTreeViewNode) next).getValue();
 				if (input instanceof Borrower) {
 					try {
-						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-								.openEditor((IEditorInput) input, BorrowerView.ID, true);
+						final IViewPart showView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+								.showView(BorrowerView.ID);
+						if (showView instanceof BorrowerView) {
+							((BorrowerView) showView).setInput((Borrower) input);
+						}
+						// .openEditor((IEditorInput) input, BorrowerView.ID,
+						// true);
 					} catch (final PartInitException e) {
 						e.printStackTrace();
 					}
