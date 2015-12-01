@@ -36,8 +36,33 @@ Philipp Widdra
       </win>
    </launcher>
 
+
    <vm>
    </vm>
+
+   <license>
+        <url>https://github.com/FI13/afbb-bibo</url>
+        <text>
+   Copyright (c) 2015, David Becker
+              2015, Matthias Elberling
+              2015, Philipp Endrulat
+              2015, Tom Ewald
+              2015, Michelé Lingel
+              2015, Philipp Widdra
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+         </text>
+   </license>
 
    <plugins>
    </plugins>
