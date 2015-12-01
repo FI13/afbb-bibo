@@ -3,3 +3,7 @@ jdk:
   - openjdk7
 install:
   - mvn verify
+before_script:
+  - cd ./bundles/de.afbb.bibo.bibservlet
+script:
+  - mvn verify
