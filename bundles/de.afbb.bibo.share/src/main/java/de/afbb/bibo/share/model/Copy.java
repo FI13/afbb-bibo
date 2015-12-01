@@ -43,17 +43,18 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable, IE
 		super();
 	}
 
-	public Copy(final int id, final String edition, final String barcode, final Date date, final String condition,
-			final Date date2, final Date date3, final int groupId, final Borrower borrower, final Borrower lastBorrower,
-			final Curator curator, final Curator lastCurator, final int mediumId, final String isbn, final String title,
-			final String author, final String language, final MediumType type, final String publisher) {
+	public Copy(final int id, final String edition, final String barcode, final Date inventoryDate,
+			final String condition, final Date borrowDate, final Date lastBorrowDate, final int groupId,
+			final Borrower borrower, final Borrower lastBorrower, final Curator curator, final Curator lastCurator,
+			final int mediumId, final String isbn, final String title, final String author, final String language,
+			final MediumType type, final String publisher) {
 		this.id = id;
 		this.edition = edition;
 		this.barcode = barcode;
-		inventoryDate = date;
+		this.inventoryDate = inventoryDate;
 		this.condition = condition;
-		borrowDate = date2;
-		lastBorrowDate = date3;
+		this.borrowDate = borrowDate;
+		this.lastBorrowDate = lastBorrowDate;
 		this.groupId = groupId;
 		this.borrower = borrower;
 		this.lastBorrower = lastBorrower;
