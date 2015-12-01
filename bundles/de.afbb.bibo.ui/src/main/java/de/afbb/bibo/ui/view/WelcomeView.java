@@ -6,14 +6,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import de.afbb.bibo.share.internal.model.CuratorInput;
+import de.afbb.bibo.share.model.Curator;
 
 /**
  * this view greets the user and gives hints to use the software
  *
  * @author dbecker
  */
-public class WelcomeView extends AbstractView<CuratorInput> {
+public class WelcomeView extends AbstractView<Curator> {
 
 	public static final String ID = "de.afbb.bibo.ui.view.welcome";//$NON-NLS-1$
 
