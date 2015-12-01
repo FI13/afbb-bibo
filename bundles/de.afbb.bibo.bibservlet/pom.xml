@@ -161,7 +161,7 @@
 									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>de.planconnect.faxwebservlet.server.MyServer</mainClass>
+									<mainClass>de.afbb.bibo.servlet.server.MyServer</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
