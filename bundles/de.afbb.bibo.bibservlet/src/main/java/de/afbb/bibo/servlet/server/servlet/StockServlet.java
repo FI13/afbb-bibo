@@ -43,18 +43,18 @@ public class StockServlet {
 		log.debug("entering STOCK Servlet...");
 
 		switch (stockAction) {
-			case "/addMediaType":
-				addMediaType();
-				break;
-			case "/addCopies":
-				addCopyGroup();
-				break;
-			case "/getMedium":
-				getMedium();
-				break;
-			default:
-				Utils.returnErrorMessage(StockServlet.class, request, response);
-				break;
+		case "/addMediaType":
+			addMediaType();
+			break;
+		case "/addCopies":
+			addCopyGroup();
+			break;
+		case "/getMedium":
+			getMedium();
+			break;
+		default:
+			Utils.returnErrorMessage(StockServlet.class, request, response);
+			break;
 		}
 	}
 
@@ -70,11 +70,13 @@ public class StockServlet {
 		final Copy[] copies = gson.fromJson(request.getReader(), Copy[].class);
 		for (final Copy copy : copies) {
 			try {
-				DBConnector.getInstance().getMedium(copy.getIsbn()).getMediumId();
+				DBConnector.getInstance().getMedium(copy.getMedium().getIsbn()).getMediumId();
 			} catch (final SQLException ex) {
 				// medium not found, create new
-				copy.setMediumId(DBConnector.getInstance().createMedium(copy.getIsbn(), copy.getTitle(), copy.getAuthor(), copy
-						.getLanguage(), copy.getType().getId()));
+				copy.getMedium()
+						.setMediumId(DBConnector.getInstance().createMedium(copy.getMedium().getIsbn(),
+								copy.getMedium().getTitle(), copy.getMedium().getAuthor(),
+								copy.getMedium().getLanguage(), copy.getMedium().getType().getId()));
 			}
 		}
 		final int groupId = DBConnector.getInstance().createCopyGroup(copies);

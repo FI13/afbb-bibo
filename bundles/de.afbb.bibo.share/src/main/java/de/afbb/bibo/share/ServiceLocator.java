@@ -9,17 +9,17 @@ import de.afbb.bibo.share.internal.stub.impl.TypStubService;
 
 /**
  * finds a service that can handle the request
- * 
+ *
  * @author dbecker
  */
 public final class ServiceLocator {
 
-	private final ICuratorService CURATOR_SERVICE = new CuratorStubService();
-	private final ILoginService LOGIN_SERVICE = new LoginStubService();
+	private ICuratorService CURATOR_SERVICE;
+	private ILoginService LOGIN_SERVICE;
 	private final ITypService TYP_SERVICE = new TypStubService();
-	private final IBorrowerService BORROWER_SERVICE = new BorrowerStubService();
-	private final IMediumService MEDIUM_SERVICE = new MediumStubService();
-	private final ICopyService COPY_SERVICE = new CopyStubService();
+	private IBorrowerService BORROWER_SERVICE;
+	private IMediumService MEDIUM_SERVICE;
+	private ICopyService COPY_SERVICE;
 
 	private static final ServiceLocator INSTANCE = new ServiceLocator();
 
@@ -35,22 +35,37 @@ public final class ServiceLocator {
 	}
 
 	public ICuratorService getCuratorService() {
+		if (CURATOR_SERVICE == null) {
+			CURATOR_SERVICE = new CuratorStubService();
+		}
 		return CURATOR_SERVICE;
 	}
 
 	public ILoginService getLoginService() {
+		if (LOGIN_SERVICE == null) {
+			LOGIN_SERVICE = new LoginStubService();
+		}
 		return LOGIN_SERVICE;
 	}
 
 	public IBorrowerService getBorrowerService() {
+		if (BORROWER_SERVICE == null) {
+			BORROWER_SERVICE = new BorrowerStubService();
+		}
 		return BORROWER_SERVICE;
 	}
 
 	public IMediumService getMediumService() {
+		if (MEDIUM_SERVICE == null) {
+			MEDIUM_SERVICE = new MediumStubService();
+		}
 		return MEDIUM_SERVICE;
 	}
 
 	public ICopyService getCopyService() {
+		if (COPY_SERVICE == null) {
+			COPY_SERVICE = new CopyStubService();
+		}
 		return COPY_SERVICE;
 	}
 }

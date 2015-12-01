@@ -3,18 +3,19 @@ package de.afbb.bibo.share.internal.stub.impl;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import de.afbb.bibo.share.IBorrowerService;
+import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 
 public class BorrowerStubService implements IBorrowerService {
 
 	Collection<Borrower> borrowers = new ArrayList<Borrower>();
-	Collection<Copy> copies = new ArrayList<Copy>();
 	int currentBorrowerId = 0;
-	int currentCopyId = 0;
 
 	public BorrowerStubService() {
 		final Borrower b1 = new Borrower();
@@ -42,29 +43,6 @@ public class BorrowerStubService implements IBorrowerService {
 		borrowers.add(b2);
 		borrowers.add(b3);
 		borrowers.add(b4);
-
-		final Copy c1 = new Copy();
-		c1.getMedium().setMediumId(++currentCopyId);
-		c1.getMedium().setTitle("IT-Handbuch");
-		c1.getMedium().setAuthor("Autor");
-		c1.getMedium().setLanguage("de");
-		c1.setBarcode(c1.getMedium().getMediumId().toString());
-		c1.setInventoryDate(new java.sql.Date(2015, 5, 15));
-
-		final Copy c2 = new Copy();
-		c2.getMedium().setMediumId(++currentCopyId);
-		c2.getMedium().setTitle("Kusch: Mathematik");
-		c2.getMedium().setAuthor("Rudolf Borgmann, Jost Knapp, Rolf Schöwe");
-		c2.getMedium().setIsbn("3464413055");
-		c2.setBarcode(c2.getMedium().getMediumId().toString());
-		c2.getMedium().setLanguage("de");
-		c2.setEdition("Aktuelle Ausgabe: Band K");
-		c2.getMedium().setPublisher("Cornelsen Verlag");
-		c2.setCondition("- Seite 42 angerissen\n- Seite 101 fehlt");
-		c2.setInventoryDate(new java.sql.Date(2015, 10, 3));
-
-		copies.add(c1);
-		copies.add(c2);
 	}
 
 	@Override
@@ -112,14 +90,21 @@ public class BorrowerStubService implements IBorrowerService {
 		return borrowers;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public Collection<Copy> listLent(final Borrower Borrower) throws ConnectException {
-		try {
-			Thread.sleep(10000);
-		} catch (final InterruptedException e) {
-			e.printStackTrace();
+	public Collection<Copy> listLent(final Borrower borrower) throws ConnectException {
+		final Set<Copy> result = new HashSet<Copy>();
+		if (borrower != null) {
+			for (final Copy copy : ((CopyStubService) ServiceLocator.getInstance().getCopyService()).getCopies()
+					.values()) {
+				if (copy != null && borrower.equals(copy.getBorrower())
+						&& (copy.getBorrowDate() != null && copy.getLastBorrowDate() == null
+								|| copy.getBorrowDate().after(copy.getLastBorrowDate()))) {
+					result.add(copy);
+				}
+			}
 		}
-		return copies;
+		return result;
 	}
 
 }

@@ -11,7 +11,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 import de.afbb.bibo.share.SessionHolder;
-import de.afbb.bibo.share.model.Curator;
+import de.afbb.bibo.share.internal.model.CuratorInput;
 import de.afbb.bibo.ui.view.WelcomeView;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
@@ -40,10 +40,10 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 
 		// FIXME for debugging purposes only! comment out when server is ready!
-//		new LoginDialog(shell).open();
+		// new LoginDialog(shell).open();
 		// TODO start remove here
-//		SessionHolder.getInstance().setSessionToken("token123");//$NON-NLS-1$
-		final Curator curator = new Curator();
+		// SessionHolder.getInstance().setSessionToken("token123");//$NON-NLS-1$
+		final CuratorInput curator = new CuratorInput();
 		curator.setName("Hugo");//$NON-NLS-1$
 		SessionHolder.getInstance().setCurator(curator);
 		// TODO end remove here
@@ -54,7 +54,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 			// open welcome view
 			final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			try {
-				page.openEditor(SessionHolder.getInstance().getCurator(), WelcomeView.ID);
+				page.openEditor((CuratorInput) SessionHolder.getInstance().getCurator(), WelcomeView.ID);
 			} catch (final PartInitException e) {
 				e.printStackTrace();
 				// shouldn't happen

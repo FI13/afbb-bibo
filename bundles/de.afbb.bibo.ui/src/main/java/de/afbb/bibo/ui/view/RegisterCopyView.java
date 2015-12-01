@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Text;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.share.internal.model.CopyInput;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.Medium;
@@ -45,7 +46,7 @@ import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
  *
  * @author dbecker
  */
-public class RegisterCopyView extends AbstractEditView<Copy> {
+public class RegisterCopyView extends AbstractEditView<CopyInput> {
 
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String REGISTER_COPY = "register.copy";//$NON-NLS-1$

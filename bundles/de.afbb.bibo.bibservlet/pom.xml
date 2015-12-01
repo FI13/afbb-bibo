@@ -91,6 +91,8 @@
 				<groupId>de.afbb.bibo</groupId>
 				<artifactId>de.afbb.bibo.share</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
+				<scope>system</scope>
+				<systemPath>${basedir}/lib/de.afbb.bibo.share_1.0.0.jar</systemPath>
 			</dependency>
 
 	</dependencies>
