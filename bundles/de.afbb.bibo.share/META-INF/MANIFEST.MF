@@ -4,12 +4,12 @@ Bundle-Name: Share
 Bundle-SymbolicName: de.afbb.bibo.share
 Bundle-Version: 1.0.0.qualifier
 Import-Package: org.apache.commons.codec.digest,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.eclipse.jface.viewers
 Export-Package: de.afbb.bibo.crypto,
  de.afbb.bibo.properties,
  de.afbb.bibo.share,
  de.afbb.bibo.share.impl,
  de.afbb.bibo.share.model
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Require-Bundle: org.eclipse.ui
 Bundle-Vendor: FI13

@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Text;
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
+import de.afbb.bibo.share.internal.model.BorrowerInput;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
@@ -38,7 +39,7 @@ import de.afbb.bibo.ui.form.CopyMovementForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.form.MediumInformationForm;
 
-public class LendCopyView extends AbstractEditView<Borrower> {
+public class LendCopyView extends AbstractEditView<BorrowerInput> {
 
 	public static final String ID = "de.afbb.bibo.ui.lend.copy";//$NON-NLS-1$
 	private static final String LEND_COPY = "lend.copy";//$NON-NLS-1$
@@ -308,7 +309,7 @@ public class LendCopyView extends AbstractEditView<Borrower> {
 	}
 
 	@Override
-	protected String computePartName(final Borrower input) {
+	protected String computePartName(final BorrowerInput input) {
 		return input != null ? "Ausleihe an " + input.getName() : null;
 	}
 

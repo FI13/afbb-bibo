@@ -30,8 +30,8 @@ import org.eclipse.swt.widgets.Text;
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
+import de.afbb.bibo.share.internal.model.CuratorInput;
 import de.afbb.bibo.share.model.Copy;
-import de.afbb.bibo.share.model.Curator;
 import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
@@ -39,7 +39,7 @@ import de.afbb.bibo.ui.form.CopyMovementForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.form.MediumInformationForm;
 
-public class ReturnCopyView extends AbstractEditView<Curator> {
+public class ReturnCopyView extends AbstractEditView<CuratorInput> {
 
 	public static final String ID = "de.afbb.bibo.ui.return.copy";//$NON-NLS-1$
 	private static final String RETURN_COPY = "return.copy";//$NON-NLS-1$

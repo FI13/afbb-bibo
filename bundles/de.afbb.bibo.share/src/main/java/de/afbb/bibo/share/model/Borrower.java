@@ -1,15 +1,11 @@
 package de.afbb.bibo.share.model;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IPersistableElement;
-
 import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 
 /**
  * model class for a person that can lend a {@link Copy}
  */
-public class Borrower extends AbstractPropertyChangeSupport implements IEditorInput, Cloneable {
+public class Borrower extends AbstractPropertyChangeSupport implements Cloneable {
 
 	public static final String FIELD_SURNAME = "surname";//$NON-NLS-1$
 	public static final String FIELD_FIRSTNAME = "forename";//$NON-NLS-1$
@@ -17,14 +13,14 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 	public static final String FIELD_EMAIL = "email";//$NON-NLS-1$
 	public static final String FIELD_PHONENUMER = "phoneNumber";//$NON-NLS-1$
 	private Integer id;
-	private String surname;
-	private String forename;
+	protected String surname;
+	protected String forename;
 	private String info;
 	private String email;
 	private String phoneNumber;
 
 	public Borrower(final int id) {
-		this(id, null, null, null, null, null);
+		this(id, "", "", null, null, null);
 	}
 
 	public Borrower(final int id, final String forename, final String surname, final String info, final String email,
@@ -87,38 +83,6 @@ public class Borrower extends AbstractPropertyChangeSupport implements IEditorIn
 
 	public void setForename(final String firstName) {
 		forename = firstName;
-	}
-
-	@SuppressWarnings("rawtypes")
-	@Override
-	public Object getAdapter(final Class adapter) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean exists() {
-		return false;
-	}
-
-	@Override
-	public ImageDescriptor getImageDescriptor() {
-		return null;
-	}
-
-	@Override
-	public IPersistableElement getPersistable() {
-		return null;
-	}
-
-	@Override
-	public String getToolTipText() {
-		return "Ausleiher erstellen: " + forename + " " + surname;
-	}
-
-	@Override
-	public String getName() {
-		return forename + " " + surname;
 	}
 
 	/** {@inheritDoc} */

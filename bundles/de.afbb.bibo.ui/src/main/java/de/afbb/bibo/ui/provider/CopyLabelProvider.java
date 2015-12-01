@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
+import de.afbb.bibo.share.internal.model.BorrowerInput;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
@@ -101,13 +102,13 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 		} else if (columnIndex == 9 && copy.getCurator() != null) {
 			value = copy.getCurator().getName();
 		} else if (columnIndex == 10 && copy.getBorrower() != null) {
-			value = copy.getBorrower().getName();
+			value = new BorrowerInput(copy.getBorrower()).getName();
 		} else if (columnIndex == 11 && copy.getLastBorrowDate() != null) {
 			value = DateFormat.getDateInstance().format(copy.getLastBorrowDate());
 		} else if (columnIndex == 12 && copy.getLastCurator() != null) {
 			value = copy.getLastCurator().getName();
 		} else if (columnIndex == 13 && copy.getLastBorrower() != null) {
-			value = copy.getLastBorrower().getName();
+			value = new BorrowerInput(copy.getLastBorrower()).getName();
 		}
 		return value;
 	}

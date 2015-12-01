@@ -2,16 +2,12 @@ package de.afbb.bibo.share.model;
 
 import java.util.Date;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IPersistableElement;
-
 import de.afbb.bibo.share.beans.AbstractPropertyChangeSupport;
 
 /**
  * one copy of a medium
  */
-public class Copy extends AbstractPropertyChangeSupport implements Cloneable, IEditorInput {
+public class Copy extends AbstractPropertyChangeSupport implements Cloneable {
 
 	public static final String FIELD_EDITION = "edition";//$NON-NLS-1$
 	public static final String FIELD_BARCODE = "barcode";//$NON-NLS-1$
@@ -25,7 +21,7 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable, IE
 	public static final String FIELD_LAST_BORROWER = "lastBorrower";//$NON-NLS-1$
 	public static final String FIELD_MEDIUM = "medium";//$NON-NLS-1$
 
-	private Integer id;
+	private final Integer id;
 	private String edition;
 	private String barcode = "";
 	private Date inventoryDate;
@@ -39,8 +35,12 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable, IE
 	private Medium medium = new Medium();
 	private int groupId = -1;
 
+	/**
+	 * default constructor. will set id to -1
+	 */
 	public Copy() {
 		super();
+		id = -1;
 	}
 
 	public Copy(final int id, final String edition, final String barcode, final Date inventoryDate,
@@ -48,6 +48,7 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable, IE
 			final Borrower borrower, final Borrower lastBorrower, final Curator curator, final Curator lastCurator,
 			final int mediumId, final String isbn, final String title, final String author, final String language,
 			final MediumType type, final String publisher) {
+		super();
 		this.id = id;
 		this.edition = edition;
 		this.barcode = barcode;
@@ -67,6 +68,10 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable, IE
 		medium.setLanguage(language);
 		medium.setType(type);
 		medium.setPublisher(publisher);
+	}
+
+	public Integer getId() {
+		return id;
 	}
 
 	public String getEdition() {
@@ -171,37 +176,6 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable, IE
 	 */
 	public void setMedium(final Medium medium) {
 		changeSupport.firePropertyChange(FIELD_MEDIUM, this.medium, this.medium = medium);
-	}
-
-	@SuppressWarnings("rawtypes")
-	@Override
-	public Object getAdapter(final Class adapter) {
-		return null;
-	}
-
-	@Override
-	public boolean exists() {
-		return false;
-	}
-
-	@Override
-	public ImageDescriptor getImageDescriptor() {
-		return null;
-	}
-
-	@Override
-	public String getName() {
-		return barcode;
-	}
-
-	@Override
-	public IPersistableElement getPersistable() {
-		return null;
-	}
-
-	@Override
-	public String getToolTipText() {
-		return barcode;
 	}
 
 	@Override

@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IEditorInput;
 
 import de.afbb.bibo.share.ServiceLocator;
-import de.afbb.bibo.share.model.Borrower;
+import de.afbb.bibo.share.internal.model.BorrowerInput;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.ui.form.BorrowerForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
@@ -28,7 +28,7 @@ import de.afbb.bibo.ui.form.StatisticForm;
  * @author philippwiddra
  * @author David Becker
  */
-public class BorrowerView extends AbstractEditView<Borrower> {
+public class BorrowerView extends AbstractEditView<BorrowerInput> {
 
 	public static final String ID = "de.afbb.bibo.ui.borrower";//$NON-NLS-1$
 	private static final String BORROWER_SHOW = "borrower.show";//$NON-NLS-1$
@@ -39,13 +39,13 @@ public class BorrowerView extends AbstractEditView<Borrower> {
 	private StatisticForm statisticForm;
 
 	@Override
-	protected String computePartName(final Borrower input) {
+	protected String computePartName(final BorrowerInput input) {
 		return input != null ? input.getName() : null;
 	}
 
 	@Override
-	protected Borrower cloneInput(final Borrower input) {
-		return (Borrower) input.clone();
+	protected BorrowerInput cloneInput(final BorrowerInput input) {
+		return (BorrowerInput) input.clone();
 	}
 
 	@Override
