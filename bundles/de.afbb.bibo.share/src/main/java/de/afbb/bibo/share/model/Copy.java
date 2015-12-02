@@ -208,7 +208,7 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = super.hashCode();
+		int result = 1;
 		result = prime * result + (barcode == null ? 0 : barcode.hashCode());
 		result = prime * result + (condition == null ? 0 : condition.hashCode());
 		result = prime * result + (edition == null ? 0 : edition.hashCode());
