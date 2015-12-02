@@ -269,13 +269,6 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 		return ((IStatus) validationStatus.getValue()).isOK();
 	}
 
-	// @Override
-	// public void init(final IEditorSite site, final IEditorInput input) throws
-	// PartInitException {
-	// setSite(site);
-	// setInput(input);
-	// }
-	//
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 	}
