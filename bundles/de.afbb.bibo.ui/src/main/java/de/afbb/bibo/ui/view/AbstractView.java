@@ -162,11 +162,11 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 	@Override
 	public void updateDirtyState() {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
-
 	}
 
 	public void setInput(final Input editorInput) {
 		changeSupport.firePropertyChange(INPUT, input, input = editorInput);
+		firePropertyChange(IEditorPart.PROP_INPUT);
 		inputCache = cloneInput(input);
 
 		// set the name of the input as title (if possible)

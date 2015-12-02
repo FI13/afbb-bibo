@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -52,10 +54,11 @@ public class ReturnCopyView extends AbstractView<Copy> {
 	private Button btnSave;
 
 	private CopyXviewerForm xViewer;
+	private CopyMovementForm movementForm;
+	private MediumInformationForm mediumInformationForm;
 
 	private final HashMap<String, Copy> copyCache = new HashMap<>();
 	private final Set<Copy> copies = new HashSet<Copy>();
-	private final Copy copyToModify = new Copy();
 
 	@Override
 	protected Composite initUi(final Composite parent) throws ConnectException {
@@ -81,10 +84,10 @@ public class ReturnCopyView extends AbstractView<Copy> {
 		txtCondition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.MULTI);
 
 		final Group statusGroup = toolkit.createGroup(content, "Informationen");
-		new CopyMovementForm(statusGroup, copyToModify, bindingContext, toolkit);
+		movementForm = new CopyMovementForm(statusGroup, input, bindingContext, toolkit);
 
 		final Group mediumGroup = toolkit.createGroup(content, "Allgemein");
-		new MediumInformationForm(mediumGroup, copyToModify, bindingContext, toolkit);
+		mediumInformationForm = new MediumInformationForm(mediumGroup, input, bindingContext, toolkit);
 
 		final Composite middle = toolkit.createComposite(content, SWT.NONE);
 		middle.setLayout(new GridLayout(2, false));
@@ -150,6 +153,14 @@ public class ReturnCopyView extends AbstractView<Copy> {
 				false);
 		BindingHelper.bindStringToTextField(txtCondition, getInputObservable(), Copy.FIELD_CONDITION, bindingContext,
 				false);
+
+		// one-way binding to update the input in sub-form
+		bindingContext.bindValue(BeansObservables.observeValue(mediumInformationForm, INPUT),
+				BeansObservables.observeValue(this, INPUT), new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER),
+				null);
+		bindingContext.bindValue(BeansObservables.observeValue(movementForm, INPUT),
+				BeansObservables.observeValue(this, INPUT), new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER),
+				null);
 	}
 
 	@Override
@@ -159,7 +170,7 @@ public class ReturnCopyView extends AbstractView<Copy> {
 
 	private void updateSaveButton() {
 		btnSave.setEnabled(
-				(copyToModify.getBarcode() == null || copyToModify.getBarcode().isEmpty()) && !copies.isEmpty());
+				(input == null || input.getBarcode() == null || input.getBarcode().isEmpty()) && !copies.isEmpty());
 	}
 
 	/**
@@ -186,7 +197,7 @@ public class ReturnCopyView extends AbstractView<Copy> {
 
 		@Override
 		public void handleEvent(final Event event) {
-			final Copy clone = (Copy) copyToModify.clone();
+			final Copy clone = (Copy) input.clone();
 			copies.add(clone);
 			setCopyToModify(null);
 			updateSaveButton();
@@ -248,31 +259,27 @@ public class ReturnCopyView extends AbstractView<Copy> {
 	 * @param copy
 	 */
 	private void setCopyToModify(final Copy copy) {
-		copyToModify.setBarcode(copy != null ? copy.getBarcode() : null);
-		copyToModify.getMedium().setAuthor(copy != null ? copy.getMedium().getAuthor() : null);
-		copyToModify.setBorrowDate(copy != null ? copy.getBorrowDate() : null);
-		copyToModify.setBorrower(copy != null ? copy.getBorrower() : null);
-		copyToModify.setCondition(copy != null ? copy.getCondition() : null);
-		copyToModify.setCurator(copy != null ? copy.getCurator() : null);
-		copyToModify.setEdition(copy != null ? copy.getEdition() : null);
-		copyToModify.setInventoryDate(copy != null ? copy.getInventoryDate() : null);
-		copyToModify.getMedium().setIsbn(copy != null ? copy.getMedium().getIsbn() : null);
-		copyToModify.getMedium().setLanguage(copy != null ? copy.getMedium().getLanguage() : null);
-		copyToModify.getMedium().setPublisher(copy != null ? copy.getMedium().getPublisher() : null);
-		copyToModify.getMedium().setTitle(copy != null ? copy.getMedium().getTitle() : null);
-		copyToModify.getMedium().setType(copy != null ? copy.getMedium().getType() : null);
 
 		/*
 		 * we don't now which person returns the book at this point -> so we
 		 * just save who had it last
 		 */
-		copyToModify.setLastBorrower(copy != null ? copy.getBorrower() : null);
-		copyToModify.setLastBorrowDate(copy != null ? now : null);
-		copyToModify.setLastCurator(copy != null ? SessionHolder.getInstance().getCurator() : null);
+		if (copy != null) {
+			copy.setLastBorrower(copy.getBorrower());
+			copy.setLastBorrowDate(now);
+			copy.setLastCurator(SessionHolder.getInstance().getCurator());
+		}
+		setInput(copy);
 
 		txtCondition.setEnabled(copy != null);
 		btnToList.setEnabled(copy != null);
 		bindingContext.updateTargets();
+	}
+
+	@Override
+	public boolean isDirty() {
+		// no dirty state for this view
+		return false;
 	}
 
 }

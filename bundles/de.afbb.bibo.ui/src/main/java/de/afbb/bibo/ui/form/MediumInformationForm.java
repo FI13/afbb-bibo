@@ -91,7 +91,7 @@ public class MediumInformationForm extends AbstractForm<Copy> {
 		BindingHelper.bindStringToTextField(txtIsbn, getInputObservable(), Copy.FIELD_MEDIUM + DOT + Medium.FIELD_ISBN,
 				bindingContext, false);
 
-		BindingHelper.bindObjectToCCombo(comboMediumType, input, Copy.class,
+		BindingHelper.bindObjectToCCombo(comboMediumType, getInputObservable(), Copy.class,
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TYPE, MediumType.class,
 				ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(), bindingContext,
 				false);

@@ -51,7 +51,6 @@ public class RegisterCopyView extends AbstractView<Copy> {
 	private static final String REGISTER_COPY = "register.copy";//$NON-NLS-1$
 
 	private final Set<Copy> copies = new HashSet<Copy>();
-	private final Copy copyToModify = new Copy();
 
 	private Group idGroup;
 	private Text txtBarcode;
@@ -82,17 +81,9 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 		@Override
 		public void handleEvent(final Event event) {
-			final Copy clone = (Copy) copyToModify.clone();
+			final Copy clone = (Copy) input.clone();
 			copies.add(clone);
-			copyToModify.setBarcode(EMPTY_STRING);
-			copyToModify.getMedium().setIsbn(EMPTY_STRING);
-			copyToModify.setEdition(EMPTY_STRING);
-			copyToModify.getMedium().setTitle(EMPTY_STRING);
-			copyToModify.getMedium().setAuthor(EMPTY_STRING);
-			copyToModify.getMedium().setLanguage(EMPTY_STRING);
-			copyToModify.getMedium().setPublisher(EMPTY_STRING);
-			copyToModify.setCondition(EMPTY_STRING);
-			copyToModify.getMedium().setType(null);
+			setInput(new Copy());
 			updateSaveButton();
 			xViewer.setInput(copies);
 			bindingContext.updateTargets();
@@ -115,15 +106,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 			final TreePath[] paths = xViewer.getSelection().getPaths();
 			if (paths.length > 0) {
 				final Copy copy = (Copy) paths[0].getLastSegment();
-				copyToModify.setBarcode(copy.getBarcode());
-				copyToModify.getMedium().setIsbn(copy.getMedium().getIsbn());
-				copyToModify.setEdition(copy.getEdition());
-				copyToModify.getMedium().setTitle(copy.getMedium().getTitle());
-				copyToModify.getMedium().setAuthor(copy.getMedium().getAuthor());
-				copyToModify.getMedium().setLanguage(copy.getMedium().getLanguage());
-				copyToModify.getMedium().setPublisher(copy.getMedium().getPublisher());
-				copyToModify.getMedium().setType(copy.getMedium().getType());
-				copyToModify.setCondition(copy.getCondition());
+				setInput(copy);
 				copies.remove(copy);
 				checkGroups();
 				updateSaveButton();
@@ -406,7 +389,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		BindingHelper.bindStringToTextField(txtIsbn, getInputObservable(), Copy.FIELD_MEDIUM + DOT + Medium.FIELD_ISBN,
 				bindingContext, false);
 
-		BindingHelper.bindObjectToCCombo(comboMediumType, copyToModify, Copy.class,
+		BindingHelper.bindObjectToCCombo(comboMediumType, getInputObservable(), Copy.class,
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TYPE, MediumType.class,
 				ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(), bindingContext,
 				false);
@@ -420,5 +403,11 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 	private void updateSaveButton() {
 		btnSave.setEnabled(!copies.isEmpty());
+	}
+
+	@Override
+	public boolean isDirty() {
+		// no dirty state for this view
+		return false;
 	}
 }

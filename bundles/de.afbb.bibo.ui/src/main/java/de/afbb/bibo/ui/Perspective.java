@@ -20,8 +20,8 @@ public class Perspective implements IPerspectiveFactory {
 		final String editorArea = layout.getEditorArea();
 		layout.setEditorAreaVisible(false);
 
-		layout.addStandaloneView(NavigationView.ID, false, IPageLayout.LEFT, 0.35f, editorArea);
-		final IFolderLayout folder = layout.createFolder("de.afbb.bibo.ui.category.main", IPageLayout.RIGHT, 0.5f,
+		layout.addStandaloneView(NavigationView.ID, false, IPageLayout.LEFT, 0.05f, editorArea);
+		final IFolderLayout folder = layout.createFolder("de.afbb.bibo.ui.category.main", IPageLayout.RIGHT, 0.30f,
 				NavigationView.ID);
 		folder.addView(WelcomeView.ID);
 		folder.addPlaceholder(BorrowerView.ID);

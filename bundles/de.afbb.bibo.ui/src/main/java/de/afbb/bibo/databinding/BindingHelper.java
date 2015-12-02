@@ -72,16 +72,18 @@ public final class BindingHelper {
 	 *            should the field be filled by the user?
 	 * @return binding
 	 */
-	public static <E, T> Binding bindObjectToCCombo(final CCombo combo, final E entity, final Class<E> entityClass,
-			final String propertyName, final Class<T> propertyClass, final Collection<T> values,
-			final IBaseLabelProvider labelProvider, final DataBindingContext bindingContext, final boolean isRequired) {
+	public static <E, T> Binding bindObjectToCCombo(final CCombo combo, final IObservableValue inputObservable,
+			final Class<E> entityClass, final String propertyName, final Class<T> propertyClass,
+			final Collection<T> values, final IBaseLabelProvider labelProvider, final DataBindingContext bindingContext,
+			final boolean isRequired) {
 		final ComboViewer comboViewer = new ComboViewer(combo);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(labelProvider);
 		comboViewer.setInput(values);
 
 		final IViewerObservableValue targetObservable = ViewersObservables.observeSingleSelection(comboViewer);
-		final IObservableValue modelObservable = BeanProperties.value(entityClass, propertyName).observe(entity);
+		final IObservableValue modelObservable = BeansObservables.observeDetailValue(inputObservable, propertyName,
+				entityClass);
 
 		final UpdateValueStrategy targetToModel = isRequired
 				? new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyValue()) : null;
@@ -175,10 +177,30 @@ public final class BindingHelper {
 	 *            context of the binding
 	 * @return
 	 */
-	public static <E> Binding bindObjectToTextField(final Text textField, final E entity, final Class<E> entityClass,
-			final String propertyName, final DataBindingContext bindingContext) {
+	public static <E> Binding bindObjectToTextField(final Text textField, final IObservableValue inputObservable,
+			final Class<E> entityClass, final String propertyName, final DataBindingContext bindingContext) {
+		return bindObjectToTextField(textField,
+				BeansObservables.observeDetailValue(inputObservable, propertyName, entityClass), bindingContext);
+	}
+
+	/**
+	 * one-way databinding to display the content of an object in a text field
+	 *
+	 * @param textField
+	 *            widget for input
+	 * @param entity
+	 *            class that holds the model information
+	 * @param entityClass
+	 *            class of entity
+	 * @param propertyName
+	 *            name of the property that should be binded
+	 * @param bindingContext
+	 *            context of the binding
+	 * @return
+	 */
+	public static Binding bindObjectToTextField(final Text textField, final IObservableValue modelObservable,
+			final DataBindingContext bindingContext) {
 		final ISWTObservableValue targetObservable = SWTObservables.observeText(textField, SWT.Modify);
-		final IObservableValue modelObservable = BeanProperties.value(entityClass, propertyName).observe(entity);
 		final UpdateValueStrategy modelToTarget = new UpdateValueStrategy();
 		modelToTarget.setConverter(new ObjectToStringConverter());
 		final Binding binding = bindingContext.bindValue(targetObservable, modelObservable,
