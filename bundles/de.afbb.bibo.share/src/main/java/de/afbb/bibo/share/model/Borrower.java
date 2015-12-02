@@ -20,7 +20,7 @@ public class Borrower extends AbstractPropertyChangeSupport implements Cloneable
 	private String phoneNumber;
 
 	public Borrower(final int id) {
-		this(id, "", "", null, null, null);
+		this(id, "", "", "", "", "");
 	}
 
 	public Borrower(final int id, final String forename, final String surname, final String info, final String email,
@@ -102,7 +102,9 @@ public class Borrower extends AbstractPropertyChangeSupport implements Cloneable
 		return result;
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * empty strings should be considered equals to null for easier validation
+	 */
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
@@ -115,36 +117,36 @@ public class Borrower extends AbstractPropertyChangeSupport implements Cloneable
 			return false;
 		}
 		final Borrower other = (Borrower) obj;
-		if (email == null) {
-			if (other.email != null) {
+		if (email == null || "".equals(email)) {
+			if (other.email != null && !"".equals(other.email)) {
 				return false;
 			}
 		} else if (!email.equals(other.email)) {
 			return false;
 		}
-		if (forename == null) {
-			if (other.forename != null) {
+		if (forename == null || "".equals(forename)) {
+			if (other.forename != null && !"".equals(other.forename)) {
 				return false;
 			}
 		} else if (!forename.equals(other.forename)) {
 			return false;
 		}
-		if (info == null) {
-			if (other.info != null) {
+		if (info == null || "".equals(info)) {
+			if (other.info != null && !"".equals(other.info)) {
 				return false;
 			}
 		} else if (!info.equals(other.info)) {
 			return false;
 		}
-		if (phoneNumber == null) {
-			if (other.phoneNumber != null) {
+		if (phoneNumber == null || "".equals(phoneNumber)) {
+			if (other.phoneNumber != null && !"".equals(other.phoneNumber)) {
 				return false;
 			}
 		} else if (!phoneNumber.equals(other.phoneNumber)) {
 			return false;
 		}
-		if (surname == null) {
-			if (other.surname != null) {
+		if (surname == null || "".equals(surname)) {
+			if (other.surname != null && !"".equals(other.surname)) {
 				return false;
 			}
 		} else if (!surname.equals(other.surname)) {

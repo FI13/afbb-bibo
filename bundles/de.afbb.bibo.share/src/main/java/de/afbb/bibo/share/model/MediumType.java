@@ -85,7 +85,9 @@ public class MediumType extends AbstractPropertyChangeSupport implements Cloneab
 		return result;
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * empty strings should be considered equals to null for easier validation
+	 */
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
@@ -101,8 +103,8 @@ public class MediumType extends AbstractPropertyChangeSupport implements Cloneab
 		if (icon != other.icon) {
 			return false;
 		}
-		if (name == null) {
-			if (other.name != null) {
+		if (name == null || "".equals(name)) {
+			if (other.name != null && !"".equals(other.name)) {
 				return false;
 			}
 		} else if (!name.equals(other.name)) {

@@ -215,34 +215,34 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable {
 		return result;
 	}
 
+	/**
+	 * empty strings should be considered equals to null for easier validation
+	 */
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
-		if (!super.equals(obj)) {
-			return false;
-		}
 		if (!(obj instanceof Copy)) {
 			return false;
 		}
 		final Copy other = (Copy) obj;
-		if (barcode == null) {
-			if (other.barcode != null) {
+		if (barcode == null || "".equals(barcode)) {
+			if (other.barcode != null && !"".equals(other.barcode)) {
 				return false;
 			}
 		} else if (!barcode.equals(other.barcode)) {
 			return false;
 		}
-		if (condition == null) {
-			if (other.condition != null) {
+		if (condition == null || "".equals(condition)) {
+			if (other.condition != null && !"".equals(other.condition)) {
 				return false;
 			}
 		} else if (!condition.equals(other.condition)) {
 			return false;
 		}
-		if (edition == null) {
-			if (other.edition != null) {
+		if (edition == null || "".equals(edition)) {
+			if (other.edition != null && !"".equals(other.edition)) {
 				return false;
 			}
 		} else if (!edition.equals(other.edition)) {

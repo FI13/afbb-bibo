@@ -173,7 +173,9 @@ public class Curator extends AbstractPropertyChangeSupport implements Cloneable 
 		return result;
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * empty strings should be considered equals to null for easier validation
+	 */
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
@@ -186,22 +188,22 @@ public class Curator extends AbstractPropertyChangeSupport implements Cloneable 
 			return false;
 		}
 		final Curator other = (Curator) obj;
-		if (name == null) {
-			if (other.name != null) {
+		if (name == null || "".equals(name)) {
+			if (other.name != null && !"".equals(other.name)) {
 				return false;
 			}
 		} else if (!name.equals(other.name)) {
 			return false;
 		}
-		if (passwordHash == null) {
-			if (other.passwordHash != null) {
+		if (passwordHash == null || "".equals(passwordHash)) {
+			if (other.passwordHash != null && !"".equals(other.passwordHash)) {
 				return false;
 			}
 		} else if (!passwordHash.equals(other.passwordHash)) {
 			return false;
 		}
-		if (salt == null) {
-			if (other.salt != null) {
+		if (salt == null || "".equals(salt)) {
+			if (other.salt != null && !"".equals(other.salt)) {
 				return false;
 			}
 		} else if (!salt.equals(other.salt)) {

@@ -22,8 +22,8 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 	public Medium() {
 	}
 
-	public Medium(final int id, final String isbn, final String title, final String author, final String language, final MediumType type,
-			final String publisher) {
+	public Medium(final int id, final String isbn, final String title, final String author, final String language,
+			final MediumType type, final String publisher) {
 		this.id = id;
 		this.isbn = isbn;
 		this.title = title;
@@ -103,7 +103,9 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 		return result;
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * empty strings should be considered equals to null for easier validation
+	 */
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
@@ -116,36 +118,36 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 			return false;
 		}
 		final Medium other = (Medium) obj;
-		if (author == null) {
-			if (other.author != null) {
+		if (author == null || "".equals(author)) {
+			if (other.author != null && !"".equals(other.author)) {
 				return false;
 			}
 		} else if (!author.equals(other.author)) {
 			return false;
 		}
-		if (isbn == null) {
-			if (other.isbn != null) {
+		if (isbn == null || "".equals(isbn)) {
+			if (other.isbn != null && !"".equals(other.isbn)) {
 				return false;
 			}
 		} else if (!isbn.equals(other.isbn)) {
 			return false;
 		}
-		if (language == null) {
-			if (other.language != null) {
+		if (language == null || "".equals(language)) {
+			if (other.language != null && !"".equals(other.language)) {
 				return false;
 			}
 		} else if (!language.equals(other.language)) {
 			return false;
 		}
-		if (publisher == null) {
-			if (other.publisher != null) {
+		if (publisher == null || "".equals(publisher)) {
+			if (other.publisher != null && !"".equals(other.publisher)) {
 				return false;
 			}
 		} else if (!publisher.equals(other.publisher)) {
 			return false;
 		}
-		if (title == null) {
-			if (other.title != null) {
+		if (title == null || "".equals(title)) {
+			if (other.title != null && !"".equals(other.title)) {
 				return false;
 			}
 		} else if (!title.equals(other.title)) {
@@ -163,8 +165,8 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "Medium{" + "id=" + id + ", isbn=" + isbn + ", title=" + title + ", author=" + author + ", language=" + language + ", type="
-				+ type + ", publisher=" + publisher + '}';
+		return "Medium{" + "id=" + id + ", isbn=" + isbn + ", title=" + title + ", author=" + author + ", language="
+				+ language + ", type=" + type + ", publisher=" + publisher + '}';
 	}
 
 	@Override
