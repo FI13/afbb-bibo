@@ -46,9 +46,11 @@ public class ManageBorrowerHandler extends AbstractHandler {
 						if (showView instanceof BorrowerView) {
 							final BorrowerView view = (BorrowerView) showView;
 							final boolean dirty = view.isDirty();
-							if (dirty && MessageDialog.openQuestion(activeWorkbenchWindow.getShell(),
-									"Offene Änderungen verwerfen?",
-									"Es bestehen noch offen Änderungen.\nÄnderungen verwerfen?") || !dirty) {
+							if (dirty
+									&& MessageDialog.openQuestion(activeWorkbenchWindow.getShell(),
+											"Offene Änderungen verwerfen?",
+											"Es bestehen noch offen Änderungen.\nSollen diese Änderungen verworfen werden?")
+									|| !dirty) {
 								view.setInput((Borrower) input);
 							}
 						}
