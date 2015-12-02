@@ -5,9 +5,11 @@ import java.util.Iterator;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
@@ -38,10 +40,17 @@ public class ManageBorrowerHandler extends AbstractHandler {
 				final Object input = ((NavigationTreeViewNode) next).getValue();
 				if (input instanceof Borrower) {
 					try {
-						final IViewPart showView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-								.showView(BorrowerView.ID);
+						final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench()
+								.getActiveWorkbenchWindow();
+						final IViewPart showView = activeWorkbenchWindow.getActivePage().showView(BorrowerView.ID);
 						if (showView instanceof BorrowerView) {
-							((BorrowerView) showView).setInput((Borrower) input);
+							final BorrowerView view = (BorrowerView) showView;
+							final boolean dirty = view.isDirty();
+							if (dirty && MessageDialog.openQuestion(activeWorkbenchWindow.getShell(),
+									"Offene Änderungen verwerfen?",
+									"Es bestehen noch offen Änderungen.\nÄnderungen verwerfen?") || !dirty) {
+								view.setInput((Borrower) input);
+							}
 						}
 					} catch (final PartInitException e) {
 						e.printStackTrace();
