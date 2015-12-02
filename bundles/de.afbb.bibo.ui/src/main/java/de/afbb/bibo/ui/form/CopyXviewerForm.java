@@ -1,8 +1,10 @@
 package de.afbb.bibo.ui.form;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.nebula.widgets.xviewer.XViewer;
@@ -115,6 +117,11 @@ public class CopyXviewerForm {
 
 	public TreeSelection getSelection() {
 		return (TreeSelection) xViewer.getSelection();
+	}
+
+	@SuppressWarnings("unchecked") // should be fine
+	public Iterator<Copy> getSelectionIterator() {
+		return ((StructuredSelection) xViewer.getSelection()).iterator();
 	}
 
 	public Tree getTree() {

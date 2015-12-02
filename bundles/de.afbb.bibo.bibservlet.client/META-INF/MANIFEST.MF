@@ -8,3 +8,5 @@ Import-Package: com.google.gson,
  de.afbb.bibo.share,
  de.afbb.bibo.share.model,
  javax.servlet.http
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
+ JavaSE-1.8

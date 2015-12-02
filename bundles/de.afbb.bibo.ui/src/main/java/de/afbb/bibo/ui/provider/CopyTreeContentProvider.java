@@ -15,7 +15,7 @@ import de.afbb.bibo.share.model.MediumType;
 
 /**
  * content provider for {@link Copy} in a tree viewer.
- * 
+ *
  * @author dbecker
  */
 public class CopyTreeContentProvider implements ITreeContentProvider {
@@ -43,6 +43,7 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 		input.clear();
 		dummies.clear();
 		if (newInput != null && newInput instanceof Collection<?>) {
+			@SuppressWarnings("unchecked")
 			final Collection<? extends Copy> castInput = (Collection<? extends Copy>) newInput;
 			// avoid allocation inside loop
 			int groupId = -1;
@@ -52,7 +53,8 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 				groupId = next.getGroupId();
 				// add copy to grouped copies if it has a valid group id
 				if (groupId > -1) {
-					final Set<Copy> group = groupedCopies.containsKey(groupId) ? groupedCopies.get(groupId) : new HashSet<Copy>();
+					final Set<Copy> group = groupedCopies.containsKey(groupId) ? groupedCopies.get(groupId)
+							: new HashSet<Copy>();
 					group.add(next);
 					groupedCopies.put(Integer.valueOf(groupId), group);
 				} else {
@@ -61,7 +63,8 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 				}
 			}
 		}
-		// add dummy objects for each group, and add this dummy to regular input list
+		// add dummy objects for each group, and add this dummy to regular input
+		// list
 		final Iterator<Integer> iterator = groupedCopies.keySet().iterator();
 		while (iterator.hasNext()) {
 			final Integer next = iterator.next();

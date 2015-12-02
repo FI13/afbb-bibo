@@ -6,41 +6,42 @@
 
 package de.afbb.bibo.servlet.model;
 
-import de.afbb.bibo.servlet.db.DBConnector;
 import java.sql.SQLException;
 import java.util.Calendar;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import de.afbb.bibo.servlet.db.DBConnector;
 
 /**
  *
  * @author fi13.pendrulat
  */
 public class Session {
-    String name;
-    int id;
-    Calendar date;
 
-    public Session(String name, Calendar date) {
-        this.name = name;
-        this.date = date;
-        try {
-            this.id = DBConnector.getInstance().getCuratorId(name);
-        } catch (SQLException ex) {
-            Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+	String name;
+	int id;
+	Calendar date;
 
-    public int getId() {
-        return id;
-    }
+	public Session(final String name, final Calendar date) {
+		this.name = name;
+		this.date = date;
+		try {
+			this.id = DBConnector.getInstance().getCuratorId(name);
+		} catch (final SQLException ex) {
+			Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 
-    public String getName() {
-        return name;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public Calendar getDate() {
-        return date;
-    }
+	public String getName() {
+		return name;
+	}
+
+	public Calendar getDate() {
+		return date;
+	}
 }

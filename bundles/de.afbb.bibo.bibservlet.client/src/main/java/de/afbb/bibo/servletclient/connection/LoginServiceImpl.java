@@ -21,33 +21,32 @@ import de.afbb.bibo.share.ILoginService;
  */
 public class LoginServiceImpl implements ILoginService {
 
-    @Override
-    public String requestSaltForUserName(String userName) throws ConnectException {
-        Map<String, String> params = new HashMap();
-        params.put("name", userName);
+	@Override
+	public String requestSaltForUserName(final String userName) throws ConnectException {
+		final Map<String, String> params = new HashMap<String, String>();
+		params.put("name", userName);
 
-        HttpResponse resp
-                = ServerConnection.getInstance().request("/login/requestSalt", "GET", params, null);
-        if (resp.getStatus() == HttpServletResponse.SC_OK) {
-            return resp.getData();
-        } else {
-            throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
-        }
-    }
+		final HttpResponse resp = ServerConnection.getInstance().request("/login/requestSalt", "GET", params, null);
+		if (resp.getStatus() == HttpServletResponse.SC_OK) {
+			return resp.getData();
+		} else {
+			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+		}
+	}
 
-    @Override
-    public boolean loginWithHash(String userName, String hashedPassword) throws ConnectException {
-        return ServerConnection.getInstance().login(userName, hashedPassword);
+	@Override
+	public boolean loginWithHash(final String userName, final String hashedPassword) throws ConnectException {
+		return ServerConnection.getInstance().login(userName, hashedPassword);
 
-    }
+	}
 
-    @Override
-    public void invalidateSession() {
-        try {
-            ServerConnection.getInstance().logout();
-        } catch (ConnectException ex) {
-            Logger.getLogger(LoginServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+	@Override
+	public void invalidateSession() {
+		try {
+			ServerConnection.getInstance().logout();
+		} catch (final ConnectException ex) {
+			Logger.getLogger(LoginServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 
 }

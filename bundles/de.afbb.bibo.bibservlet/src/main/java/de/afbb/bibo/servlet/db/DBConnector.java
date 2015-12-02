@@ -117,7 +117,7 @@ public class DBConnector {
 	}
 
 	public List<Curator> getCurator() throws SQLException {
-		final List<Curator> result = new ArrayList();
+		final List<Curator> result = new ArrayList<Curator>();
 		log.debug("list all users");
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet resultSet = statement
@@ -153,7 +153,7 @@ public class DBConnector {
 	}
 
 	public List<MediumType> getMediumTypes() throws SQLException {
-		final List<MediumType> result = new ArrayList();
+		final List<MediumType> result = new ArrayList<MediumType>();
 		log.debug("list all medium types");
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet resultSet = statement
@@ -212,7 +212,7 @@ public class DBConnector {
 	}
 
 	public List<Medium> getMedium() throws SQLException {
-		final List<Medium> result = new ArrayList();
+		final List<Medium> result = new ArrayList<Medium>();
 		log.debug("get all media");
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet mediaSet = statement
@@ -278,7 +278,7 @@ public class DBConnector {
 	}
 
 	public Collection<List<Copy>> getCopies() throws SQLException {
-		final Map<Integer, List<Copy>> result = new HashMap();
+		final Map<Integer, List<Copy>> result = new HashMap<Integer, List<Copy>>();
 		log.debug("get all copies");
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet copySet = statement.executeQuery("select Id, Edition, Barcode, Inventarisiert, Zustand, "
@@ -313,7 +313,7 @@ public class DBConnector {
 								new Curator(curatorId), new Curator(lastCuratorId), mediaId, isbn, title, author,
 								language, new MediumType(typeId), publisher);
 						if (!result.containsKey(groupId)) {
-							result.put(groupId, new ArrayList());
+							result.put(groupId, new ArrayList<Copy>());
 						}
 						result.get(groupId).add(copy);
 					}
@@ -355,7 +355,7 @@ public class DBConnector {
 	}
 
 	public List<Borrower> getBorrower() throws SQLException {
-		final List<Borrower> result = new ArrayList();
+		final List<Borrower> result = new ArrayList<>();
 		log.debug("get all borrower");
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet resultSet = statement.executeQuery(

@@ -4,5 +4,6 @@ Bundle-Name: Test
 Bundle-SymbolicName: de.afbb.bibo.share.test
 Bundle-Version: 1.0.0.qualifier
 Fragment-Host: de.afbb.bibo.share;bundle-version="1.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
+ JavaSE-1.8
 Require-Bundle: org.junit
