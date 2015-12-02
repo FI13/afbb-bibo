@@ -7,3 +7,5 @@ Import-Package: de.afbb.bibo.properties,
  de.afbb.bibo.share.model,
  org.apache.commons.codec,
  org.apache.commons.codec.binary
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
+ JavaSE-1.8

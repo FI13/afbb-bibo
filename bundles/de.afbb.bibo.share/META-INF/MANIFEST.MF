@@ -10,5 +10,6 @@ Export-Package: de.afbb.bibo.crypto,
  de.afbb.bibo.share,
  de.afbb.bibo.share.impl,
  de.afbb.bibo.share.model
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
+ JavaSE-1.8
 Bundle-Vendor: FI13
