@@ -1,7 +1,6 @@
 package de.afbb.bibo.share.internal.stub.impl;
 
 import java.net.ConnectException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -11,7 +10,6 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import de.afbb.bibo.share.ICopyService;
-import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Curator;
@@ -23,9 +21,10 @@ public class CopyStubService implements ICopyService {
 	final HashMap<String, Copy> copies = new HashMap<>();
 
 	public CopyStubService() {
-//		final Borrower b = ((ArrayList<Borrower>) ((BorrowerStubService) ServiceLocator.getInstance()
-//				.getBorrowerService()).borrowers).get(0);
-		Borrower b = (Borrower) new BorrowerStubService().borrowers.toArray()[0];
+		// final Borrower b = ((ArrayList<Borrower>) ((BorrowerStubService)
+		// ServiceLocator.getInstance()
+		// .getBorrowerService()).borrowers).get(0);
+		final Borrower b = (Borrower) new BorrowerStubService().borrowers.toArray()[0];
 		final Curator c = new CuratorStubService().curator;
 		final MediumType t = (MediumType) new TypStubService().types.toArray()[0];
 
