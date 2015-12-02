@@ -12,6 +12,7 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.internal.runtime.LocalizationUtils;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
@@ -28,6 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.ViewPart;
@@ -36,7 +38,7 @@ import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.ui.BiboFormToolkit;
 import de.afbb.bibo.ui.Messages;
 
-abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate {
+abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, ISaveablePart {
 
 	protected static final String EMPTY_STRING = "";//$NON-NLS-1$
 	public static final String INPUT = "input";//$NON-NLS-1$
@@ -274,23 +276,28 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate {
 	// setInput(input);
 	// }
 	//
-	// @Override
-	// public void doSave(final IProgressMonitor monitor) {
-	// }
-	//
-	// @Override
-	// public void doSaveAs() {
-	// }
-	//
-	// @Override
-	// public boolean isDirty() {
-	// return false;
-	// }
-	//
-	// @Override
-	// public boolean isSaveAsAllowed() {
-	// return false;
-	// }
+	@Override
+	public void doSave(final IProgressMonitor monitor) {
+	}
+
+	@Override
+	public void doSaveAs() {
+	}
+
+	@Override
+	public boolean isDirty() {
+		return input != null && !input.equals(inputCache);
+	}
+
+	@Override
+	public boolean isSaveAsAllowed() {
+		return false;
+	}
+
+	@Override
+	public boolean isSaveOnCloseNeeded() {
+		return false;
+	}
 
 	@Override
 	public void dispose() {

@@ -54,16 +54,6 @@ public class BorrowerView extends AbstractView<Borrower> {
 		borrowerForm.setFocus();
 	}
 
-	// @Override
-	// public void doSave(final IProgressMonitor monitor) {
-	//
-	// }
-	//
-	// @Override
-	// public boolean isDirty() {
-	// return !input.equals(inputCache);
-	// }
-
 	@Override
 	protected Composite initUi(final Composite parent) throws ConnectException {
 		final Composite content = toolkit.createComposite(parent, SWT.NONE);
