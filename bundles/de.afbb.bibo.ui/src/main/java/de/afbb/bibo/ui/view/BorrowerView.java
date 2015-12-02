@@ -127,4 +127,23 @@ public class BorrowerView extends AbstractView<Borrower> {
 		job.schedule();
 	}
 
+	@Override
+	public void doSave(final IProgressMonitor monitor) {
+		final Job saveJob = new Job("Speichere Änderungen") {
+
+			@Override
+			protected IStatus run(final IProgressMonitor monitor) {
+				try {
+					ServiceLocator.getInstance().getBorrowerService().update(input);
+				} catch (final ConnectException e) {
+					handle(e);
+				}
+				return Status.OK_STATUS;
+			}
+
+		};
+		saveJob.schedule();
+		closeView();
+	}
+
 }
