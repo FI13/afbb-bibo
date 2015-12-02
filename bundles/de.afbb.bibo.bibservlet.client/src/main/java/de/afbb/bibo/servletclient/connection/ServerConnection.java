@@ -12,6 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -54,8 +55,8 @@ public class ServerConnection {
 	 * @return HttpResponse
 	 * @throws java.net.ConnectException
 	 */
-	public HttpResponse request(String url, String method, Map<String, String> params, String json)
-			throws ConnectException {
+	public HttpResponse request(final String url, final String method, final Map<String, String> params,
+			final String json) throws ConnectException {
 		// Check for logged in
 		if (!isLoggedIn && !url.startsWith("/login")) {
 			throw new ConnectException("trying to access data without logging in first.");
@@ -65,20 +66,20 @@ public class ServerConnection {
 		URL servletURL;
 		String request = HOST + url + "?";
 		if (params != null) {
-			for (String key : params.keySet()) {
+			for (final String key : params.keySet()) {
 				request += key + "=" + params.get(key) + "&";
 			}
 		}
 		request = request.substring(0, request.length() - 1);
 		try {
 			servletURL = new URL(request);
-		} catch (MalformedURLException ex) {
+		} catch (final MalformedURLException ex) {
 			throw new ConnectException("MalformedURLException: " + ex.getMessage());
 		}
 
 		// create connection
 		try {
-			HttpURLConnection connection = (HttpURLConnection) servletURL.openConnection();
+			final HttpURLConnection connection = (HttpURLConnection) servletURL.openConnection();
 			if (isLoggedIn) {
 				connection.setRequestProperty("sessionId", sessionToken);
 			}
@@ -86,7 +87,7 @@ public class ServerConnection {
 			connection.connect();
 
 			return new HttpResponse(connection);
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 			throw new ConnectException("IOException: " + ex.getMessage());
 		}
 	}
@@ -102,11 +103,11 @@ public class ServerConnection {
 	 *             if there was an error with the request or if the recieved
 	 *             status code was wrong.
 	 */
-	protected boolean login(String user, String hash) throws ConnectException {
-		Map<String, String> params = new HashMap();
+	protected boolean login(final String user, final String hash) throws ConnectException {
+		final Map<String, String> params = new HashMap<String, String>();
 		params.put("name", user);
 		params.put("hash", hash);
-		HttpResponse resp = request("/login/login", "GET", params, null);
+		final HttpResponse resp = request("/login/login", "GET", params, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
 			isLoggedIn = true;
 			sessionToken = resp.getData();
@@ -125,9 +126,9 @@ public class ServerConnection {
 	 */
 	protected void logout() throws ConnectException {
 		if (isLoggedIn) {
-			Map<String, String> params = new HashMap();
+			final Map<String, String> params = new HashMap<String, String>();
 			params.put("sessionId", sessionToken);
-			HttpResponse resp = request("/login/logout", "GET", params, null);
+			final HttpResponse resp = request("/login/logout", "GET", params, null);
 			if (resp.getStatus() != HttpServletResponse.SC_OK) {
 				throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
 			} else {

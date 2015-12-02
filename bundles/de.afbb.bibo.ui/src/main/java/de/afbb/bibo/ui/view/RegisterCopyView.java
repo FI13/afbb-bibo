@@ -142,7 +142,7 @@ public class RegisterCopyView extends AbstractEditView<CopyInput> {
 		@Override
 		public void handleEvent(final Event event) {
 			highestAssignedGroup++;
-			final Iterator<Copy> iterator = xViewer.getSelection().iterator();
+			final Iterator<Copy> iterator = xViewer.getSelectionIterator();
 			while (iterator.hasNext()) {
 				final Copy next = iterator.next();
 				next.setGroupId(highestAssignedGroup);
@@ -162,7 +162,7 @@ public class RegisterCopyView extends AbstractEditView<CopyInput> {
 			 * set groupId to UNASSIGNED_GROUP for selection
 			 */
 			final Set<Integer> purgedGroupes = new HashSet<>();
-			final Iterator<Copy> iterator = xViewer.getSelection().iterator();
+			final Iterator<Copy> iterator = xViewer.getSelectionIterator();
 			while (iterator.hasNext()) {
 				final Copy copy = iterator.next();
 				if (copies.contains(copy)) {
@@ -250,6 +250,7 @@ public class RegisterCopyView extends AbstractEditView<CopyInput> {
 
 				// check if any item on the selection is grouped
 				boolean grouped = false;
+				@SuppressWarnings("unchecked")
 				final Iterator<Copy> iterator = ((TreeSelection) selection).iterator();
 				while (iterator.hasNext()) {
 					final Copy next = iterator.next();
