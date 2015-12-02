@@ -65,16 +65,15 @@ public class BorrowerForm extends AbstractForm<Borrower> {
 
 	@Override
 	protected void initBinding() throws ConnectException {
-		BindingHelper.bindStringToTextField(textFirstname, input, Borrower.class, Borrower.FIELD_FIRSTNAME,
+		BindingHelper.bindStringToTextField(textFirstname, getInputObservable(), Borrower.FIELD_FIRSTNAME,
 				bindingContext, true);
-		BindingHelper.bindStringToTextField(textLastname, input, Borrower.class, Borrower.FIELD_SURNAME, bindingContext,
+		BindingHelper.bindStringToTextField(textLastname, getInputObservable(), Borrower.FIELD_SURNAME, bindingContext,
 				true);
-		BindingHelper.bindStringToTextField(textEMail, input, Borrower.class, Borrower.FIELD_EMAIL, bindingContext,
+		BindingHelper.bindStringToTextField(textEMail, getInputObservable(), Borrower.FIELD_EMAIL, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(textTel, input, Borrower.class, Borrower.FIELD_PHONENUMER, bindingContext,
+		BindingHelper.bindStringToTextField(textTel, getInputObservable(), Borrower.FIELD_PHONENUMER, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(textInfo, input, Borrower.class, Borrower.FIELD_INFO, bindingContext,
-				false);
+		BindingHelper.bindStringToTextField(textInfo, getInputObservable(), Borrower.FIELD_INFO, bindingContext, false);
 	}
 
 }

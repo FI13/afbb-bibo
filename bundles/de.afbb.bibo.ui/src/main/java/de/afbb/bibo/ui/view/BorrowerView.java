@@ -3,6 +3,8 @@ package de.afbb.bibo.ui.view;
 import java.net.ConnectException;
 import java.util.Collection;
 
+import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -13,10 +15,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.ui.IEditorInput;
 
 import de.afbb.bibo.share.ServiceLocator;
-import de.afbb.bibo.share.internal.model.BorrowerInput;
+import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.ui.form.BorrowerForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
@@ -28,7 +29,7 @@ import de.afbb.bibo.ui.form.StatisticForm;
  * @author philippwiddra
  * @author David Becker
  */
-public class BorrowerView extends AbstractEditView<BorrowerInput> {
+public class BorrowerView extends AbstractView<Borrower> {
 
 	public static final String ID = "de.afbb.bibo.ui.borrower";//$NON-NLS-1$
 	private static final String BORROWER_SHOW = "borrower.show";//$NON-NLS-1$
@@ -39,28 +40,18 @@ public class BorrowerView extends AbstractEditView<BorrowerInput> {
 	private StatisticForm statisticForm;
 
 	@Override
-	protected String computePartName(final BorrowerInput input) {
+	protected String computePartName(final Borrower input) {
 		return input != null ? input.getName() : null;
 	}
 
 	@Override
-	protected BorrowerInput cloneInput(final BorrowerInput input) {
-		return (BorrowerInput) input.clone();
+	protected Borrower cloneInput(final Borrower input) {
+		return (Borrower) input.clone();
 	}
 
 	@Override
 	public void setFocus() {
 		borrowerForm.setFocus();
-	}
-
-	@Override
-	public void doSave(final IProgressMonitor monitor) {
-
-	}
-
-	@Override
-	public boolean isDirty() {
-		return !input.equals(inputCache);
 	}
 
 	@Override
@@ -88,10 +79,14 @@ public class BorrowerView extends AbstractEditView<BorrowerInput> {
 
 	@Override
 	protected void initBinding() {
+		// one-way binding to update the input in sub-form
+		bindingContext.bindValue(BeansObservables.observeValue(borrowerForm, INPUT),
+				BeansObservables.observeValue(this, INPUT), new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER),
+				null);
 	}
 
 	@Override
-	protected void setInput(final IEditorInput editorInput) {
+	public void setInput(final Borrower editorInput) {
 		super.setInput(editorInput);
 		setXViewerInput();
 	}

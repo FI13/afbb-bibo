@@ -78,19 +78,20 @@ public class MediumInformationForm extends AbstractForm<Copy> {
 
 	@Override
 	protected void initBinding() throws ConnectException {
-		BindingHelper.bindStringToTextField(txtEdition, input, Copy.class, Copy.FIELD_EDITION, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtTitle, input, Copy.class, Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TITLE,
-				bindingContext, false);
-		BindingHelper.bindStringToTextField(txtAuthor, input, Copy.class, Copy.FIELD_MEDIUM + DOT + Medium.FIELD_AUTHOR,
-				bindingContext, false);
-		BindingHelper.bindStringToTextField(txtLanguage, input, Copy.class,
+		BindingHelper.bindStringToTextField(txtEdition, getInputObservable(), Copy.FIELD_EDITION, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtTitle, getInputObservable(),
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TITLE, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtAuthor, getInputObservable(),
+				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_AUTHOR, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtLanguage, getInputObservable(),
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_LANGUAGE, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtPublisher, input, Copy.class,
+		BindingHelper.bindStringToTextField(txtPublisher, getInputObservable(),
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_PUBLISHER, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtIsbn, input, Copy.class, Copy.FIELD_MEDIUM + DOT + Medium.FIELD_ISBN,
+		BindingHelper.bindStringToTextField(txtIsbn, getInputObservable(), Copy.FIELD_MEDIUM + DOT + Medium.FIELD_ISBN,
 				bindingContext, false);
 
-		BindingHelper.bindObjectToCCombo(comboMediumType, input, Copy.class,
+		BindingHelper.bindObjectToCCombo(comboMediumType, getInputObservable(), Copy.class,
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TYPE, MediumType.class,
 				ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(), bindingContext,
 				false);

@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.beans.BeansObservables;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -29,7 +32,6 @@ import org.eclipse.swt.widgets.Text;
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
-import de.afbb.bibo.share.internal.model.BorrowerInput;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
@@ -39,10 +41,11 @@ import de.afbb.bibo.ui.form.CopyMovementForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.form.MediumInformationForm;
 
-public class LendCopyView extends AbstractEditView<BorrowerInput> {
+public class LendCopyView extends AbstractView<Borrower> {
 
 	public static final String ID = "de.afbb.bibo.ui.lend.copy";//$NON-NLS-1$
 	private static final String LEND_COPY = "lend.copy";//$NON-NLS-1$
+	private static final String INPUT_COPY = "copyToModify";//$NON-NLS-1$
 
 	private final Date now = new Date();
 	private boolean printList = true;
@@ -56,10 +59,13 @@ public class LendCopyView extends AbstractEditView<BorrowerInput> {
 	private Button btnPrint;
 
 	private CopyXviewerForm xViewer;
+	private CopyMovementForm movementForm;
+	private MediumInformationForm informationForm;
 
 	private final HashMap<String, Copy> copyCache = new HashMap<>();
 	private final Set<Copy> copies = new HashSet<Copy>();
-	private final Copy copyToModify = new Copy();
+	private Copy copyToModify = new Copy();
+	private final IObservableValue copyToModifyObservable = BeansObservables.observeValue(this, INPUT_COPY);
 
 	/**
 	 * listener that removes the selected item from the list and fills the input
@@ -117,7 +123,7 @@ public class LendCopyView extends AbstractEditView<BorrowerInput> {
 				}
 			};
 			job.schedule();
-			closeEditor();
+			closeView();
 		}
 	};
 
@@ -182,10 +188,10 @@ public class LendCopyView extends AbstractEditView<BorrowerInput> {
 		txtCondition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.MULTI);
 
 		final Group statusGroup = toolkit.createGroup(content, "Informationen");
-		new CopyMovementForm(statusGroup, copyToModify, bindingContext, toolkit);
+		movementForm = new CopyMovementForm(statusGroup, copyToModify, bindingContext, toolkit);
 
 		final Group mediumGroup = toolkit.createGroup(content, "Allgemein");
-		new MediumInformationForm(mediumGroup, copyToModify, bindingContext, toolkit);
+		informationForm = new MediumInformationForm(mediumGroup, copyToModify, bindingContext, toolkit);
 
 		final Composite middle = toolkit.createComposite(content, SWT.NONE);
 		middle.setLayout(new GridLayout(3, false));
@@ -234,10 +240,16 @@ public class LendCopyView extends AbstractEditView<BorrowerInput> {
 
 	@Override
 	protected void initBinding() throws ConnectException {
-		BindingHelper.bindStringToTextField(txtBarcode, copyToModify, Copy.class, Copy.FIELD_BARCODE, bindingContext,
+		BindingHelper.bindStringToTextField(txtBarcode, copyToModifyObservable, Copy.FIELD_BARCODE, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(txtCondition, copyToModify, Copy.class, Copy.FIELD_CONDITION,
-				bindingContext, false);
+		BindingHelper.bindStringToTextField(txtCondition, copyToModifyObservable, Copy.FIELD_CONDITION, bindingContext,
+				false);
+
+		// one-way binding to update the pseudo-input in sub-forms
+		bindingContext.bindValue(BeansObservables.observeValue(movementForm, INPUT), copyToModifyObservable,
+				new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		bindingContext.bindValue(BeansObservables.observeValue(informationForm, INPUT), copyToModifyObservable,
+				new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 	}
 
 	@Override
@@ -286,31 +298,32 @@ public class LendCopyView extends AbstractEditView<BorrowerInput> {
 	 * @param copy
 	 */
 	private void setCopyToModify(final Copy copy) {
-		copyToModify.setBarcode(copy != null ? copy.getBarcode() : null);
-		copyToModify.getMedium().setAuthor(copy != null ? copy.getMedium().getAuthor() : null);
-		copyToModify.setCondition(copy != null ? copy.getCondition() : null);
-		copyToModify.setEdition(copy != null ? copy.getEdition() : null);
-		copyToModify.setInventoryDate(copy != null ? copy.getInventoryDate() : null);
-		copyToModify.getMedium().setIsbn(copy != null ? copy.getMedium().getIsbn() : null);
-		copyToModify.getMedium().setLanguage(copy != null ? copy.getMedium().getLanguage() : null);
-		copyToModify.setLastBorrowDate(copy != null ? copy.getLastBorrowDate() : null);
-		copyToModify.setLastBorrower(copy != null ? copy.getLastBorrower() : null);
-		copyToModify.setLastCurator(copy != null ? copy.getLastCurator() : null);
-		copyToModify.getMedium().setPublisher(copy != null ? copy.getMedium().getPublisher() : null);
-		copyToModify.getMedium().setTitle(copy != null ? copy.getMedium().getTitle() : null);
-		copyToModify.getMedium().setType(copy != null ? copy.getMedium().getType() : null);
-
-		copyToModify.setBorrower(copy != null ? (Borrower) getEditorInput() : null);
-		copyToModify.setBorrowDate(copy != null ? now : null);
-		copyToModify.setCurator(copy != null ? SessionHolder.getInstance().getCurator() : null);
-
+		if (copy != null) {
+			copy.setBorrower(input);
+			copy.setBorrowDate(now);
+			copy.setCurator(SessionHolder.getInstance().getCurator());
+		}
+		changeSupport.firePropertyChange(INPUT_COPY, copyToModify, copyToModify = copy != null ? copy : new Copy());
 		btnToList.setEnabled(copy != null);
 		bindingContext.updateTargets();
 	}
 
+	/**
+	 * @return the copyToModify
+	 */
+	public Copy getCopyToModify() {
+		return copyToModify;
+	}
+
 	@Override
-	protected String computePartName(final BorrowerInput input) {
+	protected String computePartName(final Borrower input) {
 		return input != null ? "Ausleihe an " + input.getName() : null;
+	}
+
+	@Override
+	public boolean isDirty() {
+		// no dirty state for this view
+		return false;
 	}
 
 }

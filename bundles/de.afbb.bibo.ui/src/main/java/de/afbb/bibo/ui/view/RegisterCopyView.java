@@ -30,7 +30,6 @@ import org.eclipse.swt.widgets.Text;
 
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.share.ServiceLocator;
-import de.afbb.bibo.share.internal.model.CopyInput;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.Medium;
@@ -46,13 +45,12 @@ import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
  *
  * @author dbecker
  */
-public class RegisterCopyView extends AbstractEditView<CopyInput> {
+public class RegisterCopyView extends AbstractView<Copy> {
 
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String REGISTER_COPY = "register.copy";//$NON-NLS-1$
 
 	private final Set<Copy> copies = new HashSet<Copy>();
-	private final Copy copyToModify = new Copy();
 
 	private Group idGroup;
 	private Text txtBarcode;
@@ -83,17 +81,9 @@ public class RegisterCopyView extends AbstractEditView<CopyInput> {
 
 		@Override
 		public void handleEvent(final Event event) {
-			final Copy clone = (Copy) copyToModify.clone();
+			final Copy clone = (Copy) input.clone();
 			copies.add(clone);
-			copyToModify.setBarcode(EMPTY_STRING);
-			copyToModify.getMedium().setIsbn(EMPTY_STRING);
-			copyToModify.setEdition(EMPTY_STRING);
-			copyToModify.getMedium().setTitle(EMPTY_STRING);
-			copyToModify.getMedium().setAuthor(EMPTY_STRING);
-			copyToModify.getMedium().setLanguage(EMPTY_STRING);
-			copyToModify.getMedium().setPublisher(EMPTY_STRING);
-			copyToModify.setCondition(EMPTY_STRING);
-			copyToModify.getMedium().setType(null);
+			setInput(new Copy());
 			updateSaveButton();
 			xViewer.setInput(copies);
 			bindingContext.updateTargets();
@@ -116,15 +106,7 @@ public class RegisterCopyView extends AbstractEditView<CopyInput> {
 			final TreePath[] paths = xViewer.getSelection().getPaths();
 			if (paths.length > 0) {
 				final Copy copy = (Copy) paths[0].getLastSegment();
-				copyToModify.setBarcode(copy.getBarcode());
-				copyToModify.getMedium().setIsbn(copy.getMedium().getIsbn());
-				copyToModify.setEdition(copy.getEdition());
-				copyToModify.getMedium().setTitle(copy.getMedium().getTitle());
-				copyToModify.getMedium().setAuthor(copy.getMedium().getAuthor());
-				copyToModify.getMedium().setLanguage(copy.getMedium().getLanguage());
-				copyToModify.getMedium().setPublisher(copy.getMedium().getPublisher());
-				copyToModify.getMedium().setType(copy.getMedium().getType());
-				copyToModify.setCondition(copy.getCondition());
+				setInput(copy);
 				copies.remove(copy);
 				checkGroups();
 				updateSaveButton();
@@ -375,7 +357,7 @@ public class RegisterCopyView extends AbstractEditView<CopyInput> {
 
 				};
 				job.schedule();
-				closeEditor();
+				closeView();
 			}
 		});
 
@@ -390,24 +372,24 @@ public class RegisterCopyView extends AbstractEditView<CopyInput> {
 
 	@Override
 	protected void initBinding() throws ConnectException {
-		BindingHelper.bindStringToTextField(txtBarcode, copyToModify, Copy.class, Copy.FIELD_BARCODE, bindingContext,
+		BindingHelper.bindStringToTextField(txtBarcode, getInputObservable(), Copy.FIELD_BARCODE, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(txtEdition, copyToModify, Copy.class, Copy.FIELD_EDITION, bindingContext,
+		BindingHelper.bindStringToTextField(txtEdition, getInputObservable(), Copy.FIELD_EDITION, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(txtCondition, copyToModify, Copy.class, Copy.FIELD_CONDITION,
-				bindingContext, false);
-		BindingHelper.bindStringToTextField(txtTitle, copyToModify, Copy.class,
+		BindingHelper.bindStringToTextField(txtCondition, getInputObservable(), Copy.FIELD_CONDITION, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtTitle, getInputObservable(),
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TITLE, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtAuthor, copyToModify, Copy.class,
+		BindingHelper.bindStringToTextField(txtAuthor, getInputObservable(),
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_AUTHOR, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtLanguage, copyToModify, Copy.class,
+		BindingHelper.bindStringToTextField(txtLanguage, getInputObservable(),
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_LANGUAGE, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtPublisher, copyToModify, Copy.class,
+		BindingHelper.bindStringToTextField(txtPublisher, getInputObservable(),
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_PUBLISHER, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtIsbn, copyToModify, Copy.class,
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_ISBN, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtIsbn, getInputObservable(), Copy.FIELD_MEDIUM + DOT + Medium.FIELD_ISBN,
+				bindingContext, false);
 
-		BindingHelper.bindObjectToCCombo(comboMediumType, copyToModify, Copy.class,
+		BindingHelper.bindObjectToCCombo(comboMediumType, getInputObservable(), Copy.class,
 				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TYPE, MediumType.class,
 				ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(), bindingContext,
 				false);
@@ -421,5 +403,11 @@ public class RegisterCopyView extends AbstractEditView<CopyInput> {
 
 	private void updateSaveButton() {
 		btnSave.setEnabled(!copies.isEmpty());
+	}
+
+	@Override
+	public boolean isDirty() {
+		// no dirty state for this view
+		return false;
 	}
 }

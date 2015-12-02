@@ -5,7 +5,6 @@ import java.util.Date;
 
 import org.eclipse.core.databinding.conversion.Converter;
 
-import de.afbb.bibo.share.internal.model.BorrowerInput;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Curator;
 
@@ -24,10 +23,7 @@ public class ObjectToStringConverter extends Converter {
 	@Override
 	public Object convert(final Object fromObject) {
 		if (fromObject instanceof Borrower) {
-			return new BorrowerInput((Borrower) fromObject).getName();
-		}
-		if (fromObject instanceof BorrowerInput) {
-			return ((BorrowerInput) fromObject).getName();
+			return ((Borrower) fromObject).getName();
 		}
 		if (fromObject instanceof Curator) {
 			return ((Curator) fromObject).getName();

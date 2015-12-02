@@ -67,14 +67,18 @@ public class CopyMovementForm extends AbstractForm<Copy> {
 
 	@Override
 	protected void initBinding() {
-		BindingHelper.bindObjectToTextField(txtBorrowDate, input, Copy.class, Copy.FIELD_DATE_BORROW, bindingContext);
-		BindingHelper.bindObjectToTextField(txtLastBorrowDate, input, Copy.class, Copy.FIELD_DATE_LAST_BORROW,
+		BindingHelper.bindObjectToTextField(txtBorrowDate, getInputObservable(), Copy.class, Copy.FIELD_DATE_BORROW,
 				bindingContext);
+		BindingHelper.bindObjectToTextField(txtLastBorrowDate, getInputObservable(), Copy.class,
+				Copy.FIELD_DATE_LAST_BORROW, bindingContext);
 
-		BindingHelper.bindObjectToTextField(txtCurator, input, Copy.class, Copy.FIELD_CURATOR, bindingContext);
-		BindingHelper.bindObjectToTextField(txtLastCurator, input, Copy.class, Copy.FIELD_LAST_CURATOR, bindingContext);
-		BindingHelper.bindObjectToTextField(txtBorrower, input, Copy.class, Copy.FIELD_BORROWER, bindingContext);
-		BindingHelper.bindObjectToTextField(txtLastBorrower, input, Copy.class, Copy.FIELD_LAST_BORROWER,
+		BindingHelper.bindObjectToTextField(txtCurator, getInputObservable(), Copy.class, Copy.FIELD_CURATOR,
+				bindingContext);
+		BindingHelper.bindObjectToTextField(txtLastCurator, getInputObservable(), Copy.class, Copy.FIELD_LAST_CURATOR,
+				bindingContext);
+		BindingHelper.bindObjectToTextField(txtBorrower, getInputObservable(), Copy.class, Copy.FIELD_BORROWER,
+				bindingContext);
+		BindingHelper.bindObjectToTextField(txtLastBorrower, getInputObservable(), Copy.class, Copy.FIELD_LAST_BORROWER,
 				bindingContext);
 	}
 

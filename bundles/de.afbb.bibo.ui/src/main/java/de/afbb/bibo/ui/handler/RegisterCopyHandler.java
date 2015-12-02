@@ -3,11 +3,11 @@ package de.afbb.bibo.ui.handler;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
-import de.afbb.bibo.share.internal.model.CopyInput;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.ui.view.RegisterCopyView;
 
@@ -22,7 +22,10 @@ public class RegisterCopyHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
-			page.openEditor(new CopyInput(), RegisterCopyView.ID);
+			final IViewPart showView = page.showView(RegisterCopyView.ID);
+			if (showView instanceof RegisterCopyView) {
+				((RegisterCopyView) showView).setInput(new Copy());
+			}
 		} catch (final PartInitException e) {
 			e.printStackTrace();
 			// shouldn't happen
