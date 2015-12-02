@@ -43,8 +43,6 @@ public class ManageBorrowerHandler extends AbstractHandler {
 						if (showView instanceof BorrowerView) {
 							((BorrowerView) showView).setInput((Borrower) input);
 						}
-						// .openEditor((IEditorInput) input, BorrowerView.ID,
-						// true);
 					} catch (final PartInitException e) {
 						e.printStackTrace();
 					}
