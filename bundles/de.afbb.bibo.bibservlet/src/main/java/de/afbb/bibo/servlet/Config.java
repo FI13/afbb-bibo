@@ -19,10 +19,11 @@ public final class Config {
 
 	private final String PASSWORD;
 	private final String USER_NAME;
-	private final String URL;
+	private final String MYSQL_URL;
 	private final String DATABASE_NAME;
 	private final int TOKEN_EXPIRATION_TIME_IN_HOURS;
 	private final int PORT;
+	private final int MYSQL_PORT;
 
 	private static Config instance;
 
@@ -30,7 +31,8 @@ public final class Config {
 		TOKEN_EXPIRATION_TIME_IN_HOURS = Integer.valueOf(BiBoProperties.get("TOKEN_EXPIRATION_TIME_IN_HOURS"));
 		PORT = Integer.valueOf(BiBoProperties.get("SERVER_PORT"));
 		DATABASE_NAME = BiBoProperties.get("DATABASE_NAME");
-		URL = BiBoProperties.get("MYSQL_URL");
+		MYSQL_URL = BiBoProperties.get("MYSQL_URL");
+		MYSQL_PORT = Integer.valueOf(BiBoProperties.get("MYSQL_PORT"));
 		USER_NAME = BiBoProperties.get("USER_NAME");
 		PASSWORD = BiBoProperties.get("PASSWORD");
 	}
@@ -50,8 +52,8 @@ public final class Config {
 		return USER_NAME;
 	}
 
-	public String getURL() {
-		return URL;
+	public String getMYSQL_URL() {
+		return MYSQL_URL;
 	}
 
 	public String getDATABASE_NAME() {
@@ -67,6 +69,13 @@ public final class Config {
 	 */
 	public int getPORT() {
 		return PORT;
+	}
+
+	/**
+	 * @return the mYSQL_PORT
+	 */
+	public int getMYSQL_PORT() {
+		return MYSQL_PORT;
 	}
 
 }
