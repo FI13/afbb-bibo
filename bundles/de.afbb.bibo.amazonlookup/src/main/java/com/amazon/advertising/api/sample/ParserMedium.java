@@ -1,5 +1,6 @@
 package com.amazon.advertising.api.sample;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
@@ -18,29 +19,42 @@ import de.afbb.bibo.share.model.Medium;
 
 public final class ParserMedium {
 
-	private ParserMedium() {
-	}
-
 	/*
 	 * Your AWS Access Key ID, as taken from the AWS Your Account page.
 	 */
-	private static final String AWS_ACCESS_KEY_ID = BiBoProperties.get("AWS_ACCESS_KEY_ID");
+	private final String AWS_ACCESS_KEY_ID;
 
 	/*
 	 * Your AWS Secret Key corresponding to the above ID, as taken from the AWS
 	 * Your Account page.
 	 */
-	private static final String AWS_SECRET_KEY = BiBoProperties.get("AWS_SECRET_KEY");
+	private final String AWS_SECRET_KEY;
 
 	/*
 	 * Use the end-point according to the region you are interested in.
 	 */
-	private static final String ENDPOINT = BiBoProperties.get("ENDPOINT");
+	private final String ENDPOINT;
 
 	/*
 	 * Use the end-point according to the region you are interested in.
 	 */
-	private static final String ASSOCIATE_TAG = BiBoProperties.get("ASSOCIATE_TAG");
+	private final String ASSOCIATE_TAG;
+
+	private static ParserMedium instance;
+
+	private ParserMedium() throws IOException {
+		AWS_ACCESS_KEY_ID = BiBoProperties.get("AWS_ACCESS_KEY_ID");
+		AWS_SECRET_KEY = BiBoProperties.get("AWS_SECRET_KEY");
+		ENDPOINT = BiBoProperties.get("ENDPOINT");
+		ASSOCIATE_TAG = BiBoProperties.get("ASSOCIATE_TAG");
+	}
+
+	public static ParserMedium getInstance() throws IOException {
+		if (instance == null) {
+			instance = new ParserMedium();
+		}
+		return instance;
+	}
 
 	/**
 	 * Bereitgestellte Funktion von Amazon
@@ -48,7 +62,7 @@ public final class ParserMedium {
 	 * @param isbn
 	 * @return
 	 */
-	public static String getUrl(final String isbn) {
+	public String getUrl(final String isbn) {
 
 		/*
 		 * Set up the signed requests helper.
@@ -89,14 +103,14 @@ public final class ParserMedium {
 	 *            Datenabgerufen werden sollen
 	 * @return Medium
 	 */
-	public static Medium getMedium(final String isbn) {
+	public Medium getMedium(final String isbn) {
 		final Medium medium = new Medium();
 
 		final String tempurl = getUrl(isbn);
 		try
 
 		{
-			if ((Integer.valueOf(BiBoProperties.get("USE_PROXY")) == 1)) {
+			if (Integer.valueOf(BiBoProperties.get("USE_PROXY")) == 1) {
 				System.setProperty("java.net.useSystemProxies", "true");
 			}
 
@@ -145,4 +159,5 @@ public final class ParserMedium {
 		}
 		return medium;
 	}
+
 }
