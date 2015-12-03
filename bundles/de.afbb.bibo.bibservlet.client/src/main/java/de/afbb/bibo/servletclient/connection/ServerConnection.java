@@ -6,6 +6,7 @@
 package de.afbb.bibo.servletclient.connection;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -84,6 +85,14 @@ public class ServerConnection {
 				connection.setRequestProperty("sessionId", sessionToken);
 			}
 			connection.setRequestMethod(method);
+			connection.setDoOutput(true);
+			connection.setRequestProperty("Content-Type", "application/json");
+			connection.setUseCaches(false);
+			if (json != null) {
+				final OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+				out.write(json);
+				out.close();
+			}
 			connection.connect();
 
 			return new HttpResponse(connection);
