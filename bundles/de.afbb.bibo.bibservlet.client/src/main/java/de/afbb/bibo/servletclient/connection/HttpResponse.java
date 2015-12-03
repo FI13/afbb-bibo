@@ -32,17 +32,20 @@ public class HttpResponse {
 	 */
 	public HttpResponse(final HttpURLConnection connection) throws IOException {
 		data = "";
-		try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-			String inputLine;
+		try {
+			try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+				String inputLine;
 
-			while ((inputLine = in.readLine()) != null) {
-				data += inputLine + "\\n";
+				while ((inputLine = in.readLine()) != null) {
+					data += inputLine + "\n";
+				}
+
+				if (!data.isEmpty()) {
+					data = data.substring(0, data.length() - 1);
+				}
 			}
-			/*
-			 * FIXME will throw an StringIndexOutOfBoundsException for empty
-			 * string (and I don't see why this might be useful otherwise
-			 */
-			// data = data.substring(0, data.length() - 1);
+		} catch (final IOException e) {
+			// done this way to preserve status code
 		}
 		status = connection.getResponseCode();
 	}
