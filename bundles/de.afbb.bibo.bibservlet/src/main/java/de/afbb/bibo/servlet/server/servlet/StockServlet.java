@@ -38,7 +38,7 @@ public class StockServlet {
 		gson = new Gson();
 	}
 
-	protected void processRequest() throws Exception {
+	protected void processRequest() throws IOException, SQLException {
 		final String stockAction = Utils.getRequestPart(request, 1);
 		log.debug("entering STOCK Servlet...");
 

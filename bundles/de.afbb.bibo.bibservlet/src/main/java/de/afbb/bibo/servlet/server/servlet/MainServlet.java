@@ -6,6 +6,7 @@
 package de.afbb.bibo.servlet.server.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 
 import javax.servlet.ServletException;
@@ -41,6 +42,7 @@ public class MainServlet extends HttpServlet {
 	 *            servlet request
 	 * @param response
 	 *            servlet response
+	 * @throws NumberFormatException
 	 * @throws ServletException
 	 *             if a servlet-specific error occurs
 	 * @throws IOException
@@ -49,7 +51,7 @@ public class MainServlet extends HttpServlet {
 	 * @throws org.apache.commons.fileupload.FileUploadException
 	 */
 	protected void processRequest(final HttpServletRequest request, final HttpServletResponse response)
-			throws Exception {
+			throws NumberFormatException, IOException {
 		boolean valid = true;
 		final String requestRoot = Utils.getRequestPart(request, 0);
 		log.debug("entering MAIN Servlet...");
@@ -64,23 +66,28 @@ public class MainServlet extends HttpServlet {
 
 			response.setContentType("application/json");
 
-			switch (requestRoot) {
-
-			case "/login":
-				new LoginServlet(request, response).processRequest();
-				break;
-			case "/user":
-				new UserServlet(request, response).processRequest();
-				break;
-			case "/stock":
-				new StockServlet(request, response).processRequest();
-				break;
-			case "/borrow":
-				new BorrowServlet(request, response).processRequest();
-				break;
-			default:
-				Utils.returnErrorMessage(MainServlet.class, request, response);
-				break;
+			try {
+				switch (requestRoot) {
+				case "/login":
+					new LoginServlet(request, response).processRequest();
+					break;
+				case "/user":
+					new UserServlet(request, response).processRequest();
+					break;
+				case "/stock":
+					new StockServlet(request, response).processRequest();
+					break;
+				case "/borrow":
+					new BorrowServlet(request, response).processRequest();
+					break;
+				default:
+					Utils.returnErrorMessage(MainServlet.class, request, response);
+					break;
+				}
+			} catch (final SQLException e) {
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			} catch (final IOException e) {
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			}
 		}
 	}
