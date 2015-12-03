@@ -96,7 +96,16 @@ public class MainServlet extends HttpServlet {
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) {
 		try {
 			processRequest(request, response);
-		} catch (final Exception ex) {
+		} catch (final NumberFormatException | IOException ex) {
+			java.util.logging.Logger.getLogger(MainServlet.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	@Override
+	protected void doPost(final HttpServletRequest request, final HttpServletResponse response) {
+		try {
+			processRequest(request, response);
+		} catch (final NumberFormatException | IOException ex) {
 			java.util.logging.Logger.getLogger(MainServlet.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
