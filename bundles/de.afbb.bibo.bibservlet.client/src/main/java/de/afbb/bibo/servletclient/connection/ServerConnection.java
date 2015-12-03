@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
+import de.afbb.bibo.properties.BiBoProperties;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
 
@@ -27,20 +28,30 @@ import de.afbb.bibo.share.model.Curator;
  */
 public class ServerConnection {
 
-	private static final String HOST = "http://localhost:8080";
+	private final String HOST;
+
+	private final String URL;
+	private final int PORT;
 
 	private String sessionToken;
 	private boolean isLoggedIn;
 
 	private static ServerConnection INSTANCE;
 
-	private ServerConnection() {
+	private ServerConnection() throws NumberFormatException, IOException {
 		isLoggedIn = false;
+		URL = BiBoProperties.get("SERVER_URL");
+		PORT = Integer.valueOf(BiBoProperties.get("SERVER_PORT"));
+		HOST = "http://" + URL + ":" + PORT;
 	}
 
-	public static ServerConnection getInstance() {
+	public static ServerConnection getInstance() throws ConnectException {
 		if (INSTANCE == null) {
-			INSTANCE = new ServerConnection();
+			try {
+				INSTANCE = new ServerConnection();
+			} catch (NumberFormatException | IOException e) {
+				throw new ConnectException("Can't load configuration");
+			}
 		}
 		return INSTANCE;
 	}
