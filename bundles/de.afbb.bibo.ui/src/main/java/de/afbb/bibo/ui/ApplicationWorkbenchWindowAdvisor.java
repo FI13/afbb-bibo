@@ -9,11 +9,11 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 import de.afbb.bibo.share.SessionHolder;
-import de.afbb.bibo.share.model.Curator;
+import de.afbb.bibo.ui.dialog.LoginDialog;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
-	private static final String TITLE = "AfbB Bibliothek";
+	private static final String TITLE = "AFBB Bibliothek";
 
 	public ApplicationWorkbenchWindowAdvisor(final IWorkbenchWindowConfigurer configurer) {
 		super(configurer);
@@ -36,14 +36,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	public void postWindowOpen() {
 		final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 
-		// FIXME for debugging purposes only! comment out when server is ready!
-		// new LoginDialog(shell).open();
-		// TODO start remove here
-		// SessionHolder.getInstance().setSessionToken("token123");//$NON-NLS-1$
-		final Curator curator = new Curator();
-		curator.setName("Hugo");//$NON-NLS-1$
-		SessionHolder.getInstance().setCurator(curator);
-		// TODO end remove here
+		new LoginDialog(shell).open();
 
 		if (shell != null && !shell.isDisposed()) {
 			shell.setText(TITLE + " - Angemeldet als: " + SessionHolder.getInstance().getCurator().getName());
