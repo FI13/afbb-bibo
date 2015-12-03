@@ -17,7 +17,7 @@ public class BeanExclusionStrategy implements ExclusionStrategy {
 
 	@Override
 	public boolean shouldSkipField(final FieldAttributes arg0) {
-		return arg0.getName().toLowerCase().contains("password");
+		return arg0.getName().equals("password");
 	}
 
 	@Override
