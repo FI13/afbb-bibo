@@ -92,7 +92,6 @@ public class LoginDialog extends AbstractDialog {
 				return false;
 			}
 			setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
-			SessionHolder.getInstance().setCurator(curator);
 			return true;
 		} catch (final ConnectException e) {
 			setMessage(Messages.MESSAGE_ERROR_CONNECTION, IMessageProvider.WARNING);
