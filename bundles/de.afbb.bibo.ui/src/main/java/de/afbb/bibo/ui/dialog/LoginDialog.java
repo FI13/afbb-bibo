@@ -20,6 +20,9 @@ import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
+import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.ui.BiboImageRegistry;
+import de.afbb.bibo.ui.IconSize;
 import de.afbb.bibo.ui.Messages;
 
 /**
@@ -66,6 +69,7 @@ public class LoginDialog extends AbstractDialog {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPassword);
 
 		initBinding();
+		setTitleImage(BiboImageRegistry.getImage(IconType.LOGO, IconSize.huge));
 
 		return area;
 	}
