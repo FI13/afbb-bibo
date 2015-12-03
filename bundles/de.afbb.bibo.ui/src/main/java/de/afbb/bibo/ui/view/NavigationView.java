@@ -10,7 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import de.afbb.bibo.share.impl.NavigationTreeService;
+import de.afbb.bibo.aggregation.NavigationTreeService;
 import de.afbb.bibo.ui.CommandExecutor;
 import de.afbb.bibo.ui.ICommandIds;
 import de.afbb.bibo.ui.provider.NavigationTreeViewContentProvider;

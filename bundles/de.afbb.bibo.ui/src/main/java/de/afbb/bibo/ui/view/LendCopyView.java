@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import de.afbb.bibo.databinding.BindingHelper;
-import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;

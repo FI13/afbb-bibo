@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import de.afbb.bibo.databinding.BindingHelper;
-import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.Medium;

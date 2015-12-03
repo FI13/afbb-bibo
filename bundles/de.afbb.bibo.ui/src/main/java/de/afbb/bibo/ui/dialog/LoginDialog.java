@@ -17,15 +17,16 @@ import org.eclipse.ui.PlatformUI;
 
 import de.afbb.bibo.crypto.CryptoUtil;
 import de.afbb.bibo.databinding.BindingHelper;
-import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
 import de.afbb.bibo.ui.Messages;
 
 /**
  * dialog that tries to log the user in.<br>
- * will set the returned session token into {@link SessionHolder} on success and will terminate the program if the user cancels the dialog
- * 
+ * will set the returned session token into {@link SessionHolder} on success and
+ * will terminate the program if the user cancels the dialog
+ *
  * @author dbecker
  */
 public class LoginDialog extends AbstractDialog {
@@ -81,9 +82,10 @@ public class LoginDialog extends AbstractDialog {
 
 	private boolean validateLogin() {
 		try {
-			final String salt = ServiceLocator.getInstance().getLoginService().requestSaltForUserName(curator.getName());
+			final String salt = ServiceLocator.getInstance().getLoginService()
+					.requestSaltForUserName(curator.getName());
 			final String hashPassword = CryptoUtil.hashPassword(curator.getPassword(), salt);
-			boolean loggedIn = ServiceLocator.getInstance().getLoginService().loginWithHash(curator.getName(),
+			final boolean loggedIn = ServiceLocator.getInstance().getLoginService().loginWithHash(curator.getName(),
 					hashPassword);
 			if (!loggedIn) {
 				setMessage("Name und Passwort stimmen nicht überein !", IMessageProvider.ERROR);
@@ -101,7 +103,8 @@ public class LoginDialog extends AbstractDialog {
 	@Override
 	protected void initBinding() {
 		BindingHelper.bindStringToTextField(txtName, curator, Curator.class, Curator.FIELD_NAME, bindingContext, true);
-		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext, true);
+		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext,
+				true);
 	}
 
 	@Override

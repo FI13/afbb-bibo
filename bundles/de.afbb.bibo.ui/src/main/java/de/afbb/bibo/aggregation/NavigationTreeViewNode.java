@@ -1,8 +1,10 @@
-package de.afbb.bibo.share.impl;
+package de.afbb.bibo.aggregation;
 
 import java.util.ArrayList;
 
 import org.eclipse.jface.viewers.TreeNode;
+
+import de.afbb.bibo.share.model.NavigationTreeNodeType;
 
 public class NavigationTreeViewNode extends TreeNode {
 

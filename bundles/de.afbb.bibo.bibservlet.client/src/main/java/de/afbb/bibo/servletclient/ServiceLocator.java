@@ -1,11 +1,17 @@
-package de.afbb.bibo.share;
+package de.afbb.bibo.servletclient;
 
-import de.afbb.bibo.share.internal.stub.impl.BorrowerStubService;
-import de.afbb.bibo.share.internal.stub.impl.CopyStubService;
-import de.afbb.bibo.share.internal.stub.impl.CuratorStubService;
-import de.afbb.bibo.share.internal.stub.impl.LoginStubService;
-import de.afbb.bibo.share.internal.stub.impl.MediumStubService;
-import de.afbb.bibo.share.internal.stub.impl.TypStubService;
+import de.afbb.bibo.servletclient.internal.stub.BorrowerStubService;
+import de.afbb.bibo.servletclient.internal.stub.CopyStubService;
+import de.afbb.bibo.servletclient.internal.stub.CuratorStubService;
+import de.afbb.bibo.servletclient.internal.stub.LoginStubService;
+import de.afbb.bibo.servletclient.internal.stub.MediumStubService;
+import de.afbb.bibo.servletclient.internal.stub.TypStubService;
+import de.afbb.bibo.share.IBorrowerService;
+import de.afbb.bibo.share.ICopyService;
+import de.afbb.bibo.share.ICuratorService;
+import de.afbb.bibo.share.ILoginService;
+import de.afbb.bibo.share.IMediumService;
+import de.afbb.bibo.share.ITypService;
 
 /**
  * finds a service that can handle the request

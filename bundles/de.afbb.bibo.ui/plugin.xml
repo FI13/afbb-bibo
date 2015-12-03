@@ -269,7 +269,7 @@
                   ifEmpty="false"
                   operator="and">
                <instanceof
-                     value="de.afbb.bibo.share.impl.NavigationTreeViewNode">
+                     value="de.afbb.bibo.aggregation.NavigationTreeViewNode">
                </instanceof>
                <test
                      property="de.afbb.bibo.PERSON">
@@ -285,7 +285,7 @@
                   ifEmpty="false"
                   operator="and">
                <instanceof
-                     value="de.afbb.bibo.share.impl.NavigationTreeViewNode">
+                     value="de.afbb.bibo.aggregation.NavigationTreeViewNode">
                </instanceof>
                <test
                      property="de.afbb.bibo.PERSON">
@@ -301,7 +301,7 @@
             id="de.afbb.bibo.ui.navigation.selection"
             namespace="de.afbb.bibo"
             properties="PERSONS, PERSON, BOOKS, BOOK, ROOT"
-            type="de.afbb.bibo.share.impl.NavigationTreeViewNode">
+            type="de.afbb.bibo.aggregation.NavigationTreeViewNode">
       </propertyTester>
    </extension>
 </plugin>

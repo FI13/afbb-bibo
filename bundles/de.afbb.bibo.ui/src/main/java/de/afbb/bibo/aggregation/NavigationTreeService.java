@@ -1,15 +1,16 @@
-package de.afbb.bibo.share.impl;
+package de.afbb.bibo.aggregation;
 
 import java.net.ConnectException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.IBorrowerService;
 import de.afbb.bibo.share.IMediumService;
-import de.afbb.bibo.share.ServiceLocator;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Medium;
+import de.afbb.bibo.share.model.NavigationTreeNodeType;
 
 public class NavigationTreeService {
 
@@ -48,7 +49,8 @@ public class NavigationTreeService {
 		final Iterator<Medium> mediaIterator = media.iterator();
 		while (mediaIterator.hasNext()) {
 			final Medium medium = mediaIterator.next();
-			final NavigationTreeViewNode mediumNode = new NavigationTreeViewNode(medium.getTitle(), medium, NavigationTreeNodeType.BOOK);
+			final NavigationTreeViewNode mediumNode = new NavigationTreeViewNode(medium.getTitle(), medium,
+					NavigationTreeNodeType.BOOK);
 
 			root.addChild(mediumNode);
 		}

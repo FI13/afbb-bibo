@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import de.afbb.bibo.databinding.BindingHelper;
-import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboImageRegistry;
@@ -105,7 +105,8 @@ public class CreateTypeDialog extends AbstractDialog {
 
 	@Override
 	protected void initBinding() {
-		BindingHelper.bindStringToTextField(txtName, type, MediumType.class, MediumType.FIELD_NAME, bindingContext, true);
+		BindingHelper.bindStringToTextField(txtName, type, MediumType.class, MediumType.FIELD_NAME, bindingContext,
+				true);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package de.afbb.bibo.share.internal.stub.impl;
+package de.afbb.bibo.servletclient.internal.stub;
 
 import java.net.ConnectException;
 import java.util.Calendar;

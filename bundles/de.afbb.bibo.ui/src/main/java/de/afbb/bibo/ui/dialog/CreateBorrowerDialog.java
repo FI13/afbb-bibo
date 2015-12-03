@@ -10,20 +10,20 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.swt.widgets.Shell;
 
-import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.ui.Messages;
 import de.afbb.bibo.ui.form.BorrowerForm;
 
 /**
  * dialog that creates a new {@link Borrower}
- * 
+ *
  * @author David Becker
  *
  */
 public class CreateBorrowerDialog extends AbstractFormDialog<Borrower, BorrowerForm> {
 
-	public CreateBorrowerDialog(Shell parentShell) {
+	public CreateBorrowerDialog(final Shell parentShell) {
 		super(parentShell, Borrower.class, BorrowerForm.class);
 	}
 
@@ -42,7 +42,7 @@ public class CreateBorrowerDialog extends AbstractFormDialog<Borrower, BorrowerF
 					final Job job = new Job(getTitle()) {
 
 						@Override
-						protected IStatus run(IProgressMonitor monitor) {
+						protected IStatus run(final IProgressMonitor monitor) {
 							try {
 								ServiceLocator.getInstance().getBorrowerService().create(input);
 								return Status.OK_STATUS;
@@ -54,7 +54,7 @@ public class CreateBorrowerDialog extends AbstractFormDialog<Borrower, BorrowerF
 					job.schedule();
 					okPressed();
 				}
-			} catch (ConnectException e) {
+			} catch (final ConnectException e) {
 				setMessage(Messages.MESSAGE_ERROR_CONNECTION, IMessageProvider.WARNING);
 			}
 		} else {

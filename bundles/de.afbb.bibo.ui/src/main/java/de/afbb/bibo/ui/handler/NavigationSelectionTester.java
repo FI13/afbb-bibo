@@ -2,7 +2,7 @@ package de.afbb.bibo.ui.handler;
 
 import org.eclipse.core.expressions.PropertyTester;
 
-import de.afbb.bibo.share.impl.NavigationTreeViewNode;
+import de.afbb.bibo.aggregation.NavigationTreeViewNode;
 
 /**
  * a property tester that can enable commands based on type of selection
