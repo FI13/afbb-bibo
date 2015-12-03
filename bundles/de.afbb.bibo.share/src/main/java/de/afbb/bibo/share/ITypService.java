@@ -5,11 +5,17 @@ import java.util.Collection;
 
 import de.afbb.bibo.share.model.MediumType;
 
+/**
+ * service interface for a service that can read & create {@link MediumType}s
+ *
+ * @author David Becker
+ *
+ */
 public interface ITypService {
 
 	/**
 	 * creates a new instance of type
-	 * 
+	 *
 	 * @param type
 	 * @throws ConnectException
 	 */
@@ -17,7 +23,7 @@ public interface ITypService {
 
 	/**
 	 * lists all types
-	 * 
+	 *
 	 * @return
 	 * @throws ConnectException
 	 */

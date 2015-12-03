@@ -159,8 +159,9 @@ public class DBConnector {
 			statement.setString(1, name);
 			statement.setString(2, iconPath);
 			statement.execute();
-			try (ResultSet resultSet = statement.executeQuery("select Id from "
-					+ Config.getInstance().getDATABASE_NAME() + ".typ where " + "Name='" + name + "'")) {
+			try (ResultSet resultSet = statement
+					.executeQuery("select Id from " + Config.getInstance().getDATABASE_NAME() + ".typ where "
+							+ "TypName='" + name + "' and iconPath='" + iconPath + "'")) {
 				resultSet.first();
 				return resultSet.getInt(1);
 			}
@@ -181,6 +182,18 @@ public class DBConnector {
 		}
 		log.debug("fetched from database: " + result);
 		return result;
+	}
+
+	public MediumType getMediumType(final String id) throws SQLException, NumberFormatException, IOException {
+		log.debug("get medium type with id : " + id);
+		try (Statement statement = connect.createStatement()) {
+			try (ResultSet mediaSet = statement.executeQuery("select Id, TypName, Icon from "
+					+ Config.getInstance().getDATABASE_NAME() + ".typ where Id='" + id + "'")) {
+				mediaSet.first();
+				return new MediumType(mediaSet.getInt(1), mediaSet.getString(2),
+						IconType.fromString(mediaSet.getString(3)));
+			}
+		}
 	}
 
 	public void deleteMediumType(final String id) throws SQLException, NumberFormatException, IOException {

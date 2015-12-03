@@ -3,6 +3,7 @@ package de.afbb.bibo.servletclient;
 import de.afbb.bibo.servletclient.connection.BorrowerServiceImpl;
 import de.afbb.bibo.servletclient.connection.CuratorServiceImpl;
 import de.afbb.bibo.servletclient.connection.LoginServiceImpl;
+import de.afbb.bibo.servletclient.connection.TypServiceImpl;
 import de.afbb.bibo.servletclient.internal.stub.BorrowerStubService;
 import de.afbb.bibo.servletclient.internal.stub.CopyStubService;
 import de.afbb.bibo.servletclient.internal.stub.CuratorStubService;
@@ -25,7 +26,7 @@ public final class ServiceLocator {
 
 	private ICuratorService CURATOR_SERVICE;
 	private ILoginService LOGIN_SERVICE;
-	private final ITypService TYP_SERVICE = new TypStubService();
+	private ITypService TYP_SERVICE;
 	private IBorrowerService BORROWER_SERVICE;
 	private IMediumService MEDIUM_SERVICE;
 	private ICopyService COPY_SERVICE;
@@ -39,6 +40,9 @@ public final class ServiceLocator {
 	}
 
 	public ITypService getTypService() {
+		if (TYP_SERVICE == null) {
+			TYP_SERVICE = useStubServices ? new TypStubService() : new TypServiceImpl();
+		}
 		return TYP_SERVICE;
 	}
 

@@ -7,6 +7,7 @@ package de.afbb.bibo.servlet.server.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +27,7 @@ import de.afbb.bibo.share.model.MediumType;
 
 /**
  * @author fi13.pendrulat
+ * @author David Becker
  */
 public class StockServlet {
 
@@ -48,6 +50,12 @@ public class StockServlet {
 		case "/addMediaType":
 			addMediaType();
 			break;
+		case "/getMediaType":
+			getMediaType();
+			break;
+		case "/listMediaTypes":
+			listMediaTypes();
+			break;
 		case "/addCopies":
 			addCopyGroup();
 			break;
@@ -66,6 +74,26 @@ public class StockServlet {
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.getWriter().println(mediumId);
 		response.setContentType("text/plain");
+	}
+
+	private void getMediaType() throws IOException, SQLException {
+		final String id = request.getParameter("id");
+		MediumType mediumType;
+		try {
+			mediumType = DBConnector.getInstance().getMediumType(id);
+			response.getWriter().println(gson.toJson(mediumType));
+			response.setStatus(HttpServletResponse.SC_OK);
+		} catch (final SQLException ex) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
+	}
+
+	private void listMediaTypes() throws IOException, SQLException {
+		final List<MediumType> mediaTypes = DBConnector.getInstance().getMediumTypes();
+		for (final MediumType mediumType : mediaTypes) {
+			response.getWriter().println(gson.toJson(mediumType));
+		}
+		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
 	private void addCopyGroup() throws IOException, SQLException {
