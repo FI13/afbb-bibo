@@ -5,6 +5,7 @@
  */
 package de.afbb.bibo.servlet.server;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,51 +20,51 @@ import de.afbb.bibo.servlet.model.Session;
  */
 public class SessionContainer {
 
-    private static SessionContainer INSTANCE;
+	private static SessionContainer INSTANCE;
 
-    private final Map<String, Session> connections;
+	private final Map<String, Session> connections;
 
-    private SessionContainer() {
-        connections = new HashMap<>();
-    }
+	private SessionContainer() {
+		connections = new HashMap<>();
+	}
 
-    public static SessionContainer getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new SessionContainer();
-        }
-        return INSTANCE;
-    }
+	public static SessionContainer getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new SessionContainer();
+		}
+		return INSTANCE;
+	}
 
-    public String createNewConnection(String name) {
-        String token = UUID.randomUUID().toString();
-        Session session = new Session(name, Calendar.getInstance());
-        connections.put(token, session);
-        return token;
-    }
+	public String createNewConnection(final String name) {
+		final String token = UUID.randomUUID().toString();
+		final Session session = new Session(name, Calendar.getInstance());
+		connections.put(token, session);
+		return token;
+	}
 
-    private boolean isExpired(Calendar created) {
-        Calendar now = Calendar.getInstance();
-        long age = now.getTimeInMillis() - created.getTimeInMillis();
-        return (age > Config.TOKEN_EXPIRATION_TIME_IN_HOURS * 3600000);
-    }
+	private boolean isExpired(final Calendar created) throws NumberFormatException, IOException {
+		final Calendar now = Calendar.getInstance();
+		final long age = now.getTimeInMillis() - created.getTimeInMillis();
+		return age > Config.getInstance().getTOKEN_EXPIRATION_TIME_IN_HOURS() * 3600000;
+	}
 
-    public boolean validate(String token) {
-        Session s = connections.get(token);
-        if (s == null) {
-            return false;
-        } else if (isExpired(s.getDate())) {
-            connections.remove(token);
-            return false;
-        } else {
-            return true;
-        }
-    }
-    
-    public void invalidate(String token) {
-        connections.remove(token);
-    }
-    
-    public Session getSession(String token) {
-        return connections.get(token);
-    }
+	public boolean validate(final String token) throws NumberFormatException, IOException {
+		final Session s = connections.get(token);
+		if (s == null) {
+			return false;
+		} else if (isExpired(s.getDate())) {
+			connections.remove(token);
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public void invalidate(final String token) {
+		connections.remove(token);
+	}
+
+	public Session getSession(final String token) {
+		return connections.get(token);
+	}
 }

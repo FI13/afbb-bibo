@@ -1,4 +1,4 @@
-package de.afbb.bibo.share.internal.stub.impl;
+package de.afbb.bibo.servletclient.internal.stub;
 
 import java.net.ConnectException;
 import java.util.ArrayList;
@@ -7,8 +7,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.IBorrowerService;
-import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.share.callback.EventListener;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 
@@ -105,6 +106,11 @@ public class BorrowerStubService implements IBorrowerService {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public void register(final EventListener listener) {
+		// nothing to do in stub service
 	}
 
 }

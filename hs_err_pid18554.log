@@ -1,0 +1,753 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 42205184 bytes for committing reserved memory.
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   In 32 bit mode, the process size limit was hit
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Use 64 bit Java on a 64 bit OS
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (os_linux.cpp:2627), pid=18554, tid=2260355904
+#
+# JRE version: OpenJDK Runtime Environment (8.0_65-b17) (build 1.8.0_65-b17)
+# Java VM: OpenJDK Server VM (25.65-b01 mixed mode linux-x86 )
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x85011000):  VMThread [stack: 0x86b24000,0x86ba5000] [id=18614]
+
+Stack: [0x86b24000,0x86ba5000],  sp=0x86ba3b70,  free space=510k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [libjvm.so+0x8ce90c]
+V  [libjvm.so+0x3a3e36]
+V  [libjvm.so+0x73b980]
+V  [libjvm.so+0x735903]
+V  [libjvm.so+0x7a6abc]
+V  [libjvm.so+0x7a7b21]
+V  [libjvm.so+0x7a4536]
+V  [libjvm.so+0x7a4d83]
+V  [libjvm.so+0x75e4a5]
+V  [libjvm.so+0x8d0479]
+V  [libjvm.so+0x8d5ba6]
+V  [libjvm.so+0x8d32a1]
+V  [libjvm.so+0x8d447c]
+V  [libjvm.so+0x8d4a6b]
+V  [libjvm.so+0x738b85]
+C  [libpthread.so.0+0x6315]  start_thread+0xe5
+
+VM_Operation (0x82d5ccb4): ParallelGCFailedAllocation, mode: safepoint, requested by thread 0x826f5000
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x08dfd400 JavaThread "Worker-2" [_thread_blocked, id=19533, stack(0x81d5e000,0x81daf000)]
+  0x823b9000 JavaThread "Provisioning Event Dispatcher" daemon [_thread_blocked, id=19436, stack(0x81eaf000,0x81f00000)]
+  0x09042400 JavaThread "Worker-1" [_thread_blocked, id=19434, stack(0x82127000,0x82178000)]
+  0x826f5000 JavaThread "Worker-0" [_thread_blocked, id=19324, stack(0x82d0d000,0x82d5e000)]
+  0x8269f000 JavaThread "resolver-1" daemon [_thread_blocked, id=19323, stack(0x82d5e000,0x82daf000)]
+  0x82c37c00 JavaThread "Worker-JM" [_thread_blocked, id=19131, stack(0x82daf000,0x82e00000)]
+  0x833bb400 JavaThread "[ThreadPool Manager] - Idle Thread" [_thread_blocked, id=19130, stack(0x8340d000,0x8345e000)]
+  0x833a3800 JavaThread "[Timer] - Main Queue Handler" [_thread_blocked, id=19123, stack(0x8345e000,0x834af000)]
+  0x83392400 JavaThread "Refresh Thread: Equinox Container: 301e864e-de99-0015-1a62-9a122acc1231" daemon [_thread_blocked, id=19026, stack(0x834af000,0x83500000)]
+  0x8385b000 JavaThread "Start Level: Equinox Container: 301e864e-de99-0015-1a62-9a122acc1231" daemon [_thread_blocked, id=19025, stack(0x836af000,0x83700000)]
+  0x8385a800 JavaThread "Framework Event Dispatcher: Equinox Container: 301e864e-de99-0015-1a62-9a122acc1231" daemon [_thread_blocked, id=19024, stack(0x83938000,0x83989000)]
+  0x83831800 JavaThread "Active Thread: Equinox Container: 301e864e-de99-0015-1a62-9a122acc1231" [_thread_blocked, id=19023, stack(0x83989000,0x839da000)]
+  0x85039000 JavaThread "Service Thread" daemon [_thread_blocked, id=18632, stack(0x84c5c000,0x84cad000)]
+  0x85036000 JavaThread "C1 CompilerThread1" daemon [_thread_blocked, id=18631, stack(0x84cad000,0x84d2e000)]
+  0x85034000 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=18630, stack(0x84d2e000,0x84daf000)]
+  0x85032800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=18629, stack(0x84daf000,0x84e00000)]
+  0x85015800 JavaThread "Finalizer" daemon [_thread_blocked, id=18621, stack(0x85145000,0x85196000)]
+  0x85014000 JavaThread "Reference Handler" daemon [_thread_blocked, id=18620, stack(0x85196000,0x851e7000)]
+  0xb6406800 JavaThread "main" [_thread_blocked, id=18600, stack(0xb655e000,0xb65af000)]
+
+Other Threads:
+=>0x85011000 VMThread [stack: 0x86b24000,0x86ba5000] [id=18614]
+  0x8503b000 WatcherThread [stack: 0x84bdb000,0x84c5c000] [id=18634]
+
+VM state:at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0xb6404c00] Threads_lock - owner thread: 0x85011000
+[0xb6405010] Heap_lock - owner thread: 0x826f5000
+
+Heap:
+ PSYoungGen      total 107776K, used 11259K [0x9c580000, 0xa3b00000, 0xa7000000)
+  eden space 96512K, 0% used [0x9c580000,0x9c580000,0xa23c0000)
+  from space 11264K, 99% used [0xa23c0000,0xa2ebece8,0xa2ec0000)
+  to   space 9984K, 0% used [0xa2ec0000,0xa2ec0000,0xa3880000)
+ ParOldGen       total 35584K, used 13656K [0x87000000, 0x892c0000, 0x9c580000)
+  object space 35584K, 38% used [0x87000000,0x87d56328,0x892c0000)
+ Metaspace       used 21047K, capacity 21857K, committed 21888K, reserved 22832K
+
+Card table byte_map: [0x86eff000,0x87000000] byte_map_base: 0x86ac7000
+
+Marking Bits: (ParMarkBitMap*) 0xb7143700
+ Begin Bits: [0x85a00000, 0x86200000)
+ End Bits:   [0x86200000, 0x86a00000)
+
+Polling page: 0xb7778000
+
+CodeCache: size=245760Kb used=9527Kb max_used=9660Kb free=236232Kb
+ bounds [0xa7400000, 0xa7d88000, 0xb6400000]
+ total_blobs=4037 nmethods=3840 adapters=112
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 18,237 Thread 0x85036000 4423       3       java.lang.String::regionMatches (91 bytes)
+Event: 18,403 Thread 0x85036000 nmethod 4423 0xa759f888 code [0xa759f9c0, 0xa759fca0]
+Event: 18,471 Thread 0x85036000 4424       1       java.util.Calendar::internalSet (8 bytes)
+Event: 18,551 Thread 0x85034000 nmethod 4419 0xa7d72248 code [0xa7d72420, 0xa7d73404]
+Event: 18,582 Thread 0x85034000 4422       4       java.lang.String::regionMatches (149 bytes)
+Event: 18,681 Thread 0x85036000 nmethod 4424 0xa796d288 code [0xa796d3a0, 0xa796d460]
+Event: 18,707 Thread 0x85036000 4426   !   3       org.eclipse.equinox.internal.p2.persistence.XMLParser$AbstractHandler::finishCharacters (118 bytes)
+Event: 18,858 Thread 0x85036000 nmethod 4426 0xa7b6cd88 code [0xa7b6d1a0, 0xa7b6f168]
+Event: 18,921 Thread 0x85036000 4427       3       java.io.FileInputStream::<init> (110 bytes)
+Event: 19,248 Thread 0x85036000 nmethod 4427 0xa7504848 code [0xa7504a80, 0xa75054a0]
+
+GC Heap History (10 events):
+Event: 4,292 GC heap after
+Heap after GC invocations=5 (full 0):
+ PSYoungGen      total 26624K, used 2042K [0x9c580000, 0xa0180000, 0xa7000000)
+  eden space 24576K, 0% used [0x9c580000,0x9c580000,0x9dd80000)
+  from space 2048K, 99% used [0x9dd80000,0x9df7e870,0x9df80000)
+  to   space 6144K, 0% used [0x9fb80000,0x9fb80000,0xa0180000)
+ ParOldGen       total 32768K, used 8211K [0x87000000, 0x89000000, 0x9c580000)
+  object space 32768K, 25% used [0x87000000,0x87804e08,0x89000000)
+ Metaspace       used 9187K, capacity 9287K, committed 9368K, reserved 9520K
+}
+Event: 5,296 GC heap before
+{Heap before GC invocations=6 (full 0):
+ PSYoungGen      total 26624K, used 26618K [0x9c580000, 0xa0180000, 0xa7000000)
+  eden space 24576K, 100% used [0x9c580000,0x9dd80000,0x9dd80000)
+  from space 2048K, 99% used [0x9dd80000,0x9df7e870,0x9df80000)
+  to   space 6144K, 0% used [0x9fb80000,0x9fb80000,0xa0180000)
+ ParOldGen       total 32768K, used 8211K [0x87000000, 0x89000000, 0x9c580000)
+  object space 32768K, 25% used [0x87000000,0x87804e08,0x89000000)
+ Metaspace       used 10049K, capacity 10129K, committed 10264K, reserved 10544K
+Event: 5,354 GC heap after
+Heap after GC invocations=6 (full 0):
+ PSYoungGen      total 55040K, used 5019K [0x9c580000, 0xa0200000, 0xa7000000)
+  eden space 48896K, 0% used [0x9c580000,0x9c580000,0x9f540000)
+  from space 6144K, 81% used [0x9fb80000,0xa0066d30,0xa0180000)
+  to   space 6400K, 0% used [0x9f540000,0x9f540000,0x9fb80000)
+ ParOldGen       total 32768K, used 8215K [0x87000000, 0x89000000, 0x9c580000)
+  object space 32768K, 25% used [0x87000000,0x87805e08,0x89000000)
+ Metaspace       used 10049K, capacity 10129K, committed 10264K, reserved 10544K
+}
+Event: 7,615 GC heap before
+{Heap before GC invocations=7 (full 0):
+ PSYoungGen      total 55040K, used 53915K [0x9c580000, 0xa0200000, 0xa7000000)
+  eden space 48896K, 100% used [0x9c580000,0x9f540000,0x9f540000)
+  from space 6144K, 81% used [0x9fb80000,0xa0066d30,0xa0180000)
+  to   space 6400K, 0% used [0x9f540000,0x9f540000,0x9fb80000)
+ ParOldGen       total 32768K, used 8215K [0x87000000, 0x89000000, 0x9c580000)
+  object space 32768K, 25% used [0x87000000,0x87805e08,0x89000000)
+ Metaspace       used 13071K, capacity 13215K, committed 13336K, reserved 13616K
+Event: 7,691 GC heap after
+Heap after GC invocations=7 (full 0):
+ PSYoungGen      total 55296K, used 6387K [0x9c580000, 0xa3880000, 0xa7000000)
+  eden space 48896K, 0% used [0x9c580000,0x9c580000,0x9f540000)
+  from space 6400K, 99% used [0x9f540000,0x9fb7cd80,0x9fb80000)
+  to   space 9984K, 0% used [0xa2ec0000,0xa2ec0000,0xa3880000)
+ ParOldGen       total 32768K, used 13247K [0x87000000, 0x89000000, 0x9c580000)
+  object space 32768K, 40% used [0x87000000,0x87cefd20,0x89000000)
+ Metaspace       used 13071K, capacity 13215K, committed 13336K, reserved 13616K
+}
+Event: 9,976 GC heap before
+{Heap before GC invocations=8 (full 0):
+ PSYoungGen      total 55296K, used 34763K [0x9c580000, 0xa3880000, 0xa7000000)
+  eden space 48896K, 58% used [0x9c580000,0x9e136190,0x9f540000)
+  from space 6400K, 99% used [0x9f540000,0x9fb7cd80,0x9fb80000)
+  to   space 9984K, 0% used [0xa2ec0000,0xa2ec0000,0xa3880000)
+ ParOldGen       total 32768K, used 13247K [0x87000000, 0x89000000, 0x9c580000)
+  object space 32768K, 40% used [0x87000000,0x87cefd20,0x89000000)
+ Metaspace       used 16006K, capacity 16371K, committed 16384K, reserved 16688K
+Event: 10,024 GC heap after
+Heap after GC invocations=8 (full 0):
+ PSYoungGen      total 106496K, used 9475K [0x9c580000, 0xa3b00000, 0xa7000000)
+  eden space 96512K, 0% used [0x9c580000,0x9c580000,0xa23c0000)
+  from space 9984K, 94% used [0xa2ec0000,0xa3800f58,0xa3880000)
+  to   space 11264K, 0% used [0xa23c0000,0xa23c0000,0xa2ec0000)
+ ParOldGen       total 32768K, used 13834K [0x87000000, 0x89000000, 0x9c580000)
+  object space 32768K, 42% used [0x87000000,0x87d82b00,0x89000000)
+ Metaspace       used 16006K, capacity 16371K, committed 16384K, reserved 16688K
+}
+Event: 10,024 GC heap before
+{Heap before GC invocations=9 (full 1):
+ PSYoungGen      total 106496K, used 9475K [0x9c580000, 0xa3b00000, 0xa7000000)
+  eden space 96512K, 0% used [0x9c580000,0x9c580000,0xa23c0000)
+  from space 9984K, 94% used [0xa2ec0000,0xa3800f58,0xa3880000)
+  to   space 11264K, 0% used [0xa23c0000,0xa23c0000,0xa2ec0000)
+ ParOldGen       total 32768K, used 13834K [0x87000000, 0x89000000, 0x9c580000)
+  object space 32768K, 42% used [0x87000000,0x87d82b00,0x89000000)
+ Metaspace       used 16006K, capacity 16371K, committed 16384K, reserved 16688K
+Event: 10,185 GC heap after
+Heap after GC invocations=9 (full 1):
+ PSYoungGen      total 106496K, used 0K [0x9c580000, 0xa3b00000, 0xa7000000)
+  eden space 96512K, 0% used [0x9c580000,0x9c580000,0xa23c0000)
+  from space 9984K, 0% used [0xa2ec0000,0xa2ec0000,0xa3880000)
+  to   space 11264K, 0% used [0xa23c0000,0xa23c0000,0xa2ec0000)
+ ParOldGen       total 35584K, used 13533K [0x87000000, 0x892c0000, 0x9c580000)
+  object space 35584K, 38% used [0x87000000,0x87d37688,0x892c0000)
+ Metaspace       used 16006K, capacity 16371K, committed 16384K, reserved 16688K
+}
+Event: 19,321 GC heap before
+{Heap before GC invocations=10 (full 1):
+ PSYoungGen      total 106496K, used 96512K [0x9c580000, 0xa3b00000, 0xa7000000)
+  eden space 96512K, 100% used [0x9c580000,0xa23c0000,0xa23c0000)
+  from space 9984K, 0% used [0xa2ec0000,0xa2ec0000,0xa3880000)
+  to   space 11264K, 0% used [0xa23c0000,0xa23c0000,0xa2ec0000)
+ ParOldGen       total 35584K, used 13533K [0x87000000, 0x892c0000, 0x9c580000)
+  object space 35584K, 38% used [0x87000000,0x87d37688,0x892c0000)
+ Metaspace       used 21047K, capacity 21857K, committed 21888K, reserved 22832K
+
+Deoptimization events (10 events):
+Event: 12,995 Thread 0xb6406800 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0xa78578b4 method=java.util.concurrent.ConcurrentHashMap.get(Ljava/lang/Object;)Ljava/lang/Object; @ 149
+Event: 13,025 Thread 0x826f5000 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0xa78578b4 method=java.util.concurrent.ConcurrentHashMap.get(Ljava/lang/Object;)Ljava/lang/Object; @ 149
+Event: 13,028 Thread 0xb6406800 Uncommon trap: reason=predicate action=maybe_recompile pc=0xa7a7b678 method=java.lang.String.regionMatches(ZILjava/lang/String;II)Z @ 63
+Event: 13,034 Thread 0xb6406800 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0xa78578b4 method=java.util.concurrent.ConcurrentHashMap.get(Ljava/lang/Object;)Ljava/lang/Object; @ 149
+Event: 13,036 Thread 0x826f5000 Uncommon trap: reason=null_check action=make_not_entrant pc=0xa7a52820 method=java.lang.StringCoding.deref(Ljava/lang/ThreadLocal;)Ljava/lang/Object; @ 4
+Event: 13,599 Thread 0xb6406800 Uncommon trap: reason=unstable_if action=reinterpret pc=0xa765dde8 method=java.util.concurrent.ConcurrentHashMap.putVal(Ljava/lang/Object;Ljava/lang/Object;Z)Ljava/lang/Object; @ 206
+Event: 14,168 Thread 0x09042400 Uncommon trap: reason=class_check action=maybe_recompile pc=0xa75e16b4 method=java.util.zip.InflaterInputStream.read([BII)I @ 100
+Event: 14,783 Thread 0xb6406800 Uncommon trap: reason=class_check action=maybe_recompile pc=0xa75e16b4 method=java.util.zip.InflaterInputStream.read([BII)I @ 100
+Event: 15,177 Thread 0x826f5000 Uncommon trap: reason=class_check action=maybe_recompile pc=0xa75e16b4 method=java.util.zip.InflaterInputStream.read([BII)I @ 100
+Event: 18,519 Thread 0xb6406800 Uncommon trap: reason=class_check action=maybe_recompile pc=0xa75e16b4 method=java.util.zip.InflaterInputStream.read([BII)I @ 100
+
+Internal exceptions (10 events):
+Event: 9,029 Thread 0xb6406800 Exception <a 'java/io/FileNotFoundException'> (0x9d7c6c58) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u65-b17/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 9,128 Thread 0xb6406800 Exception <a 'java/io/FileNotFoundException'> (0x9d80fb50) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u65-b17/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 10,271 Thread 0xb6406800 Implicit null exception at 0xa766f6ff to 0xa766faf1
+Event: 12,499 Thread 0xb6406800 Exception <a 'java/io/FileNotFoundException'> (0xa069c510) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u65-b17/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 12,883 Thread 0xb6406800 Exception <a 'java/lang/NoClassDefFoundError': org/apache/log4j/Category> (0xa0a56d70) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u65-b17/hotspot/src/share/vm/classfile/systemDictionary.cpp, line 199]
+Event: 13,036 Thread 0x826f5000 Implicit null exception at 0xa7a5210b to 0xa7a52811
+Event: 13,203 Thread 0xb6406800 Exception <a 'java/lang/NoSuchFieldError': method resolution failed> (0xa0b973a0) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u65-b17/hotspot/src/share/vm/prims/methodHandles.cpp, line 1146]
+Event: 13,215 Thread 0xb6406800 Exception <a 'java/lang/NoSuchFieldError': method resolution failed> (0xa0ba3c10) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u65-b17/hotspot/src/share/vm/prims/methodHandles.cpp, line 1146]
+Event: 13,684 Thread 0x826f5000 Exception <a 'java/lang/NoClassDefFoundError': org/apache/log4j/Category> (0xa14a0228) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u65-b17/hotspot/src/share/vm/classfile/systemDictionary.cpp, line 199]
+Event: 17,660 Thread 0xb6406800 Exception <a 'java/io/FileNotFoundException'> (0xa1c68980) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u65-b17/hotspot/src/share/vm/prims/jni.cpp, line 709]
+
+Events (10 events):
+Event: 18,507 Thread 0xb6406800 Uncommon trap: trap_request=0xffffffde fr.pc=0xa75e16b4
+Event: 18,533 Thread 0xb6406800 DEOPT PACKING pc=0xa75e16b4 sp=0xb65acca0
+Event: 18,558 Thread 0xb6406800 DEOPT UNPACKING pc=0xa743abd5 sp=0xb65accbc mode 2
+Event: 18,951 Executing VM operation: RevokeBias
+Event: 18,988 Executing VM operation: RevokeBias done
+Event: 18,994 Executing VM operation: RevokeBias
+Event: 18,994 Executing VM operation: RevokeBias done
+Event: 19,027 Executing VM operation: RevokeBias
+Event: 19,030 Executing VM operation: RevokeBias done
+Event: 19,313 Executing VM operation: ParallelGCFailedAllocation
+
+
+Dynamic libraries:
+08048000-08049000 r-xp 00000000 08:12 1754305    /usr/lib/jvm/java-8-openjdk/jre/bin/java
+08049000-0804a000 rw-p 00000000 08:12 1754305    /usr/lib/jvm/java-8-openjdk/jre/bin/java
+08dd7000-096c9000 rw-p 00000000 00:00 0          [heap]
+81d5e000-81d61000 ---p 00000000 00:00 0 
+81d61000-81dcf000 rw-p 00000000 00:00 0          [stack:19533]
+81dcf000-81eaf000 ---p 00000000 00:00 0 
+81eaf000-81eb2000 ---p 00000000 00:00 0 
+81eb2000-82000000 rw-p 00000000 00:00 0          [stack:19436]
+82000000-82090000 rw-p 00000000 00:00 0 
+82090000-82100000 ---p 00000000 00:00 0 
+82127000-8212a000 ---p 00000000 00:00 0 
+8212a000-82178000 rw-p 00000000 00:00 0          [stack:19434]
+82178000-82194000 r-xp 00000000 08:12 1711278    /usr/lib/libgcc_s.so.1
+82194000-82195000 rw-p 0001b000 08:12 1711278    /usr/lib/libgcc_s.so.1
+821c2000-821fc000 r-xp 00000000 08:12 1748737    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/libsunec.so
+821fc000-82200000 rw-p 00039000 08:12 1748737    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/libsunec.so
+82200000-822ff000 rw-p 00000000 00:00 0 
+822ff000-82300000 ---p 00000000 00:00 0 
+82300000-823ea000 rw-p 00000000 00:00 0 
+823ea000-82400000 ---p 00000000 00:00 0 
+82400000-82500000 rw-p 00000000 00:00 0 
+82500000-82600000 rw-p 00000000 00:00 0 
+82600000-82700000 rw-p 00000000 00:00 0 
+82700000-827fa000 rw-p 00000000 00:00 0 
+827fa000-82800000 ---p 00000000 00:00 0 
+82800000-82900000 rw-p 00000000 00:00 0 
+82900000-829fe000 rw-p 00000000 00:00 0 
+829fe000-82a00000 ---p 00000000 00:00 0 
+82a00000-82b00000 rw-p 00000000 00:00 0 
+82b00000-82bfa000 rw-p 00000000 00:00 0 
+82bfa000-82c00000 ---p 00000000 00:00 0 
+82c00000-82cfd000 rw-p 00000000 00:00 0 
+82cfd000-82d00000 ---p 00000000 00:00 0 
+82d0d000-82d10000 ---p 00000000 00:00 0 
+82d10000-82d5e000 rw-p 00000000 00:00 0          [stack:19324]
+82d5e000-82d61000 ---p 00000000 00:00 0 
+82d61000-82daf000 rw-p 00000000 00:00 0          [stack:19323]
+82daf000-82db2000 ---p 00000000 00:00 0 
+82db2000-82f00000 rw-p 00000000 00:00 0          [stack:19131]
+82f00000-83000000 rw-p 00000000 00:00 0 
+83000000-83100000 rw-p 00000000 00:00 0 
+83100000-83200000 rw-p 00000000 00:00 0 
+83200000-83300000 rw-p 00000000 00:00 0 
+83300000-83400000 rw-p 00000000 00:00 0 
+8340d000-83410000 ---p 00000000 00:00 0 
+83410000-8345e000 rw-p 00000000 00:00 0          [stack:19130]
+8345e000-83461000 ---p 00000000 00:00 0 
+83461000-834af000 rw-p 00000000 00:00 0          [stack:19123]
+834af000-834b2000 ---p 00000000 00:00 0 
+834b2000-83500000 rw-p 00000000 00:00 0          [stack:19026]
+83500000-83600000 rw-p 00000000 00:00 0 
+83606000-83607000 r--s 00008000 08:12 1748690    /usr/lib/jvm/java-8-openjdk/jre/lib/ext/sunec.jar
+83607000-8360b000 r--s 00037000 08:12 1748691    /usr/lib/jvm/java-8-openjdk/jre/lib/ext/sunpkcs11.jar
+8360b000-8360d000 r--s 00002000 08:12 407810     /home/david/.m2/repository/org/eclipse/tycho/tycho-p2-repository-plugin/0.23.1/tycho-p2-repository-plugin-0.23.1.jar
+8360d000-8360f000 r--s 00004000 08:12 420491     /home/david/.m2/repository/org/apache/maven/maven-archiver/2.5/maven-archiver-2.5.jar
+8360f000-83611000 r--s 0001d000 08:12 407639     /home/david/.m2/repository/org/eclipse/tycho/tycho-packaging-plugin/0.23.1/tycho-packaging-plugin-0.23.1.jar
+83611000-83617000 r--s 00048000 08:12 420489     /home/david/.m2/repository/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar
+83617000-83618000 r--s 00004000 08:12 407806     /home/david/.m2/repository/org/eclipse/tycho/tycho-p2-publisher-plugin/0.23.1/tycho-p2-publisher-plugin-0.23.1.jar
+83618000-8361e000 r--s 00054000 08:12 420464     /home/david/.m2/repository/org/apache/commons/commons-compress/1.7/commons-compress-1.7-sources.jar
+8361e000-83622000 r--s 00015000 08:12 420462     /home/david/.m2/repository/org/tukaani/xz/1.4/xz-1.4.jar
+83622000-83629000 r--s 00050000 08:12 420460     /home/david/.m2/repository/org/apache/commons/commons-compress/1.7/commons-compress-1.7.jar
+83629000-8362b000 r--s 006d1000 08:12 420458     /home/david/.m2/repository/org/eclipse/tycho/tycho-standalone-p2-director/0.23.1/tycho-standalone-p2-director-0.23.1.zip
+8362b000-8362d000 r--s 00009000 08:12 407803     /home/david/.m2/repository/org/eclipse/tycho/tycho-p2-director-plugin/0.23.1/tycho-p2-director-plugin-0.23.1.jar
+8362d000-83632000 r--s 00058000 08:12 420428     /home/david/.m2/repository/org/ow2/asm/asm-debug-all/5.0.3/asm-debug-all-5.0.3.jar
+83632000-83633000 r--s 00004000 08:12 420429     /home/david/.m2/repository/org/eclipse/tycho/tycho-artifactcomparator/0.23.1/tycho-artifactcomparator-0.23.1.jar
+83633000-83635000 r--s 0000c000 08:12 420425     /home/david/.m2/repository/org/apache/commons/commons-exec/1.2/commons-exec-1.2.jar
+83635000-83636000 r--s 00006000 08:12 420423     /home/david/.m2/repository/org/eclipse/tycho/sisu-equinox-launching/0.23.1/sisu-equinox-launching-0.23.1.jar
+83636000-83637000 r--s 00006000 08:12 407655     /home/david/.m2/repository/org/eclipse/tycho/tycho-p2-plugin/0.23.1/tycho-p2-plugin-0.23.1.jar
+83637000-83639000 r--s 00002000 08:12 420358     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.core.runtime.compatibility.registry_3.6.0.v20150318-1505/runtime_registry_compatibility.jar
+83639000-8363b000 r--s 0000a000 08:12 420379     /home/david/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.p2.tools.impl/0.23.1/org.eclipse.tycho.p2.tools.impl-0.23.1.jar
+8363b000-8363f000 r--s 00020000 08:12 420376     /home/david/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.p2.maven.repository/0.23.1/org.eclipse.tycho.p2.maven.repository-0.23.1.jar
+8363f000-83644000 r--s 00030000 08:12 420373     /home/david/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.p2.resolver.impl/0.23.1/org.eclipse.tycho.p2.resolver.impl-0.23.1.jar
+83644000-83645000 r--s 00003000 08:12 420366     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.ecf.ssl_1.1.0.v20150512-1727.jar
+83645000-8364b000 r--s 00039000 08:12 420354     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.apache.commons.codec_1.6.0.v201305230611.jar
+8364b000-8364e000 r--s 00016000 08:12 420367     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.ecf_3.4.0.v20150512-1727.jar
+8364e000-8364f000 r--s 00008000 08:12 420342     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.frameworkadmin_2.0.200.v20150423-1455.jar
+8364f000-8365e000 r--s 000c1000 08:12 420350     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.apache.httpcomponents.httpclient_4.3.6.v201411290715.jar
+8365e000-83662000 r--s 00029000 08:12 420322     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.registry_3.6.0.v20150318-1503.jar
+83662000-83667000 r--s 00037000 08:12 420312     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.sat4j.pb_2.3.5.v201404071733.jar
+83667000-83669000 r--s 00016000 08:12 420324     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.updatesite_1.0.500.v20150423-1455.jar
+83669000-8366c000 r--s 00035000 08:12 420331     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.publisher.eclipse_1.2.0.v20150601-1708.jar
+8366c000-8366f000 r--s 00016000 08:12 420348     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.core.contenttype_3.5.0.v20150421-2214.jar
+8366f000-83672000 r--s 0000f000 08:12 420339     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.core_2.4.0.v20150527-1706.jar
+83672000-83674000 r--s 00002000 08:12 420362     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.ecf.provider.filetransfer.httpclient4.ssl_1.0.0.v20150512-1727.jar
+83674000-83678000 r--s 0001d000 08:12 420328     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.repository_2.3.100.v20150428-1613.jar
+83678000-8367b000 r--s 0001d000 08:12 420327     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.touchpoint.eclipse_2.1.300.v20150423-1455.jar
+8367b000-8367d000 r--s 0001b000 08:12 420333     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.metadata.repository_1.2.200.v20150428-1613.jar
+8367d000-8367f000 r--s 0000e000 08:12 420372     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.frameworkadmin.equinox_1.0.600.v20150522-2234.jar
+8367f000-83681000 r--s 0000d000 08:12 420361     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.ecf.identity_3.5.0.v20150512-1727.jar
+83681000-83683000 r--s 00009000 08:12 420319     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.simpleconfigurator_1.1.100.v20150423-1455.jar
+83683000-83686000 r--s 0000f000 08:12 420363     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.ecf.provider.filetransfer.httpclient4_1.0.1043.v20150512-1727.jar
+83686000-83688000 r--s 00010000 08:12 420346     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.core.net_1.2.300.v20141118-1725.jar
+83688000-8368b000 r--s 00010000 08:12 420326     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.touchpoint.natives_1.2.0.v20150519-1136.jar
+8368b000-8368d000 r--s 00039000 08:12 420317     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.osgi.compatibility.state_1.0.100.v20150402-1551.jar
+8368d000-83691000 r--s 00037000 08:12 420329     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.repository.tools_2.1.100.v20150423-1455.jar
+83691000-83693000 r--s 00014000 08:12 420368     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.app_1.3.300.v20150423-1356.jar
+83693000-83695000 r--s 00000000 08:12 420314     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.tycho.noopsecurity_0.23.1.jar
+83695000-83699000 r--s 0001c000 08:12 420365     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.ecf.provider.filetransfer_3.2.200.v20150512-1727.jar
+83699000-836a0000 r--s 00047000 08:12 420349     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.apache.httpcomponents.httpcore_4.3.3.v201411290715.jar
+836a0000-836a3000 r--s 00018000 08:12 420347     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.core.jobs_3.7.0.v20150330-2103.jar
+836a3000-836a5000 r--s 00001000 08:12 420364     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.ecf.provider.filetransfer.ssl_1.0.0.v20150512-1727.jar
+836a5000-836a8000 r--s 0001d000 08:12 420323     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.preferences_3.5.300.v20150408-1437.jar
+836a8000-836af000 r--s 00052000 08:12 420313     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.sat4j.core_2.3.5.v201308161310.jar
+836af000-836b2000 ---p 00000000 00:00 0 
+836b2000-83800000 rw-p 00000000 00:00 0          [stack:19025]
+83800000-838f9000 rw-p 00000000 00:00 0 
+838f9000-83900000 ---p 00000000 00:00 0 
+83900000-83902000 r--s 00005000 08:12 420370     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.concurrent_1.1.0.v20130327-1442.jar
+83902000-83903000 r--s 00011000 08:12 420351     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.apache.commons.logging_1.1.1.v201101211721.jar
+83903000-83905000 r--s 00005000 08:12 420335     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.garbagecollector_1.0.200.v20131115-1210.jar
+83905000-83907000 r--s 00009000 08:12 420325     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.transport.ecf_1.1.100.v20150521-1342.jar
+83907000-8390a000 r--s 00017000 08:12 420337     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.director_2.3.200.v20150423-1455.jar
+8390a000-8390c000 r--s 0002e000 08:12 420371     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.ds_1.4.300.v20150423-1356.jar
+8390c000-8390f000 r--s 00019000 08:12 420369     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.common_3.7.0.v20150402-1709.jar
+8390f000-83912000 r--s 00018000 08:12 420321     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.security_1.2.100.v20150423-1356.jar
+83912000-83915000 r--s 0000a000 08:12 420360     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.ecf.filetransfer_5.0.0.v20150512-1727.jar
+83915000-83918000 r--s 00018000 08:12 420311     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.tukaani.xz_1.3.0.v201308270617.jar
+83918000-8391b000 r--s 00011000 08:12 420318     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.util_1.0.500.v20130404-1337.jar
+8391b000-8391d000 r--s 00005000 08:12 420320     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.simpleconfigurator.manipulator_2.0.100.v20150423-1455.jar
+8391d000-83920000 r--s 00015000 08:12 420330     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.publisher_1.4.0.v20141117-0929.jar
+83920000-83922000 r--s 00011000 08:12 420359     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.core.runtime_3.11.0.v20150405-1723.jar
+83922000-83926000 r--s 0002f000 08:12 420336     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.engine_2.4.0.v20150511-1532.jar
+83926000-83928000 r--s 0000b000 08:12 420341     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.launcher_1.3.100.v20150511-1540.jar
+83928000-8392c000 r--s 00017000 08:12 420316     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.osgi.services_3.5.0.v20150519-2006.jar
+8392c000-8392d000 r--s 0000c000 08:12 420338     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.director.app_1.0.400.v20150423-1455.jar
+8392d000-83931000 r--s 0001f000 08:12 420340     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.artifact.repository_1.1.400.v20150513-2116.jar
+83931000-83938000 r--s 0004d000 08:12 420332     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.metadata_2.3.0.v20150511-1532.jar
+83938000-8393b000 ---p 00000000 00:00 0 
+8393b000-83989000 rw-p 00000000 00:00 0          [stack:19024]
+83989000-8398c000 ---p 00000000 00:00 0 
+8398c000-83ada000 rw-p 00000000 00:00 0          [stack:19023]
+83ada000-83b00000 r--p 00000000 08:12 1309175    /usr/share/locale/de/LC_MESSAGES/libc.mo
+83b00000-83c00000 rw-p 00000000 00:00 0 
+83c00000-83d00000 rw-p 00000000 00:00 0 
+83d00000-83dfc000 rw-p 00000000 00:00 0 
+83dfc000-83e00000 ---p 00000000 00:00 0 
+83e00000-83efd000 rw-p 00000000 00:00 0 
+83efd000-83f00000 ---p 00000000 00:00 0 
+83f00000-84000000 rw-p 00000000 00:00 0 
+84000000-84100000 rw-p 00000000 00:00 0 
+84100000-84200000 rw-p 00000000 00:00 0 
+84200000-842f9000 rw-p 00000000 00:00 0 
+842f9000-84300000 ---p 00000000 00:00 0 
+84300000-84400000 rw-p 00000000 00:00 0 
+84400000-844fc000 rw-p 00000000 00:00 0 
+844fc000-84500000 ---p 00000000 00:00 0 
+84500000-84600000 rw-p 00000000 00:00 0 
+84600000-846fa000 rw-p 00000000 00:00 0 
+846fa000-84700000 ---p 00000000 00:00 0 
+84700000-84800000 rw-p 00000000 00:00 0 
+84800000-848ff000 rw-p 00000000 00:00 0 
+848ff000-84900000 ---p 00000000 00:00 0 
+84900000-84a00000 rw-p 00000000 00:00 0 
+84a00000-84afb000 rw-p 00000000 00:00 0 
+84afb000-84b00000 ---p 00000000 00:00 0 
+84b00000-84b02000 r--s 0000f000 08:12 420334     /home/david/.m2/repository/org/eclipse/tycho/tycho-bundles-external/0.23.1/eclipse/plugins/org.eclipse.equinox.p2.jarprocessor_1.0.400.v20150430-1836.jar
+84b02000-84b16000 r-xp 00000000 08:12 1704810    /usr/lib/libresolv-2.22.so
+84b16000-84b17000 ---p 00014000 08:12 1704810    /usr/lib/libresolv-2.22.so
+84b17000-84b18000 r--p 00014000 08:12 1704810    /usr/lib/libresolv-2.22.so
+84b18000-84b19000 rw-p 00015000 08:12 1704810    /usr/lib/libresolv-2.22.so
+84b19000-84b1b000 rw-p 00000000 00:00 0 
+84b1b000-84b20000 r-xp 00000000 08:12 1704530    /usr/lib/libnss_dns-2.22.so
+84b20000-84b21000 r--p 00004000 08:12 1704530    /usr/lib/libnss_dns-2.22.so
+84b21000-84b22000 rw-p 00005000 08:12 1704530    /usr/lib/libnss_dns-2.22.so
+84b22000-84b25000 r--s 00015000 08:12 1748662    /usr/lib/jvm/java-8-openjdk/jre/lib/jce.jar
+84b25000-84b26000 r--s 00004000 08:12 407755     /home/david/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.p2.tools.shared/0.23.1/org.eclipse.tycho.p2.tools.shared-0.23.1.jar
+84b26000-84b28000 r--s 00005000 08:12 407752     /home/david/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.p2.resolver.shared/0.23.1/org.eclipse.tycho.p2.resolver.shared-0.23.1.jar
+84b28000-84b2a000 r--s 00000000 08:12 407750     /home/david/.m2/repository/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.jar
+84b2a000-84b2c000 r--s 00007000 08:12 407748     /home/david/.m2/repository/org/eclipse/tycho/tycho-p2-facade/0.23.1/tycho-p2-facade-0.23.1.jar
+84b2c000-84b2f000 r--s 00007000 08:12 407745     /home/david/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.core.shared/0.23.1/org.eclipse.tycho.core.shared-0.23.1.jar
+84b2f000-84b31000 r--s 00001000 08:12 407743     /home/david/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.embedder.shared/0.23.1/org.eclipse.tycho.embedder.shared-0.23.1.jar
+84b31000-84b32000 r--s 00001000 08:12 407741     /home/david/.m2/repository/org/eclipse/tycho/tycho-embedder-api/0.23.1/tycho-embedder-api-0.23.1.jar
+84b32000-84b35000 r--s 00019000 08:12 407739     /home/david/.m2/repository/de/pdark/decentxml/1.3/decentxml-1.3.jar
+84b35000-84b36000 r--s 00008000 08:12 407737     /home/david/.m2/repository/org/eclipse/tycho/tycho-metadata-model/0.23.1/tycho-metadata-model-0.23.1.jar
+84b36000-84b37000 r--s 00000000 08:12 407735     /home/david/.m2/repository/org/eclipse/tycho/sisu-equinox-api/0.23.1/sisu-equinox-api-0.23.1.jar
+84b37000-84b4b000 r--s 0012b000 08:12 407732     /home/david/.m2/repository/org/eclipse/tycho/org.eclipse.osgi/3.10.100.v20150529-1857/org.eclipse.osgi-3.10.100.v20150529-1857.jar
+84b4b000-84b4d000 r--s 00002000 08:12 407730     /home/david/.m2/repository/org/eclipse/tycho/sisu-equinox-embedder/0.23.1/sisu-equinox-embedder-0.23.1.jar
+84b4d000-84b4f000 r--s 00039000 08:12 407728     /home/david/.m2/repository/org/eclipse/tycho/org.eclipse.osgi.compatibility.state/1.0.100.v20150402-1551/org.eclipse.osgi.compatibility.state-1.0.100.v20150402-1551.jar
+84b4f000-84b52000 r--s 0000c000 08:12 407726     /home/david/.m2/repository/org/codehaus/plexus/plexus-io/2.0.5/plexus-io-2.0.5.jar
+84b52000-84b57000 r--s 00029000 08:12 407724     /home/david/.m2/repository/org/codehaus/plexus/plexus-archiver/2.2/plexus-archiver-2.2.jar
+84b57000-84b5b000 r--s 00035000 08:12 407722     /home/david/.m2/repository/org/codehaus/plexus/plexus-utils/3.0.7/plexus-utils-3.0.7.jar
+84b5b000-84b5d000 r--s 00002000 08:12 407718     /home/david/.m2/repository/org/sonatype/plexus/plexus-cipher/1.7/plexus-cipher-1.7.jar
+84b5d000-84b5e000 r--s 00006000 08:12 407716     /home/david/.m2/repository/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.jar
+84b5e000-84b60000 r--s 0000d000 08:12 407712     /home/david/.m2/repository/org/codehaus/plexus/plexus-interpolation/1.14/plexus-interpolation-1.14.jar
+84b60000-84b6b000 r--s 00069000 08:12 407710     /home/david/.m2/repository/org/sonatype/sisu/sisu-guice/2.1.7/sisu-guice-2.1.7-noaop.jar
+84b6b000-84b70000 r--s 00021000 08:12 407708     /home/david/.m2/repository/org/sonatype/sisu/sisu-inject-bean/1.4.2/sisu-inject-bean-1.4.2.jar
+84b70000-84b74000 r--s 00017000 08:12 407704     /home/david/.m2/repository/org/sonatype/aether/aether-util/1.7/aether-util-1.7.jar
+84b74000-84b78000 r--s 0002c000 08:12 407674     /home/david/.m2/repository/org/eclipse/tycho/tycho-core/0.23.1/tycho-core-0.23.1.jar
+84b78000-84b79000 r--s 00001000 08:12 407672     /home/david/.m2/repository/org/eclipse/tycho/tycho-maven-plugin/0.23.1/tycho-maven-plugin-0.23.1.jar
+84b79000-84b8a000 r-xp 00000000 08:12 1748753    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/libnio.so
+84b8a000-84b8b000 rw-p 00010000 08:12 1748753    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/libnio.so
+84b8b000-84ba1000 r-xp 00000000 08:12 1748742    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/libnet.so
+84ba1000-84ba2000 rw-p 00015000 08:12 1748742    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/libnet.so
+84ba2000-84ba7000 r--s 00096000 08:12 1748668    /usr/lib/jvm/java-8-openjdk/jre/lib/jsse.jar
+84ba7000-84bb1000 r--s 00116000 08:12 1748694    /usr/lib/jvm/java-8-openjdk/jre/lib/ext/localedata.jar
+84bb1000-84bcd000 r--s 00393000 08:12 1748695    /usr/lib/jvm/java-8-openjdk/jre/lib/ext/cldrdata.jar
+84bcd000-84bcf000 r--s 00005000 08:12 2228169    /opt/maven/lib/aether-transport-wagon-1.0.2.v20150114.jar
+84bcf000-84bd1000 r--s 00013000 08:12 2228194    /opt/maven/lib/maven-embedder-3.3.3.jar
+84bd1000-84bd3000 r--s 0000f000 08:12 2228210    /opt/maven/lib/maven-aether-provider-3.3.3.jar
+84bd3000-84bd8000 r--s 0001d000 08:12 2228157    /opt/maven/lib/aether-api-1.0.2.v20150114.jar
+84bd8000-84bd9000 r--s 00000000 08:12 2228204    /opt/maven/lib/javax.inject-1.jar
+84bd9000-84bdb000 r--s 00009000 08:12 2228203    /opt/maven/lib/maven-settings-3.3.3.jar
+84bdb000-84bdc000 ---p 00000000 00:00 0 
+84bdc000-84c5c000 rw-p 00000000 00:00 0          [stack:18634]
+84c5c000-84c5f000 ---p 00000000 00:00 0 
+84c5f000-84cad000 rw-p 00000000 00:00 0          [stack:18632]
+84cad000-84cb0000 ---p 00000000 00:00 0 
+84cb0000-84d2e000 rw-p 00000000 00:00 0          [stack:18631]
+84d2e000-84d31000 ---p 00000000 00:00 0 
+84d31000-84daf000 rw-p 00000000 00:00 0          [stack:18630]
+84daf000-84db2000 ---p 00000000 00:00 0 
+84db2000-84e00000 rw-p 00000000 00:00 0          [stack:18629]
+84e00000-85000000 r--p 00000000 08:12 1753426    /usr/lib/locale/locale-archive
+85000000-850ff000 rw-p 00000000 00:00 0 
+850ff000-85100000 ---p 00000000 00:00 0 
+85100000-85101000 r--s 00003000 08:12 2228218    /opt/maven/lib/maven-builder-support-3.3.3.jar
+85101000-85102000 r--s 00002000 08:12 2228202    /opt/maven/lib/slf4j-simple-1.7.5.jar
+85102000-85105000 r--s 0000d000 08:12 2228219    /opt/maven/lib/plexus-interpolation-1.21.jar
+85105000-8510a000 r--s 00027000 08:12 2228191    /opt/maven/lib/maven-model-builder-3.3.3.jar
+8510a000-8510e000 r--s 00038000 08:12 2228172    /opt/maven/lib/plexus-utils-3.0.20.jar
+8510e000-8510f000 r--s 00008000 08:12 2228179    /opt/maven/lib/aether-connector-basic-1.0.2.v20150114.jar
+8510f000-85111000 r--s 00005000 08:12 2228221    /opt/maven/lib/maven-repository-metadata-3.3.3.jar
+85111000-85113000 r--s 00002000 08:12 2228216    /opt/maven/lib/plexus-cipher-1.7.jar
+85113000-85115000 r--s 00000000 08:12 2228195    /opt/maven/lib/plexus-component-annotations-1.5.5.jar
+85115000-85117000 r--s 0000c000 08:12 2228213    /opt/maven/lib/maven-artifact-3.3.3.jar
+85117000-85145000 r--s 001fa000 08:12 2228171    /opt/maven/lib/wagon-http-2.9-shaded.jar
+85145000-85148000 ---p 00000000 00:00 0 
+85148000-85196000 rw-p 00000000 00:00 0          [stack:18621]
+85196000-85199000 ---p 00000000 00:00 0 
+85199000-851e7000 rw-p 00000000 00:00 0          [stack:18620]
+851e7000-853b4000 r--s 03be8000 08:12 1748672    /usr/lib/jvm/java-8-openjdk/jre/lib/rt.jar
+853b4000-857fa000 rw-p 00000000 00:00 0 
+857fa000-85800000 ---p 00000000 00:00 0 
+85800000-86a00000 rw-p 00000000 00:00 0 
+86a00000-86b00000 rw-p 00000000 00:00 0 
+86b00000-86b03000 r--s 00008000 08:12 2228168    /opt/maven/lib/cdi-api-1.0.jar
+86b03000-86b08000 r--s 00041000 08:12 2228200    /opt/maven/lib/commons-lang-2.6.jar
+86b08000-86b11000 r--s 00059000 08:12 2228208    /opt/maven/lib/sisu-guice-3.2.5-no_aop.jar
+86b11000-86b1e000 r--s 0008e000 08:12 2228185    /opt/maven/lib/maven-core-3.3.3.jar
+86b1e000-86b22000 r--s 00027000 08:12 2228205    /opt/maven/lib/commons-io-2.2.jar
+86b22000-86b24000 r--s 00006000 08:12 2224237    /opt/maven/lib/aether-spi-1.0.2.v20150114.jar
+86b24000-86b25000 ---p 00000000 00:00 0 
+86b25000-86c00000 rw-p 00000000 00:00 0          [stack:18614]
+86c00000-86c21000 rw-p 00000000 00:00 0 
+86c21000-86d00000 ---p 00000000 00:00 0 
+86d00000-86d01000 r--s 00002000 08:12 2228190    /opt/maven/lib/wagon-http-shared-2.9.jar
+86d01000-86d03000 r--s 00005000 08:12 2224238    /opt/maven/lib/slf4j-api-1.7.5.jar
+86d03000-86d04000 r--s 00006000 08:12 2228155    /opt/maven/lib/plexus-sec-dispatcher-1.3.jar
+86d04000-86d05000 r--s 00001000 08:12 2228222    /opt/maven/lib/jsr250-api-1.0.jar
+86d05000-86d52000 rw-p 00000000 00:00 0 
+86d52000-86d53000 ---p 00000000 00:00 0 
+86d53000-86dd3000 rw-p 00000000 00:00 0          [stack:18602]
+86dd3000-86dd4000 ---p 00000000 00:00 0 
+86dd4000-86e66000 rw-p 00000000 00:00 0          [stack:18601]
+86e66000-86eff000 ---p 00000000 00:00 0 
+86eff000-86f11000 rw-p 00000000 00:00 0 
+86f11000-86fa9000 ---p 00000000 00:00 0 
+86fa9000-86fe5000 rw-p 00000000 00:00 0 
+86fe5000-86fff000 ---p 00000000 00:00 0 
+86fff000-892c0000 rw-p 00000000 00:00 0 
+892c0000-9c580000 ---p 00000000 00:00 0 
+9c580000-a3b00000 rw-p 00000000 00:00 0 
+a633e000-a6340000 rw-p 00000000 00:00 0 
+a6340000-a7000000 ---p 00000000 00:00 0 
+a7000000-a7004000 r--s 00027000 08:12 2227775    /opt/maven/lib/aether-impl-1.0.2.v20150114.jar
+a7004000-a7007000 r--s 0000b000 08:12 2228184    /opt/maven/lib/wagon-provider-api-2.9.jar
+a7007000-a700b000 r--s 00020000 08:12 2228189    /opt/maven/lib/aether-util-1.0.2.v20150114.jar
+a700b000-a7011000 r--s 00042000 08:12 2228207    /opt/maven/lib/jsoup-1.7.2.jar
+a7011000-a7012000 r--s 00002000 08:12 2228217    /opt/maven/lib/wagon-file-2.9.jar
+a7012000-a7015000 r--s 00025000 08:12 2228170    /opt/maven/lib/maven-model-3.3.3.jar
+a7015000-a7040000 r--s 001fc000 08:12 2228220    /opt/maven/lib/guava-18.0.jar
+a7040000-a7067000 rw-p 00000000 00:00 0 
+a7067000-a7400000 ---p 00000000 00:00 0 
+a7400000-a7d88000 rwxp 00000000 00:00 0 
+a7d88000-b6400000 ---p 00000000 00:00 0 
+b6400000-b64f7000 rw-p 00000000 00:00 0 
+b64f7000-b6500000 ---p 00000000 00:00 0 
+b6500000-b6502000 r--s 00009000 08:12 2228206    /opt/maven/lib/commons-cli-1.2.jar
+b6502000-b6508000 r--s 0002d000 08:12 2228209    /opt/maven/lib/org.eclipse.sisu.plexus-0.3.0.jar
+b6508000-b650a000 r--s 00009000 08:12 2228193    /opt/maven/lib/maven-settings-builder-3.3.3.jar
+b650a000-b6510000 r--s 00040000 08:12 2228186    /opt/maven/lib/maven-compat-3.3.3.jar
+b6510000-b6512000 r--s 00000000 08:12 2228177    /opt/maven/lib/aopalliance-1.0.jar
+b6512000-b6519000 r--s 00055000 08:12 2228165    /opt/maven/lib/org.eclipse.sisu.inject-0.3.0.jar
+b6519000-b6525000 rw-p 00000000 00:00 0 
+b6525000-b652d000 r-xp 00000000 08:12 1748738    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/libzip.so
+b652d000-b652e000 rw-p 00007000 08:12 1748738    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/libzip.so
+b652e000-b6554000 r-xp 00000000 08:12 1748740    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/libjava.so
+b6554000-b6555000 rw-p 00026000 08:12 1748740    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/libjava.so
+b6555000-b655c000 r-xp 00000000 08:12 1704811    /usr/lib/librt-2.22.so
+b655c000-b655d000 r--p 00006000 08:12 1704811    /usr/lib/librt-2.22.so
+b655d000-b655e000 rw-p 00007000 08:12 1704811    /usr/lib/librt-2.22.so
+b655e000-b6561000 ---p 00000000 00:00 0 
+b6561000-b65af000 rw-p 00000000 00:00 0          [stack:18600]
+b65af000-b65fb000 r-xp 00000000 08:12 1704808    /usr/lib/libm-2.22.so
+b65fb000-b65fc000 r--p 0004b000 08:12 1704808    /usr/lib/libm-2.22.so
+b65fc000-b65fd000 rw-p 0004c000 08:12 1704808    /usr/lib/libm-2.22.so
+b65fd000-b70d8000 r-xp 00000000 08:12 1754295    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/server/libjvm.so
+b70d8000-b7135000 rw-p 00ada000 08:12 1754295    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/server/libjvm.so
+b7135000-b7554000 rw-p 00000000 00:00 0 
+b7554000-b7707000 r-xp 00000000 08:12 1704126    /usr/lib/libc-2.22.so
+b7707000-b7708000 ---p 001b3000 08:12 1704126    /usr/lib/libc-2.22.so
+b7708000-b770a000 r--p 001b3000 08:12 1704126    /usr/lib/libc-2.22.so
+b770a000-b770b000 rw-p 001b5000 08:12 1704126    /usr/lib/libc-2.22.so
+b770b000-b770f000 rw-p 00000000 00:00 0 
+b770f000-b7712000 r-xp 00000000 08:12 1704807    /usr/lib/libdl-2.22.so
+b7712000-b7713000 r--p 00002000 08:12 1704807    /usr/lib/libdl-2.22.so
+b7713000-b7714000 rw-p 00003000 08:12 1704807    /usr/lib/libdl-2.22.so
+b7714000-b7721000 r-xp 00000000 08:12 1754292    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/jli/libjli.so
+b7721000-b7722000 rw-p 0000c000 08:12 1754292    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/jli/libjli.so
+b7722000-b7738000 r-xp 00000000 08:12 1706453    /usr/lib/libz.so.1.2.8
+b7738000-b7739000 r--p 00015000 08:12 1706453    /usr/lib/libz.so.1.2.8
+b7739000-b773a000 rw-p 00016000 08:12 1706453    /usr/lib/libz.so.1.2.8
+b773a000-b7753000 r-xp 00000000 08:12 1703588    /usr/lib/libpthread-2.22.so
+b7753000-b7754000 ---p 00019000 08:12 1703588    /usr/lib/libpthread-2.22.so
+b7754000-b7755000 r--p 00019000 08:12 1703588    /usr/lib/libpthread-2.22.so
+b7755000-b7756000 rw-p 0001a000 08:12 1703588    /usr/lib/libpthread-2.22.so
+b7756000-b7758000 rw-p 00000000 00:00 0 
+b7758000-b775a000 r--s 0000a000 08:12 2228166    /opt/maven/lib/maven-plugin-api-3.3.3.jar
+b775a000-b775c000 r--s 0000b000 08:12 2224229    /opt/maven/boot/plexus-classworlds-2.5.2.jar
+b775c000-b7764000 rw-s 00000000 00:23 34461194   /tmp/hsperfdata_david/18554
+b7764000-b776f000 r-xp 00000000 08:12 1704532    /usr/lib/libnss_files-2.22.so
+b776f000-b7770000 r--p 0000a000 08:12 1704532    /usr/lib/libnss_files-2.22.so
+b7770000-b7771000 rw-p 0000b000 08:12 1704532    /usr/lib/libnss_files-2.22.so
+b7771000-b7778000 rw-p 00000000 00:00 0 
+b7778000-b7779000 ---p 00000000 00:00 0 
+b7779000-b7784000 r-xp 00000000 08:12 1748729    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/libverify.so
+b7784000-b7785000 rw-p 0000a000 08:12 1748729    /usr/lib/jvm/java-8-openjdk/jre/lib/i386/libverify.so
+b7785000-b7786000 rw-p 00000000 00:00 0 
+b7786000-b7788000 r--p 00000000 00:00 0          [vvar]
+b7788000-b7789000 r-xp 00000000 00:00 0          [vdso]
+b7789000-b77ab000 r-xp 00000000 08:12 1704123    /usr/lib/ld-2.22.so
+b77ab000-b77ac000 r--p 00021000 08:12 1704123    /usr/lib/ld-2.22.so
+b77ac000-b77ad000 rw-p 00022000 08:12 1704123    /usr/lib/ld-2.22.so
+bf89b000-bf89c000 rwxp 00000000 00:00 0 
+bf8ce000-bf8ef000 rw-p 00000000 00:00 0          [stack]
+
+VM Arguments:
+jvm_args: -Xmx512m -Dclassworlds.conf=/opt/maven/bin/m2.conf -Dmaven.home=/opt/maven -Dmaven.multiModuleProjectDirectory=/home/david/build/afbb-bibo 
+java_command: org.codehaus.plexus.classworlds.launcher.Launcher package
+java_class_path (initial): /opt/maven/boot/plexus-classworlds-2.5.2.jar
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk
+PATH=/home/david/.gem/ruby/2.2.0/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/opt/android-sdk/platform-tools:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+SHELL=/usr/bin/zsh
+DISPLAY=:0
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0x8cf420], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGBUS: [libjvm.so+0x8cf420], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGFPE: [libjvm.so+0x736ac0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGPIPE: [libjvm.so+0x736ac0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGXFSZ: [libjvm.so+0x736ac0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGILL: [libjvm.so+0x736ac0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGUSR1: SIG_DFL, sa_mask[0]=00000000000000000000000000000000, sa_flags=none
+SIGUSR2: [libjvm.so+0x736900], sa_mask[0]=00000000000000000000000000000000, sa_flags=SA_RESTART|SA_SIGINFO
+SIGHUP: [libjvm.so+0x737090], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGINT: [libjvm.so+0x737090], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGTERM: [libjvm.so+0x737090], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGQUIT: [libjvm.so+0x737090], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+
+
+---------------  S Y S T E M  ---------------
+
+OS:NAME="Arch Linux"
+ID=arch
+PRETTY_NAME="Arch Linux"
+ANSI_COLOR="0;36"
+HOME_URL="https://www.archlinux.org/"
+SUPPORT_URL="https://bbs.archlinux.org/"
+BUG_REPORT_URL="https://bugs.archlinux.org/"
+
+
+uname:Linux 4.2.5-1-ARCH #1 SMP PREEMPT Tue Oct 27 08:28:41 CET 2015 i686
+libc:glibc 2.22 NPTL 2.22 
+rlimit: STACK 8192k, CORE 0k, NPROC 24151, NOFILE 4096, AS infinity
+load average:10,92 3,35 1,87
+
+/proc/meminfo:
+MemTotal:        3096512 kB
+MemFree:           86336 kB
+MemAvailable:      96756 kB
+Buffers:             152 kB
+Cached:           238196 kB
+SwapCached:         2984 kB
+Active:          2111164 kB
+Inactive:         788568 kB
+Active(anon):    2105344 kB
+Inactive(anon):   782900 kB
+Active(file):       5820 kB
+Inactive(file):     5668 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+HighTotal:       2227016 kB
+HighFree:           2704 kB
+LowTotal:         869496 kB
+LowFree:           83632 kB
+SwapTotal:       2097148 kB
+SwapFree:              0 kB
+Dirty:                68 kB
+Writeback:           996 kB
+AnonPages:       2660576 kB
+Mapped:            52116 kB
+Shmem:            226436 kB
+Slab:              48776 kB
+SReclaimable:      19492 kB
+SUnreclaim:        29284 kB
+KernelStack:        5488 kB
+PageTables:        17816 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:     3645404 kB
+Committed_AS:   13633624 kB
+VmallocTotal:     122880 kB
+VmallocUsed:       30464 kB
+VmallocChunk:      90044 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:   1306624 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       4096 kB
+DirectMap4k:       98296 kB
+DirectMap4M:      811008 kB
+
+
+CPU:total 2 (2 cores per cpu, 1 threads per core) family 6 model 15 stepping 13, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, tsc
+
+/proc/cpuinfo:
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 15
+model name	: Intel(R) Core(TM)2 Duo CPU     T5250  @ 1.50GHz
+stepping	: 13
+microcode	: 0xa1
+cpu MHz		: 1500.000
+cache size	: 2048 KB
+physical id	: 0
+siblings	: 2
+core id		: 0
+cpu cores	: 2
+apicid		: 0
+initial apicid	: 0
+fdiv_bug	: no
+f00f_bug	: no
+coma_bug	: no
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 10
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe nx lm constant_tsc arch_perfmon pebs bts aperfmperf pni dtes64 monitor ds_cpl est tm2 ssse3 cx16 xtpr pdcm lahf_lm dtherm
+bugs		:
+bogomips	: 2994.62
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+processor	: 1
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 15
+model name	: Intel(R) Core(TM)2 Duo CPU     T5250  @ 1.50GHz
+stepping	: 13
+microcode	: 0xa1
+cpu MHz		: 1500.000
+cache size	: 2048 KB
+physical id	: 0
+siblings	: 2
+core id		: 1
+cpu cores	: 2
+apicid		: 1
+initial apicid	: 1
+fdiv_bug	: no
+f00f_bug	: no
+coma_bug	: no
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 10
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe nx lm constant_tsc arch_perfmon pebs bts aperfmperf pni dtes64 monitor ds_cpl est tm2 ssse3 cx16 xtpr pdcm lahf_lm dtherm
+bugs		:
+bogomips	: 2994.62
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+
+
+Memory: 4k page, physical 3096512k(89628k free), swap 2097148k(0k free)
+
+vm_info: OpenJDK Server VM (25.65-b01) for linux-x86 JRE (1.8.0_65-b17), built on Oct 21 2015 14:24:16 by "builduser" with gcc 5.2.0
+
+time: Thu Dec  3 17:53:26 2015
+elapsed time: 35 seconds (0d 0h 0m 35s)
+

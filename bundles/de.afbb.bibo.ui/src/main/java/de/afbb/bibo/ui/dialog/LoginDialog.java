@@ -17,15 +17,19 @@ import org.eclipse.ui.PlatformUI;
 
 import de.afbb.bibo.crypto.CryptoUtil;
 import de.afbb.bibo.databinding.BindingHelper;
-import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
+import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.ui.BiboImageRegistry;
+import de.afbb.bibo.ui.IconSize;
 import de.afbb.bibo.ui.Messages;
 
 /**
  * dialog that tries to log the user in.<br>
- * will set the returned session token into {@link SessionHolder} on success and will terminate the program if the user cancels the dialog
- * 
+ * will set the returned session token into {@link SessionHolder} on success and
+ * will terminate the program if the user cancels the dialog
+ *
  * @author dbecker
  */
 public class LoginDialog extends AbstractDialog {
@@ -65,6 +69,7 @@ public class LoginDialog extends AbstractDialog {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPassword);
 
 		initBinding();
+		setTitleImage(BiboImageRegistry.getImage(IconType.LOGO, IconSize.huge));
 
 		return area;
 	}
@@ -81,16 +86,16 @@ public class LoginDialog extends AbstractDialog {
 
 	private boolean validateLogin() {
 		try {
-			final String salt = ServiceLocator.getInstance().getLoginService().requestSaltForUserName(curator.getName());
+			final String salt = ServiceLocator.getInstance().getLoginService()
+					.requestSaltForUserName(curator.getName());
 			final String hashPassword = CryptoUtil.hashPassword(curator.getPassword(), salt);
-			boolean loggedIn = ServiceLocator.getInstance().getLoginService().loginWithHash(curator.getName(),
+			final boolean loggedIn = ServiceLocator.getInstance().getLoginService().loginWithHash(curator.getName(),
 					hashPassword);
 			if (!loggedIn) {
 				setMessage("Name und Passwort stimmen nicht überein !", IMessageProvider.ERROR);
 				return false;
 			}
 			setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
-			SessionHolder.getInstance().setCurator(curator);
 			return true;
 		} catch (final ConnectException e) {
 			setMessage(Messages.MESSAGE_ERROR_CONNECTION, IMessageProvider.WARNING);
@@ -101,7 +106,8 @@ public class LoginDialog extends AbstractDialog {
 	@Override
 	protected void initBinding() {
 		BindingHelper.bindStringToTextField(txtName, curator, Curator.class, Curator.FIELD_NAME, bindingContext, true);
-		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext, true);
+		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext,
+				true);
 	}
 
 	@Override

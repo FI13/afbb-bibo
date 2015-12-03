@@ -13,7 +13,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
-import de.afbb.bibo.share.impl.NavigationTreeViewNode;
+import de.afbb.bibo.aggregation.NavigationTreeViewNode;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.ui.view.LendCopyView;
 

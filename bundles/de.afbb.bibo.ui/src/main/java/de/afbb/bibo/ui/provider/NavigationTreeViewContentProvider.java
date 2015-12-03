@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import de.afbb.bibo.share.impl.NavigationTreeViewNode;
+import de.afbb.bibo.aggregation.NavigationTreeViewNode;
 
 public class NavigationTreeViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
 

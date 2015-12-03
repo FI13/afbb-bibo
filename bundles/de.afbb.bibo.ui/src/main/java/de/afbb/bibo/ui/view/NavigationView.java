@@ -10,7 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import de.afbb.bibo.share.impl.NavigationTreeService;
+import de.afbb.bibo.aggregation.NavigationTreeService;
 import de.afbb.bibo.ui.CommandExecutor;
 import de.afbb.bibo.ui.ICommandIds;
 import de.afbb.bibo.ui.provider.NavigationTreeViewContentProvider;
@@ -25,7 +25,6 @@ public class NavigationView extends ViewPart {
 	public void createPartControl(final Composite parent) {
 		NavigationTreeService navigationTree;
 		try {
-			navigationTree = new NavigationTreeService();
 			viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 			viewer.setContentProvider(new NavigationTreeViewContentProvider());
 			viewer.setLabelProvider(new NavigationTreeViewLabelProvider());
@@ -39,6 +38,7 @@ public class NavigationView extends ViewPart {
 				}
 			});
 			viewer.setAutoExpandLevel(2);
+			navigationTree = new NavigationTreeService(viewer);
 			viewer.setInput(navigationTree.getRoot());
 
 			// popup menu related stuff

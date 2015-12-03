@@ -3,10 +3,15 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Client
 Bundle-SymbolicName: de.afbb.bibo.bibservlet.client
 Bundle-Version: 1.0.0.qualifier
-Export-Package: de.afbb.bibo.servletclient.connection
+Export-Package: de.afbb.bibo.servletclient
 Import-Package: com.google.gson,
+ de.afbb.bibo.crypto,
+ de.afbb.bibo.properties,
  de.afbb.bibo.share,
+ de.afbb.bibo.share.beans,
+ de.afbb.bibo.share.callback,
  de.afbb.bibo.share.model,
  javax.servlet.http
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
  JavaSE-1.8
+Bundle-Vendor: FI13

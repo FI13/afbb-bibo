@@ -21,14 +21,14 @@ import org.eclipse.swt.widgets.Text;
 
 import de.afbb.bibo.crypto.CryptoUtil;
 import de.afbb.bibo.databinding.BindingHelper;
-import de.afbb.bibo.share.ServiceLocator;
+import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
 import de.afbb.bibo.ui.Messages;
 
 /**
  * dialog that creates a new instance of type {@link Curator}
- * 
+ *
  * @author dbecker
  */
 public class ManageCuratorDialog extends AbstractDialog {
@@ -104,6 +104,7 @@ public class ManageCuratorDialog extends AbstractDialog {
 									final String salt = createNew ? CryptoUtil.generateSalt() : curator.getSalt();
 									curator.setPasswordHash(CryptoUtil.hashPassword(curator.getPassword(), salt));
 									if (createNew) {
+										curator.setSalt(salt);
 										ServiceLocator.getInstance().getCuratorService().create(curator);
 									} else {
 										ServiceLocator.getInstance().getCuratorService().update(curator);
@@ -129,8 +130,10 @@ public class ManageCuratorDialog extends AbstractDialog {
 	@Override
 	protected void initBinding() {
 		BindingHelper.bindStringToTextField(txtName, curator, Curator.class, Curator.FIELD_NAME, bindingContext, true);
-		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext, true);
-		BindingHelper.bindStringToTextField(txtPassword2, BeansObservables.observeValue(this, FIELD_PASSWORD2), bindingContext, true);
+		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext,
+				true);
+		BindingHelper.bindStringToTextField(txtPassword2, BeansObservables.observeValue(this, FIELD_PASSWORD2),
+				bindingContext, true);
 
 	}
 

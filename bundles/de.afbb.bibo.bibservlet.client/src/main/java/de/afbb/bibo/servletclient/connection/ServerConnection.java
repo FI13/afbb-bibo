@@ -6,6 +6,7 @@
 package de.afbb.bibo.servletclient.connection;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -15,26 +16,42 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
+import de.afbb.bibo.properties.BiBoProperties;
+import de.afbb.bibo.share.SessionHolder;
+import de.afbb.bibo.share.model.Curator;
+
 /**
  *
  * @author fi13.pendrulat
  */
 public class ServerConnection {
 
-	private static final String HOST = "http://localhost:8080";
+	private final String HOST;
+
+	private final String URL;
+	private final int PORT;
 
 	private String sessionToken;
 	private boolean isLoggedIn;
 
 	private static ServerConnection INSTANCE;
 
-	private ServerConnection() {
+	private ServerConnection() throws NumberFormatException, IOException {
 		isLoggedIn = false;
+		URL = BiBoProperties.get("SERVER_URL");
+		PORT = Integer.valueOf(BiBoProperties.get("SERVER_PORT"));
+		HOST = "http://" + URL + ":" + PORT;
 	}
 
-	public static ServerConnection getInstance() {
+	public static ServerConnection getInstance() throws ConnectException {
 		if (INSTANCE == null) {
-			INSTANCE = new ServerConnection();
+			try {
+				INSTANCE = new ServerConnection();
+			} catch (NumberFormatException | IOException e) {
+				throw new ConnectException("Can't load configuration");
+			}
 		}
 		return INSTANCE;
 	}
@@ -84,6 +101,14 @@ public class ServerConnection {
 				connection.setRequestProperty("sessionId", sessionToken);
 			}
 			connection.setRequestMethod(method);
+			connection.setDoOutput(true);
+			connection.setRequestProperty("Content-Type", "application/json");
+			connection.setUseCaches(false);
+			if (json != null) {
+				final OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+				out.write(json);
+				out.close();
+			}
 			connection.connect();
 
 			return new HttpResponse(connection);
@@ -110,7 +135,9 @@ public class ServerConnection {
 		final HttpResponse resp = request("/login/login", "GET", params, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
 			isLoggedIn = true;
-			sessionToken = resp.getData();
+			final String[] split = resp.getData().split("\n");
+			sessionToken = split[0];
+			SessionHolder.getInstance().setCurator(new Gson().fromJson(split[1], Curator.class));
 			return true;
 		} else if (resp.getStatus() == HttpServletResponse.SC_UNAUTHORIZED) {
 			return false;

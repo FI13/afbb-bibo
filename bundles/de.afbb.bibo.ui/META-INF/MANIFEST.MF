@@ -10,8 +10,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
  JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: de.afbb.bibo.crypto,
+ de.afbb.bibo.servletclient,
  de.afbb.bibo.share,
- de.afbb.bibo.share.impl,
+ de.afbb.bibo.share.callback,
  de.afbb.bibo.share.model,
  org.eclipse.core.databinding,
  org.eclipse.core.databinding.beans,
