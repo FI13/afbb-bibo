@@ -10,6 +10,7 @@ Export-Package: de.afbb.bibo.crypto,
  de.afbb.bibo.properties,
  de.afbb.bibo.share,
  de.afbb.bibo.share.beans,
+ de.afbb.bibo.share.callback,
  de.afbb.bibo.share.model
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
  JavaSE-1.8

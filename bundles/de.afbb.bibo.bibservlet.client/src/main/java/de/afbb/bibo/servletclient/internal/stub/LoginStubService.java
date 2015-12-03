@@ -4,11 +4,12 @@ import java.net.ConnectException;
 
 import de.afbb.bibo.crypto.CryptoUtil;
 import de.afbb.bibo.share.ILoginService;
+import de.afbb.bibo.share.callback.EventListener;
 
 /**
  * stub implementation of {@link ILoginService}
- * 
- * @author dbecker
+ *
+ * @author David Becker
  */
 public class LoginStubService implements ILoginService {
 
@@ -29,6 +30,11 @@ public class LoginStubService implements ILoginService {
 
 	@Override
 	public void invalidateSession() {
+		// nothing to do in stub service
+	}
+
+	@Override
+	public void register(final EventListener listener) {
 		// nothing to do in stub service
 	}
 

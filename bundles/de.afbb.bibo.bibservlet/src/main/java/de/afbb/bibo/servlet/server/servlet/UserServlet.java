@@ -16,9 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import de.afbb.bibo.servlet.db.DBConnector;
 import de.afbb.bibo.servlet.server.Utils;
+import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Curator;
 
@@ -36,7 +38,7 @@ public class UserServlet {
 	protected UserServlet(final HttpServletRequest request, final HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
-		this.gson = new Gson();
+		gson = new GsonBuilder().addSerializationExclusionStrategy(new BeanExclusionStrategy()).create();
 	}
 
 	protected void processRequest() throws SQLException, IOException {
@@ -135,7 +137,10 @@ public class UserServlet {
 
 	private void getBorrower() throws SQLException, IOException {
 		final List<Borrower> borrowers = DBConnector.getInstance().getBorrower();
-		response.getWriter().println(gson.toJson(borrowers));
+		for (final Borrower borrower : borrowers) {
+			final String json = gson.toJson(borrower);
+			response.getWriter().println(json);
+		}
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 

@@ -5,36 +5,42 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.widgets.Display;
+
 import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.IBorrowerService;
 import de.afbb.bibo.share.IMediumService;
+import de.afbb.bibo.share.callback.EventListener;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.NavigationTreeNodeType;
 
-public class NavigationTreeService {
+public class NavigationTreeService implements EventListener {
 
 	private final IBorrowerService borrowerService = ServiceLocator.getInstance().getBorrowerService();
 	private final IMediumService mediumService = ServiceLocator.getInstance().getMediumService();
 
 	private NavigationTreeViewNode borrowersRoot;
 	private NavigationTreeViewNode mediaRoot;
+	private final TreeViewer viewer;
 
-	public NavigationTreeService() throws ConnectException {
-		borrowersRoot = new NavigationTreeViewNode("Ausleiher", null, NavigationTreeNodeType.PERSONS);
-		mediaRoot = new NavigationTreeViewNode("Bücher", null, NavigationTreeNodeType.BOOKS);
-		loadBorrowers(borrowersRoot);
-		loadCopies(mediaRoot);
+	public NavigationTreeService(final TreeViewer viewer) throws ConnectException {
+		this.viewer = viewer;
+		ServiceLocator.getInstance().getLoginService().register(this);
+		borrowerService.register(this);
 	}
 
 	public void reloadBorrowers() throws ConnectException {
 		borrowersRoot = new NavigationTreeViewNode("Ausleiher", null, NavigationTreeNodeType.PERSONS);
 		loadBorrowers(borrowersRoot);
+		setInput();
 	}
 
 	public void reloadCopies() throws ConnectException {
 		mediaRoot = new NavigationTreeViewNode("Bücher", null, NavigationTreeNodeType.BOOKS);
 		loadCopies(mediaRoot);
+		setInput();
 	}
 
 	public NavigationTreeViewNode getRoot() {
@@ -85,5 +91,33 @@ public class NavigationTreeService {
 
 			root.addChild(group);
 		}
+	}
+
+	@Override
+	public void invalidate(final NavigationTreeNodeType type) {
+		try {
+			if (NavigationTreeNodeType.ROOT.equals(type)) {
+				reloadBorrowers();
+				reloadCopies();
+			} else if (NavigationTreeNodeType.PERSONS.equals(type)) {
+				reloadBorrowers();
+			}
+		} catch (final ConnectException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void setInput() {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				if (viewer != null && viewer.getTree() != null && !viewer.getTree().isDisposed()) {
+					viewer.setInput(getRoot());
+				}
+				viewer.refresh();
+			}
+		});
 	}
 }

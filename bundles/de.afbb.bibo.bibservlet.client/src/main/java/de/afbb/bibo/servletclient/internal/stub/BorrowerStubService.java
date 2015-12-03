@@ -9,6 +9,7 @@ import java.util.Set;
 
 import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.IBorrowerService;
+import de.afbb.bibo.share.callback.EventListener;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 
@@ -105,6 +106,11 @@ public class BorrowerStubService implements IBorrowerService {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public void register(final EventListener listener) {
+		// nothing to do in stub service
 	}
 
 }

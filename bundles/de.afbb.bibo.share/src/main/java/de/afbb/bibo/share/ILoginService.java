@@ -2,16 +2,18 @@ package de.afbb.bibo.share;
 
 import java.net.ConnectException;
 
+import de.afbb.bibo.share.callback.EventChangeProvider;
+
 /**
  * service interface to create a session with the server
- * 
- * @author dbecker
+ *
+ * @author David Becker
  */
-public interface ILoginService {
+public interface ILoginService extends EventChangeProvider {
 
 	/**
 	 * requests the salt for given user
-	 * 
+	 *
 	 * @param userName
 	 *            name of the user
 	 * @return password salt or empty String when user doesn't exist
@@ -21,19 +23,20 @@ public interface ILoginService {
 
 	/**
 	 * request a session token for given user
-	 * 
+	 *
 	 * @param userName
 	 *            name of the user
 	 * @param hashedPassword
 	 *            hashed password for user
-	 * @return session token or empty String when hashedPassword isn't valid for given userName
+	 * @return session token or empty String when hashedPassword isn't valid for
+	 *         given userName
 	 * @throws ConnectException
 	 */
 	boolean loginWithHash(String userName, String hashedPassword) throws ConnectException;
 
 	/**
 	 * invalidates the given session token
-	 * 
+	 *
 	 */
 	void invalidateSession();
 
