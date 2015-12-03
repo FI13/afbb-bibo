@@ -42,9 +42,6 @@ public class DBConnector {
 	private static final org.slf4j.Logger log = LoggerFactory.getLogger(DBConnector.class);
 
 	private Connection connect = null;
-	// private String url = "192.168.168.156";
-	// private String userName = "bibo";
-	// private String password = "b1b0";
 
 	public static DBConnector getInstance() throws SQLException, NumberFormatException, IOException {
 		log.debug("access database...");

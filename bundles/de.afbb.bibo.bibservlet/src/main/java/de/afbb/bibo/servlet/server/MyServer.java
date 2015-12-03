@@ -5,6 +5,8 @@
  */
 package de.afbb.bibo.servlet.server;
 
+import java.io.IOException;
+
 import javax.servlet.Servlet;
 
 import org.eclipse.jetty.server.Server;
@@ -13,6 +15,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.afbb.bibo.servlet.Config;
 import de.afbb.bibo.servlet.server.servlet.MainServlet;
 
 /**
@@ -25,7 +28,7 @@ public class MyServer {
 
 	private static MyServer instance;
 
-	private static final Server server = new Server(8080);
+	private final Server server;
 
 	private static final Logger log = LoggerFactory.getLogger(MyServer.class);
 
@@ -90,6 +93,15 @@ public class MyServer {
 	}
 
 	private MyServer() {
+		Server s = null;
+		try {
+			s = new Server(Config.getInstance().getPORT());
+		} catch (NumberFormatException | IOException e) {
+			log.error("Failed to load configuration", e);
+			System.exit(1);
+		} finally {
+			server = s;
+		}
 	}
 
 	public void resetServer() throws Exception {

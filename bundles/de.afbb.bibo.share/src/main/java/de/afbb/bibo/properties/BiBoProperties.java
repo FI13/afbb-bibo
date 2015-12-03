@@ -1,31 +1,24 @@
 package de.afbb.bibo.properties;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class BiBoProperties {
-	private final static String path = "./bibo.properties";
 
-	public static String get(final String search) {
-		String s = null;
-		Reader reader = null;
-		try {
-			reader = new FileReader(path);
-			final Properties prop = new Properties();
-			prop.load(reader);
-			reader.close();
-			s = prop.getProperty(search, "notFound");
+	private final static String PROPRTY_FILE = "bibo.properties";//$NON-NLS-1$
+	private static Properties prop = null;
 
-		} catch (final FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public static String get(final String search) throws IOException {
+		if (prop == null) {
+			final InputStream inputStream = BiBoProperties.class.getClassLoader().getResourceAsStream(PROPRTY_FILE);
+
+			if (inputStream != null) {
+				prop = new Properties();
+				prop.load(inputStream);
+			}
+			inputStream.close();
 		}
-		return s;
+		return prop.getProperty(search, "");
 	}
 }

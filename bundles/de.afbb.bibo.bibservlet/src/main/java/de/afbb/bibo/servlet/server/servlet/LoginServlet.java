@@ -5,6 +5,7 @@
  */
 package de.afbb.bibo.servlet.server.servlet;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -71,13 +72,17 @@ public class LoginServlet {
 	private void doLogin() throws SQLException, IOException {
 		final String userName = request.getParameter("name");
 		final String password = request.getParameter("hash");
-		if (DBConnector.getInstance().checkPassword(userName, password)) {
-			response.getWriter().println(SessionContainer.getInstance().createNewConnection(userName));
-			final Curator curator = DBConnector.getInstance().getCurator(userName);
-			response.getWriter().println(gson.toJson(curator));
-			response.setStatus(HttpServletResponse.SC_OK);
-		} else {
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		try {
+			if (DBConnector.getInstance().checkPassword(userName, password)) {
+				response.getWriter().println(SessionContainer.getInstance().createNewConnection(userName));
+				final Curator curator = DBConnector.getInstance().getCurator(userName);
+				response.getWriter().println(gson.toJson(curator));
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			}
+		} catch (final FileNotFoundException e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}
 

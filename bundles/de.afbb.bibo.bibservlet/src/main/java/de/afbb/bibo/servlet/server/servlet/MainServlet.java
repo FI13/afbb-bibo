@@ -7,7 +7,6 @@ package de.afbb.bibo.servlet.server.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.logging.Level;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -95,8 +94,9 @@ public class MainServlet extends HttpServlet {
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) {
 		try {
 			processRequest(request, response);
-		} catch (final NumberFormatException | IOException ex) {
-			java.util.logging.Logger.getLogger(MainServlet.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (final NumberFormatException | IOException e) {
+			log.debug(e.getMessage());
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -104,8 +104,9 @@ public class MainServlet extends HttpServlet {
 	protected void doPost(final HttpServletRequest request, final HttpServletResponse response) {
 		try {
 			processRequest(request, response);
-		} catch (final NumberFormatException | IOException ex) {
-			java.util.logging.Logger.getLogger(MainServlet.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (final NumberFormatException | IOException e) {
+			log.debug(e.getMessage());
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}
 

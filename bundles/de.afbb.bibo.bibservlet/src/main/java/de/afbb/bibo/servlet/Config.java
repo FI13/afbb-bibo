@@ -8,9 +8,10 @@ package de.afbb.bibo.servlet;
 
 import java.io.IOException;
 
+import de.afbb.bibo.properties.BiBoProperties;
+
 /**
- * Die config-file muss "bibo.properties" heissen und im gleichen Verzeichnis
- * wie die ausführbare Datei liegen
+ * loads the property file out of the jar file (I'm lazy...)
  *
  * @author fi13.pendrulatz
  */
@@ -21,22 +22,17 @@ public final class Config {
 	private final String URL;
 	private final String DATABASE_NAME;
 	private final int TOKEN_EXPIRATION_TIME_IN_HOURS;
+	private final int PORT;
 
 	private static Config instance;
 
 	private Config() throws NumberFormatException, IOException {
-		// FIXME doesn't work
-		// TOKEN_EXPIRATION_TIME_IN_HOURS =
-		// Integer.valueOf(BiBoProperties.get("TOKEN_EXPIRATION_TIME_IN_HOURS"));
-		// DATABASE_NAME = BiBoProperties.get("DATABASE_NAME");
-		// URL = BiBoProperties.get("URL");
-		// USER_NAME = BiBoProperties.get("USER_NAME");
-		// PASSWORD = BiBoProperties.get("PASSWORD");
-		TOKEN_EXPIRATION_TIME_IN_HOURS = 8;
-		DATABASE_NAME = "afbbbibo";
-		URL = "127.0.0.1";
-		USER_NAME = "root";
-		PASSWORD = "";
+		TOKEN_EXPIRATION_TIME_IN_HOURS = Integer.valueOf(BiBoProperties.get("TOKEN_EXPIRATION_TIME_IN_HOURS"));
+		PORT = Integer.valueOf(BiBoProperties.get("SERVER_PORT"));
+		DATABASE_NAME = BiBoProperties.get("DATABASE_NAME");
+		URL = BiBoProperties.get("MYSQL_URL");
+		USER_NAME = BiBoProperties.get("USER_NAME");
+		PASSWORD = BiBoProperties.get("PASSWORD");
 	}
 
 	public static Config getInstance() throws NumberFormatException, IOException {
@@ -64,6 +60,13 @@ public final class Config {
 
 	public int getTOKEN_EXPIRATION_TIME_IN_HOURS() {
 		return TOKEN_EXPIRATION_TIME_IN_HOURS;
+	}
+
+	/**
+	 * @return the pORT
+	 */
+	public int getPORT() {
+		return PORT;
 	}
 
 }
