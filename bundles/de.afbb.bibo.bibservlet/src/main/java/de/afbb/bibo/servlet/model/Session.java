@@ -6,6 +6,7 @@
 
 package de.afbb.bibo.servlet.model;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -28,7 +29,7 @@ public class Session {
 		this.date = date;
 		try {
 			this.id = DBConnector.getInstance().getCuratorId(name);
-		} catch (final SQLException ex) {
+		} catch (final SQLException | NumberFormatException | IOException ex) {
 			Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}

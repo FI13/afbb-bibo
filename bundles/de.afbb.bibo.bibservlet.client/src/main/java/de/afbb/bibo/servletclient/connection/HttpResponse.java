@@ -19,45 +19,49 @@ import java.net.HttpURLConnection;
  */
 public class HttpResponse {
 
-    private String data;
-    private int status;
+	private String data;
+	private final int status;
 
-    /**
-     * Create a new HttpResponse object. The HttpResponse is a wrapper class for
-     * the unnecessary complicated HttpUrlConnection object. It reads the
-     * HttpURLConnection and extracts the response data and the response status.
-     *
-     * @param connection
-     * @throws IOException
-     */
-    public HttpResponse(HttpURLConnection connection) throws IOException {
-        data = "";
-        try (BufferedReader in = new BufferedReader(
-                new InputStreamReader(
-                        connection.getInputStream()))) {
-                    String inputLine;
+	/**
+	 * Create a new HttpResponse object. The HttpResponse is a wrapper class for
+	 * the unnecessary complicated HttpUrlConnection object. It reads the
+	 * HttpURLConnection and extracts the response data and the response status.
+	 *
+	 * @param connection
+	 * @throws IOException
+	 */
+	public HttpResponse(final HttpURLConnection connection) throws IOException {
+		data = "";
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+			String inputLine;
 
-                    while ((inputLine = in.readLine()) != null) {
-                        data += inputLine + "\\n";
-                    }
-                    data = data.substring(0, data.length() - 1);
-                }
-                status = connection.getResponseCode();
-    }
+			while ((inputLine = in.readLine()) != null) {
+				data += inputLine + "\\n";
+			}
+			/*
+			 * FIXME will throw an StringIndexOutOfBoundsException for empty
+			 * string (and I don't see why this might be useful otherwise
+			 */
+			// data = data.substring(0, data.length() - 1);
+		}
+		status = connection.getResponseCode();
+	}
 
-    /**
-     * Get the response data. 
-     * @return the response data.
-     */
-    public String getData() {
-        return data;
-    }
+	/**
+	 * Get the response data.
+	 *
+	 * @return the response data.
+	 */
+	public String getData() {
+		return data;
+	}
 
-    /**
-     * Get the http status code of the response
-     * @return the http response status code.
-     */
-    public int getStatus() {
-        return status;
-    }
+	/**
+	 * Get the http status code of the response
+	 *
+	 * @return the http response status code.
+	 */
+	public int getStatus() {
+		return status;
+	}
 }

@@ -1,5 +1,6 @@
 package de.afbb.bibo.servletclient;
 
+import de.afbb.bibo.servletclient.connection.LoginServiceImpl;
 import de.afbb.bibo.servletclient.internal.stub.BorrowerStubService;
 import de.afbb.bibo.servletclient.internal.stub.CopyStubService;
 import de.afbb.bibo.servletclient.internal.stub.CuratorStubService;
@@ -29,6 +30,9 @@ public final class ServiceLocator {
 
 	private static final ServiceLocator INSTANCE = new ServiceLocator();
 
+	// TODO remove
+	private static final boolean useStubServices = false;
+
 	private ServiceLocator() {
 	}
 
@@ -49,7 +53,7 @@ public final class ServiceLocator {
 
 	public ILoginService getLoginService() {
 		if (LOGIN_SERVICE == null) {
-			LOGIN_SERVICE = new LoginStubService();
+			LOGIN_SERVICE = useStubServices ? new LoginStubService() : new LoginServiceImpl();
 		}
 		return LOGIN_SERVICE;
 	}

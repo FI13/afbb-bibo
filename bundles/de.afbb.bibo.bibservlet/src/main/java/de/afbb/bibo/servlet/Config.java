@@ -16,19 +16,49 @@ import de.afbb.bibo.properties.BiBoProperties;
  *
  * @author fi13.pendrulatz
  */
-public class Config {
+public final class Config {
 
-	public static String PASSWORD;
-	public static String USER_NAME;
-	public static String URL;
-	public static String DATABASE_NAME;
-	public static int TOKEN_EXPIRATION_TIME_IN_HOURS;
+	private final String PASSWORD;
+	private final String USER_NAME;
+	private final String URL;
+	private final String DATABASE_NAME;
+	private final int TOKEN_EXPIRATION_TIME_IN_HOURS;
 
-	public Config() throws NumberFormatException, IOException {
+	private static Config instance;
+
+	private Config() throws NumberFormatException, IOException {
 		TOKEN_EXPIRATION_TIME_IN_HOURS = Integer.valueOf(BiBoProperties.get("TOKEN_EXPIRATION_TIME_IN_HOURS"));
 		DATABASE_NAME = BiBoProperties.get("DATABASE_NAME");
 		URL = BiBoProperties.get("URL");
 		USER_NAME = BiBoProperties.get("USER_NAME");
 		PASSWORD = BiBoProperties.get("PASSWORD");
 	}
+
+	public static Config getInstance() throws NumberFormatException, IOException {
+		if (instance == null) {
+			instance = new Config();
+		}
+		return instance;
+	}
+
+	public String getPASSWORD() {
+		return PASSWORD;
+	}
+
+	public String getUSER_NAME() {
+		return USER_NAME;
+	}
+
+	public String getURL() {
+		return URL;
+	}
+
+	public String getDATABASE_NAME() {
+		return DATABASE_NAME;
+	}
+
+	public int getTOKEN_EXPIRATION_TIME_IN_HOURS() {
+		return TOKEN_EXPIRATION_TIME_IN_HOURS;
+	}
+
 }
