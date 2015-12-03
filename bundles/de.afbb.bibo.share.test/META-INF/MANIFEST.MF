@@ -7,3 +7,4 @@ Fragment-Host: de.afbb.bibo.share;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
  JavaSE-1.8
 Require-Bundle: org.junit
+Import-Package: com.google.gson
