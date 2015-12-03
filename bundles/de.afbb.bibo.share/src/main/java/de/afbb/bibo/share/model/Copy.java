@@ -22,10 +22,10 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable {
 	public static final String FIELD_MEDIUM = "medium";//$NON-NLS-1$
 
 	private final Integer id;
-	private String edition;
+	private String edition = "";
 	private String barcode = "";
 	private Date inventoryDate;
-	private String condition;
+	private String condition = "";
 	private Date borrowDate;
 	private Date lastBorrowDate;
 	private Curator curator;

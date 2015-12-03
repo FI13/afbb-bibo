@@ -11,15 +11,16 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 	public static final String FIELD_TYPE = "type";//$NON-NLS-1$
 	public static final String FIELD_PUBLISHER = "publisher";//$NON-NLS-1$
 
-	private Integer id;
-	private String isbn;
-	private String title;
-	private String author;
-	private String language;
+	private Integer id = -1;
+	private String isbn = "";
+	private String title = "";
+	private String author = "";
+	private String language = "";
 	private MediumType type;
-	private String publisher;
+	private String publisher = "";
 
 	public Medium() {
+		this(-1, "", "", "", "", new MediumType(), "");
 	}
 
 	public Medium(final int id, final String isbn, final String title, final String author, final String language,
