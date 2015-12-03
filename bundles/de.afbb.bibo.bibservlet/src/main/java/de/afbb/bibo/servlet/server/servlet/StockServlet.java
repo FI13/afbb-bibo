@@ -15,9 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import de.afbb.bibo.servlet.db.DBConnector;
 import de.afbb.bibo.servlet.server.Utils;
+import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
@@ -35,7 +37,7 @@ public class StockServlet {
 	protected StockServlet(final HttpServletRequest request, final HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
-		gson = new Gson();
+		gson = new GsonBuilder().addSerializationExclusionStrategy(new BeanExclusionStrategy()).create();
 	}
 
 	protected void processRequest() throws IOException, SQLException {

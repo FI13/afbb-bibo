@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import de.afbb.bibo.servlet.db.DBConnector;
 import de.afbb.bibo.servlet.server.SessionContainer;
 import de.afbb.bibo.servlet.server.Utils;
+import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 
 /**
  *
@@ -31,7 +33,7 @@ public class BorrowServlet {
 	protected BorrowServlet(final HttpServletRequest request, final HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
-		this.gson = new Gson();
+		gson = new GsonBuilder().addSerializationExclusionStrategy(new BeanExclusionStrategy()).create();
 	}
 
 	protected void processRequest() throws SQLException, IOException {
