@@ -104,6 +104,7 @@ public class ManageCuratorDialog extends AbstractDialog {
 									final String salt = createNew ? CryptoUtil.generateSalt() : curator.getSalt();
 									curator.setPasswordHash(CryptoUtil.hashPassword(curator.getPassword(), salt));
 									if (createNew) {
+										curator.setSalt(salt);
 										ServiceLocator.getInstance().getCuratorService().create(curator);
 									} else {
 										ServiceLocator.getInstance().getCuratorService().update(curator);
