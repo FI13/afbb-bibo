@@ -61,6 +61,7 @@ public class DBConnector {
 		} catch (final ClassNotFoundException ex) {
 			Logger.getLogger(DBConnector.class.getName()).log(Level.SEVERE, null, ex);
 		}
+		log.info("connect to database " + Config.URL);
 		// Setup the connection with the DB
 		connect = DriverManager.getConnection(
 				"jdbc:mysql://" + Config.URL + "?" + "user=" + Config.USER_NAME + "&password=" + Config.PASSWORD);
