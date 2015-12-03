@@ -47,6 +47,9 @@ public class UserServlet {
 		case "/newCurator":
 			addCurator();
 			break;
+		case "/getCurator":
+			getCurator();
+			break;
 		case "/curatorExists":
 			hasCurator();
 			break;
@@ -80,6 +83,17 @@ public class UserServlet {
 
 		DBConnector.getInstance().createCurator(curator);
 		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void getCurator() throws SQLException, IOException {
+		final String name = request.getParameter("name");
+		try {
+			final Curator curator = DBConnector.getInstance().getCurator(name);
+			response.getWriter().println(gson.toJson(curator));
+			response.setStatus(HttpServletResponse.SC_OK);
+		} catch (final SQLException ex) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		}
 	}
 
 	private void hasCurator() throws SQLException, IOException {

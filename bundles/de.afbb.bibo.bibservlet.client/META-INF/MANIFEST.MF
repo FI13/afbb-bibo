@@ -7,6 +7,7 @@ Export-Package: de.afbb.bibo.servletclient
 Import-Package: com.google.gson,
  de.afbb.bibo.crypto,
  de.afbb.bibo.share,
+ de.afbb.bibo.share.beans,
  de.afbb.bibo.share.model,
  javax.servlet.http
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7,

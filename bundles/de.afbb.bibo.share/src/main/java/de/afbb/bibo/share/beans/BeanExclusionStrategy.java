@@ -1,4 +1,4 @@
-package de.afbb.bibo.servletclient.connection;
+package de.afbb.bibo.share.beans;
 
 import java.beans.PropertyChangeSupport;
 

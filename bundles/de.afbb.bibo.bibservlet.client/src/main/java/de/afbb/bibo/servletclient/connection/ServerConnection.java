@@ -16,6 +16,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
+import de.afbb.bibo.share.SessionHolder;
+import de.afbb.bibo.share.model.Curator;
+
 /**
  *
  * @author fi13.pendrulat
@@ -119,7 +124,9 @@ public class ServerConnection {
 		final HttpResponse resp = request("/login/login", "GET", params, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
 			isLoggedIn = true;
-			sessionToken = resp.getData();
+			final String[] split = resp.getData().split("\n");
+			sessionToken = split[0];
+			SessionHolder.getInstance().setCurator(new Gson().fromJson(split[1], Curator.class));
 			return true;
 		} else if (resp.getStatus() == HttpServletResponse.SC_UNAUTHORIZED) {
 			return false;
