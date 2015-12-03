@@ -84,9 +84,8 @@ public class MainServlet extends HttpServlet {
 					Utils.returnErrorMessage(MainServlet.class, request, response);
 					break;
 				}
-			} catch (final SQLException e) {
-				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			} catch (final IOException e) {
+			} catch (final SQLException | IOException e) {
+				log.debug(e.getMessage());
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			}
 		}
