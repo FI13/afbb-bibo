@@ -110,20 +110,7 @@ public class LendCopyView extends AbstractView<Borrower> {
 
 		@Override
 		public void handleEvent(final Event event) {
-			final Job job = new Job("Rückgabe abschließen") {
-
-				@Override
-				protected IStatus run(final IProgressMonitor monitor) {
-					try {
-						ServiceLocator.getInstance().getCopyService().lendCopies(copies, printList);
-					} catch (final ConnectException e) {
-						handle(e);
-					}
-					return Status.OK_STATUS;
-				}
-			};
-			job.schedule();
-			closeView();
+			doSave(null);
 		}
 	};
 
@@ -163,6 +150,34 @@ public class LendCopyView extends AbstractView<Borrower> {
 			// no double click event
 		}
 	};
+
+	@Override
+	public void doSave(final IProgressMonitor monitor) {
+
+		final Job job = new Job("Medien ausleihen") {
+
+			@Override
+			protected IStatus run(final IProgressMonitor monitor) {
+				try {
+					ServiceLocator.getInstance().getCopyService().lendCopies(copies, printList);
+				} catch (final ConnectException e) {
+					handle(e);
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
+		closeView();
+	};
+
+	@Override
+	public void setInput(final Borrower editorInput) {
+		super.setInput(editorInput);
+		setCopyToModify(null);
+		copyCache.clear();
+		copies.clear();
+		xViewer.setInput(copies);
+	}
 
 	@Override
 	protected Composite initUi(final Composite parent) throws ConnectException {
@@ -258,8 +273,7 @@ public class LendCopyView extends AbstractView<Borrower> {
 	}
 
 	private void updateSaveButton() {
-		btnSave.setEnabled(
-				(copyToModify.getBarcode() == null || copyToModify.getBarcode().isEmpty()) && !copies.isEmpty());
+		btnSave.setEnabled(isDirty());
 	}
 
 	private void moveToEdit(final Copy copy) {
@@ -322,8 +336,8 @@ public class LendCopyView extends AbstractView<Borrower> {
 
 	@Override
 	public boolean isDirty() {
-		// no dirty state for this view
-		return false;
+		return (copyToModify == null || copyToModify.getBarcode() == null || copyToModify.getBarcode().isEmpty())
+				&& !copies.isEmpty();
 	}
 
 }
