@@ -161,4 +161,10 @@ public class CopyStubService implements ICopyService {
 		return copies;
 	}
 
+	@Override
+	public boolean exists(final String barcode) throws ConnectException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -56,6 +56,9 @@ public class StockServlet {
 		case "/listMediaTypes":
 			listMediaTypes();
 			break;
+		case "/existCopy":
+			existCopy();
+			break;
 		case "/addCopies":
 			addCopyGroup();
 			break;
@@ -135,6 +138,13 @@ public class StockServlet {
 				response.getWriter().println(gson.toJson(medium));
 			}
 		}
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void existCopy() throws NumberFormatException, SQLException, IOException {
+		final String barcode = request.getParameter("barcode");
+		final boolean exists = DBConnector.getInstance().existsCopy(barcode);
+		response.getWriter().println(exists ? 1 : 0);
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 }

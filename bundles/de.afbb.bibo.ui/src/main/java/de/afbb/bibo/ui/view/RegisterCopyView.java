@@ -7,8 +7,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -53,6 +57,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String REGISTER_COPY = "register.copy";//$NON-NLS-1$
+	private static final String BARCODE = "barcode";//$NON-NLS-1$
 
 	private final Set<Copy> copies = new HashSet<Copy>();
 
@@ -78,6 +83,9 @@ public class RegisterCopyView extends AbstractView<Copy> {
 	private int highestAssignedGroup = UNASSIGNED_GROUP;
 	private final HashMap<String, Medium> mediumCache = new HashMap<>();
 
+	private String barcode = null;
+	private final IObservableValue barcodeObservable = BeansObservables.observeValue(this, BARCODE);
+
 	/**
 	 * listener that adds a copy to the list and clears the input fields
 	 * afterwards
@@ -88,11 +96,13 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		public void handleEvent(final Event event) {
 			final Copy clone = (Copy) input.clone();
 			copies.add(clone);
+			// hack to reset the input
 			setInput(null);
 			setInput(new Copy());
 			updateSaveButton();
 			xViewer.setInput(copies);
 			txtBarcode.setFocus();
+			updateToListButton();
 		}
 	};
 
@@ -113,10 +123,11 @@ public class RegisterCopyView extends AbstractView<Copy> {
 				final Copy copy = (Copy) paths[0].getLastSegment();
 				setInput(copy);
 				copies.remove(copy);
+				bindingContext.updateTargets();
 				checkGroups();
+				updateToListButton();
 				updateSaveButton();
 				xViewer.setInput(copies);
-				bindingContext.updateTargets();
 			}
 		}
 	};
@@ -267,6 +278,17 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		idGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(idGroup, Messages.BARCODE);
 		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING);
+		txtBarcode.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(final FocusEvent e) {
+				checkBarcodeExists();
+			}
+
+			@Override
+			public void focusGained(final FocusEvent e) {
+			}
+		});
 		toolkit.createLabel(idGroup, Messages.ISBN);
 		txtIsbn = toolkit.createText(idGroup, EMPTY_STRING);
 		txtIsbn.addFocusListener(new FocusListener() {
@@ -294,7 +316,6 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		toolkit.createLabel(mediumGroup, Messages.PUBLISHER);
 		txtPublisher = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, "Typ");
-		// comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
 		comboMediumType = toolkit.createCombo(mediumGroup);
 
 		final Group conditionGroup = toolkit.createGroup(content, "Zustand");
@@ -407,6 +428,12 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		BindingHelper.bindObjectToCCombo(comboMediumType, mediumObservable, Medium.class, Medium.FIELD_TYPE,
 				MediumType.class, ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(),
 				bindingContext, false);
+
+		// dummy binding to validate that barcode isn't taken
+		final UpdateValueStrategy modelToTarget = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
+		modelToTarget.setAfterGetValidator(new BarcodeTakenValidator());
+		bindingContext.bindValue(new WritableValue(bindingContext.getValidationRealm(), "", String.class),
+				barcodeObservable, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), modelToTarget);
 	}
 
 	private void loadMediumFromDatabase(final String isbn) {
@@ -433,6 +460,36 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		idGroup.setFocus();
 	}
 
+	private void checkBarcodeExists() {
+		// disabled by default, will be enabled if barcode can't be found
+		btnToList.setEnabled(false);
+		setBarcode(null);
+		final String barcode = txtBarcode.getText();
+		if (!barcode.isEmpty()) {
+			// check list of local copies first
+			for (final Copy copy : copies) {
+				if (barcode.equals(copy.getBarcode())) {
+					return;
+				}
+			}
+			// check database next
+			try {
+				if (ServiceLocator.getInstance().getCopyService().exists(barcode)) {
+					setBarcode(barcode);
+					return;
+				}
+			} catch (final ConnectException e) {
+				handle(e);
+			}
+			btnToList.setEnabled(true);
+		}
+
+	}
+
+	private void updateToListButton() {
+		btnToList.setEnabled(!txtBarcode.getText().isEmpty());
+	}
+
 	private void updateSaveButton() {
 		btnSave.setEnabled(!copies.isEmpty());
 	}
@@ -441,5 +498,24 @@ public class RegisterCopyView extends AbstractView<Copy> {
 	public boolean isDirty() {
 		// no dirty state for this view
 		return false;
+	}
+
+	private static class BarcodeTakenValidator implements IValidator {
+
+		private static final String MSG = "Dieser Barcode wird schon verwendet!";
+
+		@Override
+		public IStatus validate(final Object value) {
+			return value == null ? ValidationStatus.ok() : ValidationStatus.error(MSG);
+		}
+
+	}
+
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(final String barcode) {
+		changeSupport.firePropertyChange(BARCODE, this.barcode, this.barcode = barcode);
 	}
 }

@@ -135,6 +135,9 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 								case IMessageProvider.ERROR:
 									newImage = JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_ERROR);
 									break;
+								case IStatus.ERROR:
+									newImage = JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_ERROR);
+									break;
 								}
 							}
 							setMessage(newMessage, newImage);

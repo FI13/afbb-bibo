@@ -467,4 +467,13 @@ public class DBConnector {
 			st.execute(sql);
 		}
 	}
+
+	public boolean existsCopy(final String barcode) throws SQLException, NumberFormatException, IOException {
+		try (Statement st = connect.createStatement()) {
+			try (ResultSet resultSet = st.executeQuery("select count(Id) from "
+					+ Config.getInstance().getDATABASE_NAME() + ".exemplar where BarcodeId='" + barcode + "';")) {
+				return resultSet.first() && 0 < resultSet.getInt(1);
+			}
+		}
+	}
 }
