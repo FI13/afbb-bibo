@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Tree;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.ui.BiboFormToolkit;
 import de.afbb.bibo.ui.Messages;
+import de.afbb.bibo.ui.events.TreeCollapseExpandListener;
 import de.afbb.bibo.ui.provider.BiboXViewerFactory;
 import de.afbb.bibo.ui.provider.CopyLabelProvider;
 import de.afbb.bibo.ui.provider.CopyTreeContentProvider;
@@ -69,6 +70,7 @@ public class CopyXviewerForm {
 		final CopyTreeContentProvider contentProvider = new CopyTreeContentProvider();
 		xViewer.setContentProvider(contentProvider);
 		xViewer.setLabelProvider(new CopyLabelProvider(xViewer, contentProvider));
+		xViewer.addDoubleClickListener(new TreeCollapseExpandListener(xViewer));
 		xViewer.getMenuManager().dispose();
 		GridDataFactory.fillDefaults().hint(300, 150).grab(true, true).applyTo(xViewer.getControl());
 	}

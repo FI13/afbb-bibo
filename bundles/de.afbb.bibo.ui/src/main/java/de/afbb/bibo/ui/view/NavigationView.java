@@ -13,6 +13,7 @@ import org.eclipse.ui.part.ViewPart;
 import de.afbb.bibo.aggregation.NavigationTreeService;
 import de.afbb.bibo.ui.CommandExecutor;
 import de.afbb.bibo.ui.ICommandIds;
+import de.afbb.bibo.ui.events.TreeCollapseExpandListener;
 import de.afbb.bibo.ui.provider.NavigationTreeViewContentProvider;
 import de.afbb.bibo.ui.provider.NavigationTreeViewLabelProvider;
 
