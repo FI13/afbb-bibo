@@ -501,8 +501,9 @@ public class DBConnector {
 	public void setNewBorrower(final String barcode, final int borrowerId, final int curatorId)
 			throws SQLException, NumberFormatException, IOException {
 		final String sql = "update " + Config.getInstance().getDATABASE_NAME() + ".exemplar set "
-				+ ", AusleihBenutzerId='" + curatorId + "'" + ", AusleiherId='" + borrowerId + "'"
+				+ " AusleihBenutzerId='" + curatorId + "'" + ", AusleiherId='" + borrowerId + "'"
 				+ ", AusleihDatum=NOW()" + " where Barcode='" + barcode + "'";
+		log.debug(sql);
 		try (Statement st = connect.createStatement()) {
 			st.execute(sql);
 		}
