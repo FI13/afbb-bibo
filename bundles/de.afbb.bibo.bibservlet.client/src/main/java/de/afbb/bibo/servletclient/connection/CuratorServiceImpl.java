@@ -7,6 +7,7 @@ package de.afbb.bibo.servletclient.connection;
 
 import java.net.ConnectException;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,6 +24,8 @@ import de.afbb.bibo.share.model.Curator;
  */
 public class CuratorServiceImpl implements ICuratorService {
 
+	private final Map<Integer, Curator> cache = new HashMap<Integer, Curator>();
+
 	@Override
 	public boolean exists(final String curatorName) throws ConnectException {
 		final HashMap<String, String> params = new HashMap<String, String>();
@@ -37,11 +40,20 @@ public class CuratorServiceImpl implements ICuratorService {
 
 	@Override
 	public Curator get(final Integer id) throws ConnectException {
+		synchronized (cache) {
+			if (cache.containsKey(id)) {
+				return cache.get(id);
+			}
+		}
 		final HashMap<String, String> params = new HashMap<String, String>();
 		params.put("id", id.toString());
 		final HttpResponse resp = ServerConnection.getInstance().request("/user/getCurator", "GET", params, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
-			return Utils.gson.fromJson(resp.getData(), Curator.class);
+			final Curator curator = Utils.gson.fromJson(resp.getData(), Curator.class);
+			synchronized (cache) {
+				cache.put(id, curator);
+			}
+			return curator;
 		} else if (resp.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
 			return null;
 		} else {
