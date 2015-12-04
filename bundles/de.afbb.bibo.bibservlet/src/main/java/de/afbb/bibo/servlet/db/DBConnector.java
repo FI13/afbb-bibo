@@ -264,7 +264,7 @@ public class DBConnector {
 		try (Statement st = connect.createStatement()) {
 			st.execute("insert into " + Config.getInstance().getDATABASE_NAME() + ".gruppe () values ()");
 			try (ResultSet resultSet = st.executeQuery("SELECT LAST_INSERT_ID()")) {
-				return resultSet.first() ? resultSet.getInt(0) : -1;
+				return resultSet.first() ? resultSet.getInt(1) : -1;
 			}
 		}
 	}
@@ -272,7 +272,7 @@ public class DBConnector {
 	/**
 	 * Create a number of copies in the "exemplar" table. The copies remain in
 	 * the same group. The input are two arrays. The first input of editions is
-	 * the same copy as the first input in barcodeIds and so on.
+	 * the same copy as the first input in Barcodes and so on.
 	 *
 	 * @param copies
 	 * @return the groupId
@@ -299,6 +299,23 @@ public class DBConnector {
 			}
 		}
 		return groupId;
+	}
+
+	public void createCopies(final Copy[] copies) throws SQLException, NumberFormatException, IOException {
+		log.debug("create new copies: " + Arrays.toString(copies));
+		for (final Copy copy : copies) {
+			final String sql = "insert into " + Config.getInstance().getDATABASE_NAME()
+					+ ".exemplar (Edition, Barcode, Inventarisiert, Zustand, MedienId) values (?, ?, ?, ?, ?)";
+
+			try (PreparedStatement statement = connect.prepareStatement(sql)) {
+				statement.setString(1, copy.getEdition());
+				statement.setString(2, copy.getBarcode());
+				statement.setDate(3, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
+				statement.setString(4, "neu");
+				statement.setInt(5, copy.getMedium().getMediumId());
+				statement.execute();
+			}
+		}
 	}
 
 	public Collection<List<Copy>> getCopies() throws SQLException, NumberFormatException, IOException {
@@ -471,7 +488,7 @@ public class DBConnector {
 	public boolean existsCopy(final String barcode) throws SQLException, NumberFormatException, IOException {
 		try (Statement st = connect.createStatement()) {
 			try (ResultSet resultSet = st.executeQuery("select count(Id) from "
-					+ Config.getInstance().getDATABASE_NAME() + ".exemplar where BarcodeId='" + barcode + "';")) {
+					+ Config.getInstance().getDATABASE_NAME() + ".exemplar where Barcode='" + barcode + "';")) {
 				return resultSet.first() && 0 < resultSet.getInt(1);
 			}
 		}

@@ -28,6 +28,7 @@ public class NavigationTreeService implements EventListener {
 	public NavigationTreeService(final TreeViewer viewer) throws ConnectException {
 		this.viewer = viewer;
 		ServiceLocator.getInstance().getLoginService().register(this);
+		ServiceLocator.getInstance().getCopyService().register(this);
 		borrowerService.register(this);
 	}
 
@@ -102,6 +103,9 @@ public class NavigationTreeService implements EventListener {
 				reloadCopies();
 			} else if (NavigationTreeNodeType.PERSONS.equals(type)) {
 				reloadBorrowers();
+			}
+			if (NavigationTreeNodeType.BOOKS.equals(type)) {
+				reloadCopies();
 			}
 		} catch (final ConnectException e) {
 			// TODO Auto-generated catch block

@@ -3,10 +3,11 @@ package de.afbb.bibo.share;
 import java.net.ConnectException;
 import java.util.Collection;
 
+import de.afbb.bibo.share.callback.EventChangeProvider;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Medium;
 
-public interface ICopyService {
+public interface ICopyService extends EventChangeProvider {
 
 	/**
 	 * updates the given copy

@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import de.afbb.bibo.share.ICopyService;
+import de.afbb.bibo.share.callback.EventListener;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Curator;
@@ -165,6 +166,11 @@ public class CopyStubService implements ICopyService {
 	public boolean exists(final String barcode) throws ConnectException {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void register(final EventListener listener) {
+		// nothing to do in stub service
 	}
 
 }

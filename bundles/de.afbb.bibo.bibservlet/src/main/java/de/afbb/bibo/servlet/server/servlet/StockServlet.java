@@ -7,7 +7,9 @@ package de.afbb.bibo.servlet.server.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -60,7 +62,10 @@ public class StockServlet {
 			existCopy();
 			break;
 		case "/addCopies":
-			addCopyGroup();
+			addCopies();
+			break;
+		case "/addGroupedCopies":
+			addGroupedCopies();
 			break;
 		case "/listMedia":
 			listMedia();
@@ -102,21 +107,45 @@ public class StockServlet {
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
-	private void addCopyGroup() throws IOException, SQLException {
-		final Copy[] copies = gson.fromJson(request.getReader(), Copy[].class);
-		for (final Copy copy : copies) {
-			if (DBConnector.getInstance().getMedium(copy.getMedium().getIsbn()).getMediumId() == null) {
-				// medium not found, create new
-				copy.getMedium()
-						.setMediumId(DBConnector.getInstance().createMedium(copy.getMedium().getIsbn(),
-								copy.getMedium().getTitle(), copy.getMedium().getAuthor(),
-								copy.getMedium().getLanguage(), copy.getMedium().getType().getId()));
-			}
-		}
+	private void addCopies() throws IOException, NumberFormatException, SQLException {
+		final Copy[] copies = setMediumInformation();
+		DBConnector.getInstance().createCopies(copies);
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void addGroupedCopies() throws IOException, SQLException {
+		final Copy[] copies = setMediumInformation();
 		final int groupId = DBConnector.getInstance().createCopyGroup(copies);
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.getWriter().println(groupId);
 		response.setContentType("text/plain");
+	}
+
+	private Copy[] setMediumInformation() throws NumberFormatException, SQLException, IOException {
+		final Copy[] copies = gson.fromJson(request.getReader(), Copy[].class);
+		final Map<String, Integer> checkedIsbns = new HashMap<String, Integer>();
+		// avoid allocation inside loop
+		String isbn;
+		Integer mediumId;
+		for (final Copy copy : copies) {
+			isbn = copy.getMedium().getIsbn();
+			// try to get id from cache first
+			if (checkedIsbns.containsKey(isbn)) {
+				mediumId = checkedIsbns.get(isbn);
+			} else {
+				// try to get id from database
+				mediumId = DBConnector.getInstance().getMedium(isbn).getMediumId();
+				if (mediumId == null) {
+					// medium not found, create new
+					mediumId = DBConnector.getInstance().createMedium(isbn, copy.getMedium().getTitle(),
+							copy.getMedium().getAuthor(), copy.getMedium().getLanguage(),
+							copy.getMedium().getType().getId());
+				}
+				checkedIsbns.put(isbn, mediumId);
+			}
+			copy.getMedium().setMediumId(mediumId);
+		}
+		return copies;
 	}
 
 	private void getMedium() throws IOException, SQLException {
@@ -147,4 +176,5 @@ public class StockServlet {
 		response.getWriter().println(exists ? 1 : 0);
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
+
 }
