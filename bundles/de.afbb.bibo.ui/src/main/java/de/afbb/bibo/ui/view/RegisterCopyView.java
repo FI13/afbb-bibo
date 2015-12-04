@@ -80,7 +80,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 	private CopyXviewerForm xViewer;
 
 	private static final int UNASSIGNED_GROUP = -1;
-	private int highestAssignedGroup = UNASSIGNED_GROUP;
+	private int highestAssignedGroup = UNASSIGNED_GROUP + 1;
 	private final HashMap<String, Medium> mediumCache = new HashMap<>();
 
 	private String barcode = null;
