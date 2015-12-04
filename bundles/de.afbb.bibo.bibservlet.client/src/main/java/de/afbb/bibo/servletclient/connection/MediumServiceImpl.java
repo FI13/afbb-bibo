@@ -26,31 +26,36 @@ public class MediumServiceImpl implements IMediumService {
 	@Override
 	public void update(final Medium medium) throws ConnectException {
 		// TODO Auto-generated method stub
-
+		// currently never called
+		throw new UnsupportedOperationException("not implemented");
 	}
 
 	@Override
 	public void create(final Medium medium) throws ConnectException {
 		// TODO Auto-generated method stub
-
+		// currently never called
+		throw new UnsupportedOperationException("not implemented");
 	}
 
 	@Override
 	public Medium getMedium(final int id) throws ConnectException {
 		// TODO Auto-generated method stub
-		return null;
+		// currently never called
+		throw new UnsupportedOperationException("not implemented");
 	}
 
 	@Override
 	public Medium getMedium(final String isbn) throws ConnectException {
 		// TODO Auto-generated method stub
-		return null;
+		// currently never called
+		throw new UnsupportedOperationException("not implemented");
 	}
 
 	@Override
 	public Collection<Borrower> listLent(final String isbn) throws ConnectException {
 		// TODO Auto-generated method stub
-		return null;
+		// currently never called
+		throw new UnsupportedOperationException("not implemented");
 	}
 
 	@Override
@@ -73,8 +78,8 @@ public class MediumServiceImpl implements IMediumService {
 
 	@Override
 	public void delete(final Medium medium) throws ConnectException {
-		// TODO Auto-generated method stub
-
+		// currently never called
+		throw new UnsupportedOperationException("not implemented");
 	}
 
 	@Override
