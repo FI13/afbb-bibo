@@ -3,6 +3,7 @@ package de.afbb.bibo.servletclient;
 import de.afbb.bibo.servletclient.connection.BorrowerServiceImpl;
 import de.afbb.bibo.servletclient.connection.CuratorServiceImpl;
 import de.afbb.bibo.servletclient.connection.LoginServiceImpl;
+import de.afbb.bibo.servletclient.connection.MediumServiceImpl;
 import de.afbb.bibo.servletclient.connection.TypServiceImpl;
 import de.afbb.bibo.servletclient.internal.stub.BorrowerStubService;
 import de.afbb.bibo.servletclient.internal.stub.CopyStubService;
@@ -73,7 +74,7 @@ public final class ServiceLocator {
 
 	public IMediumService getMediumService() {
 		if (MEDIUM_SERVICE == null) {
-			MEDIUM_SERVICE = new MediumStubService();
+			MEDIUM_SERVICE = useStubServices ? new MediumStubService() : new MediumServiceImpl();
 		}
 		return MEDIUM_SERVICE;
 	}

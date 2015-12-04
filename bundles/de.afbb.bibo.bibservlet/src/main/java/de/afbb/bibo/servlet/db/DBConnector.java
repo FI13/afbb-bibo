@@ -234,6 +234,10 @@ public class DBConnector {
 		final List<Medium> result = new ArrayList<Medium>();
 		log.debug("get all media");
 		try (Statement statement = connect.createStatement()) {
+			/*
+			 * TODO query total amount of copies and amount of lend copies ->
+			 * save this numbers in fields in medium
+			 */
 			try (ResultSet mediaSet = statement
 					.executeQuery("select TypId, Id, ISBN, Titel, Autor, Sprache, Herausgeber from "
 							+ Config.getInstance().getDATABASE_NAME() + ".medium")) {

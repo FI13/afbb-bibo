@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import de.afbb.bibo.share.IMediumService;
+import de.afbb.bibo.share.callback.EventListener;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Medium;
 
@@ -127,6 +128,11 @@ public class MediumStubService implements IMediumService {
 	public void create(final Medium medium) throws ConnectException {
 		medium.setMediumId(++currentMediaId);
 		media.add(medium);
+	}
+
+	@Override
+	public void register(final EventListener listener) {
+		// nothing to do in stub service
 	}
 
 }

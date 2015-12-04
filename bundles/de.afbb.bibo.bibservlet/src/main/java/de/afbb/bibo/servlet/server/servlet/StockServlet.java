@@ -59,6 +59,9 @@ public class StockServlet {
 		case "/addCopies":
 			addCopyGroup();
 			break;
+		case "/listMedia":
+			listMedia();
+			break;
 		case "/getMedium":
 			getMedium();
 			break;
@@ -123,5 +126,15 @@ public class StockServlet {
 		} else {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
+	}
+
+	private void listMedia() throws NumberFormatException, SQLException, IOException {
+		final List<Medium> media = DBConnector.getInstance().getMedium();
+		for (final Medium medium : media) {
+			if (medium != null) {
+				response.getWriter().println(gson.toJson(medium));
+			}
+		}
+		response.setStatus(HttpServletResponse.SC_OK);
 	}
 }

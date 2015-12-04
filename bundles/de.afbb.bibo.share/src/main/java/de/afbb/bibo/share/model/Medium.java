@@ -19,6 +19,9 @@ public class Medium extends AbstractPropertyChangeSupport implements Cloneable {
 	private MediumType type;
 	private String publisher = "";
 
+	private Integer totalCopies;
+	private Integer lendCopies;
+
 	public Medium() {
 		this(-1, "", "", "", "", new MediumType(), "");
 	}

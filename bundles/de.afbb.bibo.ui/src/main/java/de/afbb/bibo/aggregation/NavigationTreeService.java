@@ -55,10 +55,11 @@ public class NavigationTreeService implements EventListener {
 		final Iterator<Medium> mediaIterator = media.iterator();
 		while (mediaIterator.hasNext()) {
 			final Medium medium = mediaIterator.next();
-			final NavigationTreeViewNode mediumNode = new NavigationTreeViewNode(medium.getTitle(), medium,
-					NavigationTreeNodeType.BOOK);
-
-			root.addChild(mediumNode);
+			if (medium != null) {
+				final NavigationTreeViewNode mediumNode = new NavigationTreeViewNode(medium.getTitle(), medium,
+						NavigationTreeNodeType.BOOK);
+				root.addChild(mediumNode);
+			}
 		}
 
 	}
