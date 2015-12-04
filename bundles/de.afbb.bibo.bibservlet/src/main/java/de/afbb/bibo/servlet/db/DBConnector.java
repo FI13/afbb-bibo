@@ -112,8 +112,7 @@ public class DBConnector {
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet resultSet = statement.executeQuery("select Hash from "
 					+ Config.getInstance().getDATABASE_NAME() + ".benutzer where " + "Name='" + name + "'")) {
-				resultSet.first();
-				return resultSet.getString(1).equals(passwordHash);
+				return resultSet.first() && resultSet.getString(1).equals(passwordHash);
 			}
 		}
 	}
@@ -123,8 +122,7 @@ public class DBConnector {
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet resultSet = statement.executeQuery("select Salt from "
 					+ Config.getInstance().getDATABASE_NAME() + ".benutzer where " + "Name='" + name + "'")) {
-				resultSet.first();
-				return resultSet.getString(1);
+				return resultSet.first() ? resultSet.getString(1) : null;
 			}
 		}
 	}

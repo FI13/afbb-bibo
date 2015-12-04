@@ -65,8 +65,12 @@ public class LoginServlet {
 	private void requestSalt() throws SQLException, IOException {
 		final String userName = request.getParameter("name");
 		final String salt = DBConnector.getInstance().requestSalt(userName);
-		response.getWriter().write(salt);
-		response.setStatus(HttpServletResponse.SC_OK);
+		if (salt != null) {
+			response.getWriter().write(salt);
+			response.setStatus(HttpServletResponse.SC_OK);
+		} else {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
 	}
 
 	private void doLogin() throws SQLException, IOException {
