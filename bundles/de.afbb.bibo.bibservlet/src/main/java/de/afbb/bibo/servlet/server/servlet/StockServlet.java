@@ -67,6 +67,9 @@ public class StockServlet {
 		case "/listMedia":
 			listMedia();
 			break;
+		case "/countLendCopies":
+			countLendCopies();
+			break;
 		case "/listLendCopies":
 			listLendCopies();
 			break;
@@ -197,6 +200,12 @@ public class StockServlet {
 				response.getWriter().println(Utils.gson.toJson(copy));
 			}
 		}
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void countLendCopies() throws NumberFormatException, SQLException, IOException {
+		final Integer id = Integer.valueOf(request.getParameter("id"));
+		response.getWriter().println(DBConnector.getInstance().countLendCopies(id));
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 

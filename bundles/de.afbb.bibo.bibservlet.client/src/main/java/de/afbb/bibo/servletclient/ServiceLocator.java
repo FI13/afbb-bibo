@@ -1,5 +1,6 @@
 package de.afbb.bibo.servletclient;
 
+import de.afbb.bibo.servletclient.connection.AggregationServiceImpl;
 import de.afbb.bibo.servletclient.connection.BorrowerServiceImpl;
 import de.afbb.bibo.servletclient.connection.CopyServiceImpl;
 import de.afbb.bibo.servletclient.connection.CuratorServiceImpl;
@@ -12,6 +13,7 @@ import de.afbb.bibo.servletclient.internal.stub.CuratorStubService;
 import de.afbb.bibo.servletclient.internal.stub.LoginStubService;
 import de.afbb.bibo.servletclient.internal.stub.MediumStubService;
 import de.afbb.bibo.servletclient.internal.stub.TypStubService;
+import de.afbb.bibo.share.IAggregationService;
 import de.afbb.bibo.share.IBorrowerService;
 import de.afbb.bibo.share.ICopyService;
 import de.afbb.bibo.share.ICuratorService;
@@ -32,6 +34,7 @@ public final class ServiceLocator {
 	private IBorrowerService BORROWER_SERVICE;
 	private IMediumService MEDIUM_SERVICE;
 	private ICopyService COPY_SERVICE;
+	private IAggregationService AGGREGATION_SERVICE;
 
 	private static final ServiceLocator INSTANCE = new ServiceLocator();
 
@@ -85,5 +88,12 @@ public final class ServiceLocator {
 			COPY_SERVICE = useStubServices ? new CopyStubService() : new CopyServiceImpl();
 		}
 		return COPY_SERVICE;
+	}
+
+	public IAggregationService getAggregationService() {
+		if (AGGREGATION_SERVICE == null) {
+			AGGREGATION_SERVICE = new AggregationServiceImpl();
+		}
+		return AGGREGATION_SERVICE;
 	}
 }
