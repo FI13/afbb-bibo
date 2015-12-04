@@ -266,10 +266,6 @@ public class DBConnector {
 		final List<Medium> result = new ArrayList<Medium>();
 		log.debug("get all media");
 		try (Statement statement = connect.createStatement()) {
-			/*
-			 * TODO query total amount of copies and amount of lend copies ->
-			 * save this numbers in fields in medium
-			 */
 			try (ResultSet mediaSet = statement
 					.executeQuery("select TypId, Id, ISBN, Titel, Autor, Sprache, Herausgeber from "
 							+ Config.getInstance().getDATABASE_NAME() + ".medium")) {
@@ -536,5 +532,28 @@ public class DBConnector {
 				return resultSet.first() && 0 < resultSet.getInt(1);
 			}
 		}
+	}
+
+	public List<Copy> listLendCopies(final Integer borrowerId) throws NumberFormatException, SQLException, IOException {
+		final List<Copy> result = new ArrayList<Copy>();
+		log.debug("get lend copies for borrower with id: " + borrowerId);
+		try (Statement statement = connect.createStatement()) {
+			final String string = "select e.Id, e.Edition, e.Barcode, e.Inventarisiert, e.Zustand, e.AusleihDatum, e.LetztesAusleihDatum, e.AusleihBenutzerId, e.LetzterAusleihBenutzerId, e.AusleiherId, e.LetzterAusleiherId, e.GruppenId, m.Id, m.ISBN, m.Titel, m.Autor, m.Sprache, m.TypId, m.Herausgeber from "
+					+ Config.getInstance().getDATABASE_NAME() + ".exemplar e, "
+					+ Config.getInstance().getDATABASE_NAME()
+					+ ".medium m where (TIMESTAMPDIFF(SECOND,  LetztesAusleihDatum, AusleihDatum) >= 0 or (e.AusleihDatum is not null and e.LetztesAusleihDatum is null)) and AusleiherId="
+					+ borrowerId + " and e.MedienId=m.Id";
+			try (ResultSet mediaSet = statement.executeQuery(string)) {
+				while (mediaSet.next()) {
+					result.add(new Copy(mediaSet.getInt(1), mediaSet.getString(2), mediaSet.getString(3),
+							mediaSet.getDate(4), mediaSet.getString(5), mediaSet.getDate(6), mediaSet.getDate(7),
+							mediaSet.getInt(12), new Borrower(mediaSet.getInt(8)), new Borrower(mediaSet.getInt(9)),
+							new Curator(mediaSet.getInt(10)), new Curator(mediaSet.getInt(11)), mediaSet.getInt(13),
+							mediaSet.getString(14), mediaSet.getString(15), mediaSet.getString(16),
+							mediaSet.getString(17), new MediumType(mediaSet.getInt(18)), mediaSet.getString(19)));
+				}
+			}
+		}
+		return result;
 	}
 }

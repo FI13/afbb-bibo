@@ -15,7 +15,7 @@ public interface IBorrowerService extends EventChangeProvider {
 
 	Borrower get(Integer id) throws ConnectException;
 
-	void update(Borrower Borrower) throws ConnectException;
+	void update(Borrower borrower) throws ConnectException;
 
 	/**
 	 * creates a list with all borrowers
@@ -36,10 +36,10 @@ public interface IBorrowerService extends EventChangeProvider {
 	/**
 	 * lists all copies that the borrower has lent
 	 *
-	 * @param Borrower
+	 * @param borrower
 	 * @return
 	 * @throws ConnectException
 	 */
-	Collection<Copy> listLent(Borrower Borrower) throws ConnectException;
+	Collection<Copy> listLent(Borrower borrower) throws ConnectException;
 
 }

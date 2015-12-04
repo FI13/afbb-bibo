@@ -67,6 +67,9 @@ public class StockServlet {
 		case "/listMedia":
 			listMedia();
 			break;
+		case "/listLendCopies":
+			listLendCopies();
+			break;
 		case "/getMedium":
 			getMedium();
 			break;
@@ -183,6 +186,17 @@ public class StockServlet {
 		final String barcode = request.getParameter("barcode");
 		final boolean exists = DBConnector.getInstance().existsCopy(barcode);
 		response.getWriter().println(exists ? 1 : 0);
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void listLendCopies() throws NumberFormatException, SQLException, IOException {
+		final Integer id = Integer.valueOf(request.getParameter("id"));
+		final List<Copy> copies = DBConnector.getInstance().listLendCopies(id);
+		for (final Copy copy : copies) {
+			if (copy != null) {
+				response.getWriter().println(Utils.gson.toJson(copy));
+			}
+		}
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 

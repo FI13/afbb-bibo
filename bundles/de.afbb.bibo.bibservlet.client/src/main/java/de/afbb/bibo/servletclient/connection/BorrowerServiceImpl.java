@@ -120,8 +120,21 @@ public class BorrowerServiceImpl implements IBorrowerService {
 	}
 
 	@Override
-	public Collection<Copy> listLent(final Borrower Borrower) throws ConnectException {
-		// TODO Auto-generated method stub
+	public Collection<Copy> listLent(final Borrower borrower) throws ConnectException {
+		final Map<String, String> param = new HashMap<String, String>();
+		param.put("id", borrower.getId().toString());
+		final HttpResponse resp = ServerConnection.getInstance().request("/stock/listLendCopies", "GET", param, null);
+		if (resp.getStatus() == HttpServletResponse.SC_OK) {
+			final Collection<Copy> result = new HashSet<>();
+			final String[] data = resp.getData().split("\n");
+			for (int i = 0; i < data.length; i++) {
+				final Copy copy = Utils.gson.fromJson(data[i], Copy.class);
+				if (copy != null) {
+					result.add(copy);
+				}
+			}
+			return result;
+		}
 		return null;
 	}
 
