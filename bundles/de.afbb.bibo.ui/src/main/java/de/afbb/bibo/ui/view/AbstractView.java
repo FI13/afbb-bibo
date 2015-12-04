@@ -240,6 +240,7 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 
 			@Override
 			public void run() {
+				// TODO handle invalidated session differently
 				final StringBuilder msg = new StringBuilder(Messages.MESSAGE_ERROR_CONNECTION);
 				if (getSite().getPage().isPartVisible(AbstractView.this)) {
 					msg.append(Messages.NEW_LINE);
