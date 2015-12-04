@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.databinding.beans.BeansObservables;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -17,6 +19,8 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -72,6 +76,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 	private static final int UNASSIGNED_GROUP = -1;
 	private int highestAssignedGroup = UNASSIGNED_GROUP;
+	private final HashMap<String, Medium> mediumCache = new HashMap<>();
 
 	/**
 	 * listener that adds a copy to the list and clears the input fields
@@ -83,10 +88,10 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		public void handleEvent(final Event event) {
 			final Copy clone = (Copy) input.clone();
 			copies.add(clone);
+			setInput(null);
 			setInput(new Copy());
 			updateSaveButton();
 			xViewer.setInput(copies);
-			bindingContext.updateTargets();
 			txtBarcode.setFocus();
 		}
 	};
@@ -264,6 +269,17 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING);
 		toolkit.createLabel(idGroup, Messages.ISBN);
 		txtIsbn = toolkit.createText(idGroup, EMPTY_STRING);
+		txtIsbn.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(final FocusEvent e) {
+				loadMediumFromDatabase(txtIsbn.getText());
+			}
+
+			@Override
+			public void focusGained(final FocusEvent e) {
+			}
+		});
 		toolkit.createLabel(idGroup, Messages.EDITION);
 		txtEdition = toolkit.createText(idGroup, EMPTY_STRING);
 
@@ -378,22 +394,38 @@ public class RegisterCopyView extends AbstractView<Copy> {
 				false);
 		BindingHelper.bindStringToTextField(txtCondition, getInputObservable(), Copy.FIELD_CONDITION, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(txtTitle, getInputObservable(),
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TITLE, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtAuthor, getInputObservable(),
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_AUTHOR, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtLanguage, getInputObservable(),
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_LANGUAGE, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtPublisher, getInputObservable(),
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_PUBLISHER, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtIsbn, getInputObservable(), Copy.FIELD_MEDIUM + DOT + Medium.FIELD_ISBN,
-				bindingContext, false);
-
-		BindingHelper.bindObjectToCCombo(comboMediumType, getInputObservable(), Copy.class,
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TYPE, MediumType.class,
-				ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(), bindingContext,
+		final IObservableValue mediumObservable = BeansObservables.observeDetailValue(getInputObservable(),
+				Copy.FIELD_MEDIUM, Medium.class);
+		BindingHelper.bindStringToTextField(txtTitle, mediumObservable, Medium.FIELD_TITLE, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtAuthor, mediumObservable, Medium.FIELD_AUTHOR, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtLanguage, mediumObservable, Medium.FIELD_LANGUAGE, bindingContext,
 				false);
+		BindingHelper.bindStringToTextField(txtPublisher, mediumObservable, Medium.FIELD_PUBLISHER, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtIsbn, mediumObservable, Medium.FIELD_ISBN, bindingContext, false);
 
+		BindingHelper.bindObjectToCCombo(comboMediumType, mediumObservable, Medium.class, Medium.FIELD_TYPE,
+				MediumType.class, ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(),
+				bindingContext, false);
+	}
+
+	private void loadMediumFromDatabase(final String isbn) {
+		// check if we have it cached already first
+		if (!mediumCache.containsKey(isbn)) {
+			// normal fetch from database
+			Medium medium = null;
+			try {
+				medium = ServiceLocator.getInstance().getMediumService().getMedium(isbn);
+			} catch (final ConnectException e) {
+				handle(e);
+			}
+			mediumCache.put(isbn, medium);
+		}
+		final Medium medium = mediumCache.get(isbn);
+		if (medium != null && input != null) {
+			input.setMedium(medium);
+			setInput(input);
+		}
 	}
 
 	@Override
