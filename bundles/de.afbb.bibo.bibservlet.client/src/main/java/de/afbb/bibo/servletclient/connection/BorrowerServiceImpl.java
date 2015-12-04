@@ -79,6 +79,9 @@ public class BorrowerServiceImpl implements IBorrowerService {
 	public void update(final Borrower borrower) throws ConnectException {
 		final GsonBuilder gsonBuilder = new GsonBuilder()
 				.addSerializationExclusionStrategy(new BeanExclusionStrategy());
+		synchronized (cache) {
+			cache.remove(borrower.getId());
+		}
 		final HttpResponse resp = ServerConnection.getInstance().request("/user/updateBorrower", "POST", null,
 				gsonBuilder.create().toJson(borrower));
 		if (resp.getStatus() != HttpServletResponse.SC_OK) {
@@ -94,10 +97,14 @@ public class BorrowerServiceImpl implements IBorrowerService {
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
 			final Collection<Borrower> result = new HashSet<>();
 			final String[] data = resp.getData().split("\n");
-			for (int i = 0; i < data.length; i++) {
-				final Borrower borrower = Utils.gson.fromJson(data[i], Borrower.class);
-				if (borrower != null) {
-					result.add(borrower);
+			synchronized (cache) {
+				cache.clear();
+				for (int i = 0; i < data.length; i++) {
+					final Borrower borrower = Utils.gson.fromJson(data[i], Borrower.class);
+					if (borrower != null) {
+						result.add(borrower);
+						cache.put(borrower.getId(), borrower);
+					}
 				}
 			}
 			return result;
