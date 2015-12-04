@@ -399,6 +399,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		});
 
 		// disable buttons
+		btnToList.setEnabled(false);
 		btnToEdit.setEnabled(false);
 		btnGroup.setEnabled(false);
 		btnUngroup.setEnabled(false);
@@ -432,8 +433,8 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		// dummy binding to validate that barcode isn't taken
 		final UpdateValueStrategy modelToTarget = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
 		modelToTarget.setAfterGetValidator(new BarcodeTakenValidator());
-		bindingContext.bindValue(new WritableValue(bindingContext.getValidationRealm(), "", String.class),
-				barcodeObservable, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), modelToTarget);
+		bindingContext.bindValue(new WritableValue(null, String.class), barcodeObservable,
+				new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), modelToTarget);
 	}
 
 	private void loadMediumFromDatabase(final String isbn) {
