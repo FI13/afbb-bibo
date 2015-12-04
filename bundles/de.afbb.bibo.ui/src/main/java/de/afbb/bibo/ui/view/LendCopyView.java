@@ -243,7 +243,6 @@ public class LendCopyView extends AbstractView<Borrower> {
 		btnSave.addListener(SWT.MouseDown, saveListener);
 		btnPrint.addSelectionListener(togglePrint);
 
-		txtCondition.setEnabled(false);
 		btnToList.setEnabled(false);
 		btnToEdit.setEnabled(false);
 		btnSave.setEnabled(false);
