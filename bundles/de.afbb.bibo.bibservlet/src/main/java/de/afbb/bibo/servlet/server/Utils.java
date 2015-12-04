@@ -5,17 +5,15 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
+ * collection of utility methods
  *
  * @author fi13.pendrulat
  */
-public class Utils {
+public final class Utils {
+
+	private Utils() {
+	}
 
 	public static int nthOccurrence(final String str, final String toFind, int n) {
 		int pos = str.indexOf(toFind, 0);
