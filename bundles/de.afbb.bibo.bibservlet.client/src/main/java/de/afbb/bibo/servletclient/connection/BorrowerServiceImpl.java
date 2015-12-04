@@ -75,7 +75,10 @@ public class BorrowerServiceImpl implements IBorrowerService {
 			final Collection<Borrower> result = new HashSet<>();
 			final String[] data = resp.getData().split("\n");
 			for (int i = 0; i < data.length; i++) {
-				result.add(gson.fromJson(data[i], Borrower.class));
+				final Borrower borrower = gson.fromJson(data[i], Borrower.class);
+				if (borrower != null) {
+					result.add(borrower);
+				}
 			}
 			return result;
 		} else {

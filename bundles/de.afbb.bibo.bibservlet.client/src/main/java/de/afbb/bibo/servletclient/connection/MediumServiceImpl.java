@@ -60,7 +60,10 @@ public class MediumServiceImpl implements IMediumService {
 			final Collection<Medium> result = new HashSet<>();
 			final String[] data = resp.getData().split("\n");
 			for (int i = 0; i < data.length; i++) {
-				result.add(gson.fromJson(data[i], Medium.class));
+				final Medium medium = gson.fromJson(data[i], Medium.class);
+				if (medium != null) {
+					result.add(medium);
+				}
 			}
 			return result;
 		} else {
