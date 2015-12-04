@@ -461,9 +461,9 @@ public class DBConnector {
 	public void updateBorrower(final Borrower b) throws SQLException, NumberFormatException, IOException {
 		log.debug("update borrower: " + b);
 		try (Statement statement = connect.createStatement()) {
-			statement.execute("update " + Config.getInstance().getDATABASE_NAME() + ".benutzer set " + "Vorname='"
+			statement.execute("update " + Config.getInstance().getDATABASE_NAME() + ".ausleiher set " + "Vorname='"
 					+ b.getForename() + "', Nachname='" + b.getSurname() + "', Info='" + b.getInfo() + "', EMail='"
-					+ b.getEmail() + "', Telefon'" + b.getPhoneNumber() + "' where Id=" + b.getId());
+					+ b.getEmail() + "', Telefon='" + b.getPhoneNumber() + "' where Id=" + b.getId());
 		}
 	}
 
