@@ -13,6 +13,8 @@ public interface IBorrowerService extends EventChangeProvider {
 
 	void create(Borrower borrower) throws ConnectException;
 
+	Borrower get(Integer id) throws ConnectException;
+
 	void update(Borrower Borrower) throws ConnectException;
 
 	/**

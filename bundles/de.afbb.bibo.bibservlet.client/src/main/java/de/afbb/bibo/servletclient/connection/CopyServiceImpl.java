@@ -10,20 +10,16 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
+import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.ICopyService;
-import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 import de.afbb.bibo.share.callback.EventListener;
+import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.share.model.Curator;
 import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.NavigationTreeNodeType;
 
 public class CopyServiceImpl implements ICopyService {
-
-	private static final Gson gson = new GsonBuilder().addSerializationExclusionStrategy(new BeanExclusionStrategy())
-			.create();
 
 	private final Set<EventListener> listeners = new HashSet<EventListener>();
 
@@ -47,8 +43,39 @@ public class CopyServiceImpl implements ICopyService {
 
 	@Override
 	public Copy get(final String barcode) throws ConnectException {
-		// TODO Auto-generated method stub
-		return null;
+		final Map<String, String> param = new HashMap<String, String>();
+		param.put("barcode", barcode);
+		final HttpResponse resp = ServerConnection.getInstance().request("/stock/getCopy", "GET", param, null);
+		if (resp.getStatus() == HttpServletResponse.SC_OK) {
+			final Copy copy = Utils.gson.fromJson(resp.getData(), Copy.class);
+			if (copy != null) {
+				// we only get the id for sub-entities filled, so we need to
+				// fetch them separately
+				Borrower borrower = copy.getBorrower();
+				if (borrower != null) {
+					copy.setBorrower(ServiceLocator.getInstance().getBorrowerService().get(borrower.getId()));
+				}
+				borrower = copy.getLastBorrower();
+				if (borrower != null) {
+					copy.setLastBorrower(ServiceLocator.getInstance().getBorrowerService().get(borrower.getId()));
+				}
+				Curator curator = copy.getCurator();
+				if (curator != null) {
+					copy.setCurator(ServiceLocator.getInstance().getCuratorService().get(curator.getId()));
+				}
+				curator = copy.getLastCurator();
+				if (curator != null) {
+					copy.setLastCurator(ServiceLocator.getInstance().getCuratorService().get(curator.getId()));
+				}
+				copy.getMedium()
+						.setType(ServiceLocator.getInstance().getTypService().get(copy.getMedium().getType().getId()));
+			}
+			return copy;
+		} else if (resp.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
+			return null;
+		} else {
+			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+		}
 	}
 
 	@Override
@@ -82,7 +109,7 @@ public class CopyServiceImpl implements ICopyService {
 			final Set<Copy> groupedCopies = separatedByGroup.get(groupId);
 			// we send every group as one request
 			final HttpResponse resp = ServerConnection.getInstance().request(url, "POST", null,
-					gson.toJson(groupedCopies));
+					Utils.gson.toJson(groupedCopies));
 			if (resp.getStatus() != HttpServletResponse.SC_OK) {
 				// if we get any other code than 200 we override previous, but
 				// we continue with other groups

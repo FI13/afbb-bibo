@@ -36,6 +36,12 @@ public class CuratorServiceImpl implements ICuratorService {
 	}
 
 	@Override
+	public Curator get(final Integer id) throws ConnectException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public void create(final Curator curator) throws ConnectException {
 		final GsonBuilder gsonBuilder = new GsonBuilder()
 				.addSerializationExclusionStrategy(new BeanExclusionStrategy());

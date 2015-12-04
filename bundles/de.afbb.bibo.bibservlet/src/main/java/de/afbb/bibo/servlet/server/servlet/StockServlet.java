@@ -17,12 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import de.afbb.bibo.servlet.db.DBConnector;
 import de.afbb.bibo.servlet.server.Utils;
-import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
@@ -35,13 +31,11 @@ public class StockServlet {
 
 	HttpServletRequest request;
 	HttpServletResponse response;
-	Gson gson;
 	private static final Logger log = LoggerFactory.getLogger(StockServlet.class);
 
 	protected StockServlet(final HttpServletRequest request, final HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
-		gson = new GsonBuilder().addSerializationExclusionStrategy(new BeanExclusionStrategy()).create();
 	}
 
 	protected void processRequest() throws IOException, SQLException {
@@ -67,6 +61,9 @@ public class StockServlet {
 		case "/addGroupedCopies":
 			addGroupedCopies();
 			break;
+		case "/getCopy":
+			getCopy();
+			break;
 		case "/listMedia":
 			listMedia();
 			break;
@@ -80,7 +77,7 @@ public class StockServlet {
 	}
 
 	private void addMediaType() throws IOException, SQLException {
-		final MediumType type = gson.fromJson(request.getReader(), MediumType.class);
+		final MediumType type = Utils.gson.fromJson(request.getReader(), MediumType.class);
 		final int mediumId = DBConnector.getInstance().createMediumType(type.getName(), type.getIcon().getCode());
 		response.setStatus(mediumId != -1 ? HttpServletResponse.SC_OK : HttpServletResponse.SC_NOT_FOUND);
 		response.getWriter().println(mediumId);
@@ -92,7 +89,7 @@ public class StockServlet {
 		MediumType mediumType;
 		mediumType = DBConnector.getInstance().getMediumType(id);
 		if (mediumType != null) {
-			response.getWriter().println(gson.toJson(mediumType));
+			response.getWriter().println(Utils.gson.toJson(mediumType));
 			response.setStatus(HttpServletResponse.SC_OK);
 		} else {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -102,7 +99,7 @@ public class StockServlet {
 	private void listMediaTypes() throws IOException, SQLException {
 		final List<MediumType> mediaTypes = DBConnector.getInstance().getMediumTypes();
 		for (final MediumType mediumType : mediaTypes) {
-			response.getWriter().println(gson.toJson(mediumType));
+			response.getWriter().println(Utils.gson.toJson(mediumType));
 		}
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
@@ -122,7 +119,7 @@ public class StockServlet {
 	}
 
 	private Copy[] setMediumInformation() throws NumberFormatException, SQLException, IOException {
-		final Copy[] copies = gson.fromJson(request.getReader(), Copy[].class);
+		final Copy[] copies = Utils.gson.fromJson(request.getReader(), Copy[].class);
 		final Map<String, Integer> checkedIsbns = new HashMap<String, Integer>();
 		// avoid allocation inside loop
 		String isbn;
@@ -148,12 +145,24 @@ public class StockServlet {
 		return copies;
 	}
 
+	private void getCopy() throws IOException, SQLException {
+		final String barcode = request.getParameter("barcode");
+		Copy copy;
+		copy = DBConnector.getInstance().getCopy(barcode);
+		if (copy != null) {
+			response.getWriter().println(Utils.gson.toJson(copy));
+			response.setStatus(HttpServletResponse.SC_OK);
+		} else {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
+	}
+
 	private void getMedium() throws IOException, SQLException {
 		final String isbn = request.getParameter("ISBN");
 		Medium medium;
 		medium = DBConnector.getInstance().getMedium(isbn);
 		if (medium != null) {
-			response.getWriter().println(gson.toJson(medium));
+			response.getWriter().println(Utils.gson.toJson(medium));
 			response.setStatus(HttpServletResponse.SC_OK);
 		} else {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -164,7 +173,7 @@ public class StockServlet {
 		final List<Medium> media = DBConnector.getInstance().getMedium();
 		for (final Medium medium : media) {
 			if (medium != null) {
-				response.getWriter().println(gson.toJson(medium));
+				response.getWriter().println(Utils.gson.toJson(medium));
 			}
 		}
 		response.setStatus(HttpServletResponse.SC_OK);

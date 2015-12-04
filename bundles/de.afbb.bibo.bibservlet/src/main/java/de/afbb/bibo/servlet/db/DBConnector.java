@@ -35,6 +35,7 @@ import de.afbb.bibo.share.model.MediumType;
 
 /**
  * @author fi13.pendrulat
+ * @author David Becker
  */
 public class DBConnector {
 
@@ -213,6 +214,26 @@ public class DBConnector {
 			try (ResultSet resultSet = statement.executeQuery("select Id from "
 					+ Config.getInstance().getDATABASE_NAME() + ".medium where " + "ISBN='" + isbn + "'")) {
 				return resultSet.first() ? resultSet.getInt(1) : -1;
+			}
+		}
+	}
+
+	public Copy getCopy(final String barcode) throws SQLException, NumberFormatException, IOException {
+		log.debug("get copy with barcode: " + barcode);
+		try (final Statement statement = connect.createStatement()) {
+			try (final ResultSet mediaSet = statement.executeQuery(
+					"select e.Id, e.Edition, e.Barcode, e.Inventarisiert, e.Zustand, e.AusleihDatum, e.LetztesAusleihDatum, e.AusleihBenutzerId, e.LetzterAusleihBenutzerId, e.AusleiherId, e.LetzterAusleiherId, e.GruppenId, m.Id, m.ISBN, m.Titel, m.Autor, m.Sprache, m.TypId, m.Herausgeber from "
+							+ Config.getInstance().getDATABASE_NAME() + ".exemplar e, "
+							+ Config.getInstance().getDATABASE_NAME() + ".medium m where Barcode='" + barcode
+							+ "' and e.MedienId=m.Id")) {
+				return mediaSet.first()
+						? new Copy(mediaSet.getInt(1), mediaSet.getString(2), mediaSet.getString(3),
+								mediaSet.getDate(4), mediaSet.getString(5), mediaSet.getDate(6), mediaSet.getDate(7),
+								mediaSet.getInt(12), new Borrower(mediaSet.getInt(8)), new Borrower(mediaSet.getInt(9)),
+								new Curator(mediaSet.getInt(10)), new Curator(mediaSet.getInt(11)), mediaSet.getInt(13),
+								mediaSet.getString(14), mediaSet.getString(15), mediaSet.getString(16),
+								mediaSet.getString(17), new MediumType(mediaSet.getInt(18)), mediaSet.getString(19))
+						: null;
 			}
 		}
 	}
@@ -396,7 +417,18 @@ public class DBConnector {
 		}
 	}
 
-	public List<Borrower> getBorrower() throws SQLException, NumberFormatException, IOException {
+	public Borrower getBorrower(final Integer id) throws SQLException, NumberFormatException, IOException {
+		log.debug("get curator with name: " + id);
+		try (Statement statement = connect.createStatement()) {
+			try (ResultSet mediaSet = statement.executeQuery("select Id, Vorname, Nachname, Info, EMail, Telefon from "
+					+ Config.getInstance().getDATABASE_NAME() + ".ausleiher where Id=" + id)) {
+				return mediaSet.first() ? new Borrower(mediaSet.getInt(1), mediaSet.getString(2), mediaSet.getString(3),
+						mediaSet.getString(4), mediaSet.getString(5), mediaSet.getString(6)) : null;
+			}
+		}
+	}
+
+	public List<Borrower> getBorrowers() throws SQLException, NumberFormatException, IOException {
 		final List<Borrower> result = new ArrayList<>();
 		log.debug("get all borrower");
 		try (Statement statement = connect.createStatement()) {

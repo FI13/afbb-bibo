@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-
 import de.afbb.bibo.servlet.server.SessionContainer;
 import de.afbb.bibo.servlet.server.Utils;
 
@@ -30,7 +28,6 @@ import de.afbb.bibo.servlet.server.Utils;
 public class MainServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -4080327750481043213L;
-	private final Gson gson = new Gson();
 	private static final Logger log = LoggerFactory.getLogger(MainServlet.class);
 
 	/**
