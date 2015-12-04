@@ -86,6 +86,17 @@ public class DBConnector {
 		}
 	}
 
+	public Curator getCurator(final Integer id) throws SQLException, NumberFormatException, IOException {
+		log.debug("get curator with id: " + id);
+		try (Statement statement = connect.createStatement()) {
+			try (ResultSet mediaSet = statement.executeQuery("select Id, Name, Salt, Hash from "
+					+ Config.getInstance().getDATABASE_NAME() + ".benutzer where Id='" + id + "'")) {
+				return mediaSet.first() ? new Curator(mediaSet.getInt(1), mediaSet.getString(2), mediaSet.getString(3),
+						mediaSet.getString(4)) : null;
+			}
+		}
+	}
+
 	public int createCurator(final Curator user) throws SQLException, NumberFormatException, IOException {
 		log.debug("add curator: " + user);
 		try (Statement statement = connect.createStatement()) {

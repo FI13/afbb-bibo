@@ -87,13 +87,13 @@ public class UserServlet {
 	}
 
 	private void getCurator() throws SQLException, IOException {
-		final String name = request.getParameter("name");
-		final Curator curator = DBConnector.getInstance().getCurator(name);
+		final Integer id = Integer.valueOf(request.getParameter("id"));
+		final Curator curator = DBConnector.getInstance().getCurator(id);
 		if (curator != null) {
 			response.getWriter().println(Utils.gson.toJson(curator));
 			response.setStatus(HttpServletResponse.SC_OK);
 		} else {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
 

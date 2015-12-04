@@ -37,8 +37,16 @@ public class CuratorServiceImpl implements ICuratorService {
 
 	@Override
 	public Curator get(final Integer id) throws ConnectException {
-		// TODO Auto-generated method stub
-		return null;
+		final HashMap<String, String> params = new HashMap<String, String>();
+		params.put("id", id.toString());
+		final HttpResponse resp = ServerConnection.getInstance().request("/user/getCurator", "GET", params, null);
+		if (resp.getStatus() == HttpServletResponse.SC_OK) {
+			return Utils.gson.fromJson(resp.getData(), Curator.class);
+		} else if (resp.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
+			return null;
+		} else {
+			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+		}
 	}
 
 	@Override
