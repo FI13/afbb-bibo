@@ -71,7 +71,7 @@ public class StockServlet {
 	private void addMediaType() throws IOException, SQLException {
 		final MediumType type = gson.fromJson(request.getReader(), MediumType.class);
 		final int mediumId = DBConnector.getInstance().createMediumType(type.getName(), type.getIcon().getCode());
-		response.setStatus(HttpServletResponse.SC_OK);
+		response.setStatus(mediumId != -1 ? HttpServletResponse.SC_OK : HttpServletResponse.SC_NOT_FOUND);
 		response.getWriter().println(mediumId);
 		response.setContentType("text/plain");
 	}
@@ -79,11 +79,11 @@ public class StockServlet {
 	private void getMediaType() throws IOException, SQLException {
 		final String id = request.getParameter("id");
 		MediumType mediumType;
-		try {
-			mediumType = DBConnector.getInstance().getMediumType(id);
+		mediumType = DBConnector.getInstance().getMediumType(id);
+		if (mediumType != null) {
 			response.getWriter().println(gson.toJson(mediumType));
 			response.setStatus(HttpServletResponse.SC_OK);
-		} catch (final SQLException ex) {
+		} else {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
@@ -99,9 +99,7 @@ public class StockServlet {
 	private void addCopyGroup() throws IOException, SQLException {
 		final Copy[] copies = gson.fromJson(request.getReader(), Copy[].class);
 		for (final Copy copy : copies) {
-			try {
-				DBConnector.getInstance().getMedium(copy.getMedium().getIsbn()).getMediumId();
-			} catch (final SQLException ex) {
+			if (DBConnector.getInstance().getMedium(copy.getMedium().getIsbn()).getMediumId() == null) {
 				// medium not found, create new
 				copy.getMedium()
 						.setMediumId(DBConnector.getInstance().createMedium(copy.getMedium().getIsbn(),
@@ -118,11 +116,11 @@ public class StockServlet {
 	private void getMedium() throws IOException, SQLException {
 		final String isbn = request.getParameter("ISBN");
 		Medium medium;
-		try {
-			medium = DBConnector.getInstance().getMedium(isbn);
+		medium = DBConnector.getInstance().getMedium(isbn);
+		if (medium != null) {
 			response.getWriter().println(gson.toJson(medium));
 			response.setStatus(HttpServletResponse.SC_OK);
-		} catch (final SQLException ex) {
+		} else {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}

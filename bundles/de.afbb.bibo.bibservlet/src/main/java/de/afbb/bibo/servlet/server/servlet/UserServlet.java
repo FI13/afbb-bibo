@@ -89,21 +89,20 @@ public class UserServlet {
 
 	private void getCurator() throws SQLException, IOException {
 		final String name = request.getParameter("name");
-		try {
-			final Curator curator = DBConnector.getInstance().getCurator(name);
+		final Curator curator = DBConnector.getInstance().getCurator(name);
+		if (curator != null) {
 			response.getWriter().println(gson.toJson(curator));
 			response.setStatus(HttpServletResponse.SC_OK);
-		} catch (final SQLException ex) {
+		} else {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 	}
 
 	private void hasCurator() throws SQLException, IOException {
 		final String curatorName = request.getParameter("name");
-		try {
-			DBConnector.getInstance().getCuratorId(curatorName);
+		if (DBConnector.getInstance().getCuratorId(curatorName) != -1) {
 			response.getWriter().println(1);
-		} catch (final SQLException ex) {
+		} else {
 			response.getWriter().println(0);
 		}
 		response.setStatus(HttpServletResponse.SC_OK);
@@ -119,20 +118,24 @@ public class UserServlet {
 	private void addBorrower() throws SQLException, IOException {
 		final Borrower borrower = gson.fromJson(request.getReader(), Borrower.class);
 
-		DBConnector.getInstance().createBorrower(borrower);
-		response.setStatus(HttpServletResponse.SC_OK);
+		if (DBConnector.getInstance().createBorrower(borrower) != -1) {
+			response.setStatus(HttpServletResponse.SC_OK);
+		} else {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		}
 	}
 
-	private void hasBorrower() throws SQLException, IOException {
+	private void hasBorrower() throws IOException, NumberFormatException, SQLException {
 		final String fName = request.getParameter("forename");
 		final String sName = request.getParameter("surname");
-		try {
-			DBConnector.getInstance().getBorrowerId(fName, sName);
+
+		if (DBConnector.getInstance().getBorrowerId(fName, sName) != -1) {
 			response.getWriter().println(1);
-		} catch (final SQLException ex) {
+		} else {
 			response.getWriter().println(0);
 		}
 		response.setStatus(HttpServletResponse.SC_OK);
+
 	}
 
 	private void getBorrower() throws SQLException, IOException {

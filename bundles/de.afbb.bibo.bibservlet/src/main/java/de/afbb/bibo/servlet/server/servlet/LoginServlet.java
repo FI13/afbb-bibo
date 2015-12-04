@@ -80,8 +80,12 @@ public class LoginServlet {
 			if (DBConnector.getInstance().checkPassword(userName, password)) {
 				response.getWriter().println(SessionContainer.getInstance().createNewConnection(userName));
 				final Curator curator = DBConnector.getInstance().getCurator(userName);
-				response.getWriter().println(gson.toJson(curator));
-				response.setStatus(HttpServletResponse.SC_OK);
+				if (curator != null) {
+					response.getWriter().println(gson.toJson(curator));
+					response.setStatus(HttpServletResponse.SC_OK);
+				} else {
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				}
 			} else {
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			}
