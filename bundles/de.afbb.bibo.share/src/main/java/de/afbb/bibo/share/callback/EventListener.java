@@ -11,6 +11,21 @@ import de.afbb.bibo.share.model.NavigationTreeNodeType;
  */
 public interface EventListener {
 
+	/**
+	 * marks the given tree node as out of date
+	 *
+	 * @param type
+	 */
 	void invalidate(NavigationTreeNodeType type);
+
+	/**
+	 * callback method to update a specific part of the tree
+	 *
+	 * @param target
+	 *            item to update
+	 * @param information
+	 *            informations that where gathered by the service to display
+	 */
+	void update(IAggregatorTarget target, String information);
 
 }

@@ -19,7 +19,13 @@ public class NavigationTreeViewLabelProvider extends LabelProvider {
 	@Override
 	public String getText(final Object obj) {
 		if (obj instanceof NavigationTreeViewNode) {
-			return ((NavigationTreeViewNode) obj).getTitle();
+			final NavigationTreeViewNode navigationTreeViewNode = (NavigationTreeViewNode) obj;
+			final StringBuilder text = new StringBuilder(navigationTreeViewNode.getTitle());
+			if (navigationTreeViewNode.getInformation() != null) {
+				text.append(" ");//$NON-NLS-1$
+				text.append(navigationTreeViewNode.getInformation());
+			}
+			return text.toString();
 		} else {
 			return obj.toString();
 		}
@@ -29,18 +35,18 @@ public class NavigationTreeViewLabelProvider extends LabelProvider {
 	public Image getImage(final Object obj) {
 		if (obj instanceof NavigationTreeViewNode && ((NavigationTreeViewNode) obj).hasType()) {
 			switch (((NavigationTreeViewNode) obj).getType()) {
-				case BOOK:
-					return BiboImageRegistry.getImage(IconType.BOOK, IconSize.small);
-				case BOOKS:
-					return BiboImageRegistry.getImage(IconType.BOOK_GROUP, IconSize.small);
-				case PERSON:
-					return BiboImageRegistry.getImage(IconType.PUPIL, IconSize.small);
-				case PERSONS:
-					return BiboImageRegistry.getImage(IconType.USER, IconSize.small);
-				case ROOT:
-					return BiboImageRegistry.getImage(IconType.USER, IconSize.small);
-				default:
-					throw new IllegalStateException("Illegal NavigationTreeViewNode State");
+			case BOOK:
+				return BiboImageRegistry.getImage(IconType.BOOK, IconSize.small);
+			case BOOKS:
+				return BiboImageRegistry.getImage(IconType.BOOK_GROUP, IconSize.small);
+			case PERSON:
+				return BiboImageRegistry.getImage(IconType.PUPIL, IconSize.small);
+			case PERSONS:
+				return BiboImageRegistry.getImage(IconType.USER, IconSize.small);
+			case ROOT:
+				return BiboImageRegistry.getImage(IconType.USER, IconSize.small);
+			default:
+				throw new IllegalStateException("Illegal NavigationTreeViewNode State");
 			}
 
 		} else {

@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 import org.eclipse.jface.viewers.TreeNode;
 
+import de.afbb.bibo.share.callback.IAggregatorTarget;
 import de.afbb.bibo.share.model.NavigationTreeNodeType;
 
-public class NavigationTreeViewNode extends TreeNode {
+public class NavigationTreeViewNode extends TreeNode implements IAggregatorTarget {
 
 	private String title;
+	private String information = " [...]";//$NON-NLS-1$
 	private NavigationTreeViewNode parent;
 	private final NavigationTreeNodeType type;
 
@@ -26,6 +28,15 @@ public class NavigationTreeViewNode extends TreeNode {
 
 	public void setTitle(final String title) {
 		this.title = title;
+	}
+
+	public String getInformation() {
+		return information;
+	}
+
+	@Override
+	public void setInformation(final String information) {
+		this.information = information;
 	}
 
 	public void setParent(final NavigationTreeViewNode parent) {
@@ -68,24 +79,28 @@ public class NavigationTreeViewNode extends TreeNode {
 		return !children.isEmpty();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + (parent == null ? 0 : parent.hashCode());
+		result = prime * result + (title == null ? 0 : title.hashCode());
+		result = prime * result + (type == null ? 0 : type.hashCode());
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -95,7 +110,7 @@ public class NavigationTreeViewNode extends TreeNode {
 		if (!(obj instanceof NavigationTreeViewNode)) {
 			return false;
 		}
-		NavigationTreeViewNode other = (NavigationTreeViewNode) obj;
+		final NavigationTreeViewNode other = (NavigationTreeViewNode) obj;
 		if (parent == null) {
 			if (other.parent != null) {
 				return false;
@@ -115,4 +130,5 @@ public class NavigationTreeViewNode extends TreeNode {
 		}
 		return true;
 	}
+
 }

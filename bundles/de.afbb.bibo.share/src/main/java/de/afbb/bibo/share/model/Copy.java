@@ -212,6 +212,7 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable {
 		result = prime * result + (barcode == null ? 0 : barcode.hashCode());
 		result = prime * result + (condition == null ? 0 : condition.hashCode());
 		result = prime * result + (edition == null ? 0 : edition.hashCode());
+		result = prime * result + groupId;
 		return result;
 	}
 
@@ -222,6 +223,9 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable {
 	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
+		}
+		if (obj == null) {
+			return false;
 		}
 		if (!(obj instanceof Copy)) {
 			return false;
@@ -246,6 +250,9 @@ public class Copy extends AbstractPropertyChangeSupport implements Cloneable {
 				return false;
 			}
 		} else if (!edition.equals(other.edition)) {
+			return false;
+		}
+		if (groupId != other.groupId) {
 			return false;
 		}
 		return true;

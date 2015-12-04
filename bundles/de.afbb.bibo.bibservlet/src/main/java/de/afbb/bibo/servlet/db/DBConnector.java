@@ -35,6 +35,7 @@ import de.afbb.bibo.share.model.MediumType;
 
 /**
  * @author fi13.pendrulat
+ * @author David Becker
  */
 public class DBConnector {
 
@@ -69,8 +70,7 @@ public class DBConnector {
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet resultSet = statement.executeQuery("select Id from "
 					+ Config.getInstance().getDATABASE_NAME() + ".benutzer where " + "Name='" + curatorName + "'")) {
-				resultSet.first();
-				return resultSet.getInt(1);
+				return resultSet.first() ? resultSet.getInt(1) : -1;
 			}
 		}
 	}
@@ -80,9 +80,19 @@ public class DBConnector {
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet mediaSet = statement.executeQuery("select Id, Name, Salt, Hash from "
 					+ Config.getInstance().getDATABASE_NAME() + ".benutzer where Name='" + curatorName + "'")) {
-				mediaSet.first();
-				return new Curator(mediaSet.getInt(1), mediaSet.getString(2), mediaSet.getString(3),
-						mediaSet.getString(4));
+				return mediaSet.first() ? new Curator(mediaSet.getInt(1), mediaSet.getString(2), mediaSet.getString(3),
+						mediaSet.getString(4)) : null;
+			}
+		}
+	}
+
+	public Curator getCurator(final Integer id) throws SQLException, NumberFormatException, IOException {
+		log.debug("get curator with id: " + id);
+		try (Statement statement = connect.createStatement()) {
+			try (ResultSet mediaSet = statement.executeQuery("select Id, Name, Salt, Hash from "
+					+ Config.getInstance().getDATABASE_NAME() + ".benutzer where Id='" + id + "'")) {
+				return mediaSet.first() ? new Curator(mediaSet.getInt(1), mediaSet.getString(2), mediaSet.getString(3),
+						mediaSet.getString(4)) : null;
 			}
 		}
 	}
@@ -112,8 +122,7 @@ public class DBConnector {
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet resultSet = statement.executeQuery("select Hash from "
 					+ Config.getInstance().getDATABASE_NAME() + ".benutzer where " + "Name='" + name + "'")) {
-				resultSet.first();
-				return resultSet.getString(1).equals(passwordHash);
+				return resultSet.first() && resultSet.getString(1).equals(passwordHash);
 			}
 		}
 	}
@@ -123,8 +132,7 @@ public class DBConnector {
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet resultSet = statement.executeQuery("select Salt from "
 					+ Config.getInstance().getDATABASE_NAME() + ".benutzer where " + "Name='" + name + "'")) {
-				resultSet.first();
-				return resultSet.getString(1);
+				return resultSet.first() ? resultSet.getString(1) : null;
 			}
 		}
 	}
@@ -161,9 +169,8 @@ public class DBConnector {
 			statement.execute();
 			try (ResultSet resultSet = statement
 					.executeQuery("select Id from " + Config.getInstance().getDATABASE_NAME() + ".typ where "
-							+ "TypName='" + name + "' and iconPath='" + iconPath + "'")) {
-				resultSet.first();
-				return resultSet.getInt(1);
+							+ "TypName='" + name + "' and Icon='" + iconPath + "'")) {
+				return resultSet.first() ? resultSet.getInt(1) : -1;
 			}
 		}
 	}
@@ -189,9 +196,8 @@ public class DBConnector {
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet mediaSet = statement.executeQuery("select Id, TypName, Icon from "
 					+ Config.getInstance().getDATABASE_NAME() + ".typ where Id='" + id + "'")) {
-				mediaSet.first();
-				return new MediumType(mediaSet.getInt(1), mediaSet.getString(2),
-						IconType.fromString(mediaSet.getString(3)));
+				return mediaSet.first() ? new MediumType(mediaSet.getInt(1), mediaSet.getString(2),
+						IconType.fromString(mediaSet.getString(3))) : null;
 			}
 		}
 	}
@@ -218,8 +224,27 @@ public class DBConnector {
 			statement.execute();
 			try (ResultSet resultSet = statement.executeQuery("select Id from "
 					+ Config.getInstance().getDATABASE_NAME() + ".medium where " + "ISBN='" + isbn + "'")) {
-				resultSet.first();
-				return resultSet.getInt(1);
+				return resultSet.first() ? resultSet.getInt(1) : -1;
+			}
+		}
+	}
+
+	public Copy getCopy(final String barcode) throws SQLException, NumberFormatException, IOException {
+		log.debug("get copy with barcode: " + barcode);
+		try (final Statement statement = connect.createStatement()) {
+			try (final ResultSet mediaSet = statement.executeQuery(
+					"select e.Id, e.Edition, e.Barcode, e.Inventarisiert, e.Zustand, e.AusleihDatum, e.LetztesAusleihDatum, e.AusleihBenutzerId, e.LetzterAusleihBenutzerId, e.AusleiherId, e.LetzterAusleiherId, e.GruppenId, m.Id, m.ISBN, m.Titel, m.Autor, m.Sprache, m.TypId, m.Herausgeber from "
+							+ Config.getInstance().getDATABASE_NAME() + ".exemplar e, "
+							+ Config.getInstance().getDATABASE_NAME() + ".medium m where Barcode='" + barcode
+							+ "' and e.MedienId=m.Id")) {
+				return mediaSet.first()
+						? new Copy(mediaSet.getInt(1), mediaSet.getString(2), mediaSet.getString(3),
+								mediaSet.getDate(4), mediaSet.getString(5), mediaSet.getDate(6), mediaSet.getDate(7),
+								mediaSet.getInt(12), new Borrower(mediaSet.getInt(8)), new Borrower(mediaSet.getInt(9)),
+								new Curator(mediaSet.getInt(10)), new Curator(mediaSet.getInt(11)), mediaSet.getInt(13),
+								mediaSet.getString(14), mediaSet.getString(15), mediaSet.getString(16),
+								mediaSet.getString(17), new MediumType(mediaSet.getInt(18)), mediaSet.getString(19))
+						: null;
 			}
 		}
 	}
@@ -230,11 +255,9 @@ public class DBConnector {
 			try (ResultSet mediaSet = statement
 					.executeQuery("select TypId, Id, ISBN, Titel, Autor, Sprache, Herausgeber from "
 							+ Config.getInstance().getDATABASE_NAME() + ".medium where ISBN='" + isbn + "'")) {
-				mediaSet.first();
-				return new Medium(mediaSet.getInt(2), mediaSet.getString(3), mediaSet.getString(4),
+				return mediaSet.first() ? new Medium(mediaSet.getInt(2), mediaSet.getString(3), mediaSet.getString(4),
 						mediaSet.getString(5), mediaSet.getString(6), new MediumType(mediaSet.getInt(1)),
-						mediaSet.getString(7));
-
+						mediaSet.getString(7)) : null;
 			}
 		}
 	}
@@ -268,9 +291,8 @@ public class DBConnector {
 	private int createGroup() throws SQLException, NumberFormatException, IOException {
 		try (Statement st = connect.createStatement()) {
 			st.execute("insert into " + Config.getInstance().getDATABASE_NAME() + ".gruppe () values ()");
-			try (ResultSet groupResultSet = st.executeQuery("SELECT LAST_INSERT_ID()")) {
-				groupResultSet.first();
-				return groupResultSet.getInt(0);
+			try (ResultSet resultSet = st.executeQuery("SELECT LAST_INSERT_ID()")) {
+				return resultSet.first() ? resultSet.getInt(1) : -1;
 			}
 		}
 	}
@@ -278,7 +300,7 @@ public class DBConnector {
 	/**
 	 * Create a number of copies in the "exemplar" table. The copies remain in
 	 * the same group. The input are two arrays. The first input of editions is
-	 * the same copy as the first input in barcodeIds and so on.
+	 * the same copy as the first input in Barcodes and so on.
 	 *
 	 * @param copies
 	 * @return the groupId
@@ -304,8 +326,24 @@ public class DBConnector {
 				statement.execute();
 			}
 		}
-
 		return groupId;
+	}
+
+	public void createCopies(final Copy[] copies) throws SQLException, NumberFormatException, IOException {
+		log.debug("create new copies: " + Arrays.toString(copies));
+		for (final Copy copy : copies) {
+			final String sql = "insert into " + Config.getInstance().getDATABASE_NAME()
+					+ ".exemplar (Edition, Barcode, Inventarisiert, Zustand, MedienId) values (?, ?, ?, ?, ?)";
+
+			try (PreparedStatement statement = connect.prepareStatement(sql)) {
+				statement.setString(1, copy.getEdition());
+				statement.setString(2, copy.getBarcode());
+				statement.setDate(3, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
+				statement.setString(4, "neu");
+				statement.setInt(5, copy.getMedium().getMediumId());
+				statement.execute();
+			}
+		}
 	}
 
 	public Collection<List<Copy>> getCopies() throws SQLException, NumberFormatException, IOException {
@@ -370,8 +408,7 @@ public class DBConnector {
 			try (ResultSet resultSet = statement.executeQuery(
 					"select Id from " + Config.getInstance().getDATABASE_NAME() + ".ausleiher where " + "Vorname='"
 							+ borrower.getForename() + "' and Nachname='" + borrower.getSurname() + "'")) {
-				resultSet.first();
-				return resultSet.getInt(1);
+				return resultSet.first() ? resultSet.getInt(1) : -1;
 			}
 		}
 	}
@@ -382,13 +419,23 @@ public class DBConnector {
 			try (ResultSet resultSet = statement
 					.executeQuery("select Id from " + Config.getInstance().getDATABASE_NAME() + ".ausleiher where "
 							+ "Vorname='" + fName + "' ans Nachname='" + sName + "'")) {
-				resultSet.first();
-				return resultSet.getInt(1);
+				return resultSet.first() ? resultSet.getInt(1) : -1;
 			}
 		}
 	}
 
-	public List<Borrower> getBorrower() throws SQLException, NumberFormatException, IOException {
+	public Borrower getBorrower(final Integer id) throws SQLException, NumberFormatException, IOException {
+		log.debug("get curator with name: " + id);
+		try (Statement statement = connect.createStatement()) {
+			try (ResultSet mediaSet = statement.executeQuery("select Id, Vorname, Nachname, Info, EMail, Telefon from "
+					+ Config.getInstance().getDATABASE_NAME() + ".ausleiher where Id=" + id)) {
+				return mediaSet.first() ? new Borrower(mediaSet.getInt(1), mediaSet.getString(2), mediaSet.getString(3),
+						mediaSet.getString(4), mediaSet.getString(5), mediaSet.getString(6)) : null;
+			}
+		}
+	}
+
+	public List<Borrower> getBorrowers() throws SQLException, NumberFormatException, IOException {
 		final List<Borrower> result = new ArrayList<>();
 		log.debug("get all borrower");
 		try (Statement statement = connect.createStatement()) {
@@ -414,9 +461,9 @@ public class DBConnector {
 	public void updateBorrower(final Borrower b) throws SQLException, NumberFormatException, IOException {
 		log.debug("update borrower: " + b);
 		try (Statement statement = connect.createStatement()) {
-			statement.execute("update " + Config.getInstance().getDATABASE_NAME() + ".benutzer set " + "Vorname='"
+			statement.execute("update " + Config.getInstance().getDATABASE_NAME() + ".ausleiher set " + "Vorname='"
 					+ b.getForename() + "', Nachname='" + b.getSurname() + "', Info='" + b.getInfo() + "', EMail='"
-					+ b.getEmail() + "', Telefon'" + b.getPhoneNumber() + "' where Id=" + b.getId());
+					+ b.getEmail() + "', Telefon='" + b.getPhoneNumber() + "' where Id=" + b.getId());
 		}
 	}
 
@@ -424,7 +471,7 @@ public class DBConnector {
 		try (Statement st = connect.createStatement()) {
 			try (ResultSet resultSet = st.executeQuery("select AusleiherId from "
 					+ Config.getInstance().getDATABASE_NAME() + ".exemplar where barcode='" + barcode + "';")) {
-				return resultSet.getInt(1);
+				return resultSet.first() ? resultSet.getInt(1) : -1;
 			}
 		}
 	}
@@ -433,7 +480,7 @@ public class DBConnector {
 		try (Statement st = connect.createStatement()) {
 			try (ResultSet resultSet = st.executeQuery("select AusleihBenutzerId from "
 					+ Config.getInstance().getDATABASE_NAME() + ".exemplar where barcode='" + barcode + "';")) {
-				return resultSet.getInt(1);
+				return resultSet.first() ? resultSet.getInt(1) : -1;
 			}
 		}
 	}
@@ -442,7 +489,7 @@ public class DBConnector {
 		try (Statement st = connect.createStatement()) {
 			try (ResultSet resultSet = st.executeQuery("select AusleihDatum from "
 					+ Config.getInstance().getDATABASE_NAME() + ".exemplar where barcode='" + barcode + "';")) {
-				return resultSet.getString(1);
+				return resultSet.first() ? resultSet.getString(1) : null;
 			}
 		}
 	}
@@ -450,8 +497,9 @@ public class DBConnector {
 	public void setNewBorrower(final String barcode, final int borrowerId, final int curatorId)
 			throws SQLException, NumberFormatException, IOException {
 		final String sql = "update " + Config.getInstance().getDATABASE_NAME() + ".exemplar set "
-				+ ", AusleihBenutzerId='" + curatorId + "'" + ", AusleiherId='" + borrowerId + "'"
+				+ " AusleihBenutzerId='" + curatorId + "'" + ", AusleiherId='" + borrowerId + "'"
 				+ ", AusleihDatum=NOW()" + " where Barcode='" + barcode + "'";
+		log.debug(sql);
 		try (Statement st = connect.createStatement()) {
 			st.execute(sql);
 		}
@@ -475,5 +523,49 @@ public class DBConnector {
 		try (Statement st = connect.createStatement()) {
 			st.execute(sql);
 		}
+	}
+
+	public boolean existsCopy(final String barcode) throws SQLException, NumberFormatException, IOException {
+		try (Statement st = connect.createStatement()) {
+			try (ResultSet resultSet = st.executeQuery("select count(Id) from "
+					+ Config.getInstance().getDATABASE_NAME() + ".exemplar where Barcode='" + barcode + "';")) {
+				return resultSet.first() && 0 < resultSet.getInt(1);
+			}
+		}
+	}
+
+	public int countLendCopies(final Integer borrowerId) throws NumberFormatException, SQLException, IOException {
+		log.debug("count lend copies for borrower with id: " + borrowerId);
+		try (Statement st = connect.createStatement()) {
+			try (ResultSet resultSet = st
+					.executeQuery("select count(Id) from " + Config.getInstance().getDATABASE_NAME()
+							+ ".exemplar where (TIMESTAMPDIFF(SECOND,  LetztesAusleihDatum, AusleihDatum) >= 0 or (AusleihDatum is not null and LetztesAusleihDatum is null)) and AusleiherId="
+							+ borrowerId)) {
+				return resultSet.first() ? resultSet.getInt(1) : -1;
+			}
+		}
+	}
+
+	public List<Copy> listLendCopies(final Integer borrowerId) throws NumberFormatException, SQLException, IOException {
+		final List<Copy> result = new ArrayList<Copy>();
+		log.debug("get lend copies for borrower with id: " + borrowerId);
+		try (Statement statement = connect.createStatement()) {
+			final String string = "select e.Id, e.Edition, e.Barcode, e.Inventarisiert, e.Zustand, e.AusleihDatum, e.LetztesAusleihDatum, e.AusleihBenutzerId, e.LetzterAusleihBenutzerId, e.AusleiherId, e.LetzterAusleiherId, e.GruppenId, m.Id, m.ISBN, m.Titel, m.Autor, m.Sprache, m.TypId, m.Herausgeber from "
+					+ Config.getInstance().getDATABASE_NAME() + ".exemplar e, "
+					+ Config.getInstance().getDATABASE_NAME()
+					+ ".medium m where (TIMESTAMPDIFF(SECOND,  LetztesAusleihDatum, AusleihDatum) >= 0 or (e.AusleihDatum is not null and e.LetztesAusleihDatum is null)) and AusleiherId="
+					+ borrowerId + " and e.MedienId=m.Id";
+			try (ResultSet mediaSet = statement.executeQuery(string)) {
+				while (mediaSet.next()) {
+					result.add(new Copy(mediaSet.getInt(1), mediaSet.getString(2), mediaSet.getString(3),
+							mediaSet.getDate(4), mediaSet.getString(5), mediaSet.getDate(6), mediaSet.getDate(7),
+							mediaSet.getInt(12), new Borrower(mediaSet.getInt(8)), new Borrower(mediaSet.getInt(9)),
+							new Curator(mediaSet.getInt(10)), new Curator(mediaSet.getInt(11)), mediaSet.getInt(13),
+							mediaSet.getString(14), mediaSet.getString(15), mediaSet.getString(16),
+							mediaSet.getString(17), new MediumType(mediaSet.getInt(18)), mediaSet.getString(19)));
+				}
+			}
+		}
+		return result;
 	}
 }

@@ -7,6 +7,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.beans.BeansObservables;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -17,6 +23,8 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -49,6 +57,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 	public static final String ID = "de.afbb.bibo.ui.registerexemplar";//$NON-NLS-1$
 	private static final String REGISTER_COPY = "register.copy";//$NON-NLS-1$
+	private static final String BARCODE = "barcode";//$NON-NLS-1$
 
 	private final Set<Copy> copies = new HashSet<Copy>();
 
@@ -71,7 +80,11 @@ public class RegisterCopyView extends AbstractView<Copy> {
 	private CopyXviewerForm xViewer;
 
 	private static final int UNASSIGNED_GROUP = -1;
-	private int highestAssignedGroup = UNASSIGNED_GROUP;
+	private int highestAssignedGroup = UNASSIGNED_GROUP + 1;
+	private final HashMap<String, Medium> mediumCache = new HashMap<>();
+
+	private String barcode = null;
+	private final IObservableValue barcodeObservable = BeansObservables.observeValue(this, BARCODE);
 
 	/**
 	 * listener that adds a copy to the list and clears the input fields
@@ -83,11 +96,13 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		public void handleEvent(final Event event) {
 			final Copy clone = (Copy) input.clone();
 			copies.add(clone);
+			// hack to reset the input
+			setInput(null);
 			setInput(new Copy());
 			updateSaveButton();
 			xViewer.setInput(copies);
-			bindingContext.updateTargets();
 			txtBarcode.setFocus();
+			updateToListButton();
 		}
 	};
 
@@ -108,10 +123,11 @@ public class RegisterCopyView extends AbstractView<Copy> {
 				final Copy copy = (Copy) paths[0].getLastSegment();
 				setInput(copy);
 				copies.remove(copy);
+				bindingContext.updateTargets();
 				checkGroups();
+				updateToListButton();
 				updateSaveButton();
 				xViewer.setInput(copies);
-				bindingContext.updateTargets();
 			}
 		}
 	};
@@ -262,8 +278,30 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		idGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(idGroup, Messages.BARCODE);
 		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING);
+		txtBarcode.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(final FocusEvent e) {
+				checkBarcodeExists();
+			}
+
+			@Override
+			public void focusGained(final FocusEvent e) {
+			}
+		});
 		toolkit.createLabel(idGroup, Messages.ISBN);
 		txtIsbn = toolkit.createText(idGroup, EMPTY_STRING);
+		txtIsbn.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(final FocusEvent e) {
+				loadMediumFromDatabase(txtIsbn.getText());
+			}
+
+			@Override
+			public void focusGained(final FocusEvent e) {
+			}
+		});
 		toolkit.createLabel(idGroup, Messages.EDITION);
 		txtEdition = toolkit.createText(idGroup, EMPTY_STRING);
 
@@ -278,7 +316,6 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		toolkit.createLabel(mediumGroup, Messages.PUBLISHER);
 		txtPublisher = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, "Typ");
-		// comboMediumType = new CCombo(mediumGroup, SWT.BORDER);
 		comboMediumType = toolkit.createCombo(mediumGroup);
 
 		final Group conditionGroup = toolkit.createGroup(content, "Zustand");
@@ -362,6 +399,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		});
 
 		// disable buttons
+		btnToList.setEnabled(false);
 		btnToEdit.setEnabled(false);
 		btnGroup.setEnabled(false);
 		btnUngroup.setEnabled(false);
@@ -378,27 +416,79 @@ public class RegisterCopyView extends AbstractView<Copy> {
 				false);
 		BindingHelper.bindStringToTextField(txtCondition, getInputObservable(), Copy.FIELD_CONDITION, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(txtTitle, getInputObservable(),
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TITLE, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtAuthor, getInputObservable(),
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_AUTHOR, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtLanguage, getInputObservable(),
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_LANGUAGE, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtPublisher, getInputObservable(),
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_PUBLISHER, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtIsbn, getInputObservable(), Copy.FIELD_MEDIUM + DOT + Medium.FIELD_ISBN,
+		final IObservableValue mediumObservable = BeansObservables.observeDetailValue(getInputObservable(),
+				Copy.FIELD_MEDIUM, Medium.class);
+		BindingHelper.bindStringToTextField(txtTitle, mediumObservable, Medium.FIELD_TITLE, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtAuthor, mediumObservable, Medium.FIELD_AUTHOR, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtLanguage, mediumObservable, Medium.FIELD_LANGUAGE, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtPublisher, mediumObservable, Medium.FIELD_PUBLISHER, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtIsbn, mediumObservable, Medium.FIELD_ISBN, bindingContext, false);
+
+		BindingHelper.bindObjectToCCombo(comboMediumType, mediumObservable, Medium.class, Medium.FIELD_TYPE,
+				MediumType.class, ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(),
 				bindingContext, false);
 
-		BindingHelper.bindObjectToCCombo(comboMediumType, getInputObservable(), Copy.class,
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TYPE, MediumType.class,
-				ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(), bindingContext,
-				false);
+		// dummy binding to validate that barcode isn't taken
+		final UpdateValueStrategy modelToTarget = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
+		modelToTarget.setAfterGetValidator(new BarcodeTakenValidator());
+		bindingContext.bindValue(new WritableValue(null, String.class), barcodeObservable,
+				new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), modelToTarget);
+	}
 
+	private void loadMediumFromDatabase(final String isbn) {
+		// check if we have it cached already first
+		if (!mediumCache.containsKey(isbn)) {
+			// normal fetch from database
+			Medium medium = null;
+			try {
+				medium = ServiceLocator.getInstance().getMediumService().getMedium(isbn);
+			} catch (final ConnectException e) {
+				handle(e);
+			}
+			mediumCache.put(isbn, medium);
+		}
+		final Medium medium = mediumCache.get(isbn);
+		if (medium != null && input != null) {
+			input.setMedium(medium);
+			setInput(input);
+		}
 	}
 
 	@Override
 	public void setFocus() {
 		idGroup.setFocus();
+	}
+
+	private void checkBarcodeExists() {
+		// disabled by default, will be enabled if barcode can't be found
+		btnToList.setEnabled(false);
+		setBarcode(null);
+		final String barcode = txtBarcode.getText();
+		if (!barcode.isEmpty()) {
+			// check list of local copies first
+			for (final Copy copy : copies) {
+				if (barcode.equals(copy.getBarcode())) {
+					return;
+				}
+			}
+			// check database next
+			try {
+				if (ServiceLocator.getInstance().getCopyService().exists(barcode)) {
+					setBarcode(barcode);
+					return;
+				}
+			} catch (final ConnectException e) {
+				handle(e);
+			}
+			btnToList.setEnabled(true);
+		}
+
+	}
+
+	private void updateToListButton() {
+		btnToList.setEnabled(!txtBarcode.getText().isEmpty());
 	}
 
 	private void updateSaveButton() {
@@ -409,5 +499,24 @@ public class RegisterCopyView extends AbstractView<Copy> {
 	public boolean isDirty() {
 		// no dirty state for this view
 		return false;
+	}
+
+	private static class BarcodeTakenValidator implements IValidator {
+
+		private static final String MSG = "Dieser Barcode wird schon verwendet!";
+
+		@Override
+		public IStatus validate(final Object value) {
+			return value == null ? ValidationStatus.ok() : ValidationStatus.error(MSG);
+		}
+
+	}
+
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(final String barcode) {
+		changeSupport.firePropertyChange(BARCODE, this.barcode, this.barcode = barcode);
 	}
 }

@@ -113,4 +113,9 @@ public class BorrowerStubService implements IBorrowerService {
 		// nothing to do in stub service
 	}
 
+	@Override
+	public Borrower get(final Integer id) throws ConnectException {
+		return null;
+	}
+
 }

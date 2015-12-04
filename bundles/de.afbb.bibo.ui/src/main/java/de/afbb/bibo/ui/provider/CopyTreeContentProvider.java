@@ -52,7 +52,7 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 				final Copy next = iterator.next();
 				groupId = next.getGroupId();
 				// add copy to grouped copies if it has a valid group id
-				if (groupId > -1) {
+				if (groupId > 0) {
 					final Set<Copy> group = groupedCopies.containsKey(groupId) ? groupedCopies.get(groupId)
 							: new HashSet<Copy>();
 					group.add(next);

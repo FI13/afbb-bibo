@@ -24,4 +24,10 @@ public class CuratorStubService implements ICuratorService {
 		this.curator = curator;
 	}
 
+	@Override
+	public Curator get(final Integer id) throws ConnectException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -15,13 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import de.afbb.bibo.servlet.db.DBConnector;
 import de.afbb.bibo.servlet.server.SessionContainer;
 import de.afbb.bibo.servlet.server.Utils;
-import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 import de.afbb.bibo.share.model.Curator;
 
 /**
@@ -33,12 +29,10 @@ public class LoginServlet {
 	HttpServletRequest request;
 	HttpServletResponse response;
 	private static final Logger log = LoggerFactory.getLogger(LoginServlet.class);
-	private final Gson gson;
 
 	protected LoginServlet(final HttpServletRequest request, final HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
-		gson = new GsonBuilder().addSerializationExclusionStrategy(new BeanExclusionStrategy()).create();
 	}
 
 	protected void processRequest() throws SQLException, IOException {
@@ -65,8 +59,12 @@ public class LoginServlet {
 	private void requestSalt() throws SQLException, IOException {
 		final String userName = request.getParameter("name");
 		final String salt = DBConnector.getInstance().requestSalt(userName);
-		response.getWriter().write(salt);
-		response.setStatus(HttpServletResponse.SC_OK);
+		if (salt != null) {
+			response.getWriter().write(salt);
+			response.setStatus(HttpServletResponse.SC_OK);
+		} else {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
 	}
 
 	private void doLogin() throws SQLException, IOException {
@@ -76,8 +74,12 @@ public class LoginServlet {
 			if (DBConnector.getInstance().checkPassword(userName, password)) {
 				response.getWriter().println(SessionContainer.getInstance().createNewConnection(userName));
 				final Curator curator = DBConnector.getInstance().getCurator(userName);
-				response.getWriter().println(gson.toJson(curator));
-				response.setStatus(HttpServletResponse.SC_OK);
+				if (curator != null) {
+					response.getWriter().println(Utils.gson.toJson(curator));
+					response.setStatus(HttpServletResponse.SC_OK);
+				} else {
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				}
 			} else {
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			}

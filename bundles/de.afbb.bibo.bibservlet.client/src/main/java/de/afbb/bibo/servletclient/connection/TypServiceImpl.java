@@ -26,6 +26,8 @@ public class TypServiceImpl implements ITypService {
 	private static final Gson gson = new GsonBuilder().addSerializationExclusionStrategy(new BeanExclusionStrategy())
 			.create();
 
+	private final Map<Integer, MediumType> cache = new HashMap<Integer, MediumType>();
+
 	@Override
 	public void create(final MediumType type) throws ConnectException {
 		final HttpResponse resp = ServerConnection.getInstance().request("/stock/addMediaType", "POST", null,
@@ -40,9 +42,16 @@ public class TypServiceImpl implements ITypService {
 		final HttpResponse resp = ServerConnection.getInstance().request("/stock/listMediaTypes", "GET", null, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
 			final Collection<MediumType> result = new HashSet<>();
-			final String[] data = resp.getData().split("\n");
-			for (int i = 0; i < data.length; i++) {
-				result.add(gson.fromJson(data[i], MediumType.class));
+			synchronized (cache) {
+				cache.clear();
+				final String[] data = resp.getData().split("\n");
+				for (int i = 0; i < data.length; i++) {
+					final MediumType type = gson.fromJson(data[i], MediumType.class);
+					if (type != null) {
+						result.add(type);
+						cache.put(type.getId(), type);
+					}
+				}
 			}
 			return result;
 		} else {
@@ -52,11 +61,20 @@ public class TypServiceImpl implements ITypService {
 
 	@Override
 	public MediumType get(final Integer id) throws ConnectException {
+		synchronized (cache) {
+			if (cache.containsKey(id)) {
+				return cache.get(id);
+			}
+		}
 		final Map<String, String> param = new HashMap<String, String>();
 		param.put("id", id.toString());
 		final HttpResponse resp = ServerConnection.getInstance().request("/stock/getMediaType", "GET", param, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
-			return gson.fromJson(resp.getData(), MediumType.class);
+			final MediumType type = gson.fromJson(resp.getData(), MediumType.class);
+			synchronized (cache) {
+				cache.put(type.getId(), type);
+			}
+			return type;
 		} else {
 			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
 		}

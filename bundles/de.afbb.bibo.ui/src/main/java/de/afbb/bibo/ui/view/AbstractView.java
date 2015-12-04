@@ -135,6 +135,9 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 								case IMessageProvider.ERROR:
 									newImage = JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_ERROR);
 									break;
+								case IStatus.ERROR:
+									newImage = JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_ERROR);
+									break;
 								}
 							}
 							setMessage(newMessage, newImage);
@@ -240,6 +243,7 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 
 			@Override
 			public void run() {
+				// TODO handle invalidated session differently
 				final StringBuilder msg = new StringBuilder(Messages.MESSAGE_ERROR_CONNECTION);
 				if (getSite().getPage().isPartVisible(AbstractView.this)) {
 					msg.append(Messages.NEW_LINE);

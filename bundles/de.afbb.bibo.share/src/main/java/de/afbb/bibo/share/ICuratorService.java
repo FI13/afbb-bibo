@@ -8,12 +8,14 @@ public interface ICuratorService {
 
 	/**
 	 * checks if a {@link Curator} exists with the given name
-	 * 
+	 *
 	 * @param curator
 	 *            curator to check
 	 * @return
 	 */
 	boolean exists(String curatorName) throws ConnectException;
+
+	Curator get(Integer id) throws ConnectException;
 
 	void create(Curator curator) throws ConnectException;
 

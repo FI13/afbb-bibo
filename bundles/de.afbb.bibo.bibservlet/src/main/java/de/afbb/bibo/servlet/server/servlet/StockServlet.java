@@ -7,7 +7,9 @@ package de.afbb.bibo.servlet.server.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,12 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import de.afbb.bibo.servlet.db.DBConnector;
 import de.afbb.bibo.servlet.server.Utils;
-import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
@@ -33,13 +31,11 @@ public class StockServlet {
 
 	HttpServletRequest request;
 	HttpServletResponse response;
-	Gson gson;
 	private static final Logger log = LoggerFactory.getLogger(StockServlet.class);
 
 	protected StockServlet(final HttpServletRequest request, final HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
-		gson = new GsonBuilder().addSerializationExclusionStrategy(new BeanExclusionStrategy()).create();
 	}
 
 	protected void processRequest() throws IOException, SQLException {
@@ -56,8 +52,26 @@ public class StockServlet {
 		case "/listMediaTypes":
 			listMediaTypes();
 			break;
+		case "/existCopy":
+			existCopy();
+			break;
 		case "/addCopies":
-			addCopyGroup();
+			addCopies();
+			break;
+		case "/addGroupedCopies":
+			addGroupedCopies();
+			break;
+		case "/getCopy":
+			getCopy();
+			break;
+		case "/listMedia":
+			listMedia();
+			break;
+		case "/countLendCopies":
+			countLendCopies();
+			break;
+		case "/listLendCopies":
+			listLendCopies();
 			break;
 		case "/getMedium":
 			getMedium();
@@ -69,9 +83,9 @@ public class StockServlet {
 	}
 
 	private void addMediaType() throws IOException, SQLException {
-		final MediumType type = gson.fromJson(request.getReader(), MediumType.class);
+		final MediumType type = Utils.gson.fromJson(request.getReader(), MediumType.class);
 		final int mediumId = DBConnector.getInstance().createMediumType(type.getName(), type.getIcon().getCode());
-		response.setStatus(HttpServletResponse.SC_OK);
+		response.setStatus(mediumId != -1 ? HttpServletResponse.SC_OK : HttpServletResponse.SC_NOT_FOUND);
 		response.getWriter().println(mediumId);
 		response.setContentType("text/plain");
 	}
@@ -79,11 +93,11 @@ public class StockServlet {
 	private void getMediaType() throws IOException, SQLException {
 		final String id = request.getParameter("id");
 		MediumType mediumType;
-		try {
-			mediumType = DBConnector.getInstance().getMediumType(id);
-			response.getWriter().println(gson.toJson(mediumType));
+		mediumType = DBConnector.getInstance().getMediumType(id);
+		if (mediumType != null) {
+			response.getWriter().println(Utils.gson.toJson(mediumType));
 			response.setStatus(HttpServletResponse.SC_OK);
-		} catch (final SQLException ex) {
+		} else {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
@@ -91,39 +105,108 @@ public class StockServlet {
 	private void listMediaTypes() throws IOException, SQLException {
 		final List<MediumType> mediaTypes = DBConnector.getInstance().getMediumTypes();
 		for (final MediumType mediumType : mediaTypes) {
-			response.getWriter().println(gson.toJson(mediumType));
+			response.getWriter().println(Utils.gson.toJson(mediumType));
 		}
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
-	private void addCopyGroup() throws IOException, SQLException {
-		final Copy[] copies = gson.fromJson(request.getReader(), Copy[].class);
-		for (final Copy copy : copies) {
-			try {
-				DBConnector.getInstance().getMedium(copy.getMedium().getIsbn()).getMediumId();
-			} catch (final SQLException ex) {
-				// medium not found, create new
-				copy.getMedium()
-						.setMediumId(DBConnector.getInstance().createMedium(copy.getMedium().getIsbn(),
-								copy.getMedium().getTitle(), copy.getMedium().getAuthor(),
-								copy.getMedium().getLanguage(), copy.getMedium().getType().getId()));
-			}
-		}
+	private void addCopies() throws IOException, NumberFormatException, SQLException {
+		final Copy[] copies = setMediumInformation();
+		DBConnector.getInstance().createCopies(copies);
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void addGroupedCopies() throws IOException, SQLException {
+		final Copy[] copies = setMediumInformation();
 		final int groupId = DBConnector.getInstance().createCopyGroup(copies);
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.getWriter().println(groupId);
 		response.setContentType("text/plain");
 	}
 
-	private void getMedium() throws IOException, SQLException {
-		final String isbn = request.getParameter("ISBN");
-		Medium medium;
-		try {
-			medium = DBConnector.getInstance().getMedium(isbn);
-			response.getWriter().println(gson.toJson(medium));
+	private Copy[] setMediumInformation() throws NumberFormatException, SQLException, IOException {
+		final Copy[] copies = Utils.gson.fromJson(request.getReader(), Copy[].class);
+		final Map<String, Integer> checkedIsbns = new HashMap<String, Integer>();
+		// avoid allocation inside loop
+		String isbn;
+		Integer mediumId;
+		for (final Copy copy : copies) {
+			isbn = copy.getMedium().getIsbn();
+			// try to get id from cache first
+			if (checkedIsbns.containsKey(isbn)) {
+				mediumId = checkedIsbns.get(isbn);
+			} else {
+				// try to get id from database
+				mediumId = DBConnector.getInstance().getMedium(isbn).getMediumId();
+				if (mediumId == null) {
+					// medium not found, create new
+					mediumId = DBConnector.getInstance().createMedium(isbn, copy.getMedium().getTitle(),
+							copy.getMedium().getAuthor(), copy.getMedium().getLanguage(),
+							copy.getMedium().getType().getId());
+				}
+				checkedIsbns.put(isbn, mediumId);
+			}
+			copy.getMedium().setMediumId(mediumId);
+		}
+		return copies;
+	}
+
+	private void getCopy() throws IOException, SQLException {
+		final String barcode = request.getParameter("barcode");
+		Copy copy;
+		copy = DBConnector.getInstance().getCopy(barcode);
+		if (copy != null) {
+			response.getWriter().println(Utils.gson.toJson(copy));
 			response.setStatus(HttpServletResponse.SC_OK);
-		} catch (final SQLException ex) {
+		} else {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
+
+	private void getMedium() throws IOException, SQLException {
+		final String isbn = request.getParameter("ISBN");
+		Medium medium;
+		medium = DBConnector.getInstance().getMedium(isbn);
+		if (medium != null) {
+			response.getWriter().println(Utils.gson.toJson(medium));
+			response.setStatus(HttpServletResponse.SC_OK);
+		} else {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
+	}
+
+	private void listMedia() throws NumberFormatException, SQLException, IOException {
+		final List<Medium> media = DBConnector.getInstance().getMedium();
+		for (final Medium medium : media) {
+			if (medium != null) {
+				response.getWriter().println(Utils.gson.toJson(medium));
+			}
+		}
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void existCopy() throws NumberFormatException, SQLException, IOException {
+		final String barcode = request.getParameter("barcode");
+		final boolean exists = DBConnector.getInstance().existsCopy(barcode);
+		response.getWriter().println(exists ? 1 : 0);
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void listLendCopies() throws NumberFormatException, SQLException, IOException {
+		final Integer id = Integer.valueOf(request.getParameter("id"));
+		final List<Copy> copies = DBConnector.getInstance().listLendCopies(id);
+		for (final Copy copy : copies) {
+			if (copy != null) {
+				response.getWriter().println(Utils.gson.toJson(copy));
+			}
+		}
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void countLendCopies() throws NumberFormatException, SQLException, IOException {
+		final Integer id = Integer.valueOf(request.getParameter("id"));
+		response.getWriter().println(DBConnector.getInstance().countLendCopies(id));
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
 }

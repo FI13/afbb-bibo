@@ -37,6 +37,8 @@ public class LoginServiceImpl implements ILoginService {
 		final HttpResponse resp = ServerConnection.getInstance().request("/login/requestSalt", "GET", params, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
 			return resp.getData();
+		} else if (resp.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
+			return null;
 		} else {
 			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
 		}

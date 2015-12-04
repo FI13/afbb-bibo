@@ -5,17 +5,28 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 
 /**
+ * collection of utility methods
  *
  * @author fi13.pendrulat
  */
-public class Utils {
+public final class Utils {
+
+	private Utils() {
+	}
+
+	/**
+	 * no need to create multiple {@link Gson} objects all the time
+	 *
+	 * @see https://sites.google.com/site/gson/gson-user-guide#TOC-Using-Gson
+	 */
+	public static final Gson gson = new GsonBuilder().addSerializationExclusionStrategy(new BeanExclusionStrategy())
+			.setDateFormat("yyyyMMddHHmmss").create();
 
 	public static int nthOccurrence(final String str, final String toFind, int n) {
 		int pos = str.indexOf(toFind, 0);
