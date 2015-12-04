@@ -157,7 +157,7 @@ public class DBConnector {
 			statement.execute();
 			try (ResultSet resultSet = statement
 					.executeQuery("select Id from " + Config.getInstance().getDATABASE_NAME() + ".typ where "
-							+ "TypName='" + name + "' and iconPath='" + iconPath + "'")) {
+							+ "TypName='" + name + "' and Icon='" + iconPath + "'")) {
 				return resultSet.first() ? resultSet.getInt(1) : -1;
 			}
 		}
