@@ -1,10 +1,11 @@
 package de.afbb.bibo.ui.view;
 
 import java.net.ConnectException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeansObservables;
@@ -35,8 +36,10 @@ import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
+import de.afbb.bibo.ui.Messages;
 import de.afbb.bibo.ui.form.CopyMovementForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.form.MediumInformationForm;
@@ -50,8 +53,9 @@ public class LendCopyView extends AbstractView<Borrower> {
 	private final Date now = new Date();
 	private boolean printList = true;
 
-	private Text txtCondition;
 	private Text txtBarcode;
+	private Text txtEdition;
+	private Text txtCondition;
 	private Button btnToList;
 	private Button btnToEdit;
 	private Button btnSave;
@@ -63,7 +67,8 @@ public class LendCopyView extends AbstractView<Borrower> {
 	private MediumInformationForm informationForm;
 
 	private final HashMap<String, Copy> copyCache = new HashMap<>();
-	private final Set<Copy> copies = new HashSet<Copy>();
+	// clunky way to get a concurrent hash set
+	private final Set<Copy> copies = Collections.newSetFromMap(new ConcurrentHashMap<Copy, Boolean>());
 	private Copy copyToModify = new Copy();
 	private final IObservableValue copyToModifyObservable = BeansObservables.observeValue(this, INPUT_COPY);
 
@@ -85,6 +90,15 @@ public class LendCopyView extends AbstractView<Borrower> {
 		@Override
 		public void handleEvent(final Event event) {
 			final Copy copy = xViewer.getLastElementFromSelectionPath();
+			// check if user selected group
+			if (copy.getBarcode() == null || copy.getBarcode().isEmpty()) {
+				final int groupId = copy.getGroupId();
+				for (final Copy c : copies) {
+					if (c.getGroupId() == groupId) {
+						copies.remove(c);
+					}
+				}
+			}
 			delete(copy);
 		}
 	};
@@ -199,6 +213,8 @@ public class LendCopyView extends AbstractView<Borrower> {
 			public void focusGained(final FocusEvent e) {
 			}
 		});
+		toolkit.createLabel(copyGroup, Messages.EDITION);
+		txtEdition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.READ_ONLY);
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(copyGroup, "Zustand"));
 		txtCondition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.MULTI);
 
@@ -206,7 +222,7 @@ public class LendCopyView extends AbstractView<Borrower> {
 		movementForm = new CopyMovementForm(statusGroup, copyToModify, bindingContext, toolkit);
 
 		final Group mediumGroup = toolkit.createGroup(content, "Allgemein");
-		informationForm = new MediumInformationForm(mediumGroup, copyToModify, bindingContext, toolkit);
+		informationForm = new MediumInformationForm(mediumGroup, new Medium(), bindingContext, toolkit);
 
 		final Composite middle = toolkit.createComposite(content, SWT.NONE);
 		middle.setLayout(new GridLayout(3, false));
@@ -226,8 +242,9 @@ public class LendCopyView extends AbstractView<Borrower> {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(copyGroup);
 		GridDataFactory.fillDefaults().applyTo(statusGroup);
 		GridDataFactory.fillDefaults().applyTo(mediumGroup);
-		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(txtCondition);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtBarcode);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtEdition);
+		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(txtCondition);
 		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
 		GridDataFactory.fillDefaults().span(3, 1).grab(true, true).applyTo(xViewer.getControl());
 		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(footer);
@@ -256,13 +273,16 @@ public class LendCopyView extends AbstractView<Borrower> {
 	protected void initBinding() throws ConnectException {
 		BindingHelper.bindStringToTextField(txtBarcode, copyToModifyObservable, Copy.FIELD_BARCODE, bindingContext,
 				false);
+		BindingHelper.bindStringToTextField(txtEdition, copyToModifyObservable, Copy.FIELD_EDITION, bindingContext,
+				false);
 		BindingHelper.bindStringToTextField(txtCondition, copyToModifyObservable, Copy.FIELD_CONDITION, bindingContext,
 				false);
 
 		// one-way binding to update the pseudo-input in sub-forms
 		bindingContext.bindValue(BeansObservables.observeValue(movementForm, INPUT), copyToModifyObservable,
 				new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
-		bindingContext.bindValue(BeansObservables.observeValue(informationForm, INPUT), copyToModifyObservable,
+		bindingContext.bindValue(BeansObservables.observeValue(informationForm, INPUT),
+				BeansObservables.observeDetailValue(copyToModifyObservable, Copy.FIELD_MEDIUM, Medium.class),
 				new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 	}
 

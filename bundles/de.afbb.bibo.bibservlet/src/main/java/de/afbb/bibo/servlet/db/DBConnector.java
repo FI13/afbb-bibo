@@ -534,7 +534,8 @@ public class DBConnector {
 		}
 	}
 
-	public int countLendCopies(final Integer borrowerId) throws NumberFormatException, SQLException, IOException {
+	public int countLendCopiesByBorrower(final Integer borrowerId)
+			throws NumberFormatException, SQLException, IOException {
 		log.debug("count lend copies for borrower with id: " + borrowerId);
 		try (Statement st = connect.createStatement()) {
 			try (ResultSet resultSet = st
@@ -546,11 +547,33 @@ public class DBConnector {
 		}
 	}
 
+	public int countLendCopiesByMedium(final Integer mediumId) throws NumberFormatException, SQLException, IOException {
+		log.debug("count lend copies for medium with id: " + mediumId);
+		try (Statement st = connect.createStatement()) {
+			try (ResultSet resultSet = st
+					.executeQuery("select count(Id) from " + Config.getInstance().getDATABASE_NAME()
+							+ ".exemplar where (TIMESTAMPDIFF(SECOND,  LetztesAusleihDatum, AusleihDatum) >= 0 or (AusleihDatum is not null and LetztesAusleihDatum is null)) and MedienId="
+							+ mediumId)) {
+				return resultSet.first() ? resultSet.getInt(1) : -1;
+			}
+		}
+	}
+
+	public int countCopiesByMedium(final Integer mediumId) throws NumberFormatException, SQLException, IOException {
+		log.debug("count copies for medium with id: " + mediumId);
+		try (Statement st = connect.createStatement()) {
+			try (ResultSet resultSet = st.executeQuery("select count(Id) from "
+					+ Config.getInstance().getDATABASE_NAME() + ".exemplar where MedienId=" + mediumId)) {
+				return resultSet.first() ? resultSet.getInt(1) : -1;
+			}
+		}
+	}
+
 	public List<Copy> listLendCopies(final Integer borrowerId) throws NumberFormatException, SQLException, IOException {
 		final List<Copy> result = new ArrayList<Copy>();
 		log.debug("get lend copies for borrower with id: " + borrowerId);
 		try (Statement statement = connect.createStatement()) {
-			final String string = "select e.Id, e.Edition, e.Barcode, e.Inventarisiert, e.Zustand, e.AusleihDatum, e.LetztesAusleihDatum, e.AusleihBenutzerId, e.LetzterAusleihBenutzerId, e.AusleiherId, e.LetzterAusleiherId, e.GruppenId, m.Id, m.ISBN, m.Titel, m.Autor, m.Sprache, m.TypId, m.Herausgeber from "
+			final String string = "select e.Id, e.Edition, e.Barcode, e.Inventarisiert, e.Zustand, e.AusleihDatum, e.LetztesAusleihDatum, e.AusleiherId, e.LetzterAusleiherId, e.AusleihBenutzerId, e.LetzterAusleihBenutzerId, e.GruppenId, m.Id, m.ISBN, m.Titel, m.Autor, m.Sprache, m.TypId, m.Herausgeber from "
 					+ Config.getInstance().getDATABASE_NAME() + ".exemplar e, "
 					+ Config.getInstance().getDATABASE_NAME()
 					+ ".medium m where (TIMESTAMPDIFF(SECOND,  LetztesAusleihDatum, AusleihDatum) >= 0 or (e.AusleihDatum is not null and e.LetztesAusleihDatum is null)) and AusleiherId="

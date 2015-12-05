@@ -1,5 +1,6 @@
 package de.afbb.bibo.ui.form;
 
+import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -26,6 +27,7 @@ public class StatisticForm extends Composite {
 	private Text txtCount;
 	private Text txtMedian;
 	private Text txtMax;
+	private Text txtOldestInventoryDate;
 
 	private final Date today = new Date();
 
@@ -56,15 +58,20 @@ public class StatisticForm extends Composite {
 		toolkit.createLabel(content, "Ausleihtage Maximum");
 		txtMax = toolkit.createText(content, "0", SWT.RIGHT | SWT.READ_ONLY | SWT.BORDER);
 
-		GridDataFactory.fillDefaults().hint(50, SWT.DEFAULT).applyTo(txtCount);
-		GridDataFactory.fillDefaults().hint(50, SWT.DEFAULT).applyTo(txtMedian);
-		GridDataFactory.fillDefaults().hint(50, SWT.DEFAULT).applyTo(txtMax);
+		toolkit.createLabel(content, "Ältestes Inventar-Datum");
+		txtOldestInventoryDate = toolkit.createText(content, "", SWT.CENTER | SWT.READ_ONLY | SWT.BORDER);
+
+		GridDataFactory.fillDefaults().hint(80, SWT.DEFAULT).applyTo(txtCount);
+		GridDataFactory.fillDefaults().hint(80, SWT.DEFAULT).applyTo(txtMedian);
+		GridDataFactory.fillDefaults().hint(80, SWT.DEFAULT).applyTo(txtMax);
+		GridDataFactory.fillDefaults().hint(80, SWT.DEFAULT).applyTo(txtOldestInventoryDate);
 	}
 
 	public void setInput(final Collection<Copy> input) {
 		int count = 0;
 		double median = 0.0f;
 		long max = 0;
+		Date inventoryDate = null;
 		if (input != null) {
 			count = input.size();
 
@@ -82,6 +89,10 @@ public class StatisticForm extends Composite {
 					}
 					totalDeltaDays += deltaDays;
 					countDeltas += 1.0;
+
+					if (inventoryDate == null || inventoryDate.compareTo(copy.getInventoryDate()) > 0) {
+						inventoryDate = copy.getInventoryDate();
+					}
 				}
 			}
 			if (countDeltas > 0.0) {
@@ -92,6 +103,6 @@ public class StatisticForm extends Composite {
 		txtCount.setText(String.valueOf(count));
 		txtMedian.setText(String.valueOf(median));
 		txtMax.setText(String.valueOf(max));
+		txtOldestInventoryDate.setText(inventoryDate != null ? DateFormat.getDateInstance().format(inventoryDate) : "");
 	}
-
 }

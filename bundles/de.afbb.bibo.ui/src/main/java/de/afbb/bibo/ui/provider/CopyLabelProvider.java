@@ -96,17 +96,19 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 			value = copy.getMedium().getLanguage();
 		} else if (columnIndex == 7 && copy.getEdition() != null) {
 			value = copy.getEdition();
-		} else if (columnIndex == 8 && copy.getBorrowDate() != null) {
+		} else if (columnIndex == 8 && copy.getInventoryDate() != null) {
+			value = DateFormat.getDateInstance().format(copy.getInventoryDate());
+		} else if (columnIndex == 9 && copy.getBorrowDate() != null) {
 			value = DateFormat.getDateInstance().format(copy.getBorrowDate());
-		} else if (columnIndex == 9 && copy.getCurator() != null) {
+		} else if (columnIndex == 10 && copy.getCurator() != null) {
 			value = copy.getCurator().getName();
-		} else if (columnIndex == 10 && copy.getBorrower() != null) {
+		} else if (columnIndex == 11 && copy.getBorrower() != null) {
 			value = copy.getBorrower().getName();
-		} else if (columnIndex == 11 && copy.getLastBorrowDate() != null) {
+		} else if (columnIndex == 12 && copy.getLastBorrowDate() != null) {
 			value = DateFormat.getDateInstance().format(copy.getLastBorrowDate());
-		} else if (columnIndex == 12 && copy.getLastCurator() != null) {
+		} else if (columnIndex == 13 && copy.getLastCurator() != null) {
 			value = copy.getLastCurator().getName();
-		} else if (columnIndex == 13 && copy.getLastBorrower() != null) {
+		} else if (columnIndex == 14 && copy.getLastBorrower() != null) {
 			value = copy.getLastBorrower().getName();
 		}
 		return value;
@@ -114,9 +116,9 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 
 	@Override
 	public Color getBackground(final Object element, final int columnIndex) {
-		// darken the background for parent elements
-		if (contentProvider != null && contentProvider.hasChildren(element)) {
-			return Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
+		// darken the background for children elements
+		if (contentProvider != null && contentProvider.getParent(element) != null) {
+			return Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW);
 		}
 		return null;
 	}

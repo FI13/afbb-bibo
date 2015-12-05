@@ -6,7 +6,7 @@ import org.eclipse.jface.viewers.Viewer;
 
 import de.afbb.bibo.aggregation.NavigationTreeViewNode;
 
-public class NavigationTreeViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
+public class NavigationViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
 
 	@Override
 	public void inputChanged(final Viewer v, final Object oldInput, final Object newInput) {

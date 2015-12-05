@@ -72,6 +72,16 @@ public class NavigationTreeService implements EventListener {
 			if (medium != null) {
 				final NavigationTreeViewNode mediumNode = new NavigationTreeViewNode(medium.getTitle(), medium,
 						NavigationTreeNodeType.BOOK);
+				final Job job = new Job("Lade Informationen") {
+
+					@Override
+					protected IStatus run(final IProgressMonitor monitor) {
+						aggregationService.aggregateMediumInformation(medium.getMediumId(), mediumNode);
+						return Status.OK_STATUS;
+					}
+
+				};
+				job.schedule();
 				root.addChild(mediumNode);
 			}
 		}
@@ -98,7 +108,7 @@ public class NavigationTreeService implements EventListener {
 
 			pupilNode = new NavigationTreeViewNode(borrower.getForename() + " " + borrower.getSurname(), borrower,
 					NavigationTreeNodeType.PERSON);
-			final Job saveJob = new Job("Lade Informationen") {
+			final Job job = new Job("Lade Informationen") {
 
 				@Override
 				protected IStatus run(final IProgressMonitor monitor) {
@@ -107,7 +117,7 @@ public class NavigationTreeService implements EventListener {
 				}
 
 			};
-			saveJob.schedule();
+			job.schedule();
 
 			personsNode.addChild(pupilNode);
 		}
@@ -152,7 +162,7 @@ public class NavigationTreeService implements EventListener {
 	}
 
 	@Override
-	public void update(final IAggregatorTarget target, final String information) {
+	public void update(final IAggregatorTarget target, final String[] information) {
 		target.setInformation(information);
 		setInput();
 	}

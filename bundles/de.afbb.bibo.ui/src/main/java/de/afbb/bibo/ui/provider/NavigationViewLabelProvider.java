@@ -1,6 +1,6 @@
 package de.afbb.bibo.ui.provider;
 
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -10,9 +10,9 @@ import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
 
-public class NavigationTreeViewLabelProvider extends LabelProvider {
+public class NavigationViewLabelProvider extends ColumnLabelProvider {
 
-	public NavigationTreeViewLabelProvider() {
+	public NavigationViewLabelProvider() {
 		super();
 	}
 
@@ -22,8 +22,8 @@ public class NavigationTreeViewLabelProvider extends LabelProvider {
 			final NavigationTreeViewNode navigationTreeViewNode = (NavigationTreeViewNode) obj;
 			final StringBuilder text = new StringBuilder(navigationTreeViewNode.getTitle());
 			if (navigationTreeViewNode.getInformation() != null) {
-				text.append(" ");//$NON-NLS-1$
-				text.append(navigationTreeViewNode.getInformation());
+				text.append("  ");
+				text.append(navigationTreeViewNode.getInformationText());
 			}
 			return text.toString();
 		} else {
@@ -52,5 +52,14 @@ public class NavigationTreeViewLabelProvider extends LabelProvider {
 		} else {
 			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
 		}
+	}
+
+	@Override
+	public String getToolTipText(final Object element) {
+		if (element instanceof NavigationTreeViewNode) {
+			final NavigationTreeViewNode navigationTreeViewNode = (NavigationTreeViewNode) element;
+			return navigationTreeViewNode.getTooltipText();
+		}
+		return null;
 	}
 }

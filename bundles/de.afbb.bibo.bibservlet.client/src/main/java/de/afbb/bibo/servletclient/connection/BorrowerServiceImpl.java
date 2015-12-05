@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.GsonBuilder;
 
+import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.IBorrowerService;
 import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 import de.afbb.bibo.share.callback.EventListener;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.share.model.Curator;
 import de.afbb.bibo.share.model.NavigationTreeNodeType;
 
 /**
@@ -120,16 +122,36 @@ public class BorrowerServiceImpl implements IBorrowerService {
 	}
 
 	@Override
-	public Collection<Copy> listLent(final Borrower borrower) throws ConnectException {
+	public Collection<Copy> listLent(final Borrower b) throws ConnectException {
 		final Map<String, String> param = new HashMap<String, String>();
-		param.put("id", borrower.getId().toString());
+		param.put("id", b.getId().toString());
 		final HttpResponse resp = ServerConnection.getInstance().request("/stock/listLendCopies", "GET", param, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
 			final Collection<Copy> result = new HashSet<>();
 			final String[] data = resp.getData().split("\n");
 			for (int i = 0; i < data.length; i++) {
 				final Copy copy = Utils.gson.fromJson(data[i], Copy.class);
-				if (copy != null) {
+				if (copy != null) {// we only get the id for sub-entities
+									// filled, so we need to
+					// fetch them separately
+					Borrower borrower = copy.getBorrower();
+					if (borrower != null) {
+						copy.setBorrower(ServiceLocator.getInstance().getBorrowerService().get(borrower.getId()));
+					}
+					borrower = copy.getLastBorrower();
+					if (borrower != null) {
+						copy.setLastBorrower(ServiceLocator.getInstance().getBorrowerService().get(borrower.getId()));
+					}
+					Curator curator = copy.getCurator();
+					if (curator != null) {
+						copy.setCurator(ServiceLocator.getInstance().getCuratorService().get(curator.getId()));
+					}
+					curator = copy.getLastCurator();
+					if (curator != null) {
+						copy.setLastCurator(ServiceLocator.getInstance().getCuratorService().get(curator.getId()));
+					}
+					copy.getMedium().setType(
+							ServiceLocator.getInstance().getTypService().get(copy.getMedium().getType().getId()));
 					result.add(copy);
 				}
 			}

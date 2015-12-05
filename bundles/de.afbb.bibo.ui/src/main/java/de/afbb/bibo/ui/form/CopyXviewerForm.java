@@ -72,13 +72,14 @@ public class CopyXviewerForm {
 		xViewer.setLabelProvider(new CopyLabelProvider(xViewer, contentProvider));
 		xViewer.addDoubleClickListener(new TreeCollapseExpandListener(xViewer));
 		xViewer.getMenuManager().dispose();
+		xViewer.setAutoExpandLevel(2);
 		GridDataFactory.fillDefaults().hint(300, 150).grab(true, true).applyTo(xViewer.getControl());
 	}
 
 	private void initTableColumns() {
 		final XViewerColumn columnType = new XViewerColumn(namespace + DOT + Messages.TYPE, Messages.TYPE, 90, SWT.LEFT,
 				true, SortDataType.String, false, "Typ des Mediums");
-		final XViewerColumn columnBarcode = new XViewerColumn(namespace + DOT + Messages.BARCODE, Messages.BARCODE, 80,
+		final XViewerColumn columnBarcode = new XViewerColumn(namespace + DOT + Messages.BARCODE, Messages.BARCODE, 100,
 				SWT.RIGHT, true, SortDataType.Integer, false, "Barcode des Mediums");
 		final XViewerColumn columnIsbn = new XViewerColumn(namespace + DOT + Messages.ISBN, Messages.ISBN, 120,
 				SWT.RIGHT, true, SortDataType.Integer, false, "ISBN des Mediums");
@@ -92,16 +93,18 @@ public class CopyXviewerForm {
 				150, SWT.LEFT, true, SortDataType.String, false, Messages.LANGUAGE);
 		final XViewerColumn columnEdition = new XViewerColumn(namespace + DOT + Messages.EDITION, Messages.EDITION, 150,
 				SWT.LEFT, true, SortDataType.String, false, Messages.EDITION);
+		final XViewerColumn columnInventory = new XViewerColumn(namespace + DOT + Messages.INVENTORY_DATE,
+				Messages.INVENTORY_DATE, 130, SWT.CENTER, true, SortDataType.Date, false, Messages.INVENTORY_DATE);
 
 		if (showMovementColumns) {
 			final XViewerColumn columnLendDate = new XViewerColumn(namespace + DOT + Messages.LEND_DATE,
-					Messages.LEND_DATE, 150, SWT.CENTER, true, SortDataType.Date, false, Messages.LEND_DATE);
+					Messages.LEND_DATE, 130, SWT.CENTER, true, SortDataType.Date, false, Messages.LEND_DATE);
 			final XViewerColumn columnLendCurator = new XViewerColumn(namespace + DOT + Messages.LEND_CURATOR,
 					Messages.LEND_CURATOR, 150, SWT.LEFT, true, SortDataType.String, false, Messages.LEND_CURATOR);
 			final XViewerColumn columnLendBorrower = new XViewerColumn(namespace + DOT + Messages.LEND_BORROWER,
 					Messages.LEND_BORROWER, 150, SWT.LEFT, true, SortDataType.String, false, Messages.LEND_BORROWER);
 			final XViewerColumn columnReturnDate = new XViewerColumn(namespace + DOT + Messages.RETURN_DATE,
-					Messages.RETURN_DATE, 150, SWT.CENTER, true, SortDataType.Date, false, Messages.RETURN_DATE);
+					Messages.RETURN_DATE, 130, SWT.CENTER, true, SortDataType.Date, false, Messages.RETURN_DATE);
 			final XViewerColumn columnReturnCurator = new XViewerColumn(namespace + DOT + Messages.RETURN_CURATOR,
 					Messages.RETURN_CURATOR, 150, SWT.LEFT, true, SortDataType.String, false, Messages.RETURN_CURATOR);
 			final XViewerColumn columnReturnBorrower = new XViewerColumn(namespace + DOT + Messages.RETURN_BORROWER,
@@ -109,11 +112,11 @@ public class CopyXviewerForm {
 					Messages.RETURN_BORROWER);
 
 			factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
-					columnLanguage, columnEdition, columnLendDate, columnLendCurator, columnLendBorrower,
-					columnReturnDate, columnReturnCurator, columnReturnBorrower);
+					columnLanguage, columnEdition, columnInventory, columnLendDate, columnLendCurator,
+					columnLendBorrower, columnReturnDate, columnReturnCurator, columnReturnBorrower);
 		} else {
 			factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
-					columnLanguage, columnEdition);
+					columnLanguage, columnEdition, columnInventory);
 		}
 	}
 

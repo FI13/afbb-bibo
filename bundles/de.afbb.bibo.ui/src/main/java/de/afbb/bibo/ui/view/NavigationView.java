@@ -3,6 +3,7 @@ package de.afbb.bibo.ui.view;
 import java.net.ConnectException;
 
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -14,8 +15,8 @@ import de.afbb.bibo.aggregation.NavigationTreeService;
 import de.afbb.bibo.ui.CommandExecutor;
 import de.afbb.bibo.ui.ICommandIds;
 import de.afbb.bibo.ui.events.TreeCollapseExpandListener;
-import de.afbb.bibo.ui.provider.NavigationTreeViewContentProvider;
-import de.afbb.bibo.ui.provider.NavigationTreeViewLabelProvider;
+import de.afbb.bibo.ui.provider.NavigationViewContentProvider;
+import de.afbb.bibo.ui.provider.NavigationViewLabelProvider;
 
 public class NavigationView extends ViewPart {
 
@@ -27,15 +28,15 @@ public class NavigationView extends ViewPart {
 		NavigationTreeService navigationTree;
 		try {
 			viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-			viewer.setContentProvider(new NavigationTreeViewContentProvider());
-			viewer.setLabelProvider(new NavigationTreeViewLabelProvider());
+			viewer.setContentProvider(new NavigationViewContentProvider());
+			ColumnViewerToolTipSupport.enableFor(viewer);
+			viewer.setLabelProvider(new NavigationViewLabelProvider());
 			viewer.addDoubleClickListener(new TreeCollapseExpandListener(viewer));
 			viewer.addDoubleClickListener(new IDoubleClickListener() {
 
 				@Override
 				public void doubleClick(final DoubleClickEvent event) {
-					CommandExecutor.executeCommand(ICommandIds.CMD_MANAGE_BORROWER);
-					// TODO add command for medium selection here
+					CommandExecutor.executeCommand(ICommandIds.CMD_MANAGE_BORROWER_MEDIUM);
 				}
 			});
 			viewer.setAutoExpandLevel(2);

@@ -9,8 +9,9 @@ import de.afbb.bibo.share.model.NavigationTreeNodeType;
 
 public class NavigationTreeViewNode extends TreeNode implements IAggregatorTarget {
 
+	private static final String NEW_LINE = "\n";//$NON-NLS-1$
 	private String title;
-	private String information = " [...]";//$NON-NLS-1$
+	private String information[];
 	private NavigationTreeViewNode parent;
 	private final NavigationTreeNodeType type;
 
@@ -30,12 +31,45 @@ public class NavigationTreeViewNode extends TreeNode implements IAggregatorTarge
 		this.title = title;
 	}
 
-	public String getInformation() {
+	public String[] getInformation() {
 		return information;
 	}
 
+	public String getInformationText() {
+		if (information != null) {
+			final String info0 = information[0];
+			// don't show information text when nothing interesting is there
+			if (!"0".equals(info0)) {//$NON-NLS-1$
+				if (NavigationTreeNodeType.BOOK.equals(type)) {
+					return String.format("[∑:%s, ↑:%s]", info0, information[1]);//$NON-NLS-1$
+				} else if (NavigationTreeNodeType.PERSON.equals(type)) {
+					return String.format("[↑:%s]", info0);//$NON-NLS-1$
+				}
+			}
+		}
+		return "";//$NON-NLS-1$
+	}
+
+	public String getTooltipText() {
+		final StringBuilder tooltip = new StringBuilder(title);
+		if (information != null) {
+			tooltip.append(NEW_LINE);
+			if (NavigationTreeNodeType.BOOK.equals(type)) {
+				tooltip.append("Gesamt: ");
+				tooltip.append(information[0]);
+				tooltip.append(NEW_LINE);
+				tooltip.append("Ausgeliehen: ");
+				tooltip.append(information[1]);
+			} else if (NavigationTreeNodeType.PERSON.equals(type)) {
+				tooltip.append("Ausgeliehen: ");
+				tooltip.append(information[0]);
+			}
+		}
+		return tooltip.toString();
+	}
+
 	@Override
-	public void setInformation(final String information) {
+	public void setInformation(final String[] information) {
 		this.information = information;
 	}
 

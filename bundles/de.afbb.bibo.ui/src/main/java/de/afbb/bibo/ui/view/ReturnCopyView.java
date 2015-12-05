@@ -34,8 +34,10 @@ import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
+import de.afbb.bibo.ui.Messages;
 import de.afbb.bibo.ui.form.CopyMovementForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.form.MediumInformationForm;
@@ -47,8 +49,9 @@ public class ReturnCopyView extends AbstractView<Copy> {
 
 	private final Date now = new Date();
 
-	private Text txtCondition;
 	private Text txtBarcode;
+	private Text txtEdition;
+	private Text txtCondition;
 	private Button btnToList;
 	private Button btnToEdit;
 	private Button btnSave;
@@ -80,6 +83,8 @@ public class ReturnCopyView extends AbstractView<Copy> {
 			public void focusGained(final FocusEvent e) {
 			}
 		});
+		toolkit.createLabel(copyGroup, Messages.EDITION);
+		txtEdition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.READ_ONLY);
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(copyGroup, "Zustand"));
 		txtCondition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.MULTI);
 
@@ -87,7 +92,7 @@ public class ReturnCopyView extends AbstractView<Copy> {
 		movementForm = new CopyMovementForm(statusGroup, input, bindingContext, toolkit);
 
 		final Group mediumGroup = toolkit.createGroup(content, "Allgemein");
-		mediumInformationForm = new MediumInformationForm(mediumGroup, input, bindingContext, toolkit);
+		mediumInformationForm = new MediumInformationForm(mediumGroup, new Medium(), bindingContext, toolkit);
 
 		final Composite middle = toolkit.createComposite(content, SWT.NONE);
 		middle.setLayout(new GridLayout(2, false));
@@ -106,6 +111,7 @@ public class ReturnCopyView extends AbstractView<Copy> {
 		GridDataFactory.fillDefaults().applyTo(statusGroup);
 		GridDataFactory.fillDefaults().applyTo(mediumGroup);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtBarcode);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtEdition);
 		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(txtCondition);
 		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
 		GridDataFactory.fillDefaults().span(3, 1).grab(true, true).applyTo(xViewer.getControl());
@@ -153,14 +159,15 @@ public class ReturnCopyView extends AbstractView<Copy> {
 				false);
 		BindingHelper.bindStringToTextField(txtCondition, getInputObservable(), Copy.FIELD_CONDITION, bindingContext,
 				false);
+		BindingHelper.bindStringToTextField(txtEdition, getInputObservable(), Copy.FIELD_EDITION, bindingContext,
+				false);
 
 		// one-way binding to update the input in sub-form
 		bindingContext.bindValue(BeansObservables.observeValue(mediumInformationForm, INPUT),
-				BeansObservables.observeValue(this, INPUT), new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER),
-				null);
-		bindingContext.bindValue(BeansObservables.observeValue(movementForm, INPUT),
-				BeansObservables.observeValue(this, INPUT), new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER),
-				null);
+				BeansObservables.observeDetailValue(inputObservable, Copy.FIELD_MEDIUM, Medium.class),
+				new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		bindingContext.bindValue(BeansObservables.observeValue(movementForm, INPUT), inputObservable,
+				new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 	}
 
 	@Override

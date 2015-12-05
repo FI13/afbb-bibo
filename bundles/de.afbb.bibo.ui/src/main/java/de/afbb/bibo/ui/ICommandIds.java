@@ -19,6 +19,6 @@ public interface ICommandIds {
 	public static final String CMD_CREATE_TYPE = "de.afbb.bibo.ui.create.type";//$NON-NLS-1$
 
 	public static final String CMD_MANAGE_CURATOR = "de.afbb.bibo.ui.manage.curator";//$NON-NLS-1$
-	public static final String CMD_MANAGE_BORROWER = "de.afbb.bibo.ui.manage.borrower";//$NON-NLS-1$
+	public static final String CMD_MANAGE_BORROWER_MEDIUM = "de.afbb.bibo.ui.manage.BorrowerMedium";//$NON-NLS-1$
 
 }

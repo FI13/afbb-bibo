@@ -26,6 +26,6 @@ public interface EventListener {
 	 * @param information
 	 *            informations that where gathered by the service to display
 	 */
-	void update(IAggregatorTarget target, String information);
+	void update(IAggregatorTarget target, String[] information);
 
 }
