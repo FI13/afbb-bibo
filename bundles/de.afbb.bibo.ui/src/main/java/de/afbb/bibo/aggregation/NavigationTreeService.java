@@ -162,7 +162,7 @@ public class NavigationTreeService implements EventListener {
 	}
 
 	@Override
-	public void update(final IAggregatorTarget target, final String information) {
+	public void update(final IAggregatorTarget target, final String[] information) {
 		target.setInformation(information);
 		setInput();
 	}

@@ -23,7 +23,7 @@ public class NavigationViewLabelProvider extends ColumnLabelProvider {
 			final StringBuilder text = new StringBuilder(navigationTreeViewNode.getTitle());
 			if (navigationTreeViewNode.getInformation() != null) {
 				text.append("  ");
-				text.append(navigationTreeViewNode.getInformation());
+				text.append(navigationTreeViewNode.getInformationText());
 			}
 			return text.toString();
 		} else {
@@ -58,12 +58,7 @@ public class NavigationViewLabelProvider extends ColumnLabelProvider {
 	public String getToolTipText(final Object element) {
 		if (element instanceof NavigationTreeViewNode) {
 			final NavigationTreeViewNode navigationTreeViewNode = (NavigationTreeViewNode) element;
-			final StringBuilder tooltip = new StringBuilder(navigationTreeViewNode.getTitle());
-			if (navigationTreeViewNode.getInformation() != null) {
-				tooltip.append("\n");
-				tooltip.append(navigationTreeViewNode.getInformation());
-			}
-			return tooltip.toString();
+			return navigationTreeViewNode.getTooltipText();
 		}
 		return null;
 	}

@@ -8,6 +8,6 @@ package de.afbb.bibo.share.callback;
  */
 public interface IAggregatorTarget {
 
-	void setInformation(String information);
+	void setInformation(String[] information);
 
 }

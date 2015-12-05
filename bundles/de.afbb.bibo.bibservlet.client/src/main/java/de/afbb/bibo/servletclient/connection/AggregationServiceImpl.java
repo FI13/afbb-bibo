@@ -22,37 +22,31 @@ public class AggregationServiceImpl implements IAggregationService {
 
 	private final Set<EventListener> listeners = new HashSet<EventListener>();
 
+	private static final String URL_BORROWER = "/stock/countLendCopies";
+	private static final String URL_MEDIUM = "/stock/getMediumInformation";
+
 	@Override
 	public void aggregateBorrowerInformation(final Integer id, final IAggregatorTarget target) {
-		try {
-			final Map<String, String> param = new HashMap<String, String>();
-			param.put("id", id.toString());
-			HttpResponse resp;
-			resp = ServerConnection.getInstance().request("/stock/countLendCopies", "GET", param, null);
-			if (resp.getStatus() == HttpServletResponse.SC_OK) {
-				final String data = resp.getData();
-				notifyListener(target, "0".equals(data) ? null : String.format("[↑:%s]", data));
-			}
-		} catch (final ConnectException e) {
-			// just swallow exception
-		}
+		process(id, target, URL_BORROWER);
 	}
 
 	@Override
 	public void aggregateMediumInformation(final Integer id, final IAggregatorTarget target) {
+		process(id, target, URL_MEDIUM);
+	}
+
+	private void process(final Integer id, final IAggregatorTarget target, final String url) {
 		try {
 			final Map<String, String> param = new HashMap<String, String>();
 			param.put("id", id.toString());
 			HttpResponse resp;
-			resp = ServerConnection.getInstance().request("/stock/getMediumInformation", "GET", param, null);
+			resp = ServerConnection.getInstance().request(url, "GET", param, null);
 			if (resp.getStatus() == HttpServletResponse.SC_OK) {
-				final String[] data = resp.getData().split("\n");
-				notifyListener(target, String.format("[∑:%s, ↑:%s]", data[0], data[1]));
+				notifyListener(target, resp.getData().split("\n"));
 			}
 		} catch (final ConnectException e) {
 			// just swallow exception
 		}
-
 	}
 
 	@Override
@@ -60,7 +54,7 @@ public class AggregationServiceImpl implements IAggregationService {
 		listeners.add(listener);
 	}
 
-	private void notifyListener(final IAggregatorTarget target, final String information) {
+	private void notifyListener(final IAggregatorTarget target, final String[] information) {
 		for (final EventListener eventListener : listeners) {
 			eventListener.update(target, information);
 		}
