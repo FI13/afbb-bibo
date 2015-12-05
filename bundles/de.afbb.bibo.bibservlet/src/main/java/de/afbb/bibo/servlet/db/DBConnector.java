@@ -573,7 +573,7 @@ public class DBConnector {
 		final List<Copy> result = new ArrayList<Copy>();
 		log.debug("get lend copies for borrower with id: " + borrowerId);
 		try (Statement statement = connect.createStatement()) {
-			final String string = "select e.Id, e.Edition, e.Barcode, e.Inventarisiert, e.Zustand, e.AusleihDatum, e.LetztesAusleihDatum, e.AusleihBenutzerId, e.LetzterAusleihBenutzerId, e.AusleiherId, e.LetzterAusleiherId, e.GruppenId, m.Id, m.ISBN, m.Titel, m.Autor, m.Sprache, m.TypId, m.Herausgeber from "
+			final String string = "select e.Id, e.Edition, e.Barcode, e.Inventarisiert, e.Zustand, e.AusleihDatum, e.LetztesAusleihDatum, e.AusleiherId, e.LetzterAusleiherId, e.AusleihBenutzerId, e.LetzterAusleihBenutzerId, e.GruppenId, m.Id, m.ISBN, m.Titel, m.Autor, m.Sprache, m.TypId, m.Herausgeber from "
 					+ Config.getInstance().getDATABASE_NAME() + ".exemplar e, "
 					+ Config.getInstance().getDATABASE_NAME()
 					+ ".medium m where (TIMESTAMPDIFF(SECOND,  LetztesAusleihDatum, AusleihDatum) >= 0 or (e.AusleihDatum is not null and e.LetztesAusleihDatum is null)) and AusleiherId="
