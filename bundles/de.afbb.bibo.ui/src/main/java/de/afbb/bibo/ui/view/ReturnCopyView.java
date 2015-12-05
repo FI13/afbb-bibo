@@ -84,7 +84,7 @@ public class ReturnCopyView extends AbstractView<Copy> {
 			}
 		});
 		toolkit.createLabel(copyGroup, Messages.EDITION);
-		txtEdition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
+		txtEdition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.READ_ONLY);
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(copyGroup, "Zustand"));
 		txtCondition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.MULTI);
 
