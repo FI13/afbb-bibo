@@ -72,6 +72,7 @@ public class CopyXviewerForm {
 		xViewer.setLabelProvider(new CopyLabelProvider(xViewer, contentProvider));
 		xViewer.addDoubleClickListener(new TreeCollapseExpandListener(xViewer));
 		xViewer.getMenuManager().dispose();
+		xViewer.setAutoExpandLevel(2);
 		GridDataFactory.fillDefaults().hint(300, 150).grab(true, true).applyTo(xViewer.getControl());
 	}
 
