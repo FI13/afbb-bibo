@@ -38,6 +38,7 @@ import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
+import de.afbb.bibo.ui.Messages;
 import de.afbb.bibo.ui.form.CopyMovementForm;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
 import de.afbb.bibo.ui.form.MediumInformationForm;
@@ -51,8 +52,9 @@ public class LendCopyView extends AbstractView<Borrower> {
 	private final Date now = new Date();
 	private boolean printList = true;
 
-	private Text txtCondition;
 	private Text txtBarcode;
+	private Text txtEdition;
+	private Text txtCondition;
 	private Button btnToList;
 	private Button btnToEdit;
 	private Button btnSave;
@@ -200,6 +202,8 @@ public class LendCopyView extends AbstractView<Borrower> {
 			public void focusGained(final FocusEvent e) {
 			}
 		});
+		toolkit.createLabel(copyGroup, Messages.EDITION);
+		txtEdition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.READ_ONLY);
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(toolkit.createLabel(copyGroup, "Zustand"));
 		txtCondition = toolkit.createText(copyGroup, EMPTY_STRING, SWT.MULTI);
 
@@ -227,8 +231,9 @@ public class LendCopyView extends AbstractView<Borrower> {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(copyGroup);
 		GridDataFactory.fillDefaults().applyTo(statusGroup);
 		GridDataFactory.fillDefaults().applyTo(mediumGroup);
-		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(txtCondition);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtBarcode);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtEdition);
+		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(txtCondition);
 		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
 		GridDataFactory.fillDefaults().span(3, 1).grab(true, true).applyTo(xViewer.getControl());
 		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(footer);
@@ -256,6 +261,8 @@ public class LendCopyView extends AbstractView<Borrower> {
 	@Override
 	protected void initBinding() throws ConnectException {
 		BindingHelper.bindStringToTextField(txtBarcode, copyToModifyObservable, Copy.FIELD_BARCODE, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtEdition, copyToModifyObservable, Copy.FIELD_EDITION, bindingContext,
 				false);
 		BindingHelper.bindStringToTextField(txtCondition, copyToModifyObservable, Copy.FIELD_CONDITION, bindingContext,
 				false);
