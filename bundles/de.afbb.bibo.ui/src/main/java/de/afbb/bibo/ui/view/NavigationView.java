@@ -36,8 +36,7 @@ public class NavigationView extends ViewPart {
 
 				@Override
 				public void doubleClick(final DoubleClickEvent event) {
-					CommandExecutor.executeCommand(ICommandIds.CMD_MANAGE_BORROWER);
-					// TODO add command for medium selection here
+					CommandExecutor.executeCommand(ICommandIds.CMD_MANAGE_BORROWER_MEDIUM);
 				}
 			});
 			viewer.setAutoExpandLevel(2);

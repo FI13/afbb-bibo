@@ -15,14 +15,16 @@ import org.eclipse.ui.PlatformUI;
 
 import de.afbb.bibo.aggregation.NavigationTreeViewNode;
 import de.afbb.bibo.share.model.Borrower;
+import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.ui.view.BorrowerView;
+import de.afbb.bibo.ui.view.MediumView;
 
 /**
- * handler that manages a {@link Borrower}
+ * handler that manages a {@link Borrower} or a {@link Medium}
  *
  * @author David Becker
  */
-public class ManageBorrowerHandler extends AbstractHandler {
+public class ManageBorrowerMediumHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -52,6 +54,25 @@ public class ManageBorrowerHandler extends AbstractHandler {
 											"Es bestehen noch offen Änderungen.\nSollen diese Änderungen verworfen werden?")
 									|| !dirty) {
 								view.setInput((Borrower) input);
+							}
+						}
+					} catch (final PartInitException e) {
+						e.printStackTrace();
+					}
+				} else if (input instanceof Medium) {
+					try {
+						final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench()
+								.getActiveWorkbenchWindow();
+						final IViewPart showView = activeWorkbenchWindow.getActivePage().showView(MediumView.ID);
+						if (showView instanceof MediumView) {
+							final MediumView view = (MediumView) showView;
+							final boolean dirty = view.isDirty();
+							if (dirty
+									&& MessageDialog.openQuestion(activeWorkbenchWindow.getShell(),
+											"Offene Änderungen verwerfen?",
+											"Es bestehen noch offen Änderungen.\nSollen diese Änderungen verworfen werden?")
+									|| !dirty) {
+								view.setInput((Medium) input);
 							}
 						}
 					} catch (final PartInitException e) {

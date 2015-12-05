@@ -46,7 +46,7 @@
             allowMultiple="false"
             category="de.afbb.bibo.ui.category.main"
             class="de.afbb.bibo.ui.view.RegisterCopyView"
-            icon="icons/16x16book.png"
+            icon="icons/16x16add_book.png"
             id="de.afbb.bibo.ui.registerexemplar"
             name="Erfassung Medien"
             restorable="false">
@@ -76,6 +76,15 @@
             icon="icons/16x16book2.png"
             id="de.afbb.bibo.ui.lend.copy"
             name="Ausleihe"
+            restorable="false">
+      </view>
+      <view
+            allowMultiple="false"
+            category="de.afbb.bibo.ui.category.main"
+            class="de.afbb.bibo.ui.view.MediumView"
+            icon="icons/16x16book.png"
+            id="de.afbb.bibo.ui.medium"
+            name="Anzeigen Medium"
             restorable="false">
       </view>
    </extension>
@@ -114,8 +123,8 @@
             name="Eigenes Passwort Ändern">
       </command>
       <command
-            id="de.afbb.bibo.ui.manage.borrower"
-            name="Verwalten Ausleiher">
+            id="de.afbb.bibo.ui.manage.BorrowerMedium"
+            name="Verwalten Ausleiher/Medium">
       </command>
    </extension>
    <extension
@@ -220,7 +229,7 @@
                style="push">
          </command>
          <command
-               commandId="de.afbb.bibo.ui.manage.borrower"
+               commandId="de.afbb.bibo.ui.manage.BorrowerMedium"
                label="Verwalten"
                style="push">
          </command>
@@ -278,18 +287,24 @@
          </activeWhen>
       </handler>
       <handler
-            class="de.afbb.bibo.ui.handler.ManageBorrowerHandler"
-            commandId="de.afbb.bibo.ui.manage.borrower">
+            class="de.afbb.bibo.ui.handler.ManageBorrowerMediumHandler"
+            commandId="de.afbb.bibo.ui.manage.BorrowerMedium">
          <activeWhen>
             <iterate
                   ifEmpty="false"
                   operator="and">
-               <instanceof
-                     value="de.afbb.bibo.aggregation.NavigationTreeViewNode">
-               </instanceof>
-               <test
-                     property="de.afbb.bibo.PERSON">
-               </test>
+               <and>
+                  <instanceof
+                        value="de.afbb.bibo.aggregation.NavigationTreeViewNode">
+                  </instanceof>
+                  <or>
+                     <test
+                           property="de.afbb.bibo.PERSON">
+                     </test>
+                     <test
+                           property="de.afbb.bibo.BOOK">
+                     </test></or>
+               </and>
             </iterate>
          </activeWhen>
       </handler>
