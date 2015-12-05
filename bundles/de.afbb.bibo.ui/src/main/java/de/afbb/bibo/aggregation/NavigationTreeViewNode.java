@@ -37,13 +37,17 @@ public class NavigationTreeViewNode extends TreeNode implements IAggregatorTarge
 
 	public String getInformationText() {
 		if (information != null) {
-			if (NavigationTreeNodeType.BOOK.equals(type)) {
-				return String.format("[∑:%s, ↑:%s]", information[0], information[1]);
-			} else if (NavigationTreeNodeType.PERSON.equals(type)) {
-				return String.format("[↑:%s]", information[0]);
+			final String info0 = information[0];
+			// don't show information text when nothing interesting is there
+			if (!"0".equals(info0)) {//$NON-NLS-1$
+				if (NavigationTreeNodeType.BOOK.equals(type)) {
+					return String.format("[∑:%s, ↑:%s]", info0, information[1]);//$NON-NLS-1$
+				} else if (NavigationTreeNodeType.PERSON.equals(type)) {
+					return String.format("[↑:%s]", info0);//$NON-NLS-1$
+				}
 			}
 		}
-		return null;
+		return "";//$NON-NLS-1$
 	}
 
 	public String getTooltipText() {
