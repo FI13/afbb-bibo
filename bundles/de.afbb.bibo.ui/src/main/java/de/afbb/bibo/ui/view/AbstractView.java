@@ -48,7 +48,7 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 	private Label lblValidationImage;
 	private Label lblValidationMessage;
 	private final IObservableValue validationStatus = new WritableValue(IStatus.OK, IStatus.class);
-	private final IObservableValue inputObservable = BeansObservables.observeValue(this, INPUT);
+	protected final IObservableValue inputObservable = BeansObservables.observeValue(this, INPUT);
 
 	protected final DataBindingContext bindingContext = new DataBindingContext();
 	protected final BiboFormToolkit toolkit = new BiboFormToolkit(Display.getCurrent());

@@ -26,10 +26,9 @@ import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
  * @author David Becker
  *
  */
-public class MediumInformationForm extends AbstractForm<Copy> {
+public class MediumInformationForm extends AbstractForm<Medium> {
 
 	private Text txtIsbn;
-	private Text txtEdition;
 	private Text txtTitle;
 	private Text txtAuthor;
 	private Text txtLanguage;
@@ -37,7 +36,7 @@ public class MediumInformationForm extends AbstractForm<Copy> {
 
 	private CCombo comboMediumType;
 
-	public MediumInformationForm(final Composite parent, final Copy input, final DataBindingContext bindingContext,
+	public MediumInformationForm(final Composite parent, final Medium input, final DataBindingContext bindingContext,
 			final BiboFormToolkit toolkit) throws ConnectException {
 		super(parent, input, bindingContext, toolkit);
 	}
@@ -58,8 +57,6 @@ public class MediumInformationForm extends AbstractForm<Copy> {
 		txtPublisher = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.ISBN);
 		txtIsbn = toolkit.createText(content, EMPTY_STRING, SWT.RIGHT | SWT.READ_ONLY | SWT.BORDER);
-		toolkit.createLabel(content, Messages.EDITION);
-		txtEdition = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
 		toolkit.createLabel(content, Messages.TYPE);
 		comboMediumType = new CCombo(content, SWT.SHADOW_NONE | SWT.BORDER | SWT.READ_ONLY);
 		toolkit.adapt(comboMediumType);
@@ -71,30 +68,24 @@ public class MediumInformationForm extends AbstractForm<Copy> {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtLanguage);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPublisher);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtIsbn);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtEdition);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(comboMediumType);
 		GridDataFactory.fillDefaults().hint(200, SWT.DEFAULT).grab(true, true).applyTo(content);
 	}
 
 	@Override
 	protected void initBinding() throws ConnectException {
-		BindingHelper.bindStringToTextField(txtEdition, getInputObservable(), Copy.FIELD_EDITION, bindingContext,
+		BindingHelper.bindStringToTextField(txtTitle, getInputObservable(), Medium.FIELD_TITLE, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtAuthor, getInputObservable(), Medium.FIELD_AUTHOR, bindingContext,
 				false);
-		BindingHelper.bindStringToTextField(txtTitle, getInputObservable(),
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TITLE, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtAuthor, getInputObservable(),
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_AUTHOR, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtLanguage, getInputObservable(),
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_LANGUAGE, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtPublisher, getInputObservable(),
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_PUBLISHER, bindingContext, false);
-		BindingHelper.bindStringToTextField(txtIsbn, getInputObservable(), Copy.FIELD_MEDIUM + DOT + Medium.FIELD_ISBN,
-				bindingContext, false);
+		BindingHelper.bindStringToTextField(txtLanguage, getInputObservable(), Medium.FIELD_LANGUAGE, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtPublisher, getInputObservable(), Medium.FIELD_PUBLISHER, bindingContext,
+				false);
+		BindingHelper.bindStringToTextField(txtIsbn, getInputObservable(), Medium.FIELD_ISBN, bindingContext, false);
 
-		BindingHelper.bindObjectToCCombo(comboMediumType, getInputObservable(), Copy.class,
-				Copy.FIELD_MEDIUM + DOT + Medium.FIELD_TYPE, MediumType.class,
-				ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(), bindingContext,
-				false);
+		BindingHelper.bindObjectToCCombo(comboMediumType, getInputObservable(), Copy.class, Medium.FIELD_TYPE,
+				MediumType.class, ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(),
+				bindingContext, false);
 
 	}
 

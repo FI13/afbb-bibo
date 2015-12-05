@@ -35,6 +35,7 @@ import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
 import de.afbb.bibo.ui.form.CopyMovementForm;
@@ -206,7 +207,7 @@ public class LendCopyView extends AbstractView<Borrower> {
 		movementForm = new CopyMovementForm(statusGroup, copyToModify, bindingContext, toolkit);
 
 		final Group mediumGroup = toolkit.createGroup(content, "Allgemein");
-		informationForm = new MediumInformationForm(mediumGroup, copyToModify, bindingContext, toolkit);
+		informationForm = new MediumInformationForm(mediumGroup, new Medium(), bindingContext, toolkit);
 
 		final Composite middle = toolkit.createComposite(content, SWT.NONE);
 		middle.setLayout(new GridLayout(3, false));
@@ -262,7 +263,8 @@ public class LendCopyView extends AbstractView<Borrower> {
 		// one-way binding to update the pseudo-input in sub-forms
 		bindingContext.bindValue(BeansObservables.observeValue(movementForm, INPUT), copyToModifyObservable,
 				new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
-		bindingContext.bindValue(BeansObservables.observeValue(informationForm, INPUT), copyToModifyObservable,
+		bindingContext.bindValue(BeansObservables.observeValue(informationForm, INPUT),
+				BeansObservables.observeDetailValue(copyToModifyObservable, Copy.FIELD_MEDIUM, Medium.class),
 				new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 	}
 
