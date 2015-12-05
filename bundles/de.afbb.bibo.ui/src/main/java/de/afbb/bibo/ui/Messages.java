@@ -21,6 +21,7 @@ public interface Messages {
 	public static final String LANGUAGE = "Sprache";
 	public static final String EDITION = "Auflage";
 	public static final String DATE = "Datum";
+	public static final String INVENTORY_DATE = "Inventar-Datum";
 	public static final String CURATOR = "Bediener";
 	public static final String BORROWER = "Ausleiher";
 	public static final String LEND_DATE = "Ausgeliehen am";
