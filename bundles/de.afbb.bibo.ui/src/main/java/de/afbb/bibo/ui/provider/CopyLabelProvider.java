@@ -114,9 +114,9 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 
 	@Override
 	public Color getBackground(final Object element, final int columnIndex) {
-		// darken the background for parent elements
-		if (contentProvider != null && contentProvider.hasChildren(element)) {
-			return Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
+		// darken the background for children elements
+		if (contentProvider != null && contentProvider.getParent(element) != null) {
+			return Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW);
 		}
 		return null;
 	}
