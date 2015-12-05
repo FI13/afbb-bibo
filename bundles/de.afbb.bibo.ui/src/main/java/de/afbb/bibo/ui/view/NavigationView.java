@@ -3,6 +3,7 @@ package de.afbb.bibo.ui.view;
 import java.net.ConnectException;
 
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -28,6 +29,7 @@ public class NavigationView extends ViewPart {
 		try {
 			viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 			viewer.setContentProvider(new NavigationViewContentProvider());
+			ColumnViewerToolTipSupport.enableFor(viewer);
 			viewer.setLabelProvider(new NavigationViewLabelProvider());
 			viewer.addDoubleClickListener(new TreeCollapseExpandListener(viewer));
 			viewer.addDoubleClickListener(new IDoubleClickListener() {
