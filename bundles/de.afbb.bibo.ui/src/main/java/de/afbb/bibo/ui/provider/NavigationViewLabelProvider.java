@@ -10,9 +10,9 @@ import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
 
-public class NavigationTreeViewLabelProvider extends LabelProvider {
+public class NavigationViewLabelProvider extends LabelProvider {
 
-	public NavigationTreeViewLabelProvider() {
+	public NavigationViewLabelProvider() {
 		super();
 	}
 

@@ -14,8 +14,8 @@ import de.afbb.bibo.aggregation.NavigationTreeService;
 import de.afbb.bibo.ui.CommandExecutor;
 import de.afbb.bibo.ui.ICommandIds;
 import de.afbb.bibo.ui.events.TreeCollapseExpandListener;
-import de.afbb.bibo.ui.provider.NavigationTreeViewContentProvider;
-import de.afbb.bibo.ui.provider.NavigationTreeViewLabelProvider;
+import de.afbb.bibo.ui.provider.NavigationViewContentProvider;
+import de.afbb.bibo.ui.provider.NavigationViewLabelProvider;
 
 public class NavigationView extends ViewPart {
 
@@ -27,8 +27,8 @@ public class NavigationView extends ViewPart {
 		NavigationTreeService navigationTree;
 		try {
 			viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-			viewer.setContentProvider(new NavigationTreeViewContentProvider());
-			viewer.setLabelProvider(new NavigationTreeViewLabelProvider());
+			viewer.setContentProvider(new NavigationViewContentProvider());
+			viewer.setLabelProvider(new NavigationViewLabelProvider());
 			viewer.addDoubleClickListener(new TreeCollapseExpandListener(viewer));
 			viewer.addDoubleClickListener(new IDoubleClickListener() {
 
