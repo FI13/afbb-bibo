@@ -1,10 +1,11 @@
 package de.afbb.bibo.ui.view;
 
 import java.net.ConnectException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeansObservables;
@@ -66,7 +67,8 @@ public class LendCopyView extends AbstractView<Borrower> {
 	private MediumInformationForm informationForm;
 
 	private final HashMap<String, Copy> copyCache = new HashMap<>();
-	private final Set<Copy> copies = new HashSet<Copy>();
+	// clunky way to get a concurrent hash set
+	private final Set<Copy> copies = Collections.newSetFromMap(new ConcurrentHashMap<Copy, Boolean>());
 	private Copy copyToModify = new Copy();
 	private final IObservableValue copyToModifyObservable = BeansObservables.observeValue(this, INPUT_COPY);
 
@@ -88,6 +90,15 @@ public class LendCopyView extends AbstractView<Borrower> {
 		@Override
 		public void handleEvent(final Event event) {
 			final Copy copy = xViewer.getLastElementFromSelectionPath();
+			// check if user selected group
+			if (copy.getBarcode() == null || copy.getBarcode().isEmpty()) {
+				final int groupId = copy.getGroupId();
+				for (final Copy c : copies) {
+					if (c.getGroupId() == groupId) {
+						copies.remove(c);
+					}
+				}
+			}
 			delete(copy);
 		}
 	};
