@@ -534,13 +534,36 @@ public class DBConnector {
 		}
 	}
 
-	public int countLendCopies(final Integer borrowerId) throws NumberFormatException, SQLException, IOException {
+	public int countLendCopiesByBorrower(final Integer borrowerId)
+			throws NumberFormatException, SQLException, IOException {
 		log.debug("count lend copies for borrower with id: " + borrowerId);
 		try (Statement st = connect.createStatement()) {
 			try (ResultSet resultSet = st
 					.executeQuery("select count(Id) from " + Config.getInstance().getDATABASE_NAME()
 							+ ".exemplar where (TIMESTAMPDIFF(SECOND,  LetztesAusleihDatum, AusleihDatum) >= 0 or (AusleihDatum is not null and LetztesAusleihDatum is null)) and AusleiherId="
 							+ borrowerId)) {
+				return resultSet.first() ? resultSet.getInt(1) : -1;
+			}
+		}
+	}
+
+	public int countLendCopiesByMedium(final Integer mediumId) throws NumberFormatException, SQLException, IOException {
+		log.debug("count lend copies for medium with id: " + mediumId);
+		try (Statement st = connect.createStatement()) {
+			try (ResultSet resultSet = st
+					.executeQuery("select count(Id) from " + Config.getInstance().getDATABASE_NAME()
+							+ ".exemplar where (TIMESTAMPDIFF(SECOND,  LetztesAusleihDatum, AusleihDatum) >= 0 or (AusleihDatum is not null and LetztesAusleihDatum is null)) and MedienId="
+							+ mediumId)) {
+				return resultSet.first() ? resultSet.getInt(1) : -1;
+			}
+		}
+	}
+
+	public int countCopiesByMedium(final Integer mediumId) throws NumberFormatException, SQLException, IOException {
+		log.debug("count copies for medium with id: " + mediumId);
+		try (Statement st = connect.createStatement()) {
+			try (ResultSet resultSet = st.executeQuery("select count(Id) from "
+					+ Config.getInstance().getDATABASE_NAME() + ".exemplar where MedienId=" + mediumId)) {
 				return resultSet.first() ? resultSet.getInt(1) : -1;
 			}
 		}

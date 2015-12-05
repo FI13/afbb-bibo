@@ -68,13 +68,16 @@ public class StockServlet {
 			listMedia();
 			break;
 		case "/countLendCopies":
-			countLendCopies();
+			countLendCopiesByBorrower();
 			break;
 		case "/listLendCopies":
 			listLendCopies();
 			break;
 		case "/getMedium":
 			getMedium();
+			break;
+		case "/getMediumInformation":
+			aggregateCopiesInformationByMedium();
 			break;
 		default:
 			Utils.returnErrorMessage(StockServlet.class, request, response);
@@ -203,9 +206,16 @@ public class StockServlet {
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
-	private void countLendCopies() throws NumberFormatException, SQLException, IOException {
+	private void countLendCopiesByBorrower() throws NumberFormatException, SQLException, IOException {
 		final Integer id = Integer.valueOf(request.getParameter("id"));
-		response.getWriter().println(DBConnector.getInstance().countLendCopies(id));
+		response.getWriter().println(DBConnector.getInstance().countLendCopiesByBorrower(id));
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void aggregateCopiesInformationByMedium() throws NumberFormatException, SQLException, IOException {
+		final Integer id = Integer.valueOf(request.getParameter("id"));
+		response.getWriter().println(DBConnector.getInstance().countCopiesByMedium(id));
+		response.getWriter().println(DBConnector.getInstance().countLendCopiesByMedium(id));
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 

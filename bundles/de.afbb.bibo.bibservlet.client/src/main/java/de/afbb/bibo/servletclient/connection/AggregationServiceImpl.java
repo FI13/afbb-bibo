@@ -40,7 +40,18 @@ public class AggregationServiceImpl implements IAggregationService {
 
 	@Override
 	public void aggregateMediumInformation(final Integer id, final IAggregatorTarget target) {
-		// TODO Auto-generated method stub
+		try {
+			final Map<String, String> param = new HashMap<String, String>();
+			param.put("id", id.toString());
+			HttpResponse resp;
+			resp = ServerConnection.getInstance().request("/stock/getMediumInformation", "GET", param, null);
+			if (resp.getStatus() == HttpServletResponse.SC_OK) {
+				final String[] data = resp.getData().split("\n");
+				notifyListener(target, String.format("[∑:%s, ↑:%s]", data[0], data[1]));
+			}
+		} catch (final ConnectException e) {
+			// just swallow exception
+		}
 
 	}
 
