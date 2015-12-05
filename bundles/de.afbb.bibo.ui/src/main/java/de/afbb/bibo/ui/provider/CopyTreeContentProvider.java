@@ -62,17 +62,26 @@ public class CopyTreeContentProvider implements ITreeContentProvider {
 					input.add(next);
 				}
 			}
+
 		}
 		// add dummy objects for each group, and add this dummy to regular input
 		// list
 		final Iterator<Integer> iterator = groupedCopies.keySet().iterator();
 		while (iterator.hasNext()) {
 			final Integer next = iterator.next();
-			final Copy dummy = new Copy();
-			dummy.setGroupId(next);
-			dummy.getMedium().setType(GROUP_TYPE);
-			dummies.put(next, dummy);
-			input.add(dummy);
+			// check that we only have groups with more than one children
+			final Set<Copy> set = groupedCopies.get(next);
+			if (set.size() > 1) {
+				final Copy dummy = new Copy();
+				dummy.setGroupId(next);
+				dummy.getMedium().setType(GROUP_TYPE);
+				dummies.put(next, dummy);
+				input.add(dummy);
+			} else {
+				// we only have one item, so we add it as a regular entry
+				input.addAll(set);
+				iterator.remove();
+			}
 		}
 	}
 
