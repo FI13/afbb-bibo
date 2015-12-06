@@ -140,7 +140,8 @@ public class StockServlet {
 				mediumId = checkedIsbns.get(isbn);
 			} else {
 				// try to get id from database
-				mediumId = DBConnector.getInstance().getMedium(isbn).getMediumId();
+				final Medium medium = DBConnector.getInstance().getMedium(isbn);
+				mediumId = medium != null ? medium.getMediumId() : null;
 				if (mediumId == null) {
 					// medium not found, create new
 					mediumId = DBConnector.getInstance().createMedium(isbn, copy.getMedium().getTitle(),
