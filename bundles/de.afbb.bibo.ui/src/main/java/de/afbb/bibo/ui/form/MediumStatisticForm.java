@@ -118,11 +118,12 @@ public class MediumStatisticForm extends Composite {
 		final int lend = (int) (count - countAvailable);
 		txtCount.setText(String.valueOf((int) count));
 		txtAvailableAbsolut.setText(String.valueOf(countAvailable));
-		txtAvailableRelative.setText(NumberFormat.getPercentInstance().format(countAvailable / count));
+		txtAvailableRelative
+				.setText(NumberFormat.getPercentInstance().format(count > 0 ? countAvailable / count : count));
 		txtLendAbsolut.setText(String.valueOf(lend));
-		txtLendRelative.setText(NumberFormat.getPercentInstance().format(lend / count));
+		txtLendRelative.setText(NumberFormat.getPercentInstance().format(count > 0 ? lend / count : count));
 		txtDamagedAbsolut.setText(String.valueOf(countDamaged));
-		txtDamagedRelative.setText(NumberFormat.getPercentInstance().format(countDamaged / count));
+		txtDamagedRelative.setText(NumberFormat.getPercentInstance().format(count > 0 ? countDamaged / count : count));
 		txtOldestInventoryDate.setText(inventoryDate != null ? DateFormat.getDateInstance().format(inventoryDate) : "");
 	}
 }
