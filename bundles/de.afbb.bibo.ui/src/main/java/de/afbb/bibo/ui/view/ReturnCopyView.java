@@ -72,6 +72,7 @@ public class ReturnCopyView extends AbstractView<Copy> {
 		copyGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(copyGroup, "Barcode");
 		txtBarcode = toolkit.createText(copyGroup, EMPTY_STRING, SWT.RIGHT | SWT.SINGLE);
+		txtBarcode.setMessage("Barcode einscannen");
 		txtBarcode.addFocusListener(new FocusListener() {
 
 			@Override

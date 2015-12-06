@@ -201,7 +201,8 @@ public class LendCopyView extends AbstractView<Borrower> {
 		final Group copyGroup = toolkit.createGroup(content, "Exemplar");
 		copyGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(copyGroup, "Barcode");
-		txtBarcode = toolkit.createText(copyGroup, EMPTY_STRING);
+		txtBarcode = toolkit.createText(copyGroup, EMPTY_STRING, SWT.SINGLE | SWT.RIGHT);
+		txtBarcode.setMessage("Barcode einscannen");
 		txtBarcode.addFocusListener(new FocusListener() {
 
 			@Override
