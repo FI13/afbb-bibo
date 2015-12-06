@@ -64,6 +64,9 @@ public class StockServlet {
 		case "/getCopy":
 			getCopy();
 			break;
+		case "/listCopies":
+			listCopies();
+			break;
 		case "/listMedia":
 			listMedia();
 			break;
@@ -177,6 +180,17 @@ public class StockServlet {
 		} else {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
+	}
+
+	private void listCopies() throws NumberFormatException, SQLException, IOException {
+		final Integer id = Integer.valueOf(request.getParameter("id"));
+		final List<Copy> copies = DBConnector.getInstance().listCopies(id);
+		for (final Copy copy : copies) {
+			if (copy != null) {
+				response.getWriter().println(Utils.gson.toJson(copy));
+			}
+		}
+		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
 	private void listMedia() throws NumberFormatException, SQLException, IOException {

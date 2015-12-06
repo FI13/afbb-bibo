@@ -276,6 +276,15 @@
                style="push">
          </command>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:de.afbb.bibo.ui.medium">
+         <command
+               commandId="org.eclipse.ui.file.save"
+               icon="icons/16x16Save.png"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
