@@ -233,7 +233,7 @@ public class DBConnector {
 		log.debug("get copy with barcode: " + barcode);
 		try (final Statement statement = connect.createStatement()) {
 			try (final ResultSet mediaSet = statement.executeQuery(
-					"select e.Id, e.Edition, e.Barcode, e.Inventarisiert, e.Zustand, e.AusleihDatum, e.LetztesAusleihDatum, e.AusleihBenutzerId, e.LetzterAusleihBenutzerId, e.AusleiherId, e.LetzterAusleiherId, e.GruppenId, m.Id, m.ISBN, m.Titel, m.Autor, m.Sprache, m.TypId, m.Herausgeber from "
+					"select e.Id, e.Edition, e.Barcode, e.Inventarisiert, e.Zustand, e.AusleihDatum, e.LetztesAusleihDatum, e.AusleiherId, e.LetzterAusleiherId, e.AusleihBenutzerId, e.LetzterAusleihBenutzerId, e.GruppenId, m.Id, m.ISBN, m.Titel, m.Autor, m.Sprache, m.TypId, m.Herausgeber from "
 							+ Config.getInstance().getDATABASE_NAME() + ".exemplar e, "
 							+ Config.getInstance().getDATABASE_NAME() + ".medium m where Barcode='" + barcode
 							+ "' and e.MedienId=m.Id")) {
@@ -505,12 +505,11 @@ public class DBConnector {
 		}
 	}
 
-	public void returnBook(final String barcode) throws SQLException, NumberFormatException, IOException {
+	public void returnBook(final String barcode, final int curatorId)
+			throws SQLException, NumberFormatException, IOException {
 		final String sql = "update " + Config.getInstance().getDATABASE_NAME() + ".exemplar set "
-				+ "LetzterAusleihBenutzerId='" + getLastCurator(barcode) + "'" + ", LetzterAusleiherId='"
-				+ getLastBorrower(barcode) + "'" + ", LetztesAusleihDatum='" + getLastBorrowDate(barcode) + "'"
-				+ ", AusleihBenutzerId=''" + ", AusleiherId=''" + ", AusleihDatum=''" + ", Inventarisiert=NOW()"
-				+ " where Barcode='" + barcode + "'";
+				+ "LetzterAusleihBenutzerId='" + curatorId + "'" + ", LetzterAusleiherId='" + getLastBorrower(barcode)
+				+ "'" + ", LetztesAusleihDatum=NOW() where Barcode='" + barcode + "'";
 		try (Statement st = connect.createStatement()) {
 			st.execute(sql);
 		}
