@@ -83,6 +83,10 @@ public class MediumServiceImpl implements IMediumService {
 			for (int i = 0; i < data.length; i++) {
 				final Medium medium = gson.fromJson(data[i], Medium.class);
 				if (medium != null) {
+					// we only get the id for type filled, so we need to fetch
+					// type
+					// separately
+					medium.setType(ServiceLocator.getInstance().getTypService().get(medium.getType().getId()));
 					result.add(medium);
 				}
 			}

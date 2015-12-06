@@ -95,6 +95,10 @@ public class CopyXviewerForm {
 				SWT.LEFT, true, SortDataType.String, false, Messages.EDITION);
 		final XViewerColumn columnInventory = new XViewerColumn(namespace + DOT + Messages.INVENTORY_DATE,
 				Messages.INVENTORY_DATE, 130, SWT.CENTER, true, SortDataType.Date, false, Messages.INVENTORY_DATE);
+		final XViewerColumn columnAvailable = new XViewerColumn(namespace + DOT + Messages.AVAILABLE,
+				Messages.AVAILABLE, 90, SWT.LEFT, true, SortDataType.String, false, Messages.AVAILABLE);
+		final XViewerColumn columnDamaged = new XViewerColumn(namespace + DOT + Messages.DAMAGED, Messages.DAMAGED, 90,
+				SWT.LEFT, true, SortDataType.String, false, Messages.DAMAGED);
 
 		if (showMovementColumns) {
 			final XViewerColumn columnLendDate = new XViewerColumn(namespace + DOT + Messages.LEND_DATE,
@@ -112,11 +116,11 @@ public class CopyXviewerForm {
 					Messages.RETURN_BORROWER);
 
 			factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
-					columnLanguage, columnEdition, columnInventory, columnLendDate, columnLendCurator,
-					columnLendBorrower, columnReturnDate, columnReturnCurator, columnReturnBorrower);
+					columnLanguage, columnEdition, columnInventory, columnAvailable, columnDamaged, columnLendDate,
+					columnLendCurator, columnLendBorrower, columnReturnDate, columnReturnCurator, columnReturnBorrower);
 		} else {
 			factory.registerColumns(columnType, columnBarcode, columnIsbn, columnTitle, columnAuthor, columnPublisher,
-					columnLanguage, columnEdition, columnInventory);
+					columnLanguage, columnEdition, columnInventory, columnAvailable, columnDamaged);
 		}
 	}
 

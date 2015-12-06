@@ -277,7 +277,8 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		idGroup = toolkit.createGroup(content, "Nummer");
 		idGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(idGroup, Messages.BARCODE);
-		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING);
+		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING, SWT.SINGLE | SWT.RIGHT);
+		txtBarcode.setMessage("Barcode einscannen");
 		txtBarcode.addFocusListener(new FocusListener() {
 
 			@Override
@@ -291,6 +292,8 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		});
 		toolkit.createLabel(idGroup, Messages.ISBN);
 		txtIsbn = toolkit.createText(idGroup, EMPTY_STRING);
+		txtIsbn.setMessage("ISBN einscannen");
+		txtIsbn.setToolTipText("Sie können hier auch eine Seriennummer eingeben, wenn das Medium keine ISBN besitzt.");
 		txtIsbn.addFocusListener(new FocusListener() {
 
 			@Override
@@ -346,9 +349,9 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		btnSave = toolkit.createButton(buttonComposite, "Erfassung abschließen", SWT.TOP);
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(content);
-		GridDataFactory.fillDefaults().hint(200, SWT.DEFAULT).applyTo(idGroup);
+		GridDataFactory.fillDefaults().hint(250, SWT.DEFAULT).applyTo(idGroup);
 		GridDataFactory.fillDefaults().span(3, 1).align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(middle);
-		GridDataFactory.fillDefaults().hint(200, SWT.DEFAULT).applyTo(mediumGroup);
+		GridDataFactory.fillDefaults().hint(400, SWT.DEFAULT).applyTo(mediumGroup);
 		GridDataFactory.fillDefaults().applyTo(conditionGroup);
 		GridDataFactory.fillDefaults().span(3, 1).grab(true, true).applyTo(bottom);
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).applyTo(buttonComposite);
