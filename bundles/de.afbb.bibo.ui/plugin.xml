@@ -126,6 +126,10 @@
             id="de.afbb.bibo.ui.manage.BorrowerMedium"
             name="Verwalten Ausleiher/Medium">
       </command>
+      <command
+            id="de.afbb.bibo.ui.inventory"
+            name="Inventur">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -210,17 +214,15 @@
                visible="true">
          </separator>
          <command
-               commandId="de.afbb.bibo.ui.return"
-               icon="icons/32x32login.png"
+               commandId="de.afbb.bibo.ui.lend"
                style="push">
          </command>
-         <separator
-               name="de.afbb.bibo.ui.separator.coolbar3"
-               visible="true">
-         </separator>
          <command
-               commandId="org.eclipse.ui.file.save"
-               icon="icons/32x32Save.png"
+               commandId="de.afbb.bibo.ui.return"
+               style="push">
+         </command>
+         <command
+               commandId="de.afbb.bibo.ui.inventory"
                style="push">
          </command>
       </menuContribution>
@@ -241,6 +243,33 @@
       <menuContribution
             allPopups="false"
             locationURI="toolbar:de.afbb.bibo.ui.borrower">
+         <command
+               commandId="org.eclipse.ui.file.save"
+               icon="icons/16x16Save.png"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:de.afbb.bibo.ui.registerexemplar">
+         <command
+               commandId="org.eclipse.ui.file.save"
+               icon="icons/16x16Save.png"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:de.afbb.bibo.ui.return.copy">
+         <command
+               commandId="org.eclipse.ui.file.save"
+               icon="icons/16x16Save.png"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:de.afbb.bibo.ui.lend.copy">
          <command
                commandId="org.eclipse.ui.file.save"
                icon="icons/16x16Save.png"

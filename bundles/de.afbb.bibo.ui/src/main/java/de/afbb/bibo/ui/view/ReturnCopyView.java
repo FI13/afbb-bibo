@@ -127,21 +127,7 @@ public class ReturnCopyView extends AbstractView<Copy> {
 
 			@Override
 			public void handleEvent(final Event event) {
-				final Job job = new Job("Rückgabe abschließen") {
-
-					@Override
-					protected IStatus run(final IProgressMonitor monitor) {
-						try {
-							ServiceLocator.getInstance().getCopyService().returnCopies(copies);
-						} catch (final ConnectException e) {
-							handle(e);
-						}
-						return Status.OK_STATUS;
-					}
-
-				};
-				job.schedule();
-				closeView();
+				doSave(null);
 			}
 		});
 
@@ -176,8 +162,8 @@ public class ReturnCopyView extends AbstractView<Copy> {
 	}
 
 	private void updateSaveButton() {
-		btnSave.setEnabled(
-				(input == null || input.getBarcode() == null || input.getBarcode().isEmpty()) && !copies.isEmpty());
+		firePropertyChange(PROP_DIRTY);
+		btnSave.setEnabled(isDirty());
 	}
 
 	/**
@@ -285,8 +271,27 @@ public class ReturnCopyView extends AbstractView<Copy> {
 
 	@Override
 	public boolean isDirty() {
-		// no dirty state for this view
-		return false;
+		return (input == null || input.getBarcode() == null || input.getBarcode().isEmpty()) && !copies.isEmpty();
+	}
+
+	@Override
+	public void doSave(final IProgressMonitor monitor) {
+
+		final Job job = new Job("Rückgabe abschließen") {
+
+			@Override
+			protected IStatus run(final IProgressMonitor monitor) {
+				try {
+					ServiceLocator.getInstance().getCopyService().returnCopies(copies);
+				} catch (final ConnectException e) {
+					handle(e);
+				}
+				return Status.OK_STATUS;
+			}
+
+		};
+		job.schedule();
+		closeView();
 	}
 
 }

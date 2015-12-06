@@ -126,7 +126,22 @@ public class CopyServiceImpl implements ICopyService {
 
 	@Override
 	public void returnCopies(final Collection<Copy> copies) throws ConnectException {
-		// TODO Auto-generated method stub
+		int statusCode = -1;
+		for (final Copy copy : copies) {
+			final Map<String, String> param = new HashMap<String, String>();
+			param.put("barcode", copy.getBarcode());
+			param.put("condition", copy.getBarcode());
+			param.put("condition", copy.getCondition());
+			final HttpResponse resp = ServerConnection.getInstance().request("/borrow/return", "GET", param, null);
+			if (resp.getStatus() != HttpServletResponse.SC_OK) {
+				statusCode = resp.getStatus();
+			}
+		}
+		notifyListener(NavigationTreeNodeType.ROOT);
+		// if we got an error we throw an exception
+		if (statusCode > 0) {
+			throw new ConnectException("Wrong status code. Recieved was: " + statusCode);
+		}
 
 	}
 

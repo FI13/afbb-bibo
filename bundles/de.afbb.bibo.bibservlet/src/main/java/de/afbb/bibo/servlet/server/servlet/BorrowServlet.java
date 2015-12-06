@@ -53,9 +53,18 @@ public class BorrowServlet {
 		if (condition != null) {
 			DBConnector.getInstance().setCondition(barcode, condition);
 		}
+		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
 	private void doReturn() throws SQLException, IOException {
+		final int curatorId = SessionContainer.getInstance().getSession(request.getHeader("sessionId")).getId();
+		final String barcode = request.getParameter("barcode");
+		final String condition = request.getParameter("condition");
 
+		DBConnector.getInstance().returnBook(barcode, curatorId);
+		if (condition != null) {
+			DBConnector.getInstance().setCondition(barcode, condition);
+		}
+		response.setStatus(HttpServletResponse.SC_OK);
 	}
 }
