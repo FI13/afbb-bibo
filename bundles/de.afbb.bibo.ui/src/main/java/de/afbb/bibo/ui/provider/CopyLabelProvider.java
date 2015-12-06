@@ -13,6 +13,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 import de.afbb.bibo.share.model.Copy;
+import de.afbb.bibo.share.model.IconType;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
 
@@ -68,9 +69,17 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 	@Override
 	public Image getColumnImage(final Object element, final XViewerColumn xCol, final int columnIndex)
 			throws Exception {
-		final Copy copy = (Copy) element;
-		if (columnIndex == 0 && copy.getMedium() != null && copy.getMedium().getType() != null) {
-			return BiboImageRegistry.getImage(copy.getMedium().getType().getIcon(), IconSize.small);
+		if (element instanceof Copy) {
+			final Copy copy = (Copy) element;
+			if (columnIndex == 0 && copy.getMedium() != null && copy.getMedium().getType() != null) {
+				return BiboImageRegistry.getImage(copy.getMedium().getType().getIcon(), IconSize.small);
+			} else if (columnIndex == 9 && copy.getMedium().getMediumId() > 0) {
+				return BiboImageRegistry.getImage(isAvailable(copy) ? IconType.BOOK_AVAILABLE : IconType.BOOK_LENT,
+						IconSize.small);
+			} else if (columnIndex == 10 && copy.getMedium().getMediumId() > 0) {
+				return BiboImageRegistry.getImage(isDamaged(copy) ? IconType.BOOK_DAMAGED : IconType.BOOK,
+						IconSize.small);
+			}
 		}
 		return null;
 	}
@@ -98,17 +107,21 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 			value = copy.getEdition();
 		} else if (columnIndex == 8 && copy.getInventoryDate() != null) {
 			value = DateFormat.getDateInstance().format(copy.getInventoryDate());
-		} else if (columnIndex == 9 && copy.getBorrowDate() != null) {
+		} else if (columnIndex == 9 && copy.getMedium().getMediumId() > 0) {
+			value = isAvailable(copy) ? "Ja" : "Nein";
+		} else if (columnIndex == 10 && copy.getMedium().getMediumId() > 0) {
+			value = isDamaged(copy) ? "Ja" : "Nein";
+		} else if (columnIndex == 11 && copy.getBorrowDate() != null) {
 			value = DateFormat.getDateInstance().format(copy.getBorrowDate());
-		} else if (columnIndex == 10 && copy.getCurator() != null) {
+		} else if (columnIndex == 12 && copy.getCurator() != null) {
 			value = copy.getCurator().getName();
-		} else if (columnIndex == 11 && copy.getBorrower() != null) {
+		} else if (columnIndex == 13 && copy.getBorrower() != null) {
 			value = copy.getBorrower().getName();
-		} else if (columnIndex == 12 && copy.getLastBorrowDate() != null) {
+		} else if (columnIndex == 14 && copy.getLastBorrowDate() != null) {
 			value = DateFormat.getDateInstance().format(copy.getLastBorrowDate());
-		} else if (columnIndex == 13 && copy.getLastCurator() != null) {
+		} else if (columnIndex == 15 && copy.getLastCurator() != null) {
 			value = copy.getLastCurator().getName();
-		} else if (columnIndex == 14 && copy.getLastBorrower() != null) {
+		} else if (columnIndex == 16 && copy.getLastBorrower() != null) {
 			value = copy.getLastBorrower().getName();
 		}
 		return value;
@@ -121,6 +134,15 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 			return Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW);
 		}
 		return null;
+	}
+
+	private static boolean isAvailable(final Copy copy) {
+		return copy.getBorrowDate() == null
+				|| copy.getLastBorrowDate() != null && copy.getBorrowDate().compareTo(copy.getLastBorrowDate()) <= 0;
+	}
+
+	private static boolean isDamaged(final Copy copy) {
+		return copy.getCondition() != null && !copy.getCondition().isEmpty();
 	}
 
 }
