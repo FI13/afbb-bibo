@@ -380,21 +380,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 			@Override
 			public void handleEvent(final Event event) {
-				final Job job = new Job("Erfassung abschließen") {
-
-					@Override
-					protected IStatus run(final IProgressMonitor monitor) {
-						try {
-							ServiceLocator.getInstance().getCopyService().registerCopies(copies);
-						} catch (final ConnectException e) {
-							handle(e);
-						}
-						return Status.OK_STATUS;
-					}
-
-				};
-				job.schedule();
-				closeView();
+				doSave(null);
 			}
 		});
 
@@ -492,13 +478,32 @@ public class RegisterCopyView extends AbstractView<Copy> {
 	}
 
 	private void updateSaveButton() {
-		btnSave.setEnabled(!copies.isEmpty());
+		firePropertyChange(PROP_DIRTY);
+		btnSave.setEnabled(isDirty());
 	}
 
 	@Override
 	public boolean isDirty() {
-		// no dirty state for this view
-		return false;
+		return !copies.isEmpty();
+	}
+
+	@Override
+	public void doSave(final IProgressMonitor monitor) {
+		final Job job = new Job("Erfassung abschließen") {
+
+			@Override
+			protected IStatus run(final IProgressMonitor monitor) {
+				try {
+					ServiceLocator.getInstance().getCopyService().registerCopies(copies);
+				} catch (final ConnectException e) {
+					handle(e);
+				}
+				return Status.OK_STATUS;
+			}
+
+		};
+		job.schedule();
+		closeView();
 	}
 
 	private static class BarcodeTakenValidator implements IValidator {
