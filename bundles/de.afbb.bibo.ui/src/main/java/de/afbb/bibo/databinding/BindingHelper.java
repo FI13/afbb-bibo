@@ -255,20 +255,25 @@ public final class BindingHelper {
 
 		});
 		if (isRequired) {
-			final ControlDecoration requiredDecoration = new ControlDecoration(control, SWT.RIGHT | SWT.TOP);
-			final FieldDecoration requiredFieldDecoration = FieldDecorationRegistry.getDefault()
-					.getFieldDecoration(FieldDecorationRegistry.DEC_REQUIRED);
-			requiredDecoration.setImage(requiredFieldDecoration.getImage());
-			control.addDisposeListener(new DisposeListener() {
-
-				@Override
-				public void widgetDisposed(final DisposeEvent e) {
-					requiredDecoration.dispose();
-				}
-
-			});
+			createRequiredControlDecoration(control);
 		}
 		return controlDecoration;
+	}
+
+	public static ControlDecoration createRequiredControlDecoration(final Control control) {
+		final ControlDecoration requiredDecoration = new ControlDecoration(control, SWT.RIGHT | SWT.TOP);
+		final FieldDecoration requiredFieldDecoration = FieldDecorationRegistry.getDefault()
+				.getFieldDecoration(FieldDecorationRegistry.DEC_REQUIRED);
+		requiredDecoration.setImage(requiredFieldDecoration.getImage());
+		control.addDisposeListener(new DisposeListener() {
+
+			@Override
+			public void widgetDisposed(final DisposeEvent e) {
+				requiredDecoration.dispose();
+			}
+
+		});
+		return requiredDecoration;
 	}
 
 	/**
