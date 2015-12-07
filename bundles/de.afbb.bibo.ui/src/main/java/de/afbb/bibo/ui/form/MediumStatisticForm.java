@@ -26,6 +26,7 @@ import de.afbb.bibo.ui.IconSize;
  */
 public class MediumStatisticForm extends Composite {
 
+	private static final String NEW = "NEU";//$NON-NLS-1$
 	private final BiboFormToolkit toolkit;
 	private Text txtCount;
 	private Text txtAvailableAbsolut;
@@ -105,7 +106,8 @@ public class MediumStatisticForm extends Composite {
 						countAvailable++;
 					}
 
-					if (copy.getCondition() != null && !copy.getCondition().isEmpty()) {
+					if (copy.getCondition() != null && !copy.getCondition().isEmpty()
+							&& !NEW.equals(copy.getCondition().trim().toUpperCase())) {
 						countDamaged++;
 					}
 					if (inventoryDate == null || inventoryDate.compareTo(copy.getInventoryDate()) > 0) {

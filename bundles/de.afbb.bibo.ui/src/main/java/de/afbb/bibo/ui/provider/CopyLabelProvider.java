@@ -24,6 +24,7 @@ import de.afbb.bibo.ui.IconSize;
  */
 public class CopyLabelProvider extends XViewerLabelProvider {
 
+	private static final String NEW = "NEU";//$NON-NLS-1$
 	private final ITreeContentProvider contentProvider;
 
 	/**
@@ -142,7 +143,8 @@ public class CopyLabelProvider extends XViewerLabelProvider {
 	}
 
 	private static boolean isDamaged(final Copy copy) {
-		return copy.getCondition() != null && !copy.getCondition().isEmpty();
+		return copy.getCondition() != null && !copy.getCondition().isEmpty()
+				&& !NEW.equals(copy.getCondition().trim().toUpperCase());
 	}
 
 }
