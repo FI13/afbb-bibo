@@ -581,9 +581,9 @@ public class DBConnector {
 		log.debug("get all copies medium id: " + mediumId);
 		try (Statement statement = connect.createStatement()) {
 			final String string = "select e.Id, e.Edition, e.Barcode, e.Inventarisiert, e.Zustand, e.AusleihDatum, e.LetztesAusleihDatum, e.AusleiherId, e.LetzterAusleiherId, e.AusleihBenutzerId, e.LetzterAusleihBenutzerId, e.GruppenId, m.Id, m.ISBN, m.Titel, m.Autor, m.Sprache, m.TypId, m.Herausgeber from "
-					+ Config.getInstance().getDATABASE_NAME() + ".exemplar e, "
-					+ Config.getInstance().getDATABASE_NAME() + ".medium m where e.MedienId=" + mediumId
-					+ " and e.MedienId=m.Id";
+					+ Config.getInstance().getDATABASE_NAME() + ".exemplar e inner join "
+					+ Config.getInstance().getDATABASE_NAME() + ".medium m on e.MedienId=m.Id where e.MedienId="
+					+ mediumId;
 			try (ResultSet mediaSet = statement.executeQuery(string)) {
 				while (mediaSet.next()) {
 					result.add(new Copy(mediaSet.getInt(1), mediaSet.getString(2), mediaSet.getString(3),
