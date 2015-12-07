@@ -166,7 +166,27 @@ public class CopyServiceImpl implements ICopyService {
 			throw new ConnectException("Wrong status code. Recieved was: " + statusCode);
 		}
 		// TODO implement printing here
+	}
 
+	@Override
+	public void doInventory(final Collection<Copy> copies) throws ConnectException {
+		final Map<String, String> param = new HashMap<String, String>();
+		int statusCode = -1;
+		for (final Copy copy : copies) {
+			param.put("barcode", copy.getBarcode());
+			param.put("condition", copy.getCondition());
+			final HttpResponse resp = ServerConnection.getInstance().request("/stock/physicalInventory", "GET", param,
+					null);
+			if (resp.getStatus() != HttpServletResponse.SC_OK) {
+				// if we get any other code than 200 we override previous, but
+				// we continue with other copies
+				statusCode = resp.getStatus();
+			}
+		}
+		// if we got an error we throw an exception
+		if (statusCode > 0) {
+			throw new ConnectException("Wrong status code. Recieved was: " + statusCode);
+		}
 	}
 
 	@Override

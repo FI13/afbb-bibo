@@ -173,4 +173,10 @@ public class CopyStubService implements ICopyService {
 		// nothing to do in stub service
 	}
 
+	@Override
+	public void doInventory(final Collection<Copy> copies) throws ConnectException {
+		// TODO Auto-generated method stub
+
+	}
+
 }
