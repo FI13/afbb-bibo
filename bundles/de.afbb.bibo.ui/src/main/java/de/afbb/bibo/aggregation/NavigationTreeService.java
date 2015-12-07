@@ -24,10 +24,6 @@ import de.afbb.bibo.share.model.NavigationTreeNodeType;
 
 public class NavigationTreeService implements EventListener {
 
-	private static final String SUM = "∑";//$NON-NLS-1$
-	private static final String UP = "↑";//$NON-NLS-1$
-	private static final String MEDIA_INFORMATION = " [" + SUM + ":%d, " + UP + "%d]";//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
 	private final IBorrowerService borrowerService = ServiceLocator.getInstance().getBorrowerService();
 	private final IMediumService mediumService = ServiceLocator.getInstance().getMediumService();
 	private final IAggregationService aggregationService = ServiceLocator.getInstance().getAggregationService();
@@ -52,7 +48,7 @@ public class NavigationTreeService implements EventListener {
 
 	public void reloadCopies() throws ConnectException {
 		mediaRoot = new NavigationTreeViewNode("Medien", null, NavigationTreeNodeType.MEDIA);
-		loadCopies(mediaRoot);
+		loadMedia(mediaRoot);
 		setInput();
 	}
 
@@ -63,8 +59,7 @@ public class NavigationTreeService implements EventListener {
 		return root;
 	}
 
-	private void loadCopies(final NavigationTreeViewNode root) throws ConnectException {
-		mediaRoot.setInformation(null);
+	private void loadMedia(final NavigationTreeViewNode root) throws ConnectException {
 		final Collection<Medium> media = mediumService.list();
 		final Iterator<Medium> mediaIterator = media.iterator();
 		while (mediaIterator.hasNext()) {
@@ -89,7 +84,6 @@ public class NavigationTreeService implements EventListener {
 	}
 
 	private void loadBorrowers(final NavigationTreeViewNode root) throws ConnectException {
-		borrowersRoot.setInformation(null);
 		final HashMap<String, NavigationTreeViewNode> groups = new HashMap<String, NavigationTreeViewNode>();
 
 		final Iterator<Borrower> borrowerIterator = borrowerService.listAll().iterator();
@@ -102,7 +96,6 @@ public class NavigationTreeService implements EventListener {
 				personsNode = groups.get(borrower.getInfo());
 			} else {
 				personsNode = new NavigationTreeViewNode(borrower.getInfo(), null, NavigationTreeNodeType.PERSONS);
-				personsNode.setInformation(null);
 				groups.put(borrower.getInfo(), personsNode);
 			}
 
