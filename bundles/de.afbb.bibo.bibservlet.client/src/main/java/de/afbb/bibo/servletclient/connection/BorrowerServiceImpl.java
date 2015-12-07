@@ -56,6 +56,9 @@ public class BorrowerServiceImpl implements IBorrowerService {
 
 	@Override
 	public Borrower get(final Integer id) throws ConnectException {
+		if (id == null || id < 1) {
+			return null;
+		}
 		synchronized (cache) {
 			if (cache.containsKey(id)) {
 				return cache.get(id);
