@@ -39,6 +39,7 @@ import de.afbb.bibo.share.model.MediumType;
  */
 public class DBConnector {
 
+	private static final String NEW = "Neu";
 	private static DBConnector INSTANCE;
 	private static final org.slf4j.Logger log = LoggerFactory.getLogger(DBConnector.class);
 
@@ -320,7 +321,7 @@ public class DBConnector {
 				statement.setString(1, copy.getEdition());
 				statement.setString(2, copy.getBarcode());
 				statement.setDate(3, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-				statement.setString(4, "neu");
+				statement.setString(4, NEW);
 				statement.setInt(5, groupId);
 				statement.setInt(6, copy.getMedium().getMediumId());
 				statement.execute();
@@ -339,7 +340,7 @@ public class DBConnector {
 				statement.setString(1, copy.getEdition());
 				statement.setString(2, copy.getBarcode());
 				statement.setDate(3, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-				statement.setString(4, "neu");
+				statement.setString(4, NEW);
 				statement.setInt(5, copy.getMedium().getMediumId());
 				statement.execute();
 			}

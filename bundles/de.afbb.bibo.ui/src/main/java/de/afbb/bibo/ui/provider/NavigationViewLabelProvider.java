@@ -2,11 +2,10 @@ package de.afbb.bibo.ui.provider;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 import de.afbb.bibo.aggregation.NavigationTreeViewNode;
 import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.ui.BiboImageRegistry;
 import de.afbb.bibo.ui.IconSize;
 
@@ -33,25 +32,27 @@ public class NavigationViewLabelProvider extends ColumnLabelProvider {
 
 	@Override
 	public Image getImage(final Object obj) {
-		if (obj instanceof NavigationTreeViewNode && ((NavigationTreeViewNode) obj).hasType()) {
-			switch (((NavigationTreeViewNode) obj).getType()) {
-			case BOOK:
-				return BiboImageRegistry.getImage(IconType.BOOK, IconSize.small);
-			case BOOKS:
-				return BiboImageRegistry.getImage(IconType.BOOK_GROUP, IconSize.small);
-			case PERSON:
-				return BiboImageRegistry.getImage(IconType.PUPIL, IconSize.small);
-			case PERSONS:
-				return BiboImageRegistry.getImage(IconType.USER, IconSize.small);
-			case ROOT:
-				return BiboImageRegistry.getImage(IconType.USER, IconSize.small);
-			default:
-				throw new IllegalStateException("Illegal NavigationTreeViewNode State");
+		if (obj instanceof NavigationTreeViewNode) {
+			final NavigationTreeViewNode node = (NavigationTreeViewNode) obj;
+			if (node.hasType()) {
+				switch (node.getType()) {
+				case MEDIUM:
+					if (node.getValue() instanceof Medium) {
+						return BiboImageRegistry.getImage(((Medium) node.getValue()).getType().getIcon(),
+								IconSize.small);
+					}
+				case MEDIA:
+					return BiboImageRegistry.getImage(IconType.BOOK_GROUP, IconSize.small);
+				case PERSON:
+					return BiboImageRegistry.getImage(IconType.PUPIL, IconSize.small);
+				case PERSONS:
+					return BiboImageRegistry.getImage(IconType.USER, IconSize.small);
+				case ROOT:
+					return BiboImageRegistry.getImage(IconType.USER, IconSize.small);
+				}
 			}
-
-		} else {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
 		}
+		return null;
 	}
 
 	@Override

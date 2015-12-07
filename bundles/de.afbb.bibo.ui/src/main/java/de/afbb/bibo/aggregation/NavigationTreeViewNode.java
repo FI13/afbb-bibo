@@ -40,7 +40,7 @@ public class NavigationTreeViewNode extends TreeNode implements IAggregatorTarge
 			final String info0 = information[0];
 			// don't show information text when nothing interesting is there
 			if (!"0".equals(info0)) {//$NON-NLS-1$
-				if (NavigationTreeNodeType.BOOK.equals(type)) {
+				if (NavigationTreeNodeType.MEDIUM.equals(type)) {
 					return String.format("[∑:%s, ↑:%s]", info0, information[1]);//$NON-NLS-1$
 				} else if (NavigationTreeNodeType.PERSON.equals(type)) {
 					return String.format("[↑:%s]", info0);//$NON-NLS-1$
@@ -54,7 +54,7 @@ public class NavigationTreeViewNode extends TreeNode implements IAggregatorTarge
 		final StringBuilder tooltip = new StringBuilder(title);
 		if (information != null) {
 			tooltip.append(NEW_LINE);
-			if (NavigationTreeNodeType.BOOK.equals(type)) {
+			if (NavigationTreeNodeType.MEDIUM.equals(type)) {
 				tooltip.append("Gesamt: ");
 				tooltip.append(information[0]);
 				tooltip.append(NEW_LINE);
