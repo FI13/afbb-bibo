@@ -269,6 +269,19 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		}
 	};
 
+	FocusListener updateToListButtonListener = new FocusListener() {
+
+		@Override
+		public void focusLost(final FocusEvent e) {
+			updateToListButton();
+		}
+
+		@Override
+		public void focusGained(final FocusEvent e) {
+			// nothing to do
+		}
+	};
+
 	@Override
 	public Composite initUi(final Composite parent) {
 		final Composite content = toolkit.createComposite(parent, SWT.NONE);
@@ -312,6 +325,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		mediumGroup.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(mediumGroup, Messages.TITLE);
 		txtTitle = toolkit.createText(mediumGroup, EMPTY_STRING);
+		txtTitle.addFocusListener(updateToListButtonListener);
 		toolkit.createLabel(mediumGroup, Messages.AUTHOR);
 		txtAuthor = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, Messages.LANGUAGE);
@@ -320,6 +334,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		txtPublisher = toolkit.createText(mediumGroup, EMPTY_STRING);
 		toolkit.createLabel(mediumGroup, "Typ");
 		comboMediumType = toolkit.createCombo(mediumGroup);
+		comboMediumType.addFocusListener(updateToListButtonListener);
 
 		final Group conditionGroup = toolkit.createGroup(content, "Zustand");
 		conditionGroup.setLayout(new GridLayout(1, false));
@@ -393,6 +408,11 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		btnGroup.setEnabled(false);
 		btnUngroup.setEnabled(false);
 		updateSaveButton();
+
+		// add required decorations
+		BindingHelper.createRequiredControlDecoration(txtBarcode);
+		BindingHelper.createRequiredControlDecoration(txtTitle);
+		BindingHelper.createRequiredControlDecoration(comboMediumType);
 
 		return content;
 	}
@@ -477,7 +497,9 @@ public class RegisterCopyView extends AbstractView<Copy> {
 	}
 
 	private void updateToListButton() {
-		btnToList.setEnabled(!txtBarcode.getText().isEmpty());
+		btnToList.setEnabled(input != null && input.getMedium() != null && !input.getBarcode().isEmpty()
+				&& !input.getMedium().getTitle().isEmpty() && input.getMedium().getType() != null
+				&& !input.getMedium().getType().getName().isEmpty());
 	}
 
 	private void updateSaveButton() {
