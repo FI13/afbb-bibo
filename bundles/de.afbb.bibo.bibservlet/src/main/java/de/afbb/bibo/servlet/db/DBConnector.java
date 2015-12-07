@@ -612,4 +612,13 @@ public class DBConnector {
 		}
 		return result;
 	}
+
+	public void doInventory(final String barcode, final String condition)
+			throws SQLException, NumberFormatException, IOException {
+		final String sql = "update " + Config.getInstance().getDATABASE_NAME() + ".exemplar set " + "Zustand='"
+				+ condition + "', Inventarisiert=NOW()" + " where Barcode='" + barcode + "'";
+		try (Statement st = connect.createStatement()) {
+			st.execute(sql);
+		}
+	}
 }

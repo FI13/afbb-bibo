@@ -87,6 +87,15 @@
             name="Anzeigen Medium"
             restorable="false">
       </view>
+      <view
+            allowMultiple="false"
+            category="de.afbb.bibo.ui.category.main"
+            class="de.afbb.bibo.ui.view.InventoryView"
+            icon="icons/16x16logo.png"
+            id="de.afbb.bibo.ui.inventory"
+            name="Inventur"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -285,6 +294,15 @@
                style="push">
          </command>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:de.afbb.bibo.ui.inventory">
+         <command
+               commandId="org.eclipse.ui.file.save"
+               icon="icons/16x16Save.png"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -349,6 +367,10 @@
                </and>
             </iterate>
          </activeWhen>
+      </handler>
+      <handler
+            class="de.afbb.bibo.ui.handler.InventoryHandler"
+            commandId="de.afbb.bibo.ui.inventory">
       </handler>
    </extension>
    <extension

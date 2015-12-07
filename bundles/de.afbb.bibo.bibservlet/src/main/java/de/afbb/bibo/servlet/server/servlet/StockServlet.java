@@ -82,6 +82,9 @@ public class StockServlet {
 		case "/getMediumInformation":
 			aggregateCopiesInformationByMedium();
 			break;
+		case "/physicalInventory":
+			doInventory();
+			break;
 		default:
 			Utils.returnErrorMessage(StockServlet.class, request, response);
 			break;
@@ -231,6 +234,13 @@ public class StockServlet {
 		final Integer id = Integer.valueOf(request.getParameter("id"));
 		response.getWriter().println(DBConnector.getInstance().countCopiesByMedium(id));
 		response.getWriter().println(DBConnector.getInstance().countLendCopiesByMedium(id));
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void doInventory() throws NumberFormatException, SQLException, IOException {
+		final String barcode = request.getParameter("barcode");
+		final String condition = request.getParameter("condition");
+		DBConnector.getInstance().doInventory(barcode, condition);
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 

@@ -77,6 +77,15 @@ public interface ICopyService extends EventChangeProvider {
 	void lendCopies(Collection<Copy> copies, boolean printList) throws ConnectException;
 
 	/**
+	 * updates inventory date and condition of copies
+	 *
+	 * @param copies
+	 *            collection of copies.
+	 * @throws ConnectException
+	 */
+	void doInventory(Collection<Copy> copies) throws ConnectException;
+
+	/**
 	 * gets a list of all copies of all mediums
 	 *
 	 * @return
