@@ -7,6 +7,7 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
@@ -39,6 +40,7 @@ public class NavigationView extends ViewPart {
 					CommandExecutor.executeCommand(ICommandIds.CMD_MANAGE_BORROWER_MEDIUM);
 				}
 			});
+			viewer.setSorter(new ViewerSorter());
 			viewer.setAutoExpandLevel(2);
 			navigationTree = new NavigationTreeService(viewer);
 			viewer.setInput(navigationTree.getRoot());
