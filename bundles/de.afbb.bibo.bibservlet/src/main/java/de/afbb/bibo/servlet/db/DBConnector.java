@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -313,18 +312,22 @@ public class DBConnector {
 		final int groupId = createGroup();
 		log.debug("create new group of copies: " + Arrays.toString(copies));
 		log.debug("created new group for media. groupId: " + groupId);
-		for (final Copy copy : copies) {
-			final String sql = "insert into " + Config.getInstance().getDATABASE_NAME()
-					+ ".exemplar (Edition, Barcode, Inventarisiert, Zustand, GruppenId, MedienId) values (?, ?, ?, ?, ?, ?)";
-
-			try (PreparedStatement statement = connect.prepareStatement(sql)) {
+		final String sql = "insert into " + Config.getInstance().getDATABASE_NAME()
+				+ ".exemplar (Edition, Barcode, Inventarisiert, Zustand, GruppenId, MedienId) values (?, ?, NOW(), ?, ?, ?)";
+		try (PreparedStatement statement = connect.prepareStatement(sql)) {
+			int i = 0;
+			for (final Copy copy : copies) {
 				statement.setString(1, copy.getEdition());
 				statement.setString(2, copy.getBarcode());
-				statement.setDate(3, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-				statement.setString(4, NEW);
-				statement.setInt(5, groupId);
-				statement.setInt(6, copy.getMedium().getMediumId());
-				statement.execute();
+				statement.setString(3, NEW);
+				statement.setInt(4, groupId);
+				statement.setInt(5, copy.getMedium().getMediumId());
+				statement.addBatch();
+				i++;
+				// Execute every 100 items.
+				if (i % 100 == 0 || i == copies.length) {
+					statement.executeBatch();
+				}
 			}
 		}
 		return groupId;
@@ -332,17 +335,21 @@ public class DBConnector {
 
 	public void createCopies(final Copy[] copies) throws SQLException, NumberFormatException, IOException {
 		log.debug("create new copies: " + Arrays.toString(copies));
-		for (final Copy copy : copies) {
-			final String sql = "insert into " + Config.getInstance().getDATABASE_NAME()
-					+ ".exemplar (Edition, Barcode, Inventarisiert, Zustand, MedienId) values (?, ?, ?, ?, ?)";
-
-			try (PreparedStatement statement = connect.prepareStatement(sql)) {
+		final String sql = "insert into " + Config.getInstance().getDATABASE_NAME()
+				+ ".exemplar (Edition, Barcode, Inventarisiert, Zustand, MedienId) values (?, ?, NOW(), ?, ?)";
+		try (final PreparedStatement statement = connect.prepareStatement(sql)) {
+			int i = 0;
+			for (final Copy copy : copies) {
 				statement.setString(1, copy.getEdition());
 				statement.setString(2, copy.getBarcode());
-				statement.setDate(3, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-				statement.setString(4, NEW);
-				statement.setInt(5, copy.getMedium().getMediumId());
-				statement.execute();
+				statement.setString(3, NEW);
+				statement.setInt(4, copy.getMedium().getMediumId());
+				statement.addBatch();
+				i++;
+				// Execute every 1000 items.
+				if (i % 1000 == 0 || i == copies.length) {
+					statement.executeBatch();
+				}
 			}
 		}
 	}
