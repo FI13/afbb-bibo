@@ -16,9 +16,9 @@ public class NavigationSelectionTester extends PropertyTester {
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
 		if (receiver instanceof NavigationTreeViewNode) {
 			switch (((NavigationTreeViewNode) receiver).getType()) {
-			case BOOK:
+			case MEDIUM:
 				return "BOOK".equals(property);//$NON-NLS-1$
-			case BOOKS:
+			case MEDIA:
 				return "BOOKS".equals(property);//$NON-NLS-1$
 			case PERSON:
 				return "PERSON".equals(property);//$NON-NLS-1$

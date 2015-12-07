@@ -1,5 +1,5 @@
 package de.afbb.bibo.share.model;
 
 public enum NavigationTreeNodeType {
-	PERSONS, PERSON, BOOKS, BOOK, ROOT
+	PERSONS, PERSON, MEDIA, MEDIUM, ROOT
 }

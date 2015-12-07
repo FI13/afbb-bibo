@@ -35,9 +35,9 @@ public class NavigationViewLabelProvider extends ColumnLabelProvider {
 	public Image getImage(final Object obj) {
 		if (obj instanceof NavigationTreeViewNode && ((NavigationTreeViewNode) obj).hasType()) {
 			switch (((NavigationTreeViewNode) obj).getType()) {
-			case BOOK:
+			case MEDIUM:
 				return BiboImageRegistry.getImage(IconType.BOOK, IconSize.small);
-			case BOOKS:
+			case MEDIA:
 				return BiboImageRegistry.getImage(IconType.BOOK_GROUP, IconSize.small);
 			case PERSON:
 				return BiboImageRegistry.getImage(IconType.PUPIL, IconSize.small);

@@ -116,7 +116,7 @@ public class CopyServiceImpl implements ICopyService {
 				statusCode = resp.getStatus();
 			}
 		}
-		notifyListener(NavigationTreeNodeType.BOOKS);
+		notifyListener(NavigationTreeNodeType.MEDIA);
 		// if we got an error we throw an exception
 		if (statusCode > 0) {
 			throw new ConnectException("Wrong status code. Recieved was: " + statusCode);
