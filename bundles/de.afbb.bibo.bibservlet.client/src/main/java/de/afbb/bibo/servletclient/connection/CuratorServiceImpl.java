@@ -40,6 +40,9 @@ public class CuratorServiceImpl implements ICuratorService {
 
 	@Override
 	public Curator get(final Integer id) throws ConnectException {
+		if (id == null || id < 1) {
+			return null;
+		}
 		synchronized (cache) {
 			if (cache.containsKey(id)) {
 				return cache.get(id);
