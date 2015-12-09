@@ -33,7 +33,7 @@ public class TypServiceImpl implements ITypService {
 		final HttpResponse resp = ServerConnection.getInstance().request("/stock/addMediaType", "POST", null,
 				gson.toJson(type));
 		if (resp.getStatus() != HttpServletResponse.SC_OK) {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 	}
 
@@ -55,7 +55,7 @@ public class TypServiceImpl implements ITypService {
 			}
 			return result;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 	}
 
@@ -79,7 +79,7 @@ public class TypServiceImpl implements ITypService {
 			}
 			return type;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 	}
 

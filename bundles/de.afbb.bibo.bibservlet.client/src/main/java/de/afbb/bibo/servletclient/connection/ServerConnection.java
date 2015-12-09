@@ -142,7 +142,7 @@ public class ServerConnection {
 		} else if (resp.getStatus() == HttpServletResponse.SC_UNAUTHORIZED) {
 			return false;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 	}
 
@@ -157,7 +157,7 @@ public class ServerConnection {
 			params.put("sessionId", sessionToken);
 			final HttpResponse resp = request("/login/logout", "GET", params, null);
 			if (resp.getStatus() != HttpServletResponse.SC_OK) {
-				throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+				throw Utils.createExceptionForCode(resp.getStatus());
 			} else {
 				isLoggedIn = false;
 				sessionToken = null;

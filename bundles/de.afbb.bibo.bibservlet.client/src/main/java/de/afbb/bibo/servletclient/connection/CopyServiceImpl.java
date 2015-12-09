@@ -37,7 +37,7 @@ public class CopyServiceImpl implements ICopyService {
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
 			return "1".equals(resp.getData());
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 	}
 
@@ -74,7 +74,7 @@ public class CopyServiceImpl implements ICopyService {
 		} else if (resp.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
 			return null;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 	}
 
@@ -233,7 +233,7 @@ public class CopyServiceImpl implements ICopyService {
 			}
 			return result;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 	}
 

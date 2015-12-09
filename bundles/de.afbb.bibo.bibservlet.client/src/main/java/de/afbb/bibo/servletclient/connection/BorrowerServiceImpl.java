@@ -40,7 +40,7 @@ public class BorrowerServiceImpl implements IBorrowerService {
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
 			return "1".equals(resp.getData());
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 	}
 
@@ -49,7 +49,7 @@ public class BorrowerServiceImpl implements IBorrowerService {
 		final HttpResponse resp = ServerConnection.getInstance().request("/user/newBorrower", "POST", null,
 				Utils.gson.toJson(borrower));
 		if (resp.getStatus() != HttpServletResponse.SC_OK) {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 		notifyListener(NavigationTreeNodeType.PERSONS);
 	}
@@ -76,7 +76,7 @@ public class BorrowerServiceImpl implements IBorrowerService {
 		} else if (resp.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
 			return null;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 	}
 
@@ -90,7 +90,7 @@ public class BorrowerServiceImpl implements IBorrowerService {
 		final HttpResponse resp = ServerConnection.getInstance().request("/user/updateBorrower", "POST", null,
 				gsonBuilder.create().toJson(borrower));
 		if (resp.getStatus() != HttpServletResponse.SC_OK) {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 		notifyListener(NavigationTreeNodeType.PERSONS);
 
@@ -114,7 +114,7 @@ public class BorrowerServiceImpl implements IBorrowerService {
 			}
 			return result;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 	}
 

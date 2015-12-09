@@ -63,7 +63,7 @@ public class MediumServiceImpl implements IMediumService {
 		} else if (resp.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
 			return null;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 	}
 
@@ -92,7 +92,7 @@ public class MediumServiceImpl implements IMediumService {
 			}
 			return result;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 	}
 

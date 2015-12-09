@@ -40,7 +40,7 @@ public class LoginServiceImpl implements ILoginService {
 		} else if (resp.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
 			return null;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			throw Utils.createExceptionForCode(resp.getStatus());
 		}
 	}
 
