@@ -6,6 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Export-Package: de.afbb.bibo.servletclient
 Import-Package: com.google.gson,
  de.afbb.bibo.crypto,
+ de.afbb.bibo.exception,
  de.afbb.bibo.properties,
  de.afbb.bibo.share,
  de.afbb.bibo.share.beans,

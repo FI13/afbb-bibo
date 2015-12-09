@@ -2,9 +2,12 @@ package de.afbb.bibo.servletclient.connection;
 
 import java.net.ConnectException;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import de.afbb.bibo.exception.InvalidSessionException;
 import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 
 /**
@@ -27,6 +30,9 @@ final class Utils {
 	 * @throws ConnectException
 	 */
 	public static ConnectException createExceptionForCode(final int code) {
+		if (HttpServletResponse.SC_UNAUTHORIZED == code) {
+			return new InvalidSessionException();
+		}
 		return new ConnectException("Wrong status code. Recieved was: " + code);
 	}
 
