@@ -1,6 +1,8 @@
 package de.afbb.bibo.servletclient.connection;
 
 import java.net.ConnectException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,6 +19,9 @@ import de.afbb.bibo.share.beans.BeanExclusionStrategy;
  */
 final class Utils {
 
+	// used to only throw exceptions once
+	private static final Set<String> invalidatedSessionTokens = new HashSet<String>();
+
 	private Utils() {
 	}
 
@@ -30,10 +35,34 @@ final class Utils {
 	 * @throws ConnectException
 	 */
 	public static ConnectException createExceptionForCode(final int code) {
+		System.err.println("exception for code: " + code);
 		if (HttpServletResponse.SC_UNAUTHORIZED == code) {
-			return new InvalidSessionException();
+			String sessionToken;
+			try {
+				sessionToken = ServerConnection.getInstance().getSessionToken();
+				if (!isInvalidToken(sessionToken)) {
+					addInvalidSessionToken(sessionToken);
+					return new InvalidSessionException();
+				}
+			} catch (final ConnectException e) {
+				// should never happen at this point...
+			}
+			// don't throw an other exception, just swallow this incident
+			return null;
 		}
 		return new ConnectException("Wrong status code. Recieved was: " + code);
+	}
+
+	private static boolean isInvalidToken(final String token) {
+		synchronized (invalidatedSessionTokens) {
+			return invalidatedSessionTokens.contains(token);
+		}
+	}
+
+	private static void addInvalidSessionToken(final String token) {
+		synchronized (invalidatedSessionTokens) {
+			invalidatedSessionTokens.add(token);
+		}
 	}
 
 }

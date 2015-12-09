@@ -98,7 +98,7 @@ public class ServerConnection {
 		try {
 			final HttpURLConnection connection = (HttpURLConnection) servletURL.openConnection();
 			if (isLoggedIn) {
-				connection.setRequestProperty("sessionId", sessionToken);
+				connection.setRequestProperty("sessionId", getSessionToken());
 			}
 			connection.setRequestMethod(method);
 			connection.setDoOutput(true);
@@ -136,14 +136,16 @@ public class ServerConnection {
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
 			isLoggedIn = true;
 			final String[] split = resp.getData().split("\n");
-			sessionToken = split[0];
+			setSessionToken(split[0]);
 			SessionHolder.getInstance().setCurator(new Gson().fromJson(split[1], Curator.class));
 			return true;
-		} else if (resp.getStatus() == HttpServletResponse.SC_UNAUTHORIZED) {
-			return false;
-		} else {
-			throw Utils.createExceptionForCode(resp.getStatus());
+		} else if (resp.getStatus() != HttpServletResponse.SC_UNAUTHORIZED) {
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
+		return false;
 	}
 
 	/**
@@ -154,14 +156,29 @@ public class ServerConnection {
 	protected void logout() throws ConnectException {
 		if (isLoggedIn) {
 			final Map<String, String> params = new HashMap<String, String>();
-			params.put("sessionId", sessionToken);
+			params.put("sessionId", getSessionToken());
 			final HttpResponse resp = request("/login/logout", "GET", params, null);
 			if (resp.getStatus() != HttpServletResponse.SC_OK) {
-				throw Utils.createExceptionForCode(resp.getStatus());
+				final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+				if (exception != null) {
+					throw exception;
+				}
 			} else {
 				isLoggedIn = false;
-				sessionToken = null;
+				setSessionToken(null);
 			}
+		}
+	}
+
+	String getSessionToken() {
+		synchronized (sessionToken) {
+			return sessionToken;
+		}
+	}
+
+	private void setSessionToken(final String sessionToken) {
+		synchronized (sessionToken) {
+			this.sessionToken = sessionToken;
 		}
 	}
 }

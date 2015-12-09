@@ -37,45 +37,51 @@ public class CopyServiceImpl implements ICopyService {
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
 			return "1".equals(resp.getData());
 		} else {
-			throw Utils.createExceptionForCode(resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
+		return false;
 	}
 
 	@Override
 	public Copy get(final String barcode) throws ConnectException {
+		Copy result = null;
 		final Map<String, String> param = new HashMap<String, String>();
 		param.put("barcode", barcode);
 		final HttpResponse resp = ServerConnection.getInstance().request("/stock/getCopy", "GET", param, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
-			final Copy copy = Utils.gson.fromJson(resp.getData(), Copy.class);
-			if (copy != null) {
+			result = Utils.gson.fromJson(resp.getData(), Copy.class);
+			if (result != null) {
 				// we only get the id for sub-entities filled, so we need to
 				// fetch them separately
-				Borrower borrower = copy.getBorrower();
+				Borrower borrower = result.getBorrower();
 				if (borrower != null) {
-					copy.setBorrower(ServiceLocator.getInstance().getBorrowerService().get(borrower.getId()));
+					result.setBorrower(ServiceLocator.getInstance().getBorrowerService().get(borrower.getId()));
 				}
-				borrower = copy.getLastBorrower();
+				borrower = result.getLastBorrower();
 				if (borrower != null) {
-					copy.setLastBorrower(ServiceLocator.getInstance().getBorrowerService().get(borrower.getId()));
+					result.setLastBorrower(ServiceLocator.getInstance().getBorrowerService().get(borrower.getId()));
 				}
-				Curator curator = copy.getCurator();
+				Curator curator = result.getCurator();
 				if (curator != null) {
-					copy.setCurator(ServiceLocator.getInstance().getCuratorService().get(curator.getId()));
+					result.setCurator(ServiceLocator.getInstance().getCuratorService().get(curator.getId()));
 				}
-				curator = copy.getLastCurator();
+				curator = result.getLastCurator();
 				if (curator != null) {
-					copy.setLastCurator(ServiceLocator.getInstance().getCuratorService().get(curator.getId()));
+					result.setLastCurator(ServiceLocator.getInstance().getCuratorService().get(curator.getId()));
 				}
-				copy.getMedium()
-						.setType(ServiceLocator.getInstance().getTypService().get(copy.getMedium().getType().getId()));
+				result.getMedium().setType(
+						ServiceLocator.getInstance().getTypService().get(result.getMedium().getType().getId()));
 			}
-			return copy;
 		} else if (resp.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
-			return null;
-		} else {
-			throw Utils.createExceptionForCode(resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
+		return result;
 	}
 
 	@Override
@@ -119,7 +125,10 @@ public class CopyServiceImpl implements ICopyService {
 		notifyListener(NavigationTreeNodeType.MEDIA);
 		// if we got an error we throw an exception
 		if (statusCode > 0) {
-			throw new ConnectException("Wrong status code. Recieved was: " + statusCode);
+			final ConnectException exception = Utils.createExceptionForCode(statusCode);
+			if (exception != null) {
+				throw exception;
+			}
 		}
 
 	}
@@ -140,7 +149,10 @@ public class CopyServiceImpl implements ICopyService {
 		notifyListener(NavigationTreeNodeType.ROOT);
 		// if we got an error we throw an exception
 		if (statusCode > 0) {
-			throw new ConnectException("Wrong status code. Recieved was: " + statusCode);
+			final ConnectException exception = Utils.createExceptionForCode(statusCode);
+			if (exception != null) {
+				throw exception;
+			}
 		}
 
 	}
@@ -163,7 +175,10 @@ public class CopyServiceImpl implements ICopyService {
 		notifyListener(NavigationTreeNodeType.ROOT);
 		// if we got an error we throw an exception
 		if (statusCode > 0) {
-			throw new ConnectException("Wrong status code. Recieved was: " + statusCode);
+			final ConnectException exception = Utils.createExceptionForCode(statusCode);
+			if (exception != null) {
+				throw exception;
+			}
 		}
 		// TODO implement printing here
 	}
@@ -185,7 +200,10 @@ public class CopyServiceImpl implements ICopyService {
 		}
 		// if we got an error we throw an exception
 		if (statusCode > 0) {
-			throw new ConnectException("Wrong status code. Recieved was: " + statusCode);
+			final ConnectException exception = Utils.createExceptionForCode(statusCode);
+			if (exception != null) {
+				throw exception;
+			}
 		}
 	}
 
@@ -197,11 +215,11 @@ public class CopyServiceImpl implements ICopyService {
 
 	@Override
 	public Collection<Copy> listCopies(final Medium medium) throws ConnectException {
+		final Collection<Copy> result = new HashSet<Copy>();
 		final Map<String, String> param = new HashMap<String, String>();
 		param.put("id", medium.getMediumId().toString());
 		final HttpResponse resp = ServerConnection.getInstance().request("/stock/listCopies", "GET", param, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
-			final Collection<Copy> result = new HashSet<>();
 			final String[] data = resp.getData().split("\n");
 			for (int i = 0; i < data.length; i++) {
 				final Copy copy = Utils.gson.fromJson(data[i], Copy.class);
@@ -231,10 +249,13 @@ public class CopyServiceImpl implements ICopyService {
 					result.add(copy);
 				}
 			}
-			return result;
 		} else {
-			throw Utils.createExceptionForCode(resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
+		return result;
 	}
 
 	@Override
