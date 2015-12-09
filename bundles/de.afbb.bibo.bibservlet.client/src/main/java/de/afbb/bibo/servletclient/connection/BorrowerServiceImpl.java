@@ -33,15 +33,20 @@ public class BorrowerServiceImpl implements IBorrowerService {
 
 	@Override
 	public boolean exists(final String firstName, final String surname) throws ConnectException {
+		boolean exists = false;
 		final Map<String, String> param = new HashMap<String, String>();
 		param.put("forename", firstName);
 		param.put("surname", surname);
 		final HttpResponse resp = ServerConnection.getInstance().request("/user/borrowerExists", "GET", param, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
-			return "1".equals(resp.getData());
+			exists = "1".equals(resp.getData());
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
+		return exists;
 	}
 
 	@Override
@@ -49,7 +54,10 @@ public class BorrowerServiceImpl implements IBorrowerService {
 		final HttpResponse resp = ServerConnection.getInstance().request("/user/newBorrower", "POST", null,
 				Utils.gson.toJson(borrower));
 		if (resp.getStatus() != HttpServletResponse.SC_OK) {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
 		notifyListener(NavigationTreeNodeType.PERSONS);
 	}
@@ -64,20 +72,22 @@ public class BorrowerServiceImpl implements IBorrowerService {
 				return cache.get(id);
 			}
 		}
+		Borrower result = null;
 		final Map<String, String> param = new HashMap<String, String>();
 		param.put("id", id.toString());
 		final HttpResponse resp = ServerConnection.getInstance().request("/user/getBorrower", "GET", param, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
-			final Borrower borrower = Utils.gson.fromJson(resp.getData(), Borrower.class);
+			result = Utils.gson.fromJson(resp.getData(), Borrower.class);
 			synchronized (cache) {
-				cache.put(borrower.getId(), borrower);
+				cache.put(result.getId(), result);
 			}
-			return borrower;
-		} else if (resp.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
-			return null;
-		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+		} else if (resp.getStatus() != HttpServletResponse.SC_NOT_FOUND) {
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
+		return result;
 	}
 
 	@Override
@@ -90,7 +100,10 @@ public class BorrowerServiceImpl implements IBorrowerService {
 		final HttpResponse resp = ServerConnection.getInstance().request("/user/updateBorrower", "POST", null,
 				gsonBuilder.create().toJson(borrower));
 		if (resp.getStatus() != HttpServletResponse.SC_OK) {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
 		notifyListener(NavigationTreeNodeType.PERSONS);
 
@@ -98,9 +111,9 @@ public class BorrowerServiceImpl implements IBorrowerService {
 
 	@Override
 	public Collection<Borrower> listAll() throws ConnectException {
+		final Collection<Borrower> result = new HashSet<>();
 		final HttpResponse resp = ServerConnection.getInstance().request("/user/getBorrowers", "GET", null, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
-			final Collection<Borrower> result = new HashSet<>();
 			final String[] data = resp.getData().split("\n");
 			synchronized (cache) {
 				cache.clear();
@@ -112,10 +125,13 @@ public class BorrowerServiceImpl implements IBorrowerService {
 					}
 				}
 			}
-			return result;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
+		return result;
 	}
 
 	@Override
@@ -126,11 +142,11 @@ public class BorrowerServiceImpl implements IBorrowerService {
 
 	@Override
 	public Collection<Copy> listLent(final Borrower b) throws ConnectException {
+		final Collection<Copy> result = new HashSet<>();
 		final Map<String, String> param = new HashMap<String, String>();
 		param.put("id", b.getId().toString());
 		final HttpResponse resp = ServerConnection.getInstance().request("/stock/listLendCopies", "GET", param, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
-			final Collection<Copy> result = new HashSet<>();
 			final String[] data = resp.getData().split("\n");
 			for (int i = 0; i < data.length; i++) {
 				final Copy copy = Utils.gson.fromJson(data[i], Copy.class);
@@ -158,9 +174,13 @@ public class BorrowerServiceImpl implements IBorrowerService {
 					result.add(copy);
 				}
 			}
-			return result;
+		} else {
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
-		return null;
+		return result;
 	}
 
 	@Override

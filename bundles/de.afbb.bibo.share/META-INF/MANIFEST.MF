@@ -7,6 +7,7 @@ Import-Package: com.google.gson,
  org.apache.commons.codec.digest,
  org.eclipse.jface.viewers
 Export-Package: de.afbb.bibo.crypto,
+ de.afbb.bibo.exception,
  de.afbb.bibo.properties,
  de.afbb.bibo.share,
  de.afbb.bibo.share.beans,

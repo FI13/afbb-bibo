@@ -49,22 +49,24 @@ public class MediumServiceImpl implements IMediumService {
 
 	@Override
 	public Medium getMedium(final String isbn) throws ConnectException {
+		Medium result = null;
 		final Map<String, String> param = new HashMap<String, String>();
 		param.put("ISBN", isbn);
 		final HttpResponse resp = ServerConnection.getInstance().request("/stock/getMedium", "GET", param, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
-			final Medium medium = gson.fromJson(resp.getData(), Medium.class);
-			if (medium != null) {
+			result = gson.fromJson(resp.getData(), Medium.class);
+			if (result != null) {
 				// we only get the id for type filled, so we need to fetch type
 				// separately
-				medium.setType(ServiceLocator.getInstance().getTypService().get(medium.getType().getId()));
+				result.setType(ServiceLocator.getInstance().getTypService().get(result.getType().getId()));
 			}
-			return medium;
-		} else if (resp.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
-			return null;
-		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+		} else if (resp.getStatus() != HttpServletResponse.SC_NOT_FOUND) {
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
+		return result;
 	}
 
 	@Override
@@ -76,9 +78,9 @@ public class MediumServiceImpl implements IMediumService {
 
 	@Override
 	public Collection<Medium> list() throws ConnectException {
+		final Collection<Medium> result = new HashSet<>();
 		final HttpResponse resp = ServerConnection.getInstance().request("/stock/listMedia", "GET", null, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
-			final Collection<Medium> result = new HashSet<>();
 			final String[] data = resp.getData().split("\n");
 			for (int i = 0; i < data.length; i++) {
 				final Medium medium = gson.fromJson(data[i], Medium.class);
@@ -90,10 +92,13 @@ public class MediumServiceImpl implements IMediumService {
 					result.add(medium);
 				}
 			}
-			return result;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
+		return result;
 	}
 
 	@Override

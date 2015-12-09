@@ -64,7 +64,9 @@ public class MediumView extends AbstractView<Medium> {
 
 	@Override
 	public void setFocus() {
-		informationForm.setFocus();
+		if (informationForm != null && !informationForm.isDisposed()) {
+			informationForm.setFocus();
+		}
 	}
 
 	@Override

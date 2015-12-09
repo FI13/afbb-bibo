@@ -28,6 +28,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.PlatformUI;
@@ -35,8 +36,10 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.ViewPart;
 
 import de.afbb.bibo.databinding.BindingHelper;
+import de.afbb.bibo.exception.InvalidSessionException;
 import de.afbb.bibo.ui.BiboFormToolkit;
 import de.afbb.bibo.ui.Messages;
+import de.afbb.bibo.ui.dialog.LoginDialog;
 
 abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, ISaveablePart {
 
@@ -243,15 +246,20 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 
 			@Override
 			public void run() {
-				// TODO handle invalidated session differently
-				final StringBuilder msg = new StringBuilder(Messages.MESSAGE_ERROR_CONNECTION);
-				if (getSite().getPage().isPartVisible(AbstractView.this)) {
-					msg.append(Messages.NEW_LINE);
-					msg.append(Messages.MESSAGE_VIEW_CLOSE);
-				}
-				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-						Messages.MESSAGE_ERROR, msg.toString());
 				closeView();
+				final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+				if (e instanceof InvalidSessionException) {
+					MessageDialog.openError(shell, Messages.MESSAGE_ERROR,
+							"Ihre Sitzung ist abgelaufen, sie müssen sich neu anmelden.");
+					new LoginDialog(shell).open();
+				} else {
+					final StringBuilder msg = new StringBuilder(Messages.MESSAGE_ERROR_CONNECTION);
+					if (getSite().getPage().isPartVisible(AbstractView.this)) {
+						msg.append(Messages.NEW_LINE);
+						msg.append(Messages.MESSAGE_VIEW_CLOSE);
+					}
+					MessageDialog.openError(shell, Messages.MESSAGE_ERROR, msg.toString());
+				}
 			}
 		});
 	}

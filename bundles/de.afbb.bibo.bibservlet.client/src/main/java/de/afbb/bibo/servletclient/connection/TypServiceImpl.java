@@ -33,15 +33,18 @@ public class TypServiceImpl implements ITypService {
 		final HttpResponse resp = ServerConnection.getInstance().request("/stock/addMediaType", "POST", null,
 				gson.toJson(type));
 		if (resp.getStatus() != HttpServletResponse.SC_OK) {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
 	}
 
 	@Override
 	public Collection<MediumType> list() throws ConnectException {
+		final Collection<MediumType> result = new HashSet<>();
 		final HttpResponse resp = ServerConnection.getInstance().request("/stock/listMediaTypes", "GET", null, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
-			final Collection<MediumType> result = new HashSet<>();
 			synchronized (cache) {
 				cache.clear();
 				final String[] data = resp.getData().split("\n");
@@ -53,10 +56,13 @@ public class TypServiceImpl implements ITypService {
 					}
 				}
 			}
-			return result;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
+		return result;
 	}
 
 	@Override
@@ -69,18 +75,22 @@ public class TypServiceImpl implements ITypService {
 				return cache.get(id);
 			}
 		}
+		MediumType type = null;
 		final Map<String, String> param = new HashMap<String, String>();
 		param.put("id", id.toString());
 		final HttpResponse resp = ServerConnection.getInstance().request("/stock/getMediaType", "GET", param, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
-			final MediumType type = gson.fromJson(resp.getData(), MediumType.class);
+			type = gson.fromJson(resp.getData(), MediumType.class);
 			synchronized (cache) {
 				cache.put(type.getId(), type);
 			}
-			return type;
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
+		return type;
 	}
 
 }

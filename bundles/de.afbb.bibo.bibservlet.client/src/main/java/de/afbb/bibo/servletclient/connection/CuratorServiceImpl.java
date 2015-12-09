@@ -34,8 +34,12 @@ public class CuratorServiceImpl implements ICuratorService {
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
 			return "1".equals(resp.getData());
 		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
+		return false;
 	}
 
 	@Override
@@ -48,20 +52,22 @@ public class CuratorServiceImpl implements ICuratorService {
 				return cache.get(id);
 			}
 		}
+		Curator result = null;
 		final HashMap<String, String> params = new HashMap<String, String>();
 		params.put("id", id.toString());
 		final HttpResponse resp = ServerConnection.getInstance().request("/user/getCurator", "GET", params, null);
 		if (resp.getStatus() == HttpServletResponse.SC_OK) {
-			final Curator curator = Utils.gson.fromJson(resp.getData(), Curator.class);
+			result = Utils.gson.fromJson(resp.getData(), Curator.class);
 			synchronized (cache) {
-				cache.put(id, curator);
+				cache.put(id, result);
 			}
-			return curator;
-		} else if (resp.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
-			return null;
-		} else {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+		} else if (resp.getStatus() != HttpServletResponse.SC_NOT_FOUND) {
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
+		return result;
 	}
 
 	@Override
@@ -71,7 +77,10 @@ public class CuratorServiceImpl implements ICuratorService {
 		final HttpResponse resp = ServerConnection.getInstance().request("/user/newCurator", "POST", null,
 				gsonBuilder.create().toJson(curator));
 		if (resp.getStatus() != HttpServletResponse.SC_OK) {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
 	}
 
@@ -82,7 +91,10 @@ public class CuratorServiceImpl implements ICuratorService {
 		final HttpResponse resp = ServerConnection.getInstance().request("/user/updateCurator", "POST", null,
 				gsonBuilder.create().toJson(curator));
 		if (resp.getStatus() != HttpServletResponse.SC_OK) {
-			throw new ConnectException("Wrong status code. Recieved was: " + resp.getStatus());
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
 		}
 	}
 
