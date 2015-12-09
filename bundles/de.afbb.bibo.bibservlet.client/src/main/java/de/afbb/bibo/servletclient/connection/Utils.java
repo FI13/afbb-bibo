@@ -35,7 +35,6 @@ final class Utils {
 	 * @throws ConnectException
 	 */
 	public static ConnectException createExceptionForCode(final int code) {
-		System.err.println("exception for code: " + code);
 		if (HttpServletResponse.SC_UNAUTHORIZED == code) {
 			String sessionToken;
 			try {
