@@ -80,10 +80,10 @@ public class DBConnector {
 	public Curator getCurator(final String curatorName) throws SQLException {
 		log.debug("get curator with name: " + curatorName);
 		try (Statement statement = connect.createStatement()) {
-			try (ResultSet mediaSet = statement.executeQuery("select Id, Name, Salt, Hash from " + DATABASE_NAME
-					+ ".benutzer where Name='" + curatorName + "'")) {
+			try (ResultSet mediaSet = statement.executeQuery("select Id, Name, Salt, Hash, Willkommen from "
+					+ DATABASE_NAME + ".benutzer where Name='" + curatorName + "'")) {
 				return mediaSet.first() ? new Curator(mediaSet.getInt(1), mediaSet.getString(2), mediaSet.getString(3),
-						mediaSet.getString(4)) : null;
+						mediaSet.getString(4), mediaSet.getBoolean(5)) : null;
 			}
 		}
 	}
@@ -91,10 +91,10 @@ public class DBConnector {
 	public Curator getCurator(final Integer id) throws SQLException {
 		log.debug("get curator with id: " + id);
 		try (Statement statement = connect.createStatement()) {
-			try (ResultSet mediaSet = statement.executeQuery(
-					"select Id, Name, Salt, Hash from " + DATABASE_NAME + ".benutzer where Id='" + id + "'")) {
+			try (ResultSet mediaSet = statement.executeQuery("select Id, Name, Salt, Hash, Willkommen from "
+					+ DATABASE_NAME + ".benutzer where Id='" + id + "'")) {
 				return mediaSet.first() ? new Curator(mediaSet.getInt(1), mediaSet.getString(2), mediaSet.getString(3),
-						mediaSet.getString(4)) : null;
+						mediaSet.getString(4), mediaSet.getBoolean(5)) : null;
 			}
 		}
 	}
@@ -142,9 +142,10 @@ public class DBConnector {
 		log.debug("list all users");
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet resultSet = statement
-					.executeQuery("select Id, Name, Salt from " + DATABASE_NAME + ".benutzer")) {
+					.executeQuery("select Id, Name, Salt, Willkommen from " + DATABASE_NAME + ".benutzer")) {
 				while (resultSet.next()) {
-					result.add(new Curator(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), null));
+					result.add(new Curator(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), null,
+							resultSet.getBoolean(4)));
 				}
 			}
 		}

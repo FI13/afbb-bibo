@@ -15,6 +15,7 @@ public class Curator extends AbstractPropertyChangeSupport implements Cloneable 
 	private String salt;
 	private String passwordHash;
 	private String password;
+	private boolean showWelcome;
 
 	/**
 	 * Constructor. creates a dummy object with invalid id
@@ -29,7 +30,7 @@ public class Curator extends AbstractPropertyChangeSupport implements Cloneable 
 	 * @param id
 	 */
 	public Curator(final int id) {
-		this(id, "", null, null);
+		this(id, "", null, null, false);
 	}
 
 	/**
@@ -44,12 +45,14 @@ public class Curator extends AbstractPropertyChangeSupport implements Cloneable 
 	 * @param passwordHash
 	 *            hashed password
 	 */
-	public Curator(final int id, final String name, final String salt, final String passwordHash) {
+	public Curator(final int id, final String name, final String salt, final String passwordHash,
+			final boolean showWelcome) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.salt = salt;
 		this.passwordHash = passwordHash;
+		this.showWelcome = showWelcome;
 	}
 
 	/**
@@ -145,6 +148,21 @@ public class Curator extends AbstractPropertyChangeSupport implements Cloneable 
 	 */
 	public void setPasswordHash(final String hash) {
 		passwordHash = hash;
+	}
+
+	/**
+	 * @return the showWelcome
+	 */
+	public boolean isShowWelcome() {
+		return showWelcome;
+	}
+
+	/**
+	 * @param showWelcome
+	 *            the showWelcome to set
+	 */
+	public void setShowWelcome(final boolean showWelcome) {
+		this.showWelcome = showWelcome;
 	}
 
 	@Override

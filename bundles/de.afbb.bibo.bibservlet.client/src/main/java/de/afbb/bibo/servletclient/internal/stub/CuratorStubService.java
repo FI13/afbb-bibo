@@ -8,7 +8,7 @@ import de.afbb.bibo.share.model.Curator;
 
 public class CuratorStubService implements ICuratorService {
 
-	Curator curator = new Curator(1, "Hugo", "salt", CryptoUtil.hashPassword("password123", "salt"));
+	Curator curator = new Curator(1, "Hugo", "salt", CryptoUtil.hashPassword("password123", "salt"), true);
 
 	@Override
 	public boolean exists(final String curatorName) throws ConnectException {
