@@ -9,11 +9,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.GsonBuilder;
-
 import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.IBorrowerService;
-import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 import de.afbb.bibo.share.callback.EventListener;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
@@ -92,13 +89,11 @@ public class BorrowerServiceImpl implements IBorrowerService {
 
 	@Override
 	public void update(final Borrower borrower) throws ConnectException {
-		final GsonBuilder gsonBuilder = new GsonBuilder()
-				.addSerializationExclusionStrategy(new BeanExclusionStrategy());
 		synchronized (cache) {
 			cache.remove(borrower.getId());
 		}
 		final HttpResponse resp = ServerConnection.getInstance().request("/user/updateBorrower", "POST", null,
-				gsonBuilder.create().toJson(borrower));
+				Utils.gson.toJson(borrower));
 		if (resp.getStatus() != HttpServletResponse.SC_OK) {
 			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
 			if (exception != null) {
@@ -106,7 +101,6 @@ public class BorrowerServiceImpl implements IBorrowerService {
 			}
 		}
 		notifyListener(NavigationTreeNodeType.PERSONS);
-
 	}
 
 	@Override

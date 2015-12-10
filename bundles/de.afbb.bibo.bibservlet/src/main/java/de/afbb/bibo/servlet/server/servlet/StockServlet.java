@@ -76,6 +76,9 @@ public class StockServlet {
 		case "/listLendCopies":
 			listLendCopies();
 			break;
+		case "/updateMedium":
+			updateMedium();
+			break;
 		case "/getMedium":
 			getMedium();
 			break;
@@ -241,6 +244,12 @@ public class StockServlet {
 		final String barcode = request.getParameter("barcode");
 		final String condition = request.getParameter("condition");
 		DBConnector.getInstance().doInventory(barcode, condition);
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void updateMedium() throws SQLException, IOException {
+		final Medium medium = Utils.gson.fromJson(request.getReader(), Medium.class);
+		DBConnector.getInstance().updateMedium(medium);
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
