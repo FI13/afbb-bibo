@@ -19,7 +19,8 @@ public class NavigationViewLabelProvider extends ColumnLabelProvider {
 	public String getText(final Object obj) {
 		if (obj instanceof NavigationTreeViewNode) {
 			final NavigationTreeViewNode navigationTreeViewNode = (NavigationTreeViewNode) obj;
-			final StringBuilder text = new StringBuilder(navigationTreeViewNode.getTitle());
+			final String title = navigationTreeViewNode.getTitle();
+			final StringBuilder text = new StringBuilder(title != null ? title : "");
 			if (navigationTreeViewNode.getInformation() != null) {
 				text.append("  ");
 				text.append(navigationTreeViewNode.getInformationText());
@@ -38,8 +39,10 @@ public class NavigationViewLabelProvider extends ColumnLabelProvider {
 				switch (node.getType()) {
 				case MEDIUM:
 					if (node.getValue() instanceof Medium) {
-						return BiboImageRegistry.getImage(((Medium) node.getValue()).getType().getIcon(),
-								IconSize.small);
+						final Medium medium = (Medium) node.getValue();
+						if (medium.getType() != null) {
+							return BiboImageRegistry.getImage(medium.getType().getIcon(), IconSize.small);
+						}
 					}
 				case MEDIA:
 					return BiboImageRegistry.getImage(IconType.BOOK_GROUP, IconSize.small);
