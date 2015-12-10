@@ -18,6 +18,7 @@ import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.share.model.MediumType;
 import de.afbb.bibo.ui.BiboFormToolkit;
 import de.afbb.bibo.ui.Messages;
+import de.afbb.bibo.ui.events.UpdateDirtyListener;
 import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
 
 /**
@@ -26,7 +27,7 @@ import de.afbb.bibo.ui.provider.MediumTypeLabelProvider;
  * @author David Becker
  *
  */
-public class MediumInformationForm extends AbstractForm<Medium> {
+public class MediumForm extends AbstractForm<Medium> {
 
 	private Text txtIsbn;
 	private Text txtTitle;
@@ -36,7 +37,7 @@ public class MediumInformationForm extends AbstractForm<Medium> {
 
 	private CCombo comboMediumType;
 
-	public MediumInformationForm(final Composite parent, final Medium input, final DataBindingContext bindingContext,
+	public MediumForm(final Composite parent, final Medium input, final DataBindingContext bindingContext,
 			final BiboFormToolkit toolkit) throws ConnectException {
 		super(parent, input, bindingContext, toolkit);
 	}
@@ -48,20 +49,18 @@ public class MediumInformationForm extends AbstractForm<Medium> {
 		content.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		toolkit.createLabel(content, Messages.TITLE);
-		txtTitle = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
+		txtTitle = toolkit.createText(content, EMPTY_STRING, SWT.BORDER);
 		toolkit.createLabel(content, Messages.AUTHOR);
-		txtAuthor = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
+		txtAuthor = toolkit.createText(content, EMPTY_STRING, SWT.BORDER);
 		toolkit.createLabel(content, Messages.LANGUAGE);
-		txtLanguage = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
+		txtLanguage = toolkit.createText(content, EMPTY_STRING, SWT.BORDER);
 		toolkit.createLabel(content, Messages.PUBLISHER);
-		txtPublisher = toolkit.createText(content, EMPTY_STRING, SWT.READ_ONLY | SWT.BORDER);
+		txtPublisher = toolkit.createText(content, EMPTY_STRING, SWT.BORDER);
 		toolkit.createLabel(content, Messages.ISBN);
-		txtIsbn = toolkit.createText(content, EMPTY_STRING, SWT.RIGHT | SWT.READ_ONLY | SWT.BORDER);
+		txtIsbn = toolkit.createText(content, EMPTY_STRING, SWT.RIGHT | SWT.BORDER);
 		toolkit.createLabel(content, Messages.TYPE);
 		comboMediumType = new CCombo(content, SWT.SHADOW_NONE | SWT.BORDER | SWT.READ_ONLY);
 		toolkit.adapt(comboMediumType);
-
-		comboMediumType.setEnabled(false);
 
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtTitle);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtAuthor);
@@ -70,11 +69,19 @@ public class MediumInformationForm extends AbstractForm<Medium> {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtIsbn);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(comboMediumType);
 		GridDataFactory.fillDefaults().hint(200, SWT.DEFAULT).grab(true, true).applyTo(content);
+
+		final UpdateDirtyListener updateDirtyListener = new UpdateDirtyListener();
+		txtTitle.addFocusListener(updateDirtyListener);
+		txtAuthor.addFocusListener(updateDirtyListener);
+		txtLanguage.addFocusListener(updateDirtyListener);
+		txtPublisher.addFocusListener(updateDirtyListener);
+		txtIsbn.addFocusListener(updateDirtyListener);
+		comboMediumType.addFocusListener(updateDirtyListener);
 	}
 
 	@Override
 	protected void initBinding() throws ConnectException {
-		BindingHelper.bindStringToTextField(txtTitle, getInputObservable(), Medium.FIELD_TITLE, bindingContext, false);
+		BindingHelper.bindStringToTextField(txtTitle, getInputObservable(), Medium.FIELD_TITLE, bindingContext, true);
 		BindingHelper.bindStringToTextField(txtAuthor, getInputObservable(), Medium.FIELD_AUTHOR, bindingContext,
 				false);
 		BindingHelper.bindStringToTextField(txtLanguage, getInputObservable(), Medium.FIELD_LANGUAGE, bindingContext,
@@ -85,7 +92,7 @@ public class MediumInformationForm extends AbstractForm<Medium> {
 
 		BindingHelper.bindObjectToCCombo(comboMediumType, getInputObservable(), Copy.class, Medium.FIELD_TYPE,
 				MediumType.class, ServiceLocator.getInstance().getTypService().list(), new MediumTypeLabelProvider(),
-				bindingContext, false);
+				bindingContext, true);
 	}
 
 }
