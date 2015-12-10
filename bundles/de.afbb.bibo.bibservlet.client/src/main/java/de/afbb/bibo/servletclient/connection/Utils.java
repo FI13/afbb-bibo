@@ -35,7 +35,7 @@ final class Utils {
 	 * @throws ConnectException
 	 */
 	public static ConnectException createExceptionForCode(final int code) {
-		if (HttpServletResponse.SC_OK == code) {
+		if (HttpServletResponse.SC_OK == code || HttpServletResponse.SC_NOT_FOUND == code) {
 			return null;
 		}
 		if (HttpServletResponse.SC_UNAUTHORIZED == code) {
