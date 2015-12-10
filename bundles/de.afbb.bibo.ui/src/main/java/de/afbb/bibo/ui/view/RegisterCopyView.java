@@ -491,7 +491,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 			} catch (final ConnectException e) {
 				handle(e);
 			}
-			btnToList.setEnabled(true);
+			updateToListButton();
 		}
 
 	}
