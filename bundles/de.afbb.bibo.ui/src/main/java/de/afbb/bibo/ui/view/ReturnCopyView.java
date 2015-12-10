@@ -277,7 +277,7 @@ public class ReturnCopyView extends AbstractView<Copy> {
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-
+		super.doSave(monitor);
 		final Job job = new Job("Rückgabe abschließen") {
 
 			@Override

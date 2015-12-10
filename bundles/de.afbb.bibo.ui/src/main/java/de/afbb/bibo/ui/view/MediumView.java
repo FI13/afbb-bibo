@@ -123,6 +123,7 @@ public class MediumView extends AbstractView<Medium> {
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
+		super.doSave(monitor);
 		final Job saveJob = new Job("Speichere Änderungen") {
 
 			@Override

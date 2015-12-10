@@ -514,6 +514,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
+		super.doSave(monitor);
 		final Job job = new Job("Erfassung abschließen") {
 
 			@Override
