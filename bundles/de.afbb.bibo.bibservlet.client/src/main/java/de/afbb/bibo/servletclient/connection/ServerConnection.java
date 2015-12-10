@@ -153,19 +153,14 @@ public class ServerConnection {
 	 *
 	 * @throws java.net.ConnectException
 	 */
-	protected void logout() throws ConnectException {
+	protected void logout() {
 		if (isLoggedIn) {
 			final Map<String, String> params = new HashMap<String, String>();
 			params.put("sessionId", getSessionToken());
-			final HttpResponse resp = request("/login/logout", "GET", params, null);
-			if (resp.getStatus() != HttpServletResponse.SC_OK) {
-				final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
-				if (exception != null) {
-					throw exception;
-				}
-			} else {
-				isLoggedIn = false;
-				setSessionToken(null);
+			try {
+				request("/login/logout", "GET", params, null);
+			} catch (final ConnectException e) {
+				// nothing to do, application is closing anyway
 			}
 		}
 	}

@@ -90,6 +90,7 @@ public class LoginServlet {
 
 	private void doLogout() {
 		final String token = request.getHeader("sessionId");
+		log.debug("invalidate session: " + token);
 		SessionContainer.getInstance().invalidate(token);
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
