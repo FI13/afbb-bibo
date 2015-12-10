@@ -302,7 +302,7 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 
 	@Override
 	public boolean isDirty() {
-		return !markedAsSaved && input != null && !input.equals(inputCache);
+		return isSaveAble() && !markedAsSaved && input != null && !input.equals(inputCache);
 	}
 
 	@Override
