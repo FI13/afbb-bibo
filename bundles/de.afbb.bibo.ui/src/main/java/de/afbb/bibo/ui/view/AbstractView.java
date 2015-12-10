@@ -287,7 +287,8 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 	 * @see IStatus#isOK()
 	 */
 	protected boolean isSaveAble() {
-		return ((IStatus) validationStatus.getValue()).isOK();
+		final Object value = validationStatus.getValue();
+		return value instanceof IStatus && ((IStatus) value).isOK();
 	}
 
 	@Override
