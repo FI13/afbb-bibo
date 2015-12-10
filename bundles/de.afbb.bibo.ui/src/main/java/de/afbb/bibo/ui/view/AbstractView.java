@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.ISaveablePart;
+import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.ViewPart;
@@ -41,7 +41,7 @@ import de.afbb.bibo.ui.BiboFormToolkit;
 import de.afbb.bibo.ui.Messages;
 import de.afbb.bibo.ui.dialog.LoginDialog;
 
-abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, ISaveablePart {
+abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, ISaveablePart2 {
 
 	protected static final String EMPTY_STRING = "";//$NON-NLS-1$
 	public static final String INPUT = "input";//$NON-NLS-1$
@@ -59,6 +59,8 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 
 	protected Input input;
 	protected Input inputCache;
+
+	private boolean markedAsSaved = false;
 
 	public void addPropertyChangeListener(final String propertyName, final PropertyChangeListener listener) {
 		changeSupport.addPropertyChangeListener(propertyName, listener);
@@ -185,6 +187,7 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 			 */
 			setPartName(partName);
 		}
+		markedAsSaved = false;
 	}
 
 	public Input getInput() {
@@ -266,9 +269,6 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 
 	protected void closeView() {
 		getViewSite().getPage().hideView(AbstractView.this);
-		// IViewReference[] viewReferences =
-		// getSite().getPage().hideView(getSite().ge);
-		// VgetActivePart(closEditor(AbstractEditView.this, false);
 	}
 
 	/**
@@ -283,15 +283,17 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
+		markedAsSaved = true;
 	}
 
 	@Override
 	public void doSaveAs() {
+		markedAsSaved = true;
 	}
 
 	@Override
 	public boolean isDirty() {
-		return input != null && !input.equals(inputCache);
+		return !markedAsSaved && input != null && !input.equals(inputCache);
 	}
 
 	@Override
@@ -301,7 +303,25 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 
 	@Override
 	public boolean isSaveOnCloseNeeded() {
-		return false;
+		return true;
+	}
+
+	@Override
+	public int promptToSaveOnClose() {
+		// customized MessageDialog with configured buttons
+		final MessageDialog dialog = new MessageDialog(getSite().getShell(), "Änderungen speichern", null,
+				"'" + getPartName() + "' wurde bearbeitet.\nSollen diese Änderungen gespeichert werden?",
+				MessageDialog.QUESTION, new String[] { "Speichern", "Schließen ohne zu Speichern", "Abbrechen" }, 0);
+		final int result = dialog.open();
+		switch (result) {
+		case 0:
+			return YES;
+		case 1:
+			return NO;
+		case 2:
+			return CANCEL;
+		}
+		return DEFAULT;
 	}
 
 	@Override

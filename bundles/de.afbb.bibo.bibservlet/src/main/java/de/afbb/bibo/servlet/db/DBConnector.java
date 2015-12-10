@@ -226,6 +226,15 @@ public class DBConnector {
 		}
 	}
 
+	public void updateMedium(final Medium medium) throws SQLException {
+		log.debug("update medium: " + medium.getMediumId());
+		try (Statement statement = connect.createStatement()) {
+			statement.execute("update " + DATABASE_NAME + ".medium set " + "ISBN='" + medium.getIsbn() + "', Titel='"
+					+ medium.getTitle() + "', Autor='" + medium.getAuthor() + "', Sprache='" + medium.getLanguage()
+					+ "', TypId='" + medium.getType().getId() + "' where Id=" + medium.getMediumId());
+		}
+	}
+
 	public Copy getCopy(final String barcode) throws SQLException {
 		log.debug("get copy with barcode: " + barcode);
 		try (final Statement statement = connect.createStatement()) {

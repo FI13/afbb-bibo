@@ -18,6 +18,7 @@ import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 import de.afbb.bibo.share.callback.EventListener;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Medium;
+import de.afbb.bibo.share.model.NavigationTreeNodeType;
 
 public class MediumServiceImpl implements IMediumService {
 
@@ -28,9 +29,15 @@ public class MediumServiceImpl implements IMediumService {
 
 	@Override
 	public void update(final Medium medium) throws ConnectException {
-		// TODO Auto-generated method stub
-		// currently never called
-		throw new UnsupportedOperationException("not implemented");
+		final HttpResponse resp = ServerConnection.getInstance().request("/stock/updateMedium", "POST", null,
+				Utils.gson.toJson(medium));
+		if (resp.getStatus() != HttpServletResponse.SC_OK) {
+			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+			if (exception != null) {
+				throw exception;
+			}
+		}
+		notifyListener(NavigationTreeNodeType.MEDIA);
 	}
 
 	@Override
@@ -110,6 +117,12 @@ public class MediumServiceImpl implements IMediumService {
 	@Override
 	public void register(final EventListener listener) {
 		listeners.add(listener);
+	}
+
+	private void notifyListener(final NavigationTreeNodeType type) {
+		for (final EventListener eventListener : listeners) {
+			eventListener.invalidate(type);
+		}
 	}
 
 }

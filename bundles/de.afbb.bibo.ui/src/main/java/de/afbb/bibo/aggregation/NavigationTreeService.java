@@ -38,6 +38,7 @@ public class NavigationTreeService implements EventListener {
 		ServiceLocator.getInstance().getCopyService().register(this);
 		aggregationService.register(this);
 		borrowerService.register(this);
+		mediumService.register(this);
 	}
 
 	public void reloadBorrowers() throws ConnectException {

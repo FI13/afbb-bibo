@@ -491,7 +491,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 			} catch (final ConnectException e) {
 				handle(e);
 			}
-			btnToList.setEnabled(true);
+			updateToListButton();
 		}
 
 	}
@@ -514,6 +514,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
+		super.doSave(monitor);
 		final Job job = new Job("Erfassung abschließen") {
 
 			@Override

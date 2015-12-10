@@ -9,6 +9,7 @@ import de.afbb.bibo.share.model.NavigationTreeNodeType;
 
 public class NavigationTreeViewNode extends TreeNode implements IAggregatorTarget {
 
+	private static final String EMPTY_STRING = "";//$NON-NLS-1$
 	private static final String NEW_LINE = "\n";//$NON-NLS-1$
 	private String title;
 	private String information[];
@@ -47,11 +48,11 @@ public class NavigationTreeViewNode extends TreeNode implements IAggregatorTarge
 				}
 			}
 		}
-		return "";//$NON-NLS-1$
+		return EMPTY_STRING;
 	}
 
 	public String getTooltipText() {
-		final StringBuilder tooltip = new StringBuilder(title);
+		final StringBuilder tooltip = new StringBuilder(title != null ? title : EMPTY_STRING);
 		if (information != null) {
 			tooltip.append(NEW_LINE);
 			if (NavigationTreeNodeType.MEDIUM.equals(type)) {

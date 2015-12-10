@@ -36,16 +36,18 @@ public class AggregationServiceImpl implements IAggregationService {
 	}
 
 	private void process(final Integer id, final IAggregatorTarget target, final String url) {
-		try {
-			final Map<String, String> param = new HashMap<String, String>();
-			param.put("id", id.toString());
-			HttpResponse resp;
-			resp = ServerConnection.getInstance().request(url, "GET", param, null);
-			if (resp.getStatus() == HttpServletResponse.SC_OK) {
-				notifyListener(target, resp.getData().split("\n"));
+		if (id != null) {
+			try {
+				final Map<String, String> param = new HashMap<String, String>();
+				param.put("id", id.toString());
+				HttpResponse resp;
+				resp = ServerConnection.getInstance().request(url, "GET", param, null);
+				if (resp.getStatus() == HttpServletResponse.SC_OK) {
+					notifyListener(target, resp.getData().split("\n"));
+				}
+			} catch (final ConnectException e) {
+				// just swallow exception
 			}
-		} catch (final ConnectException e) {
-			// just swallow exception
 		}
 	}
 

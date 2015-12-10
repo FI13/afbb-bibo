@@ -167,7 +167,7 @@ public class LendCopyView extends AbstractView<Borrower> {
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-
+		super.doSave(monitor);
 		final Job job = new Job("Medien ausleihen") {
 
 			@Override

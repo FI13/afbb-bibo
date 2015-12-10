@@ -20,7 +20,7 @@ import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.model.Copy;
 import de.afbb.bibo.share.model.Medium;
 import de.afbb.bibo.ui.form.CopyXviewerForm;
-import de.afbb.bibo.ui.form.MediumInformationForm;
+import de.afbb.bibo.ui.form.MediumForm;
 import de.afbb.bibo.ui.form.MediumStatisticForm;
 
 public class MediumView extends AbstractView<Medium> {
@@ -30,7 +30,7 @@ public class MediumView extends AbstractView<Medium> {
 
 	private CopyXviewerForm xViewer;
 	private MediumStatisticForm statisticForm;
-	private MediumInformationForm informationForm;
+	private MediumForm informationForm;
 	private Job job;
 
 	@Override
@@ -39,7 +39,7 @@ public class MediumView extends AbstractView<Medium> {
 		content.setLayout(new GridLayout(2, false));
 
 		final Group mediumGroup = toolkit.createGroup(content, "Allgemein");
-		informationForm = new MediumInformationForm(mediumGroup, input, bindingContext, toolkit);
+		informationForm = new MediumForm(mediumGroup, input, bindingContext, toolkit);
 
 		final Group statisticGroup = toolkit.createGroup(content, "Statistik");
 		statisticForm = new MediumStatisticForm(statisticGroup);
@@ -70,13 +70,13 @@ public class MediumView extends AbstractView<Medium> {
 	}
 
 	@Override
-	public boolean isDirty() {
-		return false;
+	protected String computePartName(final Medium input) {
+		return input != null ? input.getTitle() : null;
 	}
 
 	@Override
-	protected String computePartName(final Medium input) {
-		return input != null ? input.getTitle() : null;
+	protected Medium cloneInput(final Medium input) {
+		return (Medium) input.clone();
 	}
 
 	@Override
@@ -119,6 +119,26 @@ public class MediumView extends AbstractView<Medium> {
 			}
 		};
 		job.schedule();
+	}
+
+	@Override
+	public void doSave(final IProgressMonitor monitor) {
+		super.doSave(monitor);
+		final Job saveJob = new Job("Speichere Änderungen") {
+
+			@Override
+			protected IStatus run(final IProgressMonitor monitor) {
+				try {
+					ServiceLocator.getInstance().getMediumService().update(input);
+				} catch (final ConnectException e) {
+					handle(e);
+				}
+				return Status.OK_STATUS;
+			}
+
+		};
+		saveJob.schedule();
+		closeView();
 	}
 
 }
