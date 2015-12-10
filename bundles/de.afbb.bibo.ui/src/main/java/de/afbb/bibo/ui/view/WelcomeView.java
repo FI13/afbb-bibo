@@ -42,6 +42,11 @@ public class WelcomeView extends AbstractView<Curator> {
 	}
 
 	@Override
+	protected void createValidationComposite(final Composite parent) {
+		// no need for this here
+	}
+
+	@Override
 	protected void initBinding() {
 		// nothing to do
 	}

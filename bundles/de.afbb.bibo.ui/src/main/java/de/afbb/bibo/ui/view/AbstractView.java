@@ -48,8 +48,8 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 	protected static final String DOT = ".";//$NON-NLS-1$
 	private static final String OK = LocalizationUtils.safeLocalize("ok");//$NON-NLS-1$
 
-	private Label lblValidationImage;
-	private Label lblValidationMessage;
+	protected Label lblValidationImage;
+	protected Label lblValidationMessage;
 	private final IObservableValue validationStatus = new WritableValue(IStatus.OK, IStatus.class);
 	protected final IObservableValue inputObservable = BeansObservables.observeValue(this, INPUT);
 
@@ -80,14 +80,7 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 			final GridData layoutData = new GridData(GridData.FILL_BOTH);
 			outer.setLayoutData(layoutData);
 
-			final Composite validationComposite = toolkit.createComposite(outer, SWT.NONE);
-			validationComposite.setLayout(new GridLayout(2, false));
-			lblValidationImage = toolkit.createLabel(validationComposite, EMPTY_STRING);
-			lblValidationMessage = toolkit.createLabel(validationComposite, EMPTY_STRING);
-
-			GridDataFactory.fillDefaults().grab(true, false).applyTo(validationComposite);
-			GridDataFactory.fillDefaults().applyTo(lblValidationImage);
-			GridDataFactory.fillDefaults().grab(true, false).applyTo(lblValidationMessage);
+			createValidationComposite(outer);
 
 			final ScrolledComposite content = new ScrolledComposite(outer, SWT.H_SCROLL | SWT.V_SCROLL);
 			content.setExpandHorizontal(true);
@@ -102,6 +95,18 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 		} catch (final ConnectException e) {
 			handle(e);
 		}
+	}
+
+	protected void createValidationComposite(final Composite parent) {
+		final Composite validationComposite = toolkit.createComposite(parent, SWT.NONE);
+		validationComposite.setLayout(new GridLayout(2, false));
+		lblValidationImage = toolkit.createLabel(validationComposite, EMPTY_STRING);
+		lblValidationMessage = toolkit.createLabel(validationComposite, EMPTY_STRING);
+
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(validationComposite);
+		GridDataFactory.fillDefaults().applyTo(lblValidationImage);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(lblValidationMessage);
+
 	}
 
 	/**
@@ -160,9 +165,13 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 	 * @param image
 	 */
 	private void setMessage(final String message, final Image image) {
-		lblValidationImage.setImage(image);
-		lblValidationMessage.setText(message);
-		lblValidationMessage.getParent().layout(true, true);
+		if (lblValidationImage != null) {
+			lblValidationImage.setImage(image);
+		}
+		if (lblValidationMessage != null) {
+			lblValidationMessage.setText(message);
+			lblValidationMessage.getParent().layout(true, true);
+		}
 		// update dirty state when validation message changes
 		updateDirtyState();
 	}
