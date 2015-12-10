@@ -53,7 +53,11 @@ public class ManageBorrowerMediumHandler extends AbstractHandler {
 											"Offene Änderungen verwerfen?",
 											"Es bestehen noch offen Änderungen.\nSollen diese Änderungen verworfen werden?")
 									|| !dirty) {
-								view.setInput((Borrower) input);
+								/*
+								 * make a copy of input, so modifications don't
+								 * leak outside of this view
+								 */
+								view.setInput((Borrower) ((Borrower) input).clone());
 							}
 						}
 					} catch (final PartInitException e) {
@@ -72,7 +76,11 @@ public class ManageBorrowerMediumHandler extends AbstractHandler {
 											"Offene Änderungen verwerfen?",
 											"Es bestehen noch offen Änderungen.\nSollen diese Änderungen verworfen werden?")
 									|| !dirty) {
-								view.setInput((Medium) input);
+								/*
+								 * make a copy of input, so modifications don't
+								 * leak outside of this view
+								 */
+								view.setInput((Medium) ((Medium) input).clone());
 							}
 						}
 					} catch (final PartInitException e) {
