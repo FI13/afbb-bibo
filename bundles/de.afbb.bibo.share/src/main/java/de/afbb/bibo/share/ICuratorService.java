@@ -17,6 +17,8 @@ public interface ICuratorService {
 
 	Curator get(Integer id) throws ConnectException;
 
+	void toggleWelcome(Integer id) throws ConnectException;
+
 	void create(Curator curator) throws ConnectException;
 
 	void update(Curator curator) throws ConnectException;

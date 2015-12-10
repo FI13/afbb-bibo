@@ -5,13 +5,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import de.afbb.bibo.servletclient.ServiceLocator;
+import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
 
 /**
@@ -25,6 +31,8 @@ public class WelcomeView extends AbstractView<Curator> {
 
 	private Browser browser;
 
+	private Button btnShow;
+
 	@Override
 	public Composite initUi(final Composite parent) {
 		final Composite content = toolkit.createComposite(parent);
@@ -37,8 +45,26 @@ public class WelcomeView extends AbstractView<Curator> {
 		browser.setLayoutData(new GridData(GridData.FILL_BOTH));
 		browser.setText(readPage());
 
-		toolkit.createButton(content, "Diese Ansicht beim Start anzeigen", SWT.CHECK);
+		btnShow = toolkit.createButton(content, "Diese Ansicht beim Start anzeigen", SWT.CHECK);
+		setCheckBoxt();
+		btnShow.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				try {
+					ServiceLocator.getInstance().getCuratorService()
+							.toggleWelcome(SessionHolder.getInstance().getCurator().getId());
+					setCheckBoxt();
+				} catch (final ConnectException exception) {
+					handle(exception);
+				}
+			}
+		});
 		return content;
+	}
+
+	private void setCheckBoxt() {
+		btnShow.setSelection(SessionHolder.getInstance().getCurator().isShowWelcome());
 	}
 
 	@Override

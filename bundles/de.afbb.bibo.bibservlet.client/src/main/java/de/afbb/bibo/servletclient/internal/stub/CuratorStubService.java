@@ -30,4 +30,10 @@ public class CuratorStubService implements ICuratorService {
 		return null;
 	}
 
+	@Override
+	public void toggleWelcome(final Integer id) throws ConnectException {
+		// TODO Auto-generated method stub
+
+	}
+
 }

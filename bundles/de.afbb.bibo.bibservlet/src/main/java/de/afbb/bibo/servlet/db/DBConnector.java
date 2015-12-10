@@ -624,4 +624,19 @@ public class DBConnector {
 			st.execute(sql);
 		}
 	}
+
+	public void toggleWelcome(final Integer curatorId) throws SQLException {
+		int showWelcome = 1;
+		try (Statement st = connect.createStatement()) {
+			try (ResultSet resultSet = st.executeQuery(
+					"select Willkommen from " + DATABASE_NAME + ".benutzer where Id='" + curatorId + "'")) {
+				showWelcome = resultSet.first() && resultSet.getInt(1) == 1 ? 0 : 1;
+			}
+		}
+		final String sql = "update " + DATABASE_NAME + ".benutzer set " + "Willkommen='" + showWelcome + "' where Id='"
+				+ curatorId + "'";
+		try (Statement st = connect.createStatement()) {
+			st.execute(sql);
+		}
+	}
 }
