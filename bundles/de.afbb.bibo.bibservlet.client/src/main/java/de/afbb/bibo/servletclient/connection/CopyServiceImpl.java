@@ -1,5 +1,6 @@
 package de.afbb.bibo.servletclient.connection;
 
+import java.awt.print.PrinterException;
 import java.net.ConnectException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,8 +11,10 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
+import de.afbb.bibo.print.PrintCopyList;
 import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.ICopyService;
+import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.callback.EventListener;
 import de.afbb.bibo.share.model.Borrower;
 import de.afbb.bibo.share.model.Copy;
@@ -159,28 +162,39 @@ public class CopyServiceImpl implements ICopyService {
 
 	@Override
 	public void lendCopies(final Collection<Copy> copies, final boolean printList) throws ConnectException {
-		final Map<String, String> param = new HashMap<String, String>();
-		int statusCode = -1;
-		for (final Copy copy : copies) {
-			param.put("barcode", copy.getBarcode());
-			param.put("borrower", copy.getBorrower().getId().toString());
-			param.put("condition", copy.getCondition());
-			final HttpResponse resp = ServerConnection.getInstance().request("/borrow/doBorrow", "GET", param, null);
-			if (resp.getStatus() != HttpServletResponse.SC_OK) {
-				// if we get any other code than 200 we override previous, but
-				// we continue with other copies
-				statusCode = resp.getStatus();
+		if (copies != null && !copies.isEmpty()) {
+			final Map<String, String> param = new HashMap<String, String>();
+			int statusCode = -1;
+			for (final Copy copy : copies) {
+				param.put("barcode", copy.getBarcode());
+				param.put("borrower", copy.getBorrower().getId().toString());
+				param.put("condition", copy.getCondition());
+				final HttpResponse resp = ServerConnection.getInstance().request("/borrow/doBorrow", "GET", param,
+						null);
+				if (resp.getStatus() != HttpServletResponse.SC_OK) {
+					// if we get any other code than 200 we override previous,
+					// but
+					// we continue with other copies
+					statusCode = resp.getStatus();
+				}
+			}
+			notifyListener(NavigationTreeNodeType.ROOT);
+			// if we got an error we throw an exception
+			if (statusCode > 0) {
+				final ConnectException exception = Utils.createExceptionForCode(statusCode);
+				if (exception != null) {
+					throw exception;
+				}
+			}
+			if (printList) {
+				final Copy[] array = copies.toArray(new Copy[copies.size()]);
+				try {
+					PrintCopyList.print(array, SessionHolder.getInstance().getCurator(), array[0].getBorrower());
+				} catch (final PrinterException e) {
+					// swallow exception
+				}
 			}
 		}
-		notifyListener(NavigationTreeNodeType.ROOT);
-		// if we got an error we throw an exception
-		if (statusCode > 0) {
-			final ConnectException exception = Utils.createExceptionForCode(statusCode);
-			if (exception != null) {
-				throw exception;
-			}
-		}
-		// TODO implement printing here
 	}
 
 	@Override
