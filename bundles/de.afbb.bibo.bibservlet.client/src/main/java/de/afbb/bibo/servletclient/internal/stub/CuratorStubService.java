@@ -8,7 +8,7 @@ import de.afbb.bibo.share.model.Curator;
 
 public class CuratorStubService implements ICuratorService {
 
-	Curator curator = new Curator(1, "Hugo", "salt", CryptoUtil.hashPassword("password123", "salt"));
+	Curator curator = new Curator(1, "Hugo", "salt", CryptoUtil.hashPassword("password123", "salt"), true);
 
 	@Override
 	public boolean exists(final String curatorName) throws ConnectException {
@@ -28,6 +28,12 @@ public class CuratorStubService implements ICuratorService {
 	public Curator get(final Integer id) throws ConnectException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void toggleWelcome(final Integer id) throws ConnectException {
+		// TODO Auto-generated method stub
+
 	}
 
 }

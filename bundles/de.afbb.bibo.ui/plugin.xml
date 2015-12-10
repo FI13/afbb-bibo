@@ -139,6 +139,10 @@
             id="de.afbb.bibo.ui.inventory"
             name="Inventur">
       </command>
+      <command
+            id="de.afbb.bibo.ui.welcome"
+            name="Hilfe Anzeigen">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -303,6 +307,28 @@
                style="push">
          </command>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:file">
+         <command
+               commandId="org.eclipse.ui.file.exit"
+               label="Beenden"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:help">
+         <command
+               commandId="de.afbb.bibo.ui.welcome"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.ui.help.aboutAction"
+               label="Über dieses Programm"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -371,6 +397,10 @@
       <handler
             class="de.afbb.bibo.ui.handler.InventoryHandler"
             commandId="de.afbb.bibo.ui.inventory">
+      </handler>
+      <handler
+            class="de.afbb.bibo.ui.handler.WelcomeHandler"
+            commandId="de.afbb.bibo.ui.welcome">
       </handler>
    </extension>
    <extension

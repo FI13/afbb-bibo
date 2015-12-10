@@ -23,7 +23,7 @@ public class Perspective implements IPerspectiveFactory {
 		layout.addStandaloneView(NavigationView.ID, false, IPageLayout.LEFT, 0.05f, editorArea);
 		final IFolderLayout folder = layout.createFolder("de.afbb.bibo.ui.category.main", IPageLayout.RIGHT, 0.30f,
 				NavigationView.ID);
-		folder.addView(WelcomeView.ID);
+		folder.addPlaceholder(WelcomeView.ID);
 		folder.addPlaceholder(BorrowerView.ID);
 		folder.addPlaceholder(LendCopyView.ID);
 		folder.addPlaceholder(RegisterCopyView.ID);

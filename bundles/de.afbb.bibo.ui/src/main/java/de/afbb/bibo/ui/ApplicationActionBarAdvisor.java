@@ -9,9 +9,6 @@ import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
@@ -24,35 +21,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	public static final String ID_COOLBAR = "de.afbb.bibo.coolbar";//$NON-NLS-1$
 
-	// Actions - important to allocate these only in makeActions, and then use
-	// them
-	// in the fill methods. This ensures that the actions aren't recreated
-	// when fillActionBars is called with FILL_PROXY.
-	private IWorkbenchAction exitAction;
-	private IWorkbenchAction aboutAction;
-
 	public ApplicationActionBarAdvisor(final IActionBarConfigurer configurer) {
 		super(configurer);
-	}
-
-	@Override
-	protected void makeActions(final IWorkbenchWindow window) {
-		// Creates the actions and registers them.
-		// Registering is needed to ensure that key bindings work.
-		// The corresponding commands keybindings are defined in the plugin.xml
-		// file.
-		// Registering also provides automatic disposal of the actions when
-		// the window is closed.
-
-		exitAction = ActionFactory.QUIT.create(window);
-		exitAction.setText("Beenden");
-		register(exitAction);
-
-		aboutAction = ActionFactory.ABOUT.create(window);
-		aboutAction.setText("Über dieses Programm");
-		register(aboutAction);
-
-		// newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(window);
 	}
 
 	@Override
@@ -64,14 +34,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// Add a group marker indicating where action set menus will appear.
 		menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		menuBar.add(helpMenu);
-
-		// File
-		// fileMenu.add(newWindowAction);
-		// fileMenu.add(new Separator());
-		fileMenu.add(exitAction);
-
-		// Help
-		helpMenu.add(aboutAction);
 	}
 
 	@Override

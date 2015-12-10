@@ -54,6 +54,9 @@ public class UserServlet {
 		case "/updateCurator":
 			updateCurator();
 			break;
+		case "/toggleWelcome":
+			toggleWelcome();
+			break;
 		case "/newBorrower":
 			addBorrower();
 			break;
@@ -160,16 +163,19 @@ public class UserServlet {
 
 	private void updateBorrower() throws SQLException, IOException {
 		final Borrower b = Utils.gson.fromJson(request.getReader(), Borrower.class);
-
 		DBConnector.getInstance().updateBorrower(b);
-		;
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
 	private void deleteBorrower() throws SQLException, IOException {
 		final Borrower b = Utils.gson.fromJson(request.getReader(), Borrower.class);
-
 		DBConnector.getInstance().deleteBorrower(b.getId());
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void toggleWelcome() throws SQLException, IOException {
+		final Integer id = Integer.valueOf(request.getParameter("id"));
+		DBConnector.getInstance().toggleWelcome(id);
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 }

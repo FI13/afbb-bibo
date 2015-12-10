@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.GsonBuilder;
 
 import de.afbb.bibo.share.ICuratorService;
+import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 import de.afbb.bibo.share.model.Curator;
 
@@ -71,6 +72,24 @@ public class CuratorServiceImpl implements ICuratorService {
 	}
 
 	@Override
+	public void toggleWelcome(final Integer id) throws ConnectException {
+		if (id != null) {
+			final HashMap<String, String> params = new HashMap<String, String>();
+			params.put("id", id.toString());
+			final HttpResponse resp = ServerConnection.getInstance().request("/user/toggleWelcome", "GET", params,
+					null);
+			if (resp.getStatus() != HttpServletResponse.SC_OK) {
+				final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
+				if (exception != null) {
+					throw exception;
+				}
+			}
+			SessionHolder.getInstance().getCurator()
+					.setShowWelcome(!SessionHolder.getInstance().getCurator().isShowWelcome());
+		}
+	}
+
+	@Override
 	public void create(final Curator curator) throws ConnectException {
 		final GsonBuilder gsonBuilder = new GsonBuilder()
 				.addSerializationExclusionStrategy(new BeanExclusionStrategy());
@@ -97,5 +116,4 @@ public class CuratorServiceImpl implements ICuratorService {
 			}
 		}
 	}
-
 }
