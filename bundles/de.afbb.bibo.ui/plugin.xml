@@ -309,9 +309,23 @@
       </menuContribution>
       <menuContribution
             allPopups="false"
+            locationURI="menu:file">
+         <command
+               commandId="org.eclipse.ui.file.exit"
+               label="Beenden"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
             locationURI="menu:help">
          <command
                commandId="de.afbb.bibo.ui.welcome"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.ui.help.aboutAction"
+               label="Über dieses Programm"
                style="push">
          </command>
       </menuContribution>
