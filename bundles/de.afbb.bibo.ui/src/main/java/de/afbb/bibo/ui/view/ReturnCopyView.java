@@ -272,8 +272,8 @@ public class ReturnCopyView extends AbstractView<Copy> {
 
 	@Override
 	public boolean isDirty() {
-		return isSaveAble() && (input == null || input.getBarcode() == null || input.getBarcode().isEmpty())
-				&& !copies.isEmpty();
+		return isSaveAble() && !markedAsSaved
+				&& (input == null || input.getBarcode() == null || input.getBarcode().isEmpty()) && !copies.isEmpty();
 	}
 
 	@Override
