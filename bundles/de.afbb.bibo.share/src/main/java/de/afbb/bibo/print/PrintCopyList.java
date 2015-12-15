@@ -25,7 +25,7 @@ public class PrintCopyList {
 		final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 		final MessageFormat head = new MessageFormat("Ausleihübersicht");
-		final MessageFormat foot = new MessageFormat("created by AfbB-Bibo on " + dateFormat.format(new Date()));
+		final MessageFormat foot = new MessageFormat("erstellt durch AfBB-Bibo am " + dateFormat.format(new Date()));
 
 		final PrinterJob pj = PrinterJob.getPrinterJob();
 

@@ -9,3 +9,4 @@ Import-Package: de.afbb.bibo.properties,
  org.apache.commons.codec.binary
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
  JavaSE-1.8
+Export-Package: de.afbb.bibo.amazon

@@ -1,5 +1,6 @@
 package de.afbb.bibo.ui.view;
 
+import java.io.IOException;
 import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,6 +37,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import de.afbb.bibo.amazon.ParserMedium;
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.model.Copy;
@@ -453,6 +455,12 @@ public class RegisterCopyView extends AbstractView<Copy> {
 			Medium medium = null;
 			try {
 				medium = ServiceLocator.getInstance().getMediumService().getMedium(isbn);
+				if (medium == null) {
+					try {
+						medium = ParserMedium.getInstance().getMedium(isbn);
+					} catch (final IOException e) {
+					}
+				}
 			} catch (final ConnectException e) {
 				handle(e);
 			}

@@ -1,4 +1,4 @@
-package com.amazon.advertising.api.sample;
+package de.afbb.bibo.amazon;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -107,11 +107,15 @@ public final class ParserMedium {
 		final Medium medium = new Medium();
 
 		final String tempurl = getUrl(isbn);
+		System.out.println(isbn);
 		try
 
 		{
 			if (Integer.valueOf(BiBoProperties.get("USE_PROXY")) == 1) {
 				System.setProperty("java.net.useSystemProxies", "true");
+				System.out.println(System.getProperty("http.proxyHost"));
+				System.out.println(System.getProperty("http.proxyPort"));
+				System.out.println(System.getProperty("http.proxySet"));
 			}
 
 			final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();

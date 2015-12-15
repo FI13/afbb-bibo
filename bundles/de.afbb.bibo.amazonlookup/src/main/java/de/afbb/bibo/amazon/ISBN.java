@@ -1,4 +1,4 @@
-package com.amazon.advertising.api.sample;
+package de.afbb.bibo.amazon;
 
 /*
  *  Copyright (C) 2009 Kilian Gaertner

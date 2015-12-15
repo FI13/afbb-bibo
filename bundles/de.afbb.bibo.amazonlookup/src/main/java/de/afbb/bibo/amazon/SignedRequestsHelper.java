@@ -19,7 +19,7 @@
  *
  */
 
-package com.amazon.advertising.api.sample;
+package de.afbb.bibo.amazon;
 
 import java.io.UnsupportedEncodingException;
 
