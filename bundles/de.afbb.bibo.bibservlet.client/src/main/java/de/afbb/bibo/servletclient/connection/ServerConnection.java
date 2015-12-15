@@ -105,7 +105,7 @@ public class ServerConnection {
 			connection.setRequestProperty("Content-Type", "application/json");
 			connection.setUseCaches(false);
 			if (json != null) {
-				final OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+				final OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
 				out.write(json);
 				out.close();
 			}
