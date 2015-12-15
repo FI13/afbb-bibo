@@ -543,7 +543,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 	@Override
 	public boolean isDirty() {
-		return isSaveAble() && !copies.isEmpty();
+		return isSaveAble() && !markedAsSaved && !copies.isEmpty();
 	}
 
 	@Override

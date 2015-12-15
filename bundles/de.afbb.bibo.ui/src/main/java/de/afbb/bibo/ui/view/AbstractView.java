@@ -60,7 +60,7 @@ abstract class AbstractView<Input> extends ViewPart implements IDirtyEvaluate, I
 	protected Input input;
 	protected Input inputCache;
 
-	private boolean markedAsSaved = false;
+	protected boolean markedAsSaved = false;
 
 	public void addPropertyChangeListener(final String propertyName, final PropertyChangeListener listener) {
 		changeSupport.addPropertyChangeListener(propertyName, listener);
