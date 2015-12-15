@@ -461,14 +461,19 @@ public class RegisterCopyView extends AbstractView<Copy> {
 			protected IStatus run(final IProgressMonitor monitor) {
 				// check if we have it cached already first
 				if (!mediumCache.containsKey(isbn)) {
-					// normal fetch from database
 					Medium medium = null;
 					try {
+						// normal fetch from database
 						medium = ServiceLocator.getInstance().getMediumService().getMedium(isbn);
+						/*
+						 * if medium isn't in database, we check the Amazon API
+						 * for convenience
+						 */
 						if (medium == null) {
 							try {
 								medium = ParserMedium.getInstance().getMedium(isbn);
 							} catch (final IOException e) {
+								// nothing to do, just swallow exception
 							}
 						}
 					} catch (final ConnectException e) {
