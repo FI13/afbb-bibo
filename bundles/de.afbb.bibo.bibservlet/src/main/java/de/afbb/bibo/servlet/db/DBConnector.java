@@ -208,9 +208,9 @@ public class DBConnector {
 	}
 
 	public int createMedium(final String isbn, final String title, final String author, final String language,
-			final int typeId) throws SQLException {
+			final String publisher, final int typeId) throws SQLException {
 		final String sql = "insert into " + DATABASE_NAME
-				+ ".medium (ISBN, Titel, Autor, Sprache, TypId) values (?, ?, ?, ?, ?)";
+				+ ".medium (ISBN, Titel, Autor, Herausgeber, Sprache, TypId) values (?, ?, ?, ?, ?, ?)";
 		log.debug("create new medium: {isbn: " + isbn + ", title: " + title + ", author: " + author + ", language: "
 				+ language + "}");
 		try (PreparedStatement statement = connect.prepareStatement(sql)) {
@@ -218,7 +218,8 @@ public class DBConnector {
 			statement.setString(2, title);
 			statement.setString(3, author);
 			statement.setString(4, language);
-			statement.setInt(5, typeId);
+			statement.setString(5, publisher);
+			statement.setInt(6, typeId);
 			statement.execute();
 			try (ResultSet resultSet = statement
 					.executeQuery("select Id from " + DATABASE_NAME + ".medium where " + "ISBN='" + isbn + "'")) {
