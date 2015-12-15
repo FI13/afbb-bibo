@@ -67,7 +67,7 @@ public class BiboFormToolkit extends FormToolkit {
 	}
 
 	public CCombo createCombo(final Composite parent) {
-		return createCombo(parent, SWT.SHADOW_NONE);
+		return createCombo(parent, SWT.SHADOW_NONE | SWT.BORDER);
 	}
 
 }
