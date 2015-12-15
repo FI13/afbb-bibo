@@ -427,7 +427,7 @@ public class DBConnector {
 			throws SQLException, NumberFormatException, IOException {
 		try (Statement statement = connect.createStatement()) {
 			try (ResultSet resultSet = statement.executeQuery("select Id from " + DATABASE_NAME + ".ausleiher where "
-					+ "Vorname='" + fName + "' ans Nachname='" + sName + "'")) {
+					+ "Vorname='" + fName + "' and Nachname='" + sName + "'")) {
 				return resultSet.first() ? resultSet.getInt(1) : -1;
 			}
 		}
