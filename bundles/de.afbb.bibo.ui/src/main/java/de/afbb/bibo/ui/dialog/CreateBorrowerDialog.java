@@ -12,6 +12,9 @@ import org.eclipse.swt.widgets.Shell;
 
 import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.model.Borrower;
+import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.ui.BiboImageRegistry;
+import de.afbb.bibo.ui.IconSize;
 import de.afbb.bibo.ui.Messages;
 import de.afbb.bibo.ui.form.BorrowerForm;
 
@@ -25,6 +28,8 @@ public class CreateBorrowerDialog extends AbstractFormDialog<Borrower, BorrowerF
 
 	public CreateBorrowerDialog(final Shell parentShell) {
 		super(parentShell, Borrower.class, BorrowerForm.class);
+
+		setTitleImage(BiboImageRegistry.getImage(IconType.PUPIL, IconSize.huge));
 	}
 
 	@Override

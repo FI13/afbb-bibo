@@ -70,6 +70,7 @@ public class CreateTypeDialog extends AbstractDialog {
 		setUpButton(btnCd, IconType.CD, IconSize.medium);
 
 		btnNone.setSelection(true);
+		setTitleImage(BiboImageRegistry.getImage(IconType.MEDIA, IconSize.huge));
 
 		return area;
 	}
