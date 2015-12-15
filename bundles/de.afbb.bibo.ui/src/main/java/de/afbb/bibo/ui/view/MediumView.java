@@ -49,7 +49,7 @@ public class MediumView extends AbstractView<Medium> {
 
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(mediumGroup);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(informationForm);
-		GridDataFactory.swtDefaults().applyTo(statisticGroup);
+		GridDataFactory.fillDefaults().applyTo(statisticGroup);
 		GridDataFactory.fillDefaults().applyTo(statisticForm);
 		GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(copyGroup);
 
