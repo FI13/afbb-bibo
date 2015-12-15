@@ -2,17 +2,22 @@ package de.afbb.bibo.amazon;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import de.afbb.bibo.properties.BiBoProperties;
 import de.afbb.bibo.share.model.Medium;
@@ -61,20 +66,19 @@ public final class ParserMedium {
 	 *
 	 * @param isbn
 	 * @return
+	 * @throws NoSuchAlgorithmException
+	 * @throws UnsupportedEncodingException
+	 * @throws IllegalArgumentException
+	 * @throws InvalidKeyException
 	 */
-	public String getUrl(final String isbn) {
+	public String getUrl(final String isbn) throws InvalidKeyException, IllegalArgumentException,
+			UnsupportedEncodingException, NoSuchAlgorithmException {
 
 		/*
 		 * Set up the signed requests helper.
 		 */
-		SignedRequestsHelper helper;
-
-		try {
-			helper = SignedRequestsHelper.getInstance(ENDPOINT, AWS_ACCESS_KEY_ID, AWS_SECRET_KEY);
-		} catch (final Exception e) {
-			e.printStackTrace();
-			return "Error";
-		}
+		final SignedRequestsHelper helper = SignedRequestsHelper.getInstance(ENDPOINT, AWS_ACCESS_KEY_ID,
+				AWS_SECRET_KEY);
 
 		String requestUrl = null;
 
@@ -104,18 +108,12 @@ public final class ParserMedium {
 	 * @return Medium
 	 */
 	public Medium getMedium(final String isbn) {
-		final Medium medium = new Medium();
+		Medium medium = null;
 
-		final String tempurl = getUrl(isbn);
-		System.out.println(isbn);
-		try
-
-		{
+		try {
+			final String tempurl = getUrl(isbn);
 			if (Integer.valueOf(BiBoProperties.get("USE_PROXY")) == 1) {
 				System.setProperty("java.net.useSystemProxies", "true");
-				System.out.println(System.getProperty("http.proxyHost"));
-				System.out.println(System.getProperty("http.proxyPort"));
-				System.out.println(System.getProperty("http.proxySet"));
 			}
 
 			final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -145,6 +143,7 @@ public final class ParserMedium {
 					for (int i = 0; i < eElement.getElementsByTagName("Author").getLength(); i++) {
 						authorNames += eElement.getElementsByTagName("Author").item(i).getTextContent() + " ";
 					}
+					medium = new Medium();
 					medium.setAuthor(authorNames);
 					// Authors Ende
 					medium.setLanguage(
@@ -156,10 +155,9 @@ public final class ParserMedium {
 
 				}
 			}
-		} catch (final Exception e)
-
-		{
-			e.printStackTrace();
+		} catch (final IllegalArgumentException | SAXException | IOException | ParserConfigurationException
+				| InvalidKeyException | NoSuchAlgorithmException e) {
+			// nothing to do, return null
 		}
 		return medium;
 	}
