@@ -1,4 +1,6 @@
-package com.amazon.advertising.api.sample;
+package de.afbb.bibo.amazon;
+
+import java.io.IOException;
 
 import de.afbb.bibo.share.model.Medium;
 
@@ -11,15 +13,16 @@ import de.afbb.bibo.share.model.Medium;
  */
 public class Tester {
 
-	public static void main(final String[] args) {
+	public static void main(final String[] args) throws IOException {
 
 		/*
 		 * Set up the signed requests helper.
 		 */
 
 		// System.out.println("Signed URL: \"" + requestUrl + "\"");
-		final Medium med = new Medium();
-		// med = ParserMedium.getMedium("9783804553804");
-		System.out.println("ISBN-Check: " + ISBN.checkISBN("9783804553805"));
+		Medium med = new Medium();
+		med = ParserMedium.getInstance().getMedium("9783804553804");
+		System.out.println(med);
+		System.out.println("ISBN-Check: " + ISBN.checkISBN("3128010498"));
 	}
 }

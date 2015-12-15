@@ -22,12 +22,13 @@ Philipp Widdra
    </configIni>
 
    <launcherArgs>
+      <vmArgs>-Djava.net.useSystemProxies=true
+      </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
    </launcherArgs>
 
    <windowImages i16="/de.afbb.bibo.ui/icons/16x16book2.png" i32="/de.afbb.bibo.ui/icons/32x32book2.png" i48="/de.afbb.bibo.ui/icons/48x48book2.png"/>
-
 
    <launcher name="AFBB_Bibliothek">
       <solaris/>
@@ -35,7 +36,6 @@ Philipp Widdra
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>

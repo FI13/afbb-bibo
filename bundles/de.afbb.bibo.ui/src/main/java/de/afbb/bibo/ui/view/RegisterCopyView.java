@@ -1,5 +1,6 @@
 package de.afbb.bibo.ui.view;
 
+import java.io.IOException;
 import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,11 +32,13 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import de.afbb.bibo.amazon.ParserMedium;
 import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.model.Copy;
@@ -281,6 +284,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 			// nothing to do
 		}
 	};
+	private Job backgroundJob;
 
 	@Override
 	public Composite initUi(final Composite parent) {
@@ -447,22 +451,52 @@ public class RegisterCopyView extends AbstractView<Copy> {
 	}
 
 	private void loadMediumFromDatabase(final String isbn) {
-		// check if we have it cached already first
-		if (!mediumCache.containsKey(isbn)) {
-			// normal fetch from database
-			Medium medium = null;
-			try {
-				medium = ServiceLocator.getInstance().getMediumService().getMedium(isbn);
-			} catch (final ConnectException e) {
-				handle(e);
+		// cancel previous job if there is one
+		if (backgroundJob != null) {
+			backgroundJob.cancel();
+		}
+		backgroundJob = new Job("Lade Medien-Informationen") {
+
+			@Override
+			protected IStatus run(final IProgressMonitor monitor) {
+				// check if we have it cached already first
+				if (!mediumCache.containsKey(isbn)) {
+					Medium medium = null;
+					try {
+						// normal fetch from database
+						medium = ServiceLocator.getInstance().getMediumService().getMedium(isbn);
+						/*
+						 * if medium isn't in database, we check the Amazon API
+						 * for convenience
+						 */
+						if (medium == null) {
+							try {
+								medium = ParserMedium.getInstance().getMedium(isbn);
+							} catch (final IOException e) {
+								// nothing to do, just swallow exception
+							}
+						}
+					} catch (final ConnectException e) {
+						handle(e);
+					}
+					mediumCache.put(isbn, medium);
+				}
+				final Medium medium = mediumCache.get(isbn);
+				if (medium != null && input != null) {
+					// callback to display thread
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							input.setMedium(medium);
+							setInput(input);
+						}
+					});
+				}
+				return Status.OK_STATUS;
 			}
-			mediumCache.put(isbn, medium);
-		}
-		final Medium medium = mediumCache.get(isbn);
-		if (medium != null && input != null) {
-			input.setMedium(medium);
-			setInput(input);
-		}
+		};
+		backgroundJob.schedule();
 	}
 
 	@Override
