@@ -154,8 +154,8 @@ public class StockServlet {
 				if (mediumId == null) {
 					// medium not found, create new
 					mediumId = DBConnector.getInstance().createMedium(isbn, copy.getMedium().getTitle(),
-							copy.getMedium().getAuthor(), copy.getMedium().getLanguage(),
-							copy.getMedium().getType().getId());
+							copy.getMedium().getAuthor(), copy.getMedium().getPublisher(),
+							copy.getMedium().getLanguage(), copy.getMedium().getType().getId());
 				}
 				checkedIsbns.put(isbn, mediumId);
 			}

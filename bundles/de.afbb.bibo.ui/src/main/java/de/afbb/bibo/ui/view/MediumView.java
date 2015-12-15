@@ -26,6 +26,8 @@ import de.afbb.bibo.ui.form.MediumStatisticForm;
 public class MediumView extends AbstractView<Medium> {
 
 	public static final String ID = "de.afbb.bibo.ui.medium";//$NON-NLS-1$
+	private static final int MAX_TITLE_LENGTH = 30;
+	private static final String MORE = "...";//$NON-NLS-1$
 	private static final String MEDIUM_SHOW = "medium.show";//$NON-NLS-1$
 
 	private CopyXviewerForm xViewer;
@@ -49,7 +51,7 @@ public class MediumView extends AbstractView<Medium> {
 
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(mediumGroup);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(informationForm);
-		GridDataFactory.swtDefaults().applyTo(statisticGroup);
+		GridDataFactory.fillDefaults().applyTo(statisticGroup);
 		GridDataFactory.fillDefaults().applyTo(statisticForm);
 		GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(copyGroup);
 
@@ -71,7 +73,13 @@ public class MediumView extends AbstractView<Medium> {
 
 	@Override
 	protected String computePartName(final Medium input) {
-		return input != null ? input.getTitle() : null;
+		String partName = input != null ? input.getTitle() : null;
+		// truncate part name when length over 30
+		if (partName != null && partName.length() > MAX_TITLE_LENGTH) {
+			partName = partName.substring(0, MAX_TITLE_LENGTH - MORE.length()) + MORE;
+			System.err.println(partName.length());
+		}
+		return partName;
 	}
 
 	@Override

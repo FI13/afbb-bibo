@@ -8,8 +8,11 @@
 	<packaging>jar</packaging>
 	<name>BibServlet</name>
 
-	<dependencies>
+	<properties>
+		<encoding>UTF-8</encoding>
+	</properties>
 
+	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -88,12 +91,12 @@
 			<version>5.1.6</version>
 		</dependency>
 		<dependency>
-				<groupId>de.afbb.bibo</groupId>
-				<artifactId>de.afbb.bibo.share</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
-				<scope>system</scope>
-				<systemPath>${basedir}/lib/de.afbb.bibo.share_1.0.0.jar</systemPath>
-			</dependency>
+			<groupId>de.afbb.bibo</groupId>
+			<artifactId>de.afbb.bibo.share</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/de.afbb.bibo.share_1.0.0.jar</systemPath>
+		</dependency>
 
 	</dependencies>
 

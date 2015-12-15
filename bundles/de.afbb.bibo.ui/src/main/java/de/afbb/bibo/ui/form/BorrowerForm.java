@@ -48,6 +48,9 @@ public class BorrowerForm extends AbstractForm<Borrower> {
 
 		toolkit.createLabel(content, "Informationen");
 		textInfo = toolkit.createText(content, EMPTY_STRING, SWT.SINGLE | SWT.BORDER);
+		textInfo.setToolTipText(
+				"Dieses Feld ist als Gruppen-Zuordnung gedacht. Nach Inhalt dieses Feldes werden die Ausleiher in der Navigations-Ansicht gruppiert.");
+		textInfo.setMessage("z.B.: Schulleitung, Dozent, FI-13, ...");
 
 		final UpdateDirtyListener updateDirtyListener = new UpdateDirtyListener();
 		textFirstname.addFocusListener(updateDirtyListener);

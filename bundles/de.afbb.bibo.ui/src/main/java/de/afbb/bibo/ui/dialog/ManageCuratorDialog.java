@@ -24,6 +24,9 @@ import de.afbb.bibo.databinding.BindingHelper;
 import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
+import de.afbb.bibo.share.model.IconType;
+import de.afbb.bibo.ui.BiboImageRegistry;
+import de.afbb.bibo.ui.IconSize;
 import de.afbb.bibo.ui.Messages;
 
 /**
@@ -48,6 +51,8 @@ public class ManageCuratorDialog extends AbstractDialog {
 		super(parentShell);
 		this.createNew = createNew;
 		curator = createNew ? new Curator() : SessionHolder.getInstance().getCurator();
+
+		setTitleImage(BiboImageRegistry.getImage(IconType.TEACHER, IconSize.huge));
 	}
 
 	@Override

@@ -64,7 +64,7 @@
             allowMultiple="false"
             category="de.afbb.bibo.ui.category.main"
             class="de.afbb.bibo.ui.view.ReturnCopyView"
-            icon="icons/16x16login.png"
+            icon="icons/16x16rückgabe.png"
             id="de.afbb.bibo.ui.return.copy"
             name="Rückgabe"
             restorable="true">
@@ -73,7 +73,7 @@
             allowMultiple="true"
             category="de.afbb.bibo.ui.category.main"
             class="de.afbb.bibo.ui.view.LendCopyView"
-            icon="icons/16x16book2.png"
+            icon="icons/16x16ausleihen.png"
             id="de.afbb.bibo.ui.lend.copy"
             name="Ausleihe"
             restorable="false">
@@ -91,7 +91,7 @@
             allowMultiple="false"
             category="de.afbb.bibo.ui.category.main"
             class="de.afbb.bibo.ui.view.InventoryView"
-            icon="icons/16x16logo.png"
+            icon="icons/16x16inventur.png"
             id="de.afbb.bibo.ui.inventory"
             name="Inventur"
             restorable="true">
@@ -228,14 +228,17 @@
          </separator>
          <command
                commandId="de.afbb.bibo.ui.lend"
+               icon="icons/32x32ausleihen.png"
                style="push">
          </command>
          <command
                commandId="de.afbb.bibo.ui.return"
+               icon="icons/32x32rückgabe.png"
                style="push">
          </command>
          <command
                commandId="de.afbb.bibo.ui.inventory"
+               icon="icons/32x32inventur.png"
                style="push">
          </command>
       </menuContribution>
@@ -244,6 +247,7 @@
             locationURI="popup:de.afbb.bibo.ui.navigationView">
          <command
                commandId="de.afbb.bibo.ui.lend"
+               icon="icons/16x16ausleihen.png"
                label="Verleihen an"
                style="push">
          </command>

@@ -356,7 +356,7 @@ public class LendCopyView extends AbstractView<Borrower> {
 
 	@Override
 	public boolean isDirty() {
-		return isSaveAble()
+		return isSaveAble() && !markedAsSaved
 				&& (copyToModify == null || copyToModify.getBarcode() == null || copyToModify.getBarcode().isEmpty())
 				&& !copies.isEmpty();
 	}

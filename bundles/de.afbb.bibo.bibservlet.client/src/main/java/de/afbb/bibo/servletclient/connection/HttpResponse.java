@@ -33,7 +33,7 @@ public class HttpResponse {
 	public HttpResponse(final HttpURLConnection connection) throws IOException {
 		data = "";
 		try {
-			try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+			try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"))) {
 				String inputLine;
 
 				while ((inputLine = in.readLine()) != null) {
