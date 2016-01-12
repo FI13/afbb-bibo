@@ -16,8 +16,8 @@ public class BiBoProperties {
 			if (inputStream != null) {
 				prop = new Properties();
 				prop.load(inputStream);
+				inputStream.close();
 			}
-			inputStream.close();
 		}
 		return prop.getProperty(search, "");
 	}
