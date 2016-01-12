@@ -6,6 +6,8 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -36,7 +38,7 @@ public class LoginDialog extends AbstractDialog {
 
 	private Text txtPassword;
 	private Text txtName;
-	private final Curator curator = new Curator();
+//	private final Curator curator = new Curator();
 	private boolean loginSuccessful = false;
 
 	public LoginDialog(final Shell parentShell) {
@@ -61,6 +63,7 @@ public class LoginDialog extends AbstractDialog {
 		final Label lblName = new Label(container, SWT.NONE);
 		lblName.setText("Name");
 		txtName = new Text(container, SWT.BORDER);
+//		txtName.addFocusListener(new HackListener());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtName);
 
 		final Label lblPassword = new Label(container, SWT.NONE);
@@ -70,7 +73,6 @@ public class LoginDialog extends AbstractDialog {
 
 		initBinding();
 		setTitleImage(BiboImageRegistry.getImage(IconType.LOGO, IconSize.huge));
-
 		return area;
 	}
 
@@ -87,9 +89,9 @@ public class LoginDialog extends AbstractDialog {
 	private boolean validateLogin() {
 		try {
 			final String salt = ServiceLocator.getInstance().getLoginService()
-					.requestSaltForUserName(curator.getName());
-			final String hashPassword = CryptoUtil.hashPassword(curator.getPassword(), salt);
-			final boolean loggedIn = ServiceLocator.getInstance().getLoginService().loginWithHash(curator.getName(),
+					.requestSaltForUserName(txtName.getText());
+			final String hashPassword = CryptoUtil.hashPassword(txtPassword.getText(), salt);
+			final boolean loggedIn = ServiceLocator.getInstance().getLoginService().loginWithHash(txtName.getText(),
 					hashPassword);
 			if (!loggedIn) {
 				setMessage("Name und Passwort stimmen nicht überein !", IMessageProvider.ERROR);
@@ -105,14 +107,30 @@ public class LoginDialog extends AbstractDialog {
 
 	@Override
 	protected void initBinding() {
-		BindingHelper.bindStringToTextField(txtName, curator, Curator.class, Curator.FIELD_NAME, bindingContext, true);
-		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext,
-				true);
+//		BindingHelper.bindStringToTextField(txtName, curator, Curator.class, Curator.FIELD_NAME, bindingContext, true);
+//		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext,
+//				true);
 	}
 
 	@Override
 	protected String getTitle() {
 		return "Benutzer-Anmeldung";
+	}
+
+	static final class HackListener implements FocusListener {
+
+		@Override
+		public void focusLost(FocusEvent e) {
+		}
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			Text widget = (Text) e.widget;
+			if (!widget.isDisposed()) {
+				int length = widget.getText().length();
+				widget.setSelection(0, length);
+			}
+		}
 	}
 
 }
