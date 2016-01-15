@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import de.afbb.bibo.properties.BiBoProperties;
 import de.afbb.bibo.share.SessionHolder;
@@ -137,7 +138,11 @@ public class ServerConnection {
 			isLoggedIn = true;
 			final String[] split = resp.getData().split("\n");
 			setSessionToken(split[0]);
-			SessionHolder.getInstance().setCurator(new Gson().fromJson(split[1], Curator.class));
+			try {
+				SessionHolder.getInstance().setCurator(new Gson().fromJson(split[1], Curator.class));
+			} catch (JsonSyntaxException e) {
+				throw Utils.createExceptionForCode(HttpServletResponse.SC_BAD_GATEWAY);
+			}
 			return true;
 		} else if (resp.getStatus() != HttpServletResponse.SC_UNAUTHORIZED) {
 			final ConnectException exception = Utils.createExceptionForCode(resp.getStatus());
