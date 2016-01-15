@@ -22,7 +22,7 @@ Philipp Widdra
    </configIni>
 
    <launcherArgs>
-      <vmArgs>-Djava.net.useSystemProxies=true
+      <vmArgs>-Djava.net.useSystemProxies=false
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
