@@ -24,8 +24,10 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -242,7 +244,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 	 * listener that reacts when the selection changes and enables & disables
 	 * control buttons
 	 */
-	SelectionListener xViewerSelectionListener = new SelectionListener() {
+	SelectionListener xViewerSelectionListener = new SelectionAdapter() {
 
 		@Override
 		public void widgetSelected(final SelectionEvent e) {
@@ -266,23 +268,13 @@ public class RegisterCopyView extends AbstractView<Copy> {
 				btnUngroup.setEnabled(singleSelection && grouped);
 			}
 		}
-
-		@Override
-		public void widgetDefaultSelected(final SelectionEvent e) {
-			// no double click event
-		}
 	};
 
-	FocusListener updateToListButtonListener = new FocusListener() {
+	FocusListener updateToListButtonListener = new FocusAdapter() {
 
 		@Override
 		public void focusLost(final FocusEvent e) {
 			updateToListButton();
-		}
-
-		@Override
-		public void focusGained(final FocusEvent e) {
-			// nothing to do
 		}
 	};
 	private Job backgroundJob;
@@ -297,30 +289,22 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		toolkit.createLabel(idGroup, Messages.BARCODE);
 		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING, SWT.SINGLE | SWT.RIGHT);
 		txtBarcode.setMessage("Barcode einscannen");
-		txtBarcode.addFocusListener(new FocusListener() {
+		txtBarcode.addFocusListener(new FocusAdapter() {
 
 			@Override
 			public void focusLost(final FocusEvent e) {
 				checkBarcodeExists();
-			}
-
-			@Override
-			public void focusGained(final FocusEvent e) {
 			}
 		});
 		toolkit.createLabel(idGroup, Messages.ISBN);
 		txtIsbn = toolkit.createText(idGroup, EMPTY_STRING);
 		txtIsbn.setMessage("ISBN einscannen");
 		txtIsbn.setToolTipText("Sie können hier auch eine Seriennummer eingeben, wenn das Medium keine ISBN besitzt.");
-		txtIsbn.addFocusListener(new FocusListener() {
+		txtIsbn.addFocusListener(new FocusAdapter() {
 
 			@Override
 			public void focusLost(final FocusEvent e) {
 				loadMediumFromDatabase(txtIsbn.getText());
-			}
-
-			@Override
-			public void focusGained(final FocusEvent e) {
 			}
 		});
 		toolkit.createLabel(idGroup, Messages.EDITION);
@@ -340,6 +324,13 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		toolkit.createLabel(mediumGroup, "Typ");
 		comboMediumType = toolkit.createCombo(mediumGroup);
 		comboMediumType.addFocusListener(updateToListButtonListener);
+		comboMediumType.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				updateToListButton();
+			}
+		});
 
 		final Group conditionGroup = toolkit.createGroup(content, "Zustand");
 		conditionGroup.setLayout(new GridLayout(1, false));
