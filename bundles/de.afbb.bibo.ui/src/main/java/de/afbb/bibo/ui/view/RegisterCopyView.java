@@ -88,6 +88,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 	private String barcode = null;
 	private final IObservableValue barcodeObservable = BeansObservables.observeValue(this, BARCODE);
+	private boolean barcodeTaken = false;
 
 	/**
 	 * listener that adds a copy to the list and clears the input fields
@@ -490,6 +491,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 						public void run() {
 							input.setMedium(medium);
 							setInput(input);
+							updateToListButton();
 						}
 					});
 				}
@@ -506,6 +508,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 	private void checkBarcodeExists() {
 		// disabled by default, will be enabled if barcode can't be found
+		barcodeTaken = false;
 		btnToList.setEnabled(false);
 		setBarcode(null);
 		final String barcode = txtBarcode.getText();
@@ -513,6 +516,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 			// check list of local copies first
 			for (final Copy copy : copies) {
 				if (barcode.equals(copy.getBarcode())) {
+					barcodeTaken = true;
 					return;
 				}
 			}
@@ -520,6 +524,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 			try {
 				if (ServiceLocator.getInstance().getCopyService().exists(barcode)) {
 					setBarcode(barcode);
+					barcodeTaken = true;
 					return;
 				}
 			} catch (final ConnectException e) {
@@ -533,7 +538,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 	private void updateToListButton() {
 		btnToList.setEnabled(input != null && input.getMedium() != null && !input.getBarcode().isEmpty()
 				&& !input.getMedium().getTitle().isEmpty() && input.getMedium().getType() != null
-				&& !input.getMedium().getType().getName().isEmpty());
+				&& !input.getMedium().getType().getName().isEmpty() && !barcodeTaken);
 	}
 
 	private void updateSaveButton() {
