@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import de.afbb.bibo.exception.BadGatewayException;
 import de.afbb.bibo.exception.InvalidSessionException;
 import de.afbb.bibo.share.beans.BeanExclusionStrategy;
 
@@ -51,6 +52,8 @@ final class Utils {
 			}
 			// don't throw an other exception, just swallow this incident
 			return null;
+		} else if (HttpServletResponse.SC_BAD_GATEWAY == code) {
+			return new BadGatewayException();
 		}
 		return new ConnectException("Wrong status code. Recieved was: " + code);
 	}

@@ -19,6 +19,7 @@ import org.eclipse.ui.PlatformUI;
 
 import de.afbb.bibo.crypto.CryptoUtil;
 import de.afbb.bibo.databinding.BindingHelper;
+import de.afbb.bibo.exception.BadGatewayException;
 import de.afbb.bibo.servletclient.ServiceLocator;
 import de.afbb.bibo.share.SessionHolder;
 import de.afbb.bibo.share.model.Curator;
@@ -38,7 +39,7 @@ public class LoginDialog extends AbstractDialog {
 
 	private Text txtPassword;
 	private Text txtName;
-//	private final Curator curator = new Curator();
+	// private final Curator curator = new Curator();
 	private boolean loginSuccessful = false;
 
 	public LoginDialog(final Shell parentShell) {
@@ -63,7 +64,7 @@ public class LoginDialog extends AbstractDialog {
 		final Label lblName = new Label(container, SWT.NONE);
 		lblName.setText("Name");
 		txtName = new Text(container, SWT.BORDER);
-//		txtName.addFocusListener(new HackListener());
+		// txtName.addFocusListener(new HackListener());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtName);
 
 		final Label lblPassword = new Label(container, SWT.NONE);
@@ -94,22 +95,28 @@ public class LoginDialog extends AbstractDialog {
 			final boolean loggedIn = ServiceLocator.getInstance().getLoginService().loginWithHash(txtName.getText(),
 					hashPassword);
 			if (!loggedIn) {
-				setMessage("Name und Passwort stimmen nicht überein !", IMessageProvider.ERROR);
+				setMessage("Name und Passwort stimmen nicht überein!", IMessageProvider.ERROR);
 				return false;
 			}
 			setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
 			return true;
 		} catch (final ConnectException e) {
-			setMessage(Messages.MESSAGE_ERROR_CONNECTION, IMessageProvider.WARNING);
+			if (e instanceof BadGatewayException) {
+				setMessage("Proxy-Konfiguration fehlerhaft", IMessageProvider.ERROR);
+			} else {
+				setMessage(Messages.MESSAGE_ERROR_CONNECTION, IMessageProvider.WARNING);
+			}
 		}
 		return false;
 	}
 
 	@Override
 	protected void initBinding() {
-//		BindingHelper.bindStringToTextField(txtName, curator, Curator.class, Curator.FIELD_NAME, bindingContext, true);
-//		BindingHelper.bindStringToTextField(txtPassword, curator, Curator.class, Curator.FIELD_PASSWORD, bindingContext,
-//				true);
+		// BindingHelper.bindStringToTextField(txtName, curator, Curator.class,
+		// Curator.FIELD_NAME, bindingContext, true);
+		// BindingHelper.bindStringToTextField(txtPassword, curator,
+		// Curator.class, Curator.FIELD_PASSWORD, bindingContext,
+		// true);
 	}
 
 	@Override
