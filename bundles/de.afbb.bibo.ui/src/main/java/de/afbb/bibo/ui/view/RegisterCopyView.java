@@ -24,8 +24,10 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -88,6 +90,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 	private String barcode = null;
 	private final IObservableValue barcodeObservable = BeansObservables.observeValue(this, BARCODE);
+	private boolean barcodeTaken = false;
 
 	/**
 	 * listener that adds a copy to the list and clears the input fields
@@ -241,7 +244,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 	 * listener that reacts when the selection changes and enables & disables
 	 * control buttons
 	 */
-	SelectionListener xViewerSelectionListener = new SelectionListener() {
+	SelectionListener xViewerSelectionListener = new SelectionAdapter() {
 
 		@Override
 		public void widgetSelected(final SelectionEvent e) {
@@ -265,23 +268,13 @@ public class RegisterCopyView extends AbstractView<Copy> {
 				btnUngroup.setEnabled(singleSelection && grouped);
 			}
 		}
-
-		@Override
-		public void widgetDefaultSelected(final SelectionEvent e) {
-			// no double click event
-		}
 	};
 
-	FocusListener updateToListButtonListener = new FocusListener() {
+	FocusListener updateToListButtonListener = new FocusAdapter() {
 
 		@Override
 		public void focusLost(final FocusEvent e) {
 			updateToListButton();
-		}
-
-		@Override
-		public void focusGained(final FocusEvent e) {
-			// nothing to do
 		}
 	};
 	private Job backgroundJob;
@@ -296,30 +289,22 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		toolkit.createLabel(idGroup, Messages.BARCODE);
 		txtBarcode = toolkit.createText(idGroup, EMPTY_STRING, SWT.SINGLE | SWT.RIGHT);
 		txtBarcode.setMessage("Barcode einscannen");
-		txtBarcode.addFocusListener(new FocusListener() {
+		txtBarcode.addFocusListener(new FocusAdapter() {
 
 			@Override
 			public void focusLost(final FocusEvent e) {
 				checkBarcodeExists();
-			}
-
-			@Override
-			public void focusGained(final FocusEvent e) {
 			}
 		});
 		toolkit.createLabel(idGroup, Messages.ISBN);
 		txtIsbn = toolkit.createText(idGroup, EMPTY_STRING);
 		txtIsbn.setMessage("ISBN einscannen");
 		txtIsbn.setToolTipText("Sie können hier auch eine Seriennummer eingeben, wenn das Medium keine ISBN besitzt.");
-		txtIsbn.addFocusListener(new FocusListener() {
+		txtIsbn.addFocusListener(new FocusAdapter() {
 
 			@Override
 			public void focusLost(final FocusEvent e) {
 				loadMediumFromDatabase(txtIsbn.getText());
-			}
-
-			@Override
-			public void focusGained(final FocusEvent e) {
 			}
 		});
 		toolkit.createLabel(idGroup, Messages.EDITION);
@@ -339,6 +324,13 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		toolkit.createLabel(mediumGroup, "Typ");
 		comboMediumType = toolkit.createCombo(mediumGroup);
 		comboMediumType.addFocusListener(updateToListButtonListener);
+		comboMediumType.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				updateToListButton();
+			}
+		});
 
 		final Group conditionGroup = toolkit.createGroup(content, "Zustand");
 		conditionGroup.setLayout(new GridLayout(1, false));
@@ -490,6 +482,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 						public void run() {
 							input.setMedium(medium);
 							setInput(input);
+							updateToListButton();
 						}
 					});
 				}
@@ -506,6 +499,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 	private void checkBarcodeExists() {
 		// disabled by default, will be enabled if barcode can't be found
+		barcodeTaken = false;
 		btnToList.setEnabled(false);
 		setBarcode(null);
 		final String barcode = txtBarcode.getText();
@@ -513,6 +507,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 			// check list of local copies first
 			for (final Copy copy : copies) {
 				if (barcode.equals(copy.getBarcode())) {
+					barcodeTaken = true;
 					return;
 				}
 			}
@@ -520,6 +515,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 			try {
 				if (ServiceLocator.getInstance().getCopyService().exists(barcode)) {
 					setBarcode(barcode);
+					barcodeTaken = true;
 					return;
 				}
 			} catch (final ConnectException e) {
@@ -533,7 +529,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 	private void updateToListButton() {
 		btnToList.setEnabled(input != null && input.getMedium() != null && !input.getBarcode().isEmpty()
 				&& !input.getMedium().getTitle().isEmpty() && input.getMedium().getType() != null
-				&& !input.getMedium().getType().getName().isEmpty());
+				&& !input.getMedium().getType().getName().isEmpty() && !barcodeTaken);
 	}
 
 	private void updateSaveButton() {

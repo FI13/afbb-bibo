@@ -77,7 +77,6 @@ public class MediumView extends AbstractView<Medium> {
 		// truncate part name when length over 30
 		if (partName != null && partName.length() > MAX_TITLE_LENGTH) {
 			partName = partName.substring(0, MAX_TITLE_LENGTH - MORE.length()) + MORE;
-			System.err.println(partName.length());
 		}
 		return partName;
 	}

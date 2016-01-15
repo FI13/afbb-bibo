@@ -52,7 +52,7 @@ public class ManageCuratorDialog extends AbstractDialog {
 		this.createNew = createNew;
 		curator = createNew ? new Curator() : SessionHolder.getInstance().getCurator();
 
-		setTitleImage(BiboImageRegistry.getImage(IconType.TEACHER, IconSize.huge));
+		setTitleImage(BiboImageRegistry.getImage(createNew ? IconType.TEACHER : IconType.USER_MANAGE, IconSize.huge));
 	}
 
 	@Override
