@@ -86,7 +86,7 @@ public class RegisterCopyView extends AbstractView<Copy> {
 
 	private static final int UNASSIGNED_GROUP = -1;
 	private int highestAssignedGroup = UNASSIGNED_GROUP + 1;
-	private final HashMap<String, Medium> mediumCache = new HashMap<>();
+	private final HashMap<String, Medium> mediumCache = new HashMap<String, Medium>();
 
 	private String barcode = null;
 	private final IObservableValue barcodeObservable = BeansObservables.observeValue(this, BARCODE);
@@ -102,6 +102,13 @@ public class RegisterCopyView extends AbstractView<Copy> {
 		public void handleEvent(final Event event) {
 			final Copy clone = (Copy) input.clone();
 			copies.add(clone);
+
+			// cache medium if not already in cache
+			final String isbn = clone.getMedium().getIsbn();
+			if (mediumCache.isEmpty() || !mediumCache.containsKey(isbn)) {
+				mediumCache.put(isbn, (Medium) clone.getMedium().clone());
+			}
+
 			// hack to reset the input
 			setInput(null);
 			setInput(new Copy());
@@ -471,7 +478,10 @@ public class RegisterCopyView extends AbstractView<Copy> {
 					} catch (final ConnectException e) {
 						handle(e);
 					}
-					mediumCache.put(isbn, medium);
+					// only cache valid media
+					if (medium != null) {
+						mediumCache.put(isbn, medium);
+					}
 				}
 				final Medium medium = mediumCache.get(isbn);
 				if (medium != null && input != null) {
